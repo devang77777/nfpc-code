@@ -1,0 +1,51 @@
+<div class="card">
+    <div class="card-header pt-4">
+        <span class="h6 font-weight-bold text-secondary">{{formType}} Merchandising {{type == "swap" ? "Swap" : "Replace"}}</span>
+        <a (click)="close()" class="closeicon settingclose"><i class="os-icon os-icon-x text-secondary float-right"
+                aria-hidden="true"></i></a>
+    </div>
+    <div class="form-box">
+        <form [formGroup]="replacementForm">
+            <div class="container " style="padding: 20px;">
+                <div class="row mb-4">
+                    <div class="col-md-4 "> Select Old Salesman*</div>
+                    <div class="col-md-8">
+                        <!-- <mat-select class="form-control form-control-sm" formControlName="old_salesman_id">
+                            <mat-option *ngFor="let item of salesmanList" [value]="item?.user_id">
+                                {{item.user?.firstname}} {{item.user?.lastname}}
+                            </mat-option>
+                        </mat-select> -->
+                        <app-multiautocomplete isSingle="true" [options]="salesmanList"
+                            [control]="replacementForm.controls['old_salesman_id']" text="" id="user_id"
+                            objectName="user" param1="firstname" param2="lastname" placeholder="Search Salesman">
+                        </app-multiautocomplete>
+                    </div>
+                </div>
+                <div class="row mb-4">
+                    <div class="col-md-4 ">Select New Salesman*</div>
+                    <div class="col-md-8">
+                        <!-- <mat-select class="form-control form-control-sm" formControlName="new_salesman_id">
+                            <mat-option *ngFor="let item of salesmanList" [value]="item.user_id">
+                                {{item.user?.firstname}} {{item.user?.lastname}}
+                            </mat-option>
+                        </mat-select> -->
+                        <app-multiautocomplete isSingle="true" [options]="salesmanList"
+                            [control]="replacementForm.controls['new_salesman_id']" text="" id="user_id"
+                            objectName="user" param1="firstname" param2="lastname" placeholder="Search Salesman">
+                        </app-multiautocomplete>
+                    </div>
+                </div>
+                <div class="row  mb-4 ">
+                    <div class="col-md-12" style="   display: flex; justify-content: flex-end;">
+                        <button class="btn btn-sm btn-light mr-2" (click)="close()">Cancel</button>
+                        <button class="btn btn-sm btn-p" [disabled]="replacementForm.invalid"
+                            (click)="saveReplacement()">{{type == "swap" ? "Swap" : "Replace"}}</button>
+                    </div>
+                </div>
+            </div>
+        </form>
+
+    </div>
+
+
+</div>

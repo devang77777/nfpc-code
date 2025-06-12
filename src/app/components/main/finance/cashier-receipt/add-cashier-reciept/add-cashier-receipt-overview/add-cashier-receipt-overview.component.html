@@ -1,0 +1,382 @@
+<div class="form-box">
+  <form [formGroup]="cashFormGroup" class="order-form custom-mat square">
+    <div class="card-body active-form overview">
+      <div class=" row justify-content-between">
+        <div class="col-md-4">
+          <div class="form-group smmatinput">
+            <label for="">Route</label>
+            <mat-form-field>
+              <mat-label>Select Route</mat-label>
+              <mat-select (selectionChange)="checkChange(routeFormControl, 1)" [formControl]="routeFormControl"
+                [disabled]="disableCondition.routeControl" class="form-control form-control-sm">
+                <mat-option *ngFor="let item of routeList" [value]="item.id">
+                  {{ item.route_name }}
+                </mat-option>
+              </mat-select>
+              <mat-error class="mt-1" *ngIf="routeFormControl.hasError('required')">Please select route</mat-error>
+            </mat-form-field>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <div [ngClass]="{ 'inactive-form': routeFormControl.invalid }">
+      <div class="card-body overview">
+        <div class=" row justify-content-between">
+          <div class="col-md-4">
+            <div class="form-group smmatinput">
+              <label for="">Salesman</label>
+              <mat-form-field>
+                <mat-select (selectionChange)="checkChange(NameFormControl, 2)" [formControl]="NameFormControl"
+                  [disabled]="disableCondition.NameControl" class="form-control form-control-sm">
+                  <mat-option *ngFor="let item of salesmanList" [value]="item.user_id">
+                    {{ item.user.firstname+' '+item.user.lastname }} - {{ item.salesman_code }}
+                  </mat-option>
+                </mat-select>
+                <mat-error class="mt-1" *ngIf="NameFormControl.hasError('required')">Please select salesman</mat-error>
+              </mat-form-field>
+            </div>
+            <div class="form-group">
+              <label for="">Date</label>
+              <input class="form-control fixWidthsame form-control-sm" (change)="checkChange(dateFormControl, 3)"
+                [disabled]="disableCondition.dateControl" type="date" [formControl]="dateFormControl" />
+              <mat-error class="mt-1" *ngIf="dateFormControl.hasError('required')">Please select Date</mat-error>
+            </div>
+          </div>
+          <div class="col-md-4">
+            <label for="">Receipt Code</label>
+            <div class="position-relative">
+              <input type="text" class="form-control form-control-sm" (keypress)="restrictLength($event)"
+                [disabled]="true" [formControl]="CodeFormControl">
+              <span class="setting-btn" [hidden]="!isAddForm"><button (click)="openNumberSettings()"><i
+                    class="os-icon os-icon-ui-46"></i></button></span>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </form>
+  <div class="positionFix">
+    <div *ngIf="opencashiertable" id="collapseOne" class="tabCls" aria-labelledby="headingOne">
+      <label *ngIf="opencashiertable" class="labelCash"> Cash </label>
+      <div class="card-body">
+        <div class="table-responsive">
+          <mat-table class="table table-hover" [dataSource]="collectionDataCash" matSort class="mat-elevation-z8">
+            <ng-container matColumnDef="collection">
+              <mat-header-cell *matHeaderCellDef mat-sort-header>
+                Collection No
+              </mat-header-cell>
+              <mat-cell *matCellDef="let element">
+                {{ element.collection_number }}
+              </mat-cell>
+              <mat-footer-cell *matFooterCellDef></mat-footer-cell>
+            </ng-container>
+            <ng-container matColumnDef="invoice">
+              <mat-header-cell *matHeaderCellDef mat-sort-header>
+                Invoice No#
+              </mat-header-cell>
+              <mat-cell *matCellDef="let element">
+                {{ element.invoice?.invoice_number }}
+              </mat-cell>
+              <mat-footer-cell class="price_Total" *matFooterCellDef></mat-footer-cell>
+            </ng-container>
+            <ng-container matColumnDef="collection_date">
+              <mat-header-cell *matHeaderCellDef mat-sort-header>
+                Collection Date
+              </mat-header-cell>
+              <mat-cell *matCellDef="let element">
+                {{ element.cheque_date }}
+              </mat-cell>
+              <mat-footer-cell class="makeRed" *matFooterCellDef>
+                Total Cash*
+              </mat-footer-cell>
+            </ng-container>
+            <ng-container matColumnDef="paid">
+              <mat-header-cell mat-header-cell *matHeaderCellDef mat-sort-header>
+                Paid
+              </mat-header-cell>
+              <mat-cell *matCellDef="let element"> {{ element.collectiondetails[0]?.amount }} </mat-cell>
+              <mat-footer-cell class="price_Total" *matFooterCellDef>
+                <p class="paginatorClass">
+                  {{ calculatedTotalCash | currency: "INR" }} &nbsp;
+                  <i class="fa fa-info-circle" aria-hidden="true"></i>
+                </p>
+              </mat-footer-cell>
+            </ng-container>
+            <ng-container matColumnDef="balance">
+              <mat-header-cell mat-header-cell *matHeaderCellDef mat-sort-header>
+                Balance
+              </mat-header-cell>
+              <mat-cell *matCellDef="let element">
+                {{ element.collectiondetails[0]?.pending_amount }}
+              </mat-cell>
+              <mat-footer-cell class="cashVarianceFix" *matFooterCellDef></mat-footer-cell>
+            </ng-container>
+
+            <ng-container matColumnDef="emptyFooter">
+              <mat-footer-cell *matFooterCellDef></mat-footer-cell>
+            </ng-container>
+            <ng-container matColumnDef="actualAmountTitle">
+              <mat-footer-cell class="actual_page" *matFooterCellDef>
+                Actual Amount*
+              </mat-footer-cell>
+            </ng-container>
+            <ng-container matColumnDef="actualAmount">
+              <mat-footer-cell class="actual_textbox" *matFooterCellDef>
+                <input (keyup)="changeTotalAmount(1)" [formControl]="actualCashAmountFormControl"
+                  [disabled]="disableCondition.actualCashAmount" class="form-control cash_actual form-control-sm"
+                  type="text" />
+              </mat-footer-cell>
+            </ng-container>
+            <ng-container matColumnDef="varience">
+              <mat-footer-cell class="cashVarianceFix" *matFooterCellDef>
+                <div class="row mb-4" style="margin-top: 12px;">
+                  <div class="col-3 vare">
+                    <label style="color: red;">Variance*</label>
+                  </div>
+                  <div class="col-6">
+                    <input [formControl]="varienceCashFormControl" [disabled]="disableCondition.varienceCashControl"
+                      class="form-control form-control-sm" type="text" />
+                  </div>
+                </div>
+              </mat-footer-cell>
+            </ng-container>
+
+            <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+            <mat-row *matRowDef="let row; columns: displayedColumns"></mat-row>
+            <mat-footer-row class="firstFooter" *matFooterRowDef="displayedColumns"></mat-footer-row>
+            <mat-footer-row class="secondFooter" *matFooterRowDef="displayedTotalColumns"></mat-footer-row>
+          </mat-table>
+        </div>
+      </div>
+    </div>
+
+    <!-- ------------------------------------------------------------------------------------- -->
+
+    <div *ngIf="openchecktable" style="margin-top: -35px;" id="collapseOne" class="tabCls" aria-labelledby="headingOne">
+      <label *ngIf="openchecktable" class="labelCash"> Cheque </label>
+      <div class="card-body">
+        <div class="table-responsive">
+          <mat-table class="table table-hover" [dataSource]="collectionDataCheque" matSort class="mat-elevation-z8">
+            <ng-container matColumnDef="collection">
+              <mat-header-cell *matHeaderCellDef mat-sort-header>
+                Collection No
+              </mat-header-cell>
+              <mat-cell *matCellDef="let element">
+                {{ element.collection_number }}
+              </mat-cell>
+              <mat-footer-cell *matFooterCellDef></mat-footer-cell>
+            </ng-container>
+            <ng-container matColumnDef="invoice">
+              <mat-header-cell *matHeaderCellDef mat-sort-header>
+                Invoice No#
+              </mat-header-cell>
+              <mat-cell *matCellDef="let element">
+                {{ element.invoice }}
+              </mat-cell>
+              <mat-footer-cell *matFooterCellDef></mat-footer-cell>
+            </ng-container>
+            <ng-container matColumnDef="collection_date">
+              <mat-header-cell *matHeaderCellDef mat-sort-header>
+                Collection Date
+              </mat-header-cell>
+              <mat-cell *matCellDef="let element">
+                {{ element.cheque_date }}
+              </mat-cell>
+              <mat-footer-cell *matFooterCellDef></mat-footer-cell>
+            </ng-container>
+            <ng-container matColumnDef="checkno">
+              <mat-header-cell *matHeaderCellDef mat-sort-header>
+                Check No.
+              </mat-header-cell>
+              <mat-cell *matCellDef="let element">
+                {{ element.cheque_number }}
+              </mat-cell>
+              <mat-footer-cell *matFooterCellDef></mat-footer-cell>
+            </ng-container>
+            <ng-container matColumnDef="check_date">
+              <mat-header-cell *matHeaderCellDef mat-sort-header>
+                Check Date
+              </mat-header-cell>
+              <mat-cell *matCellDef="let element">
+                {{ element.cheque_date }}
+              </mat-cell>
+              <mat-footer-cell *matFooterCellDef></mat-footer-cell>
+            </ng-container>
+            <ng-container matColumnDef="bank">
+              <mat-header-cell *matHeaderCellDef mat-sort-header>
+                Bank
+              </mat-header-cell>
+              <mat-cell *matCellDef="let element"> {{ element.bank }} </mat-cell>
+              <mat-footer-cell class="makeRed" *matFooterCellDef>Total Check Amount*</mat-footer-cell>
+            </ng-container>
+            <ng-container matColumnDef="paid">
+              <mat-header-cell mat-header-cell *matHeaderCellDef mat-sort-header>
+                Paid
+              </mat-header-cell>
+              <mat-cell *matCellDef="let element"> {{ element.collectiondetails[0]?.amount }} </mat-cell>
+              <mat-footer-cell class="price_Total" *matFooterCellDef>
+                <p class="paginatorClass">
+                  {{ calculatedTotalCheque | currency: "INR" }} &nbsp;
+                  <i class="fa fa-info-circle" aria-hidden="true"></i>
+                </p>
+              </mat-footer-cell>
+            </ng-container>
+            <ng-container matColumnDef="balance">
+              <mat-header-cell mat-header-cell *matHeaderCellDef mat-sort-header>
+                Balance
+              </mat-header-cell>
+              <mat-cell *matCellDef="let element">
+                {{ element.collectiondetails[0]?.pending_amount }}
+              </mat-cell>
+              <mat-footer-cell *matFooterCellDef></mat-footer-cell>
+            </ng-container>
+
+            <ng-container matColumnDef="emptyFooter">
+              <mat-footer-cell *matFooterCellDef></mat-footer-cell>
+            </ng-container>
+            <ng-container matColumnDef="actualAmountTitle">
+              <mat-footer-cell class="actual_page" *matFooterCellDef>
+                Actual Amount*
+              </mat-footer-cell>
+            </ng-container>
+            <ng-container matColumnDef="actualAmount">
+              <mat-footer-cell class="actual_textbox" *matFooterCellDef>
+                <input (keyup)="changeTotalAmount(2)" [formControl]="actualCheckAmountFormControl"
+                  [disabled]="disableCondition.actualCheckAmount" class="form-control cash_actual form-control-sm"
+                  type="text" />
+              </mat-footer-cell>
+            </ng-container>
+            <ng-container matColumnDef="varience">
+              <mat-footer-cell class="cashVarianceFix" *matFooterCellDef>
+                <div class="row mb-4" style="margin-top: 12px;">
+                  <div class="col-3" style="margin-right: 28px;">
+                    <label style="color: red;">Variance*</label>
+                  </div>
+                  <div class="col-6">
+                    <input style="width: 121%;" [formControl]="varienceCheckFormControl"
+                      [disabled]="disableCondition.varienceCheckControl" class="form-control form-control-sm"
+                      type="text" />
+                  </div>
+                </div>
+              </mat-footer-cell>
+            </ng-container>
+
+            <mat-header-row *matHeaderRowDef="displayedColumns1"></mat-header-row>
+            <mat-row *matRowDef="let row; columns: displayedColumns1"></mat-row>
+            <mat-footer-row class="firstFooter" *matFooterRowDef="displayedColumns1"></mat-footer-row>
+            <mat-footer-row class="secondFooter" *matFooterRowDef="displayedTotalColumns1"></mat-footer-row>
+          </mat-table>
+        </div>
+      </div>
+    </div>
+
+    <!-- -------------------------------------------------------------------------------------  -->
+
+    <div *ngIf="openCreditCardTable" style="margin-top: -35px;" id="collapseOne" class="tabCls"
+      aria-labelledby="headingOne">
+      <label *ngIf="openCreditCardTable" class="labelCash"> NEFT </label>
+      <div class="card-body">
+        <div class="table-responsive">
+          <mat-table class="table table-hover" [dataSource]="collectionDataNeft" matSort class="mat-elevation-z8">
+            <ng-container matColumnDef="collection">
+              <mat-header-cell *matHeaderCellDef mat-sort-header>
+                Collection No
+              </mat-header-cell>
+              <mat-cell *matCellDef="let element">
+                {{ element.collection_number }}
+              </mat-cell>
+              <mat-footer-cell *matFooterCellDef></mat-footer-cell>
+            </ng-container>
+            <ng-container matColumnDef="invoice">
+              <mat-header-cell *matHeaderCellDef mat-sort-header>
+                Invoice No#
+              </mat-header-cell>
+              <mat-cell *matCellDef="let element">
+                {{ element.invoice }}
+              </mat-cell>
+              <mat-footer-cell *matFooterCellDef></mat-footer-cell>
+            </ng-container>
+            <ng-container matColumnDef="collection_date">
+              <mat-header-cell *matHeaderCellDef mat-sort-header>
+                Collection Date
+              </mat-header-cell>
+              <mat-cell *matCellDef="let element">
+                {{ element.cheque_date }}
+              </mat-cell>
+              <mat-footer-cell *matFooterCellDef></mat-footer-cell>
+            </ng-container>
+            <ng-container matColumnDef="credit_card_tranx_no">
+              <mat-header-cell *matHeaderCellDef mat-sort-header>
+                Credit Card Transaction ID</mat-header-cell>
+              <mat-cell *matCellDef="let element">
+                {{ element.transaction_number }}
+              </mat-cell>
+              <mat-footer-cell class="makeRed checkFix" *matFooterCellDef>Total Credit Card Amount*</mat-footer-cell>
+            </ng-container>
+            <ng-container matColumnDef="paid">
+              <mat-header-cell mat-header-cell *matHeaderCellDef mat-sort-header>
+                Paid
+              </mat-header-cell>
+              <mat-cell *matCellDef="let element"> {{ element.collectiondetails[0]?.amount }} </mat-cell>
+              <mat-footer-cell class="price_Total" *matFooterCellDef>
+                <p class="paginatorClass">
+                  {{ calculatedTotalNeft | currency: "INR" }} &nbsp;
+                  <i class="fa fa-info-circle" aria-hidden="true"></i>
+                </p>
+              </mat-footer-cell>
+            </ng-container>
+            <ng-container matColumnDef="balance">
+              <mat-header-cell mat-header-cell *matHeaderCellDef mat-sort-header>
+                Balance</mat-header-cell>
+              <mat-cell *matCellDef="let element">
+                {{ element.collectiondetails[0]?.pending_amount }}
+              </mat-cell>
+              <mat-footer-cell *matFooterCellDef></mat-footer-cell>
+            </ng-container>
+
+            <ng-container matColumnDef="emptyFooter">
+              <mat-footer-cell *matFooterCellDef></mat-footer-cell>
+            </ng-container>
+            <ng-container matColumnDef="actualAmountTitle">
+              <mat-footer-cell class="actual_page" *matFooterCellDef>
+                Actual Amount*
+              </mat-footer-cell>
+            </ng-container>
+            <ng-container matColumnDef="actualAmount">
+              <mat-footer-cell class="actual_textbox" *matFooterCellDef>
+                <input (keyup)="changeTotalAmount(3)" [formControl]="actualCreditCardAmountFormControl"
+                  [disabled]="disableCondition.actualCreditCardAmount"
+                  class="form-control form-checking-to form-control-sm" type="text" />
+              </mat-footer-cell>
+            </ng-container>
+            <ng-container matColumnDef="varience">
+              <mat-footer-cell class="cashVarianceFix" *matFooterCellDef>
+                <div class="row mb-4" style="margin-top: 12px;">
+                  <div class="col-3 vare">
+                    <label style="color: red;">Variance*</label>
+                  </div>
+                  <div class="col-6">
+                    <input [formControl]="varienceCreditCardFormControl"
+                      [disabled]="disableCondition.varienceCreditCardControl" class="form-control form-control-sm"
+                      type="text" />
+                  </div>
+                </div>
+              </mat-footer-cell>
+            </ng-container>
+
+            <mat-header-row *matHeaderRowDef="displayedColumns2"></mat-header-row>
+            <mat-row *matRowDef="let row; columns: displayedColumns2"></mat-row>
+            <mat-footer-row class="firstFooter" *matFooterRowDef="displayedColumns2"></mat-footer-row>
+            <mat-footer-row class="secondFooter" *matFooterRowDef="displayedTotalColumns2"></mat-footer-row>
+          </mat-table>
+        </div>
+      </div>
+    </div>
+    <span *ngIf="openCreditCardTable" class="totalAmount">Total Amount :
+      &nbsp;{{ +calculatedTotalCash + +calculatedTotalCheque + +calculatedTotalNeft | currency: "INR" }}
+    </span>
+  </div>
+</div>

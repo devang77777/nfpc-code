@@ -1,0 +1,308 @@
+<!-- <div class="_sidenav " [ngClass]="{'collapse_sidenav': !showTitle }"> -->
+<div class="_sidenav">
+  <!-- (click)="showTitle = !showTitle" -->
+  <button class="sidenav-toggler" (click)="onToggle()">
+    <i class="os-icon os-icon-arrow-right4 righticon" aria-hidden="true"></i>
+    <i class="os-icon os-icon-arrow-left2 lefticon" aria-hidden="true"></i>
+  </button>
+  <!-- <button class="sidenav-toggler d-block d-sm-none mobileclick"  (click)="onToggle()">
+        <i  class=" os-icon os-icon-arrow-right4 righticon" aria-hidden="true"></i>
+      <i class="os-icon os-icon-arrow-left2 lefticon" aria-hidden="true"></i>
+    </button> -->
+  <!-- <div class="logo-container">
+        <img *ngIf="showTitle;else mini_logo" class="_logo" src="assets/images/logo.png" alt="logo">
+        <ng-template #mini_logo>
+            <img class="logomin" src="assets/images/logo_mini.png" alt="logo" height="40px">
+        </ng-template>
+    </div> -->
+  <div class="logo-container">
+    <img class="_logo" src="assets/images/logo.png" alt="logo" />
+    <img class="logomin" src="assets/images/logo_mini.png" alt="logo" height="40px" />
+  </div>
+  <div *ngIf="settingsNav; else elseBlock">
+    <div class="mt-2 menuholder">
+      <a (click)="navigateBack()" class="back-arr"><i class="fa fa-arrow-left mr-2"
+          aria-hidden="true"></i><span>Back</span>
+      </a>
+      <p class="ml-3 text-muted h6"><span>Settings</span></p>
+      <a (click)="navigateTo('settings/organization')" [ngClass]="{ active: isActive('/organization') }">
+        <i class="fa fa-building-o mr-2" aria-hidden="true"></i><span>Organization</span>
+      </a>
+      <a *ngIf="displayRoles()" (click)="navigateTo('settings/users')" [ngClass]="{ active: isActive('/users') }">
+        <i class="os-icon os-icon-users mr-2" aria-hidden="true"></i><span>Users & Roles</span>
+      </a>
+      <a (click)="navigateTo('settings/preference')" [ngClass]="{ active: isActive('/preference') }">
+        <i class="os-icon os-icon-sliders mr-2" aria-hidden="true"></i><span>Preferences</span>
+      </a>
+      <a (click)="navigateTo('settings/taxes')" [ngClass]="{ active: isActive('/taxes') }">
+        <i class="os-icon os-icon-percent mr-2" aria-hidden="true"></i><span>Taxes</span>
+      </a>
+      <a (click)="navigateTo('settings/bank')" [ngClass]="{ active: isActive('/bank') }">
+        <i class="fa fa-university mr-2" aria-hidden="true"></i><span>BANK</span>
+      </a>
+      <a (click)="navigateTo('settings/warehouse')" [ngClass]="{ active: isActive('/warehouse') }">
+        <i class="os-icon os-icon-home-09 mr-2" aria-hidden="true"></i><span>Warehouse</span>
+      </a>
+      <!-- <a (click)="navigateTo('settings/route-item-group')" [ngClass]="{'active':isActive('/route-item-group')}"> <i
+                        class="os-icon os-icon-layers mr-2" aria-hidden="true"></i>Route Item Group</a> -->
+      <mat-expansion-panel (opened)="panelOpenState = true" (closed)="panelOpenState = false">
+        <mat-expansion-panel-header [collapsedHeight]="'35px'" [expandedHeight]="'35px'">
+          <mat-panel-title>
+            <span class="p-2">Location</span>
+          </mat-panel-title>
+        </mat-expansion-panel-header>
+        <a (click)="navigateTo('settings/location/country')"
+          [ngClass]="{ active: isActive('/settings/location/country') }"><i class="fa fa-globe mr-2"
+            aria-hidden="true"></i><span>Country</span>
+        </a>
+        <a (click)="navigateTo('settings/location/region')"
+          [ngClass]="{ active: isActive('/settings/location/region-master') }"><i class="fa fa-map-signs mr-2"
+            aria-hidden="true"></i><span>Region</span>
+        </a>
+        <a (click)="navigateTo('settings/location/depot')"
+          [ngClass]="{ active: isActive('/settings/location/depot') }"><i class="os-icon os-icon-home-09 mr-2"
+            aria-hidden="true"></i><span>Branch/Depot</span>
+        </a>
+        <!-- <a (click)="navigateTo('settings/area')" [ngClass]="{'active':isActive('/area')}"><i
+                        class="fa fa-map-marker mr-2" aria-hidden="true"></i>Area</a>
+                <a (click)="navigateTo('settings/sub-area')" [ngClass]="{'active':isActive('/sub-area')}"><i
+                        class="fa fa-compass mr-2" aria-hidden="true"></i>Sub
+                    Area</a> -->
+        <a (click)="navigateTo('settings/location/van')" [ngClass]="{ active: isActive('/van-master') }"><i
+            class="os-icon os-icon-truck mr-2" aria-hidden="true"></i><span>Van Master</span>
+        </a>
+        <a (click)="navigateTo('settings/location/route')" [ngClass]="{ active: activePath === '/settings/route' }"><i
+            class="os-icon os-icon-map mr-2" aria-hidden="true"></i><span>Route</span>
+        </a>
+      </mat-expansion-panel>
+      <mat-expansion-panel (opened)="panelOpenState = true" (closed)="panelOpenState = false">
+        <mat-expansion-panel-header [collapsedHeight]="'35px'" [expandedHeight]="'35px'">
+          <mat-panel-title>
+            <span class="p-2">Customer</span>
+          </mat-panel-title>
+        </mat-expansion-panel-header>
+        <a (click)="navigateTo('settings/customer/customer-category')"
+          [ngClass]="{ active: isActive('/customer-category') }"><i class="fa fa-users mr-2"
+            aria-hidden="true"></i><span>Customer Category</span>
+        </a>
+
+        <a (click)="navigateTo('settings/customer/credit-limits')"
+          [ngClass]="{ active: isActive('settings/credit-limits') }"><i class="fa fa-credit-card mr-2"
+            aria-hidden="true"></i><span>Credit Limits</span>
+        </a>
+        <a (click)="navigateTo('settings/customer/outlet-product-code')"
+          [ngClass]="{ active: isActive('/outlet-product') }"><i class="fa fa-file-text-o mr-2"
+            aria-hidden="true"></i><span>Outlet Product Code</span>
+        </a>
+      </mat-expansion-panel>
+      <mat-expansion-panel (opened)="panelOpenState = true" (closed)="panelOpenState = false">
+        <mat-expansion-panel-header [collapsedHeight]="'35px'" [expandedHeight]="'35px'">
+          <mat-panel-title>
+            <span class="p-2">Item</span>
+          </mat-panel-title>
+        </mat-expansion-panel-header>
+        <a (click)="navigateTo('settings/item/item-group')"><i class="fa fa-th-large mr-2"
+            aria-hidden="true"></i><span>Item Group</span>
+        </a>
+        <a (click)="navigateTo('settings/item/item-uom')"><i class="fa fa-balance-scale mr-2"
+            aria-hidden="true"></i><span>UOM</span>
+        </a>
+      </mat-expansion-panel>
+    </div>
+  </div>
+
+  <ng-template #elseBlock>
+    <div class="menuholder">
+      <a *ngFor="let menu of sidebarConfig;" [hidden]="featureCheck(menu.label)" [routerLink]="menu.routeTo"
+        [ngClass]="{ active: isActive(menu.active), spacing : isSpacing(menu.label)}">
+        <i class="{{menu.icon}} mr-2" aria-hidden="true"></i>
+        <span>{{menu.label}}</span>
+      </a>
+      <hr />
+      <!-- <a routerLink="dashboard" [ngClass]="{ active: isActive('/dashboard') }">
+        <i class="os-icon os-icon-bar-chart-stats-up mr-2" aria-hidden="true"></i>
+        <span>Dashboard</span>
+      </a> -->
+      <!-- <a (click)="navigateTo('masters/customer')" [ngClass]="{ active: isActive('/customer') }">
+        <i class="os-icon os-icon-user mr-2" aria-hidden="true"></i>
+        <span>Customer</span>
+      </a>
+      <a (click)="navigateTo('masters/item')" [ngClass]="{ active: isActive('/item') }">
+        <i class="os-icon os-icon-shopping-bag mr-2" aria-hidden="true"></i>
+        <span>Item</span>
+      </a>
+      <a (click)="navigateTo('masters/salesman')" [ngClass]="{ active: isActivePath('/masters/salesman') }">
+        <i class="os-icon os-icon-briefcase mr-2" aria-hidden="true"></i>
+        <span>Salesman</span>
+      </a>
+      <a (click)="navigateTo('masters/journey-plan')" [ngClass]="{ active: isActive('/masters/journey-plan') }">
+        <i class="os-icon os-icon-layers mr-2" aria-hidden="true"></i>
+        <span>Journey Plan</span>
+      </a>
+      <hr />
+      <a routerLink="pricing-plan/promotion" [ngClass]="{ active: isActive('/promotion') }">
+        <i class="fa fa-gift mr-2" aria-hidden="true"></i>
+        <span>Promotion</span>
+      </a>
+      <a routerLink="pricing-plan/pricing" [ngClass]="{ active: isActive('pricing-plan/pricing') }">
+        <i class="os-icon os-icon-dollar-sign mr-2" aria-hidden="true"></i>
+        <span>Pricing</span>
+      </a>
+      <a routerLink="pricing-plan/discount" [ngClass]="{ active: isActive('/discount') }">
+        <i class="os-icon os-icon-percent mr-2" aria-hidden="true"></i>
+        <span>Discount</span>
+      </a>
+      <a routerLink="pricing-plan/rebate" [ngClass]="{ active: isActive('/rebate') }">
+        <i class="fa fa-certificate mr-2" aria-hidden="true"></i>
+        <span>Rebate</span>
+      </a>
+
+      <hr />
+      <a routerLink="transaction/order" [ngClass]="{ active: isActive('/transaction/order') }">
+        <i class="os-icon os-icon-shopping-cart mr-2" aria-hidden="true"></i>
+        <span>Order</span>
+      </a>
+      <a routerLink="transaction/delivery" [ngClass]="{ active: isActive('/delivery') }">
+        <i class="os-icon os-icon-truck mr-2" aria-hidden="true"></i>
+        <span>Delivery</span>
+      </a>
+      <a routerLink="transaction/invoice" [ngClass]="{ active: isActive('/invoice') }">
+        <i class="os-icon os-icon-file-text mr-2" aria-hidden="true"></i>
+        <span>Invoice</span>
+      </a>
+
+      <a routerLink="transaction/credit-note" [ngClass]="{ active: isActive('/credit-note') }">
+        <i class="fa fa-credit-card mr-2" aria-hidden="true"></i>
+        <span>Credit Note</span>
+      </a>
+      <a routerLink="transaction/debit-note" [ngClass]="{ active: isActive('/debit-note') }">
+        <i class="fa fa-credit-card-alt mr-2" aria-hidden="true"></i>
+        <span>Debit Note</span>
+      </a>
+      <!-- <hr> --
+      <a routerLink="transaction/collection" [ngClass]="{ active: isActive('/collection') }">
+        <i class="fa fa-calendar-check-o mr-2" aria-hidden="true"></i>
+        <span>Collection</span>
+      </a>
+
+      <hr />
+      <a (click)="navigateTo('grouping/route-item-group')"
+        [ngClass]="{ active: isActive('/grouping/route-item-group') }">
+        <i class="os-icon os-icon-layers mr-2" aria-hidden="true"></i>
+        <span>Route Item Grouping</span>
+      </a>
+      <a routerLink="grouping/portfolio-management" [ngClass]="{ active: isActive('/grouping/portfolio-management') }">
+        <i class="fa fa-address-book-o mr-2" aria-hidden="true"></i>
+        <span>Portfolio Management</span>
+      </a>
+      <a routerLink="target/salesman-load" [ngClass]="{ active: isActivePath('/target/salesman-load') }">
+        <i class="os-icon os-icon-truck mr-2" aria-hidden="true"></i>
+        <span>Salesman Load</span>
+      </a>
+      <a (click)="navigateTo('supervisor/van-to-van-transfer')"
+        [ngClass]="{ active: isActive('/supervisor/van-to-van') }">
+        <i class="os-icon os-icon-truck fa-flip-horizontal mr-2" aria-hidden="true"></i>
+        <span>Van to Van Transfer</span>
+      </a>
+      <hr />
+      <a (click)="navigateTo('masters/vendor')" [ngClass]="{ active: isActive('/masters/vendor') }">
+        <i class="os-icon os-icon-map-pin mr-2" aria-hidden="true"></i>
+        <span>Vendor</span>
+      </a>
+      <a routerLink="inventory/purchase-order" [ngClass]="{ active: isActive('/purchase-order') }">
+        <i class="os-icon os-icon-shopping-cart mr-2" aria-hidden="true"></i>
+        <span>Purchase Order</span>
+      </a>
+      <a routerLink="manual-inventrory" [ngClass]="{ active: isActive('/manual-inventrory') }">
+        <i class="os-icon os-icon-box mr-2" aria-hidden="true"></i>
+        <span>Manual Inventory</span>
+      </a>
+      <a routerLink="inventory/grn" [ngClass]="{ active: isActive('/grn') }">
+        <i class="fa fa-sticky-note-o mr-2" aria-hidden="true"></i>
+        <span>GRN</span>
+      </a>
+
+      <a routerLink="inventory/depot-expairy" [ngClass]="{ active: isActive('/depot-expairy') }">
+        <i class="os-icon os-icon-link mr-2" aria-hidden="true"></i>
+        <span>Depot Damage/Expiry</span>
+      </a>
+      <a routerLink="inventory/stock-adjustment" [ngClass]="{ active: isActive('/stock-adjustment') }">
+        <i class="os-icon os-icon-home fa-inverse mr-2" aria-hidden="true"></i>
+        <span>Stock Adjustment</span>
+      </a>
+      <hr />
+      <a (click)="navigateTo('finance/cashier-reciept')" [ngClass]="{ active: isActive('/finance/cashier-reciept') }">
+        <i class="os-icon os-icon-file-text mr-2" aria-hidden="true"></i>
+        <span>Cashier Receipt</span>
+      </a>
+      <a routerLink="pdc" [ngClass]="{ active: isActive('/pdc') }">
+        <i class="os-icon os-icon-edit mr-2" aria-hidden="true"></i>
+        <span>PDC</span>
+      </a>
+      <a routerLink="salesman-reconciliation" [ngClass]="{ active: isActive('/salesman-reconciliation') }">
+        <i class="fa fa-calendar-check-o mr-2" aria-hidden="true"></i>
+        <span>Salesman Reconciliation</span>
+      </a>
+      <hr />
+      <a routerLink="supervisor/session" [ngClass]="{ active: isActive('/session') }">
+        <i class="os-icon os-icon-thumbs-up mr-2" aria-hidden="true"></i>
+        <span>Session Endorsement</span>
+      </a>
+      <a routerLink="/target/sales-target" [ngClass]="{ active: isActive('/sales-target') }">
+        <i class="os-icon os-icon-target mr-2" aria-hidden="true"></i>
+        <span>Sales Target</span>
+      </a>
+
+      <hr />
+      <a routerLink="expense/expenses" [ngClass]="{ active: isActive('expense/expenses') }">
+        <i class="fa fa-money mr-2" aria-hidden="true"></i>
+        <span>Expenses</span>
+      </a>
+      <a routerLink="/estimate" [ngClass]="{ active: isActive('/estimate') }">
+        <i class="fa fa-calculator mr-2" aria-hidden="true"></i>
+        <span>Estimate</span>
+      </a>
+      <hr />
+      <a routerLink="merchandising/stockinstore" [ngClass]="{ active: isActive('/stockinstore') }">
+        <i class="os-icon os-icon-shopping-bag mr-2" aria-hidden="true"></i>
+        <span>Stock In Store</span>
+      </a>
+      <a routerLink="merchandising/complaint-feedback" [ngClass]="{ active: isActive('/complaint-feedback') }">
+        <i class="os-icon os-icon-file-text mr-2" aria-hidden="true"></i>
+        <span>Complaint Feedback</span>
+      </a>
+      <a routerLink="merchandising/competitors" [ngClass]="{ active: isActive('/competitors') }">
+        <i class="os-icon os-icon-file-text mr-2" aria-hidden="true"></i>
+        <span>Competitor Info</span>
+      </a>
+      <a routerLink="merchandising/campaigns" [ngClass]="{ active: isActive('/campaigns') }">
+        <i class="os-icon os-icon-file-text mr-2" aria-hidden="true"></i>
+        <span>Campaign</span>
+      </a>
+      <a routerLink="merchandising/planograms" [ngClass]="{ active: isActive('/planograms') }">
+        <i class="os-icon os-icon-file-text mr-2" aria-hidden="true"></i>
+        <span>Planogram</span>
+      </a>
+      <a routerLink="merchandising/shelf-display" [ngClass]="{ active: isActive('/shelf-display') }">
+        <i class="os-icon os-icon-file-text mr-2" aria-hidden="true"></i>
+        <span>Shelf Display</span>
+      </a>
+      <a routerLink="merchandising/asset-tracking" [ngClass]="{ active: isActive('/asset-tracking') }">
+        <i class="os-icon os-icon-file-text mr-2" aria-hidden="true"></i>
+        <span>Asset Tracking</span>
+      </a>
+      <a routerLink="merchandising/consumer-survey" [ngClass]="{ active: isActive('/consumer-survey') }">
+        <i class="os-icon os-icon-file-text mr-2" aria-hidden="true"></i>
+        <span>Consumer Survey</span>
+      </a>
+      <a routerLink="merchandising/sensory-survey" [ngClass]="{ active: isActive('/sensory-survey') }">
+        <i class="os-icon os-icon-file-text mr-2" aria-hidden="true"></i>
+        <span>Sensory Survey</span>
+      </a>
+      <a routerLink="merchandising/promotional" [ngClass]="{ active: isActive('/promotional') }">
+        <i class="os-icon os-icon-file-text mr-2" aria-hidden="true"></i>
+        <span>Promotional Accountability</span>
+      </a> -->
+    </div>
+  </ng-template>
+</div>

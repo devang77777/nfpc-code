@@ -1,0 +1,146 @@
+<div class="pl-3  items-table-box" *ngIf="itemSource.data.length > 0">
+    <div class="table-responsive">
+        <table mat-table [dataSource]="itemSource" class="mat-elevation-z8 table table-hover">
+            <ng-container *ngFor="let col of displayedColumns; ;let i = index;" matColumnDef="{{col}}">
+                <th mat-header-cell *matHeaderCellDef> {{displayLabels[i]}} </th>
+                <td mat-cell *matCellDef="let element"> 
+                    <container-element [ngSwitch]="reportName">
+                        <ng-container *ngSwitchCase="'Task Completed'">
+                            <div *ngIf="col == 'created_at'">
+                                {{ element.created_at | date :"d MMM y h:mm a" }}
+                            </div>
+                            <div *ngIf="col != 'created_at'">
+                                {{ element[col] ? element[col] : 'N/A' }}
+                            </div>
+                        </ng-container>
+                        <ng-container *ngSwitchCase="'SOS'">
+                            <div *ngIf="col == 'created_at'">
+                                {{ element.created_at | date :"d MMM y h:mm a" }}
+                            </div>
+                            <div *ngIf="col == 'customer'">
+                                {{ element?.customer?.firstname }} {{ element?.customer?.lastname }}
+                            </div>
+                            <div *ngIf="col == 'merchandiser'">
+                                {{ element?.salesman?.firstname }} {{ element?.salesman?.lastname }}
+                            </div>
+                            <div *ngIf="col == 'distribution'">
+                                {{ element?.distribution?.name }}
+                            </div>
+                            <div *ngIf="col == 'item'">
+                                {{ element?.item?.item_name }}
+                            </div>
+                            <div *ngIf="col == 'item_code'">
+                                {{ element.item?.item_code }}
+                            </div>
+                            <div *ngIf="col !== 'item' && col !== 'item_code' && col !== 'created_at' && col !== 'customer' && col !== 'merchandiser' && col !== 'distribution'">
+                                {{ element[col] ? element[col] : 'N/A' }}
+                            </div>
+                        </ng-container>
+                        <ng-container *ngSwitchCase="'Stock Availibility'">
+                            <div *ngIf="col == 'created_at'">
+                                {{ element.date | date :"d MMM y h:mm a" }}
+                            </div>
+                            <div *ngIf="col == 'customer'">
+                                {{ element?.customerName }}
+                            </div>
+                            <div *ngIf="col == 'distribution'">
+                                {{ element?.distribution?.name }}
+                            </div>
+                            <div *ngIf="col == 'item'">
+                                {{ element?.itemName }}
+                            </div>
+                            <div *ngIf="col == 'item_code'">
+                                {{ element.itemCode }}
+                            </div>
+                            <div *ngIf="col == 'is_out_of_stock'">
+                                {{ element.availbleOos }}
+                            </div>
+                            <div *ngIf="col !== 'is_out_of_stock' && col !== 'item' && col !== 'item_code' && col !== 'created_at' && col !== 'customer' && col !== 'distribution'">
+                                {{ element[col] ? element[col] : 'N/A' }}
+                            </div>
+                        </ng-container>
+                        <ng-container *ngSwitchCase="'Planogram'">
+                            <div *ngIf="col == 'created_at'">
+                                {{ element?.created_at | date :"d MMM y h:mm a" }}
+                            </div>
+                            <div *ngIf="col == 'customer'">
+                                {{ element?.customer?.firstname }} {{ element?.customer?.lastname }}
+                            </div>
+                            <div *ngIf="col == 'distribution'">
+                                {{ element?.distribution?.name }}
+                            </div>
+                            <div *ngIf="col == 'ref_planogram'">
+                                <ng-container *ngIf="element.planogram?.planogram_image.length > 0">
+                                    <div class="row">
+                                        <div class="col-md-3"></div>
+                                        <div class="col-md-6">
+                                            <div *ngFor="let pImages of element.planogram?.planogram_image" class="imageCard">
+                                                <img class="imgs" [src]="pImages.image_string" alt="">
+                                                <div class="iconsbar">
+                                                    <a href="javascript:;" (click)="open(pImages.image_string, 0)"><i class="fa fa-eye"></i></a>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-3"></div>
+                                    </div>
+                                </ng-container>
+                            </div>
+                            <div *ngIf="col == 'before_image'">
+                                <ng-container *ngIf="element.planogram_post_before_image?.length > 1">
+                                    <div class="imageCard" *ngFor="let img of element.planogram_post_before_image; let i = index;">
+                                        <img [src]="img.image_string" alt="">
+                                        <div class="iconsbar">
+                                            <a href="javascript:;" (click)="open(img.image_string, 0)"><i class="fa fa-eye"></i></a>
+                                        </div>
+                                    </div>
+                                </ng-container>
+                            </div>
+                            <div *ngIf="col == 'after_image'">
+                                <ng-container *ngIf="element.planogram_post_after_image?.length > 0">
+                                    <div class="imageCard" *ngFor="let img of element.planogram_post_after_image; let i = index;">
+                                        <img [src]="img.image_string" alt="">
+                                        <div class="iconsbar">
+                                            <a href="javascript:;" (click)="open(img.image_string, 0)"><i class="fa fa-eye"></i></a>
+                                        </div>
+                                    </div>
+                                </ng-container>
+                            </div>
+                            
+                            <div *ngIf="col !== 'before_image' && col !== 'after_image' && col !== 'ref_planogram' && col !== 'created_at' && col !== 'customer' && col !== 'distribution'">
+                                {{ element[col] ? element[col] : 'N/A' }}
+                            </div>
+                        </ng-container>
+                        <ng-container *ngSwitchCase="'Orders'">
+                            <div *ngIf="col == 'createdAt'">
+                                {{ element.createdAt | date :"d MMM y h:mm a" }}
+                            </div>
+                            <div *ngIf="col !== 'createdAt'">
+                                {{ element[col] ? element[col] : 'N/A' }}
+                            </div>
+                        </ng-container>
+                        <ng-container *ngSwitchCase="'Complaint'">
+                            <div *ngIf="col == 'created_at'">
+                                {{ element.created_at | date :"d MMM y h:mm a" }}
+                            </div>
+                            <div *ngIf="col == 'customer'">
+                                {{ element?.customer?.firstname }} {{ element?.customer?.lastname }}
+                            </div>
+                            <div *ngIf="col == 'item'">
+                                {{ element?.item?.item_name }}
+                            </div>
+                            <div *ngIf="col == 'item_code'">
+                                {{ element.item?.item_code }}
+                            </div>
+                            <div *ngIf="col !== 'item' && col !== 'item_code' && col !== 'created_at' && col !== 'customer'">
+                                {{ element[col] ? element[col] : 'N/A' }}
+                            </div>
+                        </ng-container>
+                    </container-element>
+                </td>
+            </ng-container>
+            <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+            <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+        </table>
+    </div>
+    <!-- <mat-paginator [length]="itemSource.data.length" pageSize="50" [pageSizeOptions]="[5,10,15,25,50,100]"></mat-paginator> -->
+</div>

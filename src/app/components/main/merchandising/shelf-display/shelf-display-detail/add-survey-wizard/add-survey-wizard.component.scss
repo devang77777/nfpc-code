@@ -1,0 +1,226 @@
+::ng-deep .mat-horizontal-stepper-header-container {
+    margin-top: 10px;
+}
+
+::ng-deep .mat-horizontal-stepper-header{
+    pointer-events: none !important;
+}
+
+  .mt-30{
+      margin-top: 30px;
+  }
+
+  .mainMenu {
+    display: block;
+  
+    overflow: hidden;
+    
+    .item {
+        // border-top: 1px solid #2E4053;
+        overflow: hidden;
+    }
+
+    .example-card {
+        max-width: 400px;
+
+        
+      } 
+
+    .btn {
+        display: block;
+        padding: 15px 20px;
+        background-color: #ECF0F1;
+        color: #117A65;
+        position: relative;
+    }
+    
+    .btn:before {
+        content: '';
+        position: absolute;
+        width: 0;
+        height: 0;
+        border-left: 8px solid transparent;
+        border-right: 8px solid transparent;
+        border-top: 10px solid #ECF0F1;
+        right: 15px;
+        bottom: -10px;
+        z-index: 9;
+    }
+    
+    .btn i {
+        margin-right: 15px;
+    }
+
+
+}
+
+.mat-card.qcard{
+  border: 1px solid #eee;
+  background-color: #fff;
+  margin-bottom: 20px;
+  box-shadow: none;
+  transition: all 0.31s ease-in;
+    &:hover{
+      background-color: #f9ffff;
+      border-color:#90c4ce;
+    }
+}
+.mainMenu{
+       li{
+             color: #333;
+             border-top: 1px transparent solid;
+             border-left: 1px transparent solid;
+             border-right: 1px transparent solid;
+             border-bottom: 1px solid #eaeaea;
+             -ms-box-shadow: -1px 0 1px rgba(0, 0, 0, 0.1);
+             box-shadow: -1px 0 1px rgba(0, 0, 0, 0.1);
+             background-color: #fff;
+             padding:0 6px;
+             text-align: left;
+             border-radius: 0;
+             display: block;
+             height: 40px;
+             line-height: 40px;
+             display: flex;
+             transition: all 0.21s ease;
+             align-items: center;
+             &:hover{
+                 text-decoration: none;
+                 color:#000;
+                 background: #e4e4e4;
+             }
+             >img{
+                 max-width: 14px;
+                  margin-right: 10px;
+             }
+         
+       }
+   }
+  
+  .holder{
+     font-size: 16px;
+     margin: 0 0 10px;
+     display: flex;
+     align-items: center;
+  }
+.card-input {
+    display: inline-block;
+    width: 4% !important;
+    vertical-align: bottom;
+    margin-right: 5px;
+}
+
+p {
+    font-size: 16px;
+}
+
+.trash-btn{
+    cursor: pointer;
+    color:#000;
+    font-size: 16px;
+}
+#content{
+  min-height: 160px;
+  padding:15px;
+  position: relative;
+}
+.toolbarheader{
+     background-color: #e4e4e4;
+     padding: 10px;
+     border-bottom: 1px #e3e3e3 solid;
+     margin: 0;
+     font-size: 16px;
+  }
+#sidebar {
+  z-index: 1000;
+  height: 100%;
+  -webkit-transition: all 0.5s ease;
+  -moz-transition: all 0.5s ease;
+  -o-transition: all 0.5s ease;
+  transition: all 0.5s ease;
+  background: #fff;
+  transition: all 0.5s ease;
+  min-height: 460px;
+  border: 1px solid #eaeaea;
+}
+  
+  #sidebar .snav li{
+    font-size: 14px;
+    text-decoration: none;
+  }
+  
+  #sidebar .snav li:hover{
+    background-color: #f6fcfc;
+    border: 1px dashed #91c1cc;
+  }
+  
+
+
+
+
+  .drag-over {
+    border: #ff525b dashed 1px;
+  }
+
+  .drag-hint {
+    border: #ffc100 dashed 1px;
+  }
+
+  .drag-target-border {
+    border: #00bfff dashed 1px;
+  }
+
+  .drag-target-border-green {
+    border: #3c763d dashed 1px;
+  }
+.dropheader{
+  background-color: #000;
+  color: #fff;
+  position: relative;
+    height: 48px;
+    font-size: 14px;
+    text-align: center;
+    line-height: 48px;
+}
+.dmain{
+  -webkit-box-shadow: 0 0 40px 6px rgba(204,204,204,.45);
+    -moz-box-shadow: 0 0 40px 6px rgba(204,204,204,.45);
+    -ms-box-shadow: 0 0 40px 6px rgba(204,204,204,.45);
+    box-shadow: 0 0 40px 6px rgba(204,204,204,.45);
+    border: 1px solid #e1e1e1;
+    background-color: #fbfbfb;
+    -webkit-transition: box-shadow .2s linear 0s;
+    -moz-transition: box-shadow .2s linear 0s;
+    -ms-transition: box-shadow .2s linear 0s;
+    transition: box-shadow .2s linear 0s;
+    
+}
+.darea{
+  p.tooltiptext{
+    touch-action: none;
+    outline: 0 !important;
+    text-decoration: none;
+    font-size: 15px;
+    font-weight: 400;
+    color: #ccc;
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%,-50%);
+  }
+}
+.mat-card-header-text {
+  margin: 0;
+}
+.card-footer{
+  position: fixed;
+  bottom: 0;
+  right: 0;
+  text-align:right;width: 100%;
+}
+@media (max-width: 575px) {
+  #sidebar{
+    min-height:100%;
+    margin-bottom: 10px;
+  }
+}

@@ -1,0 +1,56 @@
+<div class="card-body">
+   <form  [formGroup]="customFieldForm">
+    <div class="">
+        <div formArrayName="fields" *ngFor="let item of customFieldForm.get('fields')['controls']; let i = index;">
+            <div class="row mb-4" [formGroupName]="i">
+                <div class="col-md-4 col-3">{{item.get('fieldLabel').value}}</div>
+                <div class="col-md-7 col-7">
+                    
+                    <ng-container *ngIf="item.get('fieldType').value==='text_box'">
+                        <input  type="text" class="form-control form-control-sm"
+                    formControlName="fieldValue">
+                    </ng-container>
+                    <ng-container *ngIf="item.get('fieldType').value==='check_box'">
+                        <input  type="checkbox" formControlName="fieldValue">
+                    </ng-container>
+                    <ng-container *ngIf="item.get('fieldType').value==='date'">
+                        <input  type="date" formControlName="fieldValue"
+                        class="form-control form-control-sm">
+                    </ng-container>
+                    <ng-container *ngIf="item.get('fieldType').value==='dropdown'">
+                    <div class="form-group">
+                        <select class="form-control form-control-sm" formControlName="fieldValue">
+                            <ng-container *ngIf="item.get('fieldOptions').value && item.get('fieldOptions').value.length>0">
+                            <option  *ngFor="let option of item.get('fieldOptions').value" [value]="option">
+                                
+                                {{option}}
+                            </option>
+                        </ng-container>
+                        </select>
+                    </div>
+                </ng-container>
+                <ng-container *ngIf="item.get('fieldType').value==='multi_select'">
+                    <mat-form-field class="w-100">
+                        <mat-select formControlName="fieldValue" multiple>
+                            <ng-container *ngIf="item.get('fieldOptions').value && item.get('fieldOptions').value.length>0">
+                            <mat-option *ngFor="let option of item.get('fieldOptions').value" [value]="option">
+                                {{option}}
+                            </mat-option>
+                        </ng-container>
+                        </mat-select>
+                    </mat-form-field>
+                </ng-container>
+                </div>
+                <div class="col-1">
+                    <button class="btn btn-icon btn-sm" (click)="openDeleteBox(item,i)"><i
+                            class="fa fa-trash text-danger" aria-hidden="true"></i></button>
+                </div>
+            </div>
+
+        </div>
+    </div>
+    <button class="btn btn-link btn-sm" (click)="addCustomFields()">Add Custom Fields</button>
+</form>
+</div>
+
+

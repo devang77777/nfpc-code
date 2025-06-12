@@ -1,0 +1,67 @@
+<mat-drawer-container class="formdrawer-container" hasBackdrop="false">
+  <mat-drawer
+    id="formDrawer"
+    mode="over"
+    position="end"
+    #formDrawer
+    class="border"
+  >
+    <div style="min-width: 320px;">
+      <app-add-branch-depot-form (updateTableData)="updateTableData($event)"></app-add-branch-depot-form>
+    </div>
+  </mat-drawer>
+  <section>
+    <div class="table-box" [ngClass]="{ collapsed: isDetailVisible }">
+      <div class="heading-row">
+        <h2 class="d-inline" [hidden]="isDetailVisible">Branch/Depot Master</h2>
+        <div
+          class="float-right d-inline"
+          [ngClass]="{ 'expanded-action': isDetailVisible }"
+        >
+          <button
+            class="btn btn-sm btn-p"
+            appPermission
+            [permissions]="userPermissions"
+            [type]="'create'"
+            mat-button
+            (click)="openAddBranchDepot()"
+          >
+            <i class="os-icon os-icon-plus mr-2" aria-hidden="true"></i>New
+          </button>
+          <button *ngIf="checkedRows.length > 0" class="btn btn-sm btn-white dropdown-toggle ml-2" mat-button
+            [matMenuTriggerFor]="menu2">
+            Bulk Actions
+          </button>
+          <mat-menu #menu2="matMenu">
+            <button mat-menu-item (click)="bulkAction('active')">Mark as Active</button>
+            <button mat-menu-item (click)="bulkAction('inactive')" >Mark as Inactive</button>
+            <!-- <button mat-menu-item (click)="bulkAction('delete')" appPermission [permissions]="userPermissions" [type]="'delete'">
+              Delete
+            </button> -->
+          </mat-menu>
+          <!-- impot /Export  -->
+          <button class="btn btn-sm btn-white ml-2 dropdown-toggle" [matMenuTriggerFor]="menu3">
+            <i class="fa fa-bars" aria-hidden="true"></i>
+         </button>
+        <mat-menu #menu3="matMenu">
+            <button mat-menu-item >Import Branch/Depot</button>
+            <button mat-menu-item type="button" >Export Branch/Depot</button>
+        </mat-menu>
+        </div>
+      </div>
+      <app-branch-depot-master-dt
+        [newDepotData] = "newDepotData"
+        (itemClicked)="itemClicked($event)"
+        (selectedRows)="selectedRows($event)"
+      ></app-branch-depot-master-dt>
+    </div>
+    <div class="details-box" [ngClass]="{ expanded: isDetailVisible }">
+      <app-branch-depot-detail
+        (updateTableData)="updateTableData($event)"
+        (detailsClosed)="closeClicked()"
+        [isDetailVisible]="isDetailVisible"
+        [depotData]="depotData"
+      ></app-branch-depot-detail>
+    </div>
+  </section>
+</mat-drawer-container>

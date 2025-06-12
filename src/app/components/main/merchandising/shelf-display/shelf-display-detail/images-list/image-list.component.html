@@ -1,0 +1,103 @@
+<div class="pl-3 row mb-4 mt-4" *ngIf="imageData">
+  <div class="col-md-1 col-form-label">Date</div>
+  <div class="col-md-3 mb-md-0 mb-2">
+    <input class="form-control form-control-sm" type="date" [formControl]="dateFilterControl">
+  </div>
+  <div class="col-md-3 item-add-btn">
+    <button type="button" (click)="getDistributionImageList('date', true)"
+      class="mr-2 btn btn-sm btn-primary">Filter</button>
+    <button type="button" (click)="getDistributionImageList('all', true)" class=" btn btn-sm btn-danger">All</button>
+  </div>
+</div>
+<div class="pl-3 items-table-box">
+  <div class="table-responsive">
+    <table mat-table [dataSource]="itemSource" class="mat-elevation-z8 table table-hover" multiTemplateDataRows>
+      <ng-container matColumnDef="created_at">
+        <th mat-header-cell *matHeaderCellDef>
+          <app-column-filter title="Date" (changeSelected)="onColumnFilterOpen($event)"
+            [selected]="selectedColumnFilter" controlName="date" (close)="onColumnFilter($event)">
+            <input class="form-control form-control-sm" [formControl]="filterForm.get('date')" placeholder="Enter Date" type="date">
+          </app-column-filter>
+        </th>
+        <td mat-cell *matCellDef="let element"> {{ element.created_at | date :"d MMM y h:mm a"}} </td>
+      </ng-container>
+      <ng-container matColumnDef="salesman">
+        <th mat-header-cell *matHeaderCellDef>
+          <app-column-filter title="Merchandiser" controlName="salesman_name" (changeSelected)="onColumnFilterOpen($event)"
+            [selected]="selectedColumnFilter" (close)="onColumnFilter($event)">
+            <input class="form-control form-control-sm" [formControl]="filterForm.get('salesman_name')" placeholder="Enter Merchandiser" type="text">
+          </app-column-filter>
+        </th>
+        <td mat-cell *matCellDef="let element"> {{ element.salesman?.firstname }}
+          {{ element.salesman?.lastname }}</td>
+      </ng-container>
+      <ng-container matColumnDef="customer">
+        <th mat-header-cell *matHeaderCellDef>
+          <app-column-filter title="Customer Name" controlName="customer_name" (changeSelected)="onColumnFilterOpen($event)"
+            [selected]="selectedColumnFilter" (close)="onColumnFilter($event)">
+            <input class="form-control form-control-sm" [formControl]="filterForm.get('customer_name')" placeholder="Enter Customer Name" type="text">
+          </app-column-filter>
+        </th>
+        <td mat-cell *matCellDef="let element"> {{ element.customer?.firstname }}
+          {{ element.customer?.lastname }}</td>
+      </ng-container>
+      <ng-container matColumnDef="customerCode">
+        <th mat-header-cell *matHeaderCellDef>
+          <app-column-filter title="Customer Code" controlName="customer_code" (changeSelected)="onColumnFilterOpen($event)"
+            [selected]="selectedColumnFilter" (close)="onColumnFilter($event)">
+            <input class="form-control form-control-sm" [formControl]="filterForm.get('customer_code')" placeholder="Enter Customer Code" type="text">
+          </app-column-filter>
+        </th>
+        <td mat-cell *matCellDef="let element"> {{element.customer?.customer_info ?
+          element.customer?.customer_info?.customer_code :'N/A' }}</td>
+      </ng-container>
+      <ng-container matColumnDef="expandedDetail">
+        <td mat-cell *matCellDef="let element" [attr.colspan]="displayedColumns.length">
+          <div class="element-detail show-images"
+            [@detailExpand]="element == expandedElement ? 'expanded' : 'collapsed'">
+            <div *ngIf='element.image1' class="img-position imageCard">
+              <img [src]="element.image1" height="150" width="150px">
+              <div class="iconsbar">
+                <a href="javascript:;" (click)="downloadFile(element.image1)"><i class="fa fa-download"></i></a>
+                <a href="{{element.image1}}" target="_blank"><i class="fa fa-external-link"></i></a>
+                <a href="javascript:;" (click)="open(element.image1, 0)"><i class="fa fa-eye"></i></a>
+              </div>
+            </div>
+            <div *ngIf='element.image2' class="img-position imageCard">
+              <img [src]="element.image2" height="150" width="150px">
+              <div class="iconsbar">
+                <a href="javascript:;" (click)="downloadFile(element.image2)"><i class="fa fa-download"></i></a>
+                <a href="{{element.image2}}" target="_blank"><i class="fa fa-external-link"></i></a>
+                <a href="javascript:;" (click)="open(element.image2, 0)"><i class="fa fa-eye"></i></a>
+              </div>
+            </div>
+            <div *ngIf='element.image3' class="img-position imageCard">
+              <img [src]="element.image3" height="150" width="150px">
+              <div class="iconsbar">
+                <a href="javascript:;" (click)="downloadFile(element.image3)"><i class="fa fa-download"></i></a>
+                <a href="{{element.image3}}" target="_blank"><i class="fa fa-external-link"></i></a>
+                <a href="javascript:;" (click)="open(element.image3, 0)"><i class="fa fa-eye"></i></a>
+              </div>
+            </div>
+            <div *ngIf='element.image4' class="img-position imageCard">
+              <img [src]="element.image4" height="150" width="150px">
+              <div class="iconsbar">
+                <a href="javascript:;" (click)="downloadFile(element.image4)"><i class="fa fa-download"></i></a>
+                <a href="{{element.image4}}" target="_blank"><i class="fa fa-external-link"></i></a>
+                <a href="javascript:;" (click)="open(element.image4, 0)"><i class="fa fa-eye"></i></a>
+              </div>
+
+            </div>
+            <br />
+          </div>
+        </td>
+      </ng-container>
+      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+      <tr mat-row *matRowDef="let row; columns: displayedColumns;" (click)="expandList(row)" class="element-row"
+        [class.expanded-row]="expandedElement === row"></tr>
+      <tr mat-row *matRowDef="let row;let i = index; columns: ['expandedDetail']" class="detail-row"></tr>
+    </table>
+  </div>
+  <mat-paginator [hidden]="hidePaginator(itemSource.data.length)" pageSize="10" [pageSizeOptions]="[5,10]">
+  </mat-paginator>
+</div>

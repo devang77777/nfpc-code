@@ -1,0 +1,775 @@
+<mat-drawer-container class="formdrawer-container" hasBackdrop="false">
+    <mat-drawer id="formDrawer" mode="over" position="start" #formDrawer class="border">
+        <div style="min-width: 350px;">
+            <div class="card">
+                <div class="card-header pt-4">
+                    <span class="h6 font-weight-light">Report Filters</span>
+                    <a (click)="close()"><i class="fa fa-times fa-lg text-secondary float-right"
+                            aria-hidden="true"></i></a>
+                </div>
+                <form [formGroup]="sideFiltersForm">
+                    <div class="">
+                        <div class="row card-body"
+                            *ngIf="activeRoute!='order-details' && activeRoute!='daily-operation' && activeRoute!='delivery-report'"
+                            [ngStyle]="{'padding-bottom':activeRoute=='order-details' || activeRoute=='daily-operation'?'20px':'0px'}">
+                            <div class="col-6">
+                                <div class="mb-4">
+                                    <label for="">Start Date <i class="text-red">*</i></label>
+                                    <input type="date" class="form-control form-control-sm" formControlName="start_date"
+                                        placeholder="Start Date">
+                                    <span
+                                        *ngIf="(sideFiltersForm.controls.start_date.touched || isSubmitted) && sideFiltersForm.controls.start_date.errors?.required"
+                                        class="error-msg">
+                                        <span class="text-danger">Field is required.</span>
+                                    </span>
+                                </div>
+                            </div>
+                            <div class="col-6">
+                                <div class="mb-4">
+                                    <label for="">End Date <i class="text-red">*</i></label>
+                                    <input type="date" class="form-control form-control-sm" formControlName="end_date"
+                                        placeholder="End Date">
+                                    <span
+                                        *ngIf="(sideFiltersForm.controls.end_date.touched || isSubmitted) && sideFiltersForm.controls.end_date.errors?.required"
+                                        class="error-msg">
+                                        <span class="text-danger">Field is required.</span>
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card-body"
+                            [ngStyle]="{'padding-top':activeRoute=='order-details' || activeRoute=='daily-operation'?'20px':'0px'}"
+                            *ngIf="checkIsActiveRoute()===1">
+                            <div class="mb-4"
+                                *ngIf="activeRoute=='sales-quantity' || (activeRoute!='driver-loaded-qty' && activeRoute!='sales-vs-grv' && activeRoute!='daily-operation') && activeRoute!='delivery-report'">
+                                <label for="">Region</label>
+                                <app-multiautocomplete isSingle="false" [options]="regionList"
+                                    [control]="sideFiltersForm.controls['region']" (selectionchanged)="filterSalesman()"
+                                    text="region_name" id="id" placeholder="Search region">
+                                </app-multiautocomplete>
+                               
+                                <!-- <label for="" class="mt-4">Service Channel</label>
+                                <app-multiautocomplete isSingle="false" [options]="channelList"
+                                    [control]="sideFiltersForm.controls['channel_code']" text="name" id="id"
+                                    param1="id" param2="name" objectName="code-root" placeholder="Select Service Channel">
+                                </app-multiautocomplete> -->
+                                <!-- <label for="">Zone</label>
+                                <app-multiautocomplete isSingle="true" [options]="zoneList"
+                                    [control]="sideFiltersForm.controls['zone_id']" (selectionchanged)="filterSalesman()"
+                                    text="name" id="id" placeholder="Search zone">
+                                </app-multiautocomplete> -->
+                            </div>
+                            
+                            <div class="mb-4"
+                                *ngIf=" activeRoute!='daily-operation' && activeRoute!='delivery-report' && activeRoute!='driver-loaded-qty' && activeRoute!='sales-vs-grv'">
+                                <label for="">Division</label>
+                                <app-multiautocomplete isSingle="true" [options]="divisionList"
+                                    (selectionchanged)="filterWarehouse()"
+                                    [control]="sideFiltersForm.controls['division']" text="name" id="id"
+                                    placeholder="Select Division">
+                                </app-multiautocomplete>
+                                <span
+                                    *ngIf="(sideFiltersForm.controls.division.touched || isSubmitted) && sideFiltersForm.controls.division.errors?.required"
+                                    class="error-msg">
+                                    <span class="text-danger">Field is required.</span>
+                                </span>
+                            </div>
+                            <div class="mb-4"
+                                *ngIf="activeRoute!='order-details' && activeRoute!='daily-operation' &&  activeRoute!='delivery-report' && activeRoute!='driver-loaded-qty' && activeRoute!='sales-vs-grv'">
+                                <label for="">Warehouse</label>
+                                <app-multiautocomplete isSingle="false" [options]="warehouseList"
+                                    (selectionchanged)="filterVehicles()"
+                                    [control]="sideFiltersForm.controls['warehouse_id']" text="name" id="id"
+                                    param1="code" param2="name" objectName="code-root" placeholder="Select Warehouse">
+                                </app-multiautocomplete>
+                                <span
+                                    *ngIf="(sideFiltersForm.controls.warehouse_id.touched || isSubmitted) && sideFiltersForm.controls.warehouse_id.errors?.required"
+                                    class="error-msg">
+                                    <span class="text-danger">Field is required.</span>
+                                </span>
+                            </div>
+                            
+
+                            <ng-container *ngIf="activeRoute=='order-details'">
+                                <div class="row">
+                                    <div class="col-6">
+                                        <div class="mb-4">
+                                            <label for="">Order No.</label>
+                                            <input type="no" class="form-control form-control-sm"
+                                                placeholder="Order No." formControlName="order_number">
+                                        </div>
+                                    </div>
+                                    <div class="col-6">
+                                        <div class="mb-4">
+                                            <label for="">LPO</label>
+                                            <input type="no" class="form-control form-control-sm"
+                                                placeholder="Customer LPO" formControlName="customer_lpo">
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="mb-4">
+                                    <label for="">Division</label>
+                                    <app-multiautocomplete isSingle="true" [options]="divisionList"
+                                        (selectionchanged)="filterWarehouse()"
+                                        [control]="sideFiltersForm.controls['division']" text="name" id="id"
+                                        placeholder="Select Division">
+                                    </app-multiautocomplete>
+                                </div>
+                                <div class="mb-4">
+                                    <label for="">Warehouse</label>
+                                    <app-multiautocomplete isSingle="false" [options]="warehouseList"
+                                        (selectionchanged)="filterVehicles()"
+                                        [control]="sideFiltersForm.controls['warehouse_id']" text="name" id="id"
+                                        param1="code" param2="name" objectName="code-root"
+                                        placeholder="Select Warehouse">
+                                    </app-multiautocomplete>
+                                </div>
+
+
+                                <div class="mb-4">
+                                    <label for="">Item</label>
+                                    <!-- <app-multiautocomplete isSingle="false" [options]="itemList"
+                                        [control]="sideFiltersForm.controls['item_id']" text="item_name" id="id"
+                                        objectName="items-root" param1="item_code" param2="item_name"
+                                        placeholder="Select Item">
+                                    </app-multiautocomplete> -->
+
+                                    <angular2-multiselect [data]="itemList"
+                                        [formControl]="sideFiltersForm.controls['item_id']" [settings]="settings">
+                                        <!-- (onSelect)="onItemSelect($event)" (onDeSelect)="OnItemDeSelect($event)"
+                                        (onSelectAll)="onSelectAll($event)" (onDeSelectAll)="onDeSelectAll($event)" -->
+                                        <c-search>
+                                            <ng-template>
+                                                <input type="text" (input)="onSearch($event)" placeholder="Search Items"
+                                                    style="border: none;width: 100%; height: 100%;outline: none;" />
+                                            </ng-template>
+                                        </c-search>
+                                        <c-item>
+                                            <ng-template let-item="item">
+                                                <label style="color: #333;width: 150px;">{{item.itemName}}</label>
+                                            </ng-template>
+                                        </c-item>
+                                    </angular2-multiselect>
+                                </div>
+                                <div class="mb-4">
+                                    <label for="">Customer</label>
+                                    <app-multiautocomplete isSingle="true" [options]="customerList"
+                                        [control]="customerFormControl" (selectionchanged)="selectedCustomer()"
+                                        text="customer_name" id="id" placeholder="Search Salesman">
+                                    </app-multiautocomplete>
+                                </div>
+
+                                <div class="mb-4">
+                                    <label for="">Select Date Range</label>
+                                    <select class="form-control form-rounded" placeholder="Date"
+                                        (change)="selectDateRange($event.target.value)">
+                                        <option value="" disabled selected>Select Date Range</option>
+                                        <option value="del">Delivery Date</option>
+                                        <option value="order">Order Date</option>
+                                    </select>
+                                </div>
+                                <div *ngIf="dateRange=='order'">
+                                    <div class="row">
+
+                                        <div class="col-6">
+                                            <div class="mb-4">
+                                                <label for="">Start Date</label>
+                                                <input type="date" class="form-control form-control-sm"
+                                                    formControlName="start_date" placeholder="Start Date">
+                                            </div>
+                                        </div>
+                                        <div class="col-6">
+                                            <div class="mb-4">
+                                                <label for="">End Date</label>
+                                                <input type="date" class="form-control form-control-sm"
+                                                    formControlName="end_date" placeholder="End Date">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div *ngIf="dateRange=='del'">
+                                    <div class="row">
+                                        <div class="col-6">
+                                            <div class="mb-4">
+                                                <label for="">Delivery Start Date</label>
+                                                <input type="date" class="form-control form-control-sm"
+                                                    formControlName="del_start_date" placeholder="Delivery Start Date">
+                                            </div>
+                                        </div>
+                                        <div class="col-6">
+                                            <div class="mb-4">
+                                                <label for="">Delivery End Date</label>
+                                                <input type="date" class="form-control form-control-sm"
+                                                    formControlName="del_end_date" placeholder="Delivery End Date">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </ng-container>
+                            <ng-container *ngIf="activeRoute=='daily-operation'">
+                                <div class="row">
+                                    <div class="col-6">
+                                        <div class="mb-4">
+                                            <label for="">Order No.</label>
+                                            <input type="no" class="form-control form-control-sm"
+                                                placeholder="Order No." formControlName="order_number">
+                                        </div>
+                                    </div>
+                                    <div class="col-6">
+                                        <div class="mb-4">
+                                            <label for="">LPO</label>
+                                            <input type="no" class="form-control form-control-sm"
+                                                placeholder="Customer LPO" formControlName="customer_lpo">
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="mb-4">
+                                    <label for="">Division</label>
+                                    <app-multiautocomplete isSingle="true" [options]="divisionList"
+                                        (selectionchanged)="filterWarehouse()"
+                                        [control]="sideFiltersForm.controls['division']" text="name" id="id"
+                                        placeholder="Select Division">
+                                    </app-multiautocomplete>
+                                </div>
+
+                                <div class="mb-4" *ngIf="activeRoute=='daily-operation'">
+                                    <label for="">Warehouse</label>
+                                    <app-multiautocomplete isSingle="false" [options]="warehouseList"
+                                        [control]="sideFiltersForm.controls['warehouse_id']" text="name" id="id"
+                                        param1="code" param2="name" objectName="code-root"
+                                        placeholder="Select Warehouse">
+                                    </app-multiautocomplete>
+                                    <!-- <label for="" class="mt-4">Service Channel</label>
+                                    <app-multiautocomplete isSingle="false" [options]="channelList"
+                                        [control]="sideFiltersForm.controls['channel_code']" text="name" id="id"
+                                        param1="id" param2="name" objectName="code-root" placeholder="Select Service Channel">
+                                    </app-multiautocomplete> -->
+                                    
+                                </div>
+
+
+                                <div>
+                                    <div class="row">
+                                        <div class="col-6">
+                                            <div class="mb-4">
+                                                <label for="">Delivery Start Date</label>
+                                                <input type="date" class="form-control form-control-sm"
+                                                    formControlName="del_start_date" placeholder="Delivery Start Date">
+                                            </div>
+                                        </div>
+                                        <div class="col-6">
+                                            <div class="mb-4">
+                                                <label for="">Delivery End Date</label>
+                                                <input type="date" class="form-control form-control-sm"
+                                                    formControlName="del_end_date" placeholder="Delivery End Date">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </ng-container>
+                            <ng-container *ngIf="activeRoute=='delivery-report'">
+                              <div>
+                                <div class="row">
+                                    <div class="col-6">
+                                        <div class="mb-4">
+                                            <label for=""> Start Date</label>
+                                            <input type="date" class="form-control form-control-sm"
+                                                formControlName="start_date" placeholder="Delivery Start Date">
+                                        </div>
+                                    </div>
+                                    <div class="col-6">
+                                        <div class="mb-4">
+                                            <label for=""> End Date</label>
+                                            <input type="date" class="form-control form-control-sm"
+                                                formControlName="end_date" placeholder="Delivery End Date">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                              <div class="mb-4">
+                                  <label for="">Division</label>
+                                  <app-multiautocomplete isSingle="true" [options]="divisionList"
+                                      (selectionchanged)="filterWarehouse()"
+                                      [control]="sideFiltersForm.controls['division']" text="name" id="id"
+                                      placeholder="Select Division">
+                                  </app-multiautocomplete>
+                              </div>
+
+                              <div class="mb-4">
+                                  <label for="">Warehouse</label>
+                                  <app-multiautocomplete isSingle="false" [options]="warehouseList"
+                                      [control]="sideFiltersForm.controls['warehouse_id']" text="name" id="id"
+                                      param1="code" param2="name" objectName="code-root"
+                                      placeholder="Select Warehouse">
+                                  </app-multiautocomplete>
+                              </div>
+
+
+
+
+                          </ng-container>
+                            <div class="mb-4"
+                                *ngIf="vehiclesList.length>0 && (activeRoute=='sales-quantity'  || activeRoute=='loading-chart-by-warehouse' || activeRoute=='loading-chart-final-by-route' || activeRoute==='truck-utilisation') || (activeRoute!=='sales-vs-grv' && activeRoute!='daily-operation' && activeRoute!='delivery-report' && activeRoute != 'delivery-export-report')">
+                                <label for="">Vehicle</label>
+                                <app-multiautocomplete isSingle="true" [options]="vehiclesList"
+                                    [control]="sideFiltersForm.controls['van_id']" text="name" id="id"
+                                    placeholder="Select Vehicle">
+                                </app-multiautocomplete>
+                                <!-- <label for="" class="mt-4">Service Channel</label>
+                                <app-multiautocomplete isSingle="false" [options]="channelList"
+                                    [control]="sideFiltersForm.controls['channel_code']" text="name" id="id"
+                                    param1="id" param2="name" objectName="code-root" placeholder="Select Service Channel">
+                                </app-multiautocomplete> -->
+                                
+                            </div>
+                            <div class="mb-4" *ngIf="(activeRoute=='loading-chart-by-warehouse' || activeRoute=='loading-chart-final-by-route' || activeRoute=='sales-quantity') || (activeRoute!=='order-details' && activeRoute!=='geo-approval' && activeRoute!=='delivery-export-report' && activeRoute!=='sales-vs-grv' &&  activeRoute!='delivery-report' )">
+                                <label for="">Service Channel</label>
+                                <app-multiautocomplete isSingle="false" [options]="channelList"
+                                    [control]="sideFiltersForm.controls['channel_code']" text="name" id="id"
+                                    param1="id" param2="name" objectName="code-root" placeholder="Select Service Channel">
+                                </app-multiautocomplete>
+                            </div>
+                            <div class="mb-4" *ngIf="activeRoute!=='sales-vs-grv' && activeRoute!='daily-operation' && activeRoute!='delivery-report'">
+                                <label for="">Salesman</label>
+                                <app-multiautocomplete isSingle="true" [options]="salesmanList"
+                                    [control]="sideFiltersForm.controls['salesman']" text="salesman_name" id="id"
+                                    placeholder="Search Salesman">
+                                </app-multiautocomplete>
+                            </div>
+                            <div class="mb-4" *ngIf="activeRoute==='sales-vs-grv'">
+                                <label for="">KSM</label>
+                                <app-multiautocomplete isSingle="false" [options]="userList"
+                                    [control]="sideFiltersForm.controls['ksm_id']" text="username" id="id"
+                                    placeholder="Search User">
+                                </app-multiautocomplete>
+                                <!-- (selectionchanged)="onSelectUSer()" -->
+                            </div>
+                            <div class="card-body" style="padding-top:0px" *ngIf="activeRoute === 'sales-vs-grv'">
+                                <div class="mb-4 form-group">
+                                    <label for="">Select Report Type</label>
+                                    <div>
+                                        <input id="level" type="radio" value="1" name="salesGrvReportType"
+                                            formControlName="salesGrvReportType" class="formControl radioMarginRight" />
+                                        <label for="level">KSM</label>
+                                    </div>
+
+                                    <div>
+                                        <input id="level" type="radio" value="2" name="salesGrvReportType"
+                                            formControlName="salesGrvReportType" class="formControl radioMarginRight" />
+                                        <label for="level">Monthly</label>
+                                    </div>
+                                    <span
+                                        *ngIf="(sideFiltersForm.controls.salesGrvReportType.touched || isSubmitted) && sideFiltersForm.controls.salesGrvReportType.errors?.required"
+                                        class="error-msg">
+                                        <span class="text-danger">Field is required.</span>
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="card-body" style="padding-top:0px" *ngIf="checkIsActiveRoute()===2">
+                            <div class="mb-4" *ngIf="activeRoute === 'driver-loaded-qty'">
+                                <label for="">Division</label>
+                                <app-multiautocomplete isSingle="true" [options]="divisionList"
+                                    (selectionchanged)="filterWarehouse()"
+                                    [control]="sideFiltersForm.controls['division']" text="name" id="id"
+                                    placeholder="Select Division">
+                                </app-multiautocomplete>
+                            </div>
+                            <div class="mb-4" *ngIf="activeRoute === 'driver-loaded-qty'">
+                                <label for="">Warehouse</label>
+                                <app-multiautocomplete isSingle="false" [options]="warehouseList"
+                                    (selectionchanged)="filterVehicles()"
+                                    [control]="sideFiltersForm.controls['warehouse_id']" text="name" id="id"
+                                    param1="code" param2="name" objectName="code-root" placeholder="Select Warehouse">
+                                </app-multiautocomplete>
+
+                            </div>
+                            
+                            <div class="mb-4"
+                                *ngIf="activeRoute!=='daily-grv' && activeRoute!=='daily-spot-return' && activeRoute!=='daily-crf' && activeRoute!=='truck-utilisation' && activeRoute!=='difot' &&  activeRoute!=='daily-cancel-order' &&  activeRoute!=='monthly-kpi' &&  activeRoute!=='ytd-kpi' && activeRoute!=='timesheets' && activeRoute !== 'salesman-performance' && activeRoute !== 'driver-loaded-qty'">
+                                <label for="">Region</label>
+                                <app-multiautocomplete isSingle="false" [options]="regionList"
+                                    [control]="sideFiltersForm.controls['region']" (selectionchanged)="filterSalesman()"
+                                    text="region_name" id="id" placeholder="Search region">
+                                </app-multiautocomplete>
+                            </div>
+                            <div class="mb-4"
+                                *ngIf="activeRoute==='daily-grv' || activeRoute==='daily-spot-return' || activeRoute==='daily-cancel-order'">
+                                <label for="">KSM</label>
+                                <app-multiautocomplete isSingle="false" [options]="userList"
+                                    [control]="sideFiltersForm.controls['ksm_id']" text="username" id="id"
+                                    placeholder="Search User">
+                                </app-multiautocomplete>
+                                <!-- (selectionchanged)="onSelectUSer()" -->
+                            </div>
+                            <div class="mb-4"
+                                *ngIf="activeRoute==='daily-crf' || activeRoute==='truck-utilisation'  || activeRoute==='difot' || activeRoute==='daily-cancel-order' ||  activeRoute==='monthly-kpi' ||  activeRoute==='timesheets' || activeRoute === 'salesman-performance' ||  (activeRoute !== 'driver-loaded-qty' &&  activeRoute!=='ytd-kpi')">
+                                <label for="">Zone</label>
+                                <app-multiautocomplete isSingle="true" [options]="zoneList"
+                                    [control]="sideFiltersForm.controls['zone_id']" text="name" id="id"
+                                    placeholder="Search zone">
+                                </app-multiautocomplete>
+                            </div>
+                            <div class="mb-4" *ngIf="activeRoute==='truck-utilisation' ">
+                                <label for="">Vehicle</label>
+                                <app-multiautocomplete isSingle="true" [options]="vehiclesList"
+                                    [control]="sideFiltersForm.controls['vehicle_id']" text="name" id="id"
+                                    placeholder="Select Vehicle">
+                                </app-multiautocomplete>
+                            </div>
+                            <div class="mb-4" *ngIf="activeRoute === 'truck-utilisation' || activeRoute==='timesheets'">
+                                <label for="">Salesman</label>
+                                <app-multiautocomplete isSingle="true" [options]="salesmanList"
+                                    [control]="sideFiltersForm.controls['salesman']" text="salesman_name" id="id"
+                                    placeholder="Search Salesman">
+                                </app-multiautocomplete>
+                            </div>
+                        </div>
+                        <div class="card-body" style="padding-top:0px"
+                            *ngIf="activeRoute === 'salesman-performance' || activeRoute == 'driver-loaded-qty'">
+                            <div class="mb-4 form-group">
+                                <label for="">Select Report Type</label>
+                                <div>
+                                    <input id="reportType" type="radio" value="1" name="reportType"
+                                        formControlName="reportType" class="formControl radioMarginRight" />
+                                    <label for="reportType">Salesman</label>
+                                </div>
+
+                                <div>
+                                    <input id="reportType" type="radio" value="2" name="reportType"
+                                        formControlName="reportType" class="formControl radioMarginRight" />
+                                    <label for="reportType">Helper</label>
+                                </div>
+                                <!-- <span
+                                    *ngIf="(sideFiltersForm.controls.level.touched || isSubmitted) && sideFiltersForm.controls.level.errors?.required"
+                                    class="error-msg">
+                                    <span class="text-danger">Field is required.</span>
+                                </span> -->
+                            </div>
+                        </div>
+                        <div class="card-body" style="padding-top:0px"
+                            *ngIf="activeRoute==='salesman-performance' || activeRoute == 'driver-loaded-qty'">
+                            <div class="mb-4" *ngIf="sideFiltersForm.controls.reportType.value ==='1'">
+                                <label for="">Salesman</label>
+                                <app-multiautocomplete isSingle="true" [options]="salesmanList"
+                                    [control]="sideFiltersForm.controls['salesman']" text="salesman_name" id="id"
+                                    placeholder="Search Salesman">
+                                </app-multiautocomplete>
+                            </div>
+                            <div class="mb-4" *ngIf="sideFiltersForm.controls.reportType.value ==='2'">
+                                <label for="">Helper</label>
+                                <app-multiautocomplete isSingle="true" [options]="helperList"
+                                    [control]="sideFiltersForm.controls['helper']" text="name" id="id"
+                                    placeholder="Search Helper">
+                                </app-multiautocomplete>
+                            </div>
+                        </div>
+                        <div class="card-body" style="padding-top:0px" *ngIf="activeRoute === 'truck-utilisation'">
+                            <div class="mb-4 form-group">
+                                <label for="">Select Report Type</label>
+                                <div>
+                                    <input id="level" type="radio" value="1" name="level" formControlName="level"
+                                        class="formControl radioMarginRight" />
+                                    <label for="level">Header</label>
+                                </div>
+
+                                <div>
+                                    <input id="level" type="radio" value="0" name="level" formControlName="level"
+                                        class="formControl radioMarginRight" />
+                                    <label for="level">Details</label>
+                                </div>
+                                <span
+                                    *ngIf="(sideFiltersForm.controls.level.touched || isSubmitted) && sideFiltersForm.controls.level.errors?.required"
+                                    class="error-msg">
+                                    <span class="text-danger">Field is required.</span>
+                                </span>
+                            </div>
+                        </div>
+
+                        <div class="card-body" style="padding-top:0px" *ngIf="activeRoute === 'difot'">
+                            <div class="mb-4 form-group">
+                                <label for="">Select Report Type</label>
+                                <div>
+                                    <input id="level" type="radio" value="0" name="level" formControlName="level"
+                                        class="formControl radioMarginRight" />
+                                    <label for="level">Header</label>
+                                </div>
+
+                                <div>
+                                    <input id="level" type="radio" value="1" name="level" formControlName="level"
+                                        class="formControl radioMarginRight" />
+                                    <label for="level">Details</label>
+                                </div>
+                                <span
+                                    *ngIf="(sideFiltersForm.controls.level.touched || isSubmitted) && sideFiltersForm.controls.level.errors?.required"
+                                    class="error-msg">
+                                    <span class="text-danger">Field is required.</span>
+                                </span>
+                            </div>
+                        </div>
+                        <div class="card-body" style="padding-top:0px" *ngIf="checkIsActiveRoute()===0">
+                            <div class="mb-4">
+                                <label for="">Division</label>
+                                <app-multiautocomplete isSingle="false" [options]="divisionList"
+                                    (selectionchanged)="onSelectDivison()"
+                                    [control]="sideFiltersForm.controls['division']" text="name" id="id"
+                                    placeholder="Select Division">
+                                </app-multiautocomplete>
+                            </div>
+                            <div class="mb-4">
+                                <label for="">Region</label>
+                                <app-multiautocomplete isSingle="false" [options]="regionList"
+                                    [control]="sideFiltersForm.controls['region']" (selectionchanged)="filterSalesman()"
+                                    text="region_name" id="id" placeholder="Search region">
+                                </app-multiautocomplete>
+                            </div>
+                            <div class="mb-4" *ngIf="activeRoute != 'product-summary-by-customer-sales'">
+                                <label for="">Route</label>
+                                <app-multiautocomplete isSingle="false" [options]="routeList"
+                                    (selectionchanged)="filterSalesman()" [control]="sideFiltersForm.controls['route']"
+                                    text="route_name" id="id" placeholder="Search route">
+                                </app-multiautocomplete>
+                            </div>
+                            <div class="mb-4" *ngIf="activeRoute != 'customer-statement'">
+                                <label for="">Supervisor</label>
+                                <app-multiautocomplete isSingle="false" [options]="supervisorList"
+                                    (selectionchanged)="getSalesmans()"
+                                    [control]="sideFiltersForm.controls['supervisor']" text="supervisor_name" id="id"
+                                    placeholder="Search supervisor">
+                                </app-multiautocomplete>
+                            </div>
+                            <div class="mb-4"
+                                *ngIf="activeRoute != 'visit-analysis-by-van-or-salesman' && SelectedRport !== 'Customer Statement'">
+                                <label for="">Salesman</label>
+                                <app-multiautocomplete isSingle="false" [options]="salesmanList"
+                                    [control]="sideFiltersForm.controls['salesman']" text="salesman_name" id="id"
+                                    placeholder="Search Salesman">
+                                </app-multiautocomplete>
+                            </div>
+                            <div class="mb-4 custom-mat square"
+                                *ngIf="activeRoute == 'product-summary-by-customer-sales' || SelectedRport == 'Customer Statement'">
+                                <label for="">Customer</label>
+                                <app-multiautocomplete isSingle="true" [options]="customerList"
+                                    [control]="customerFormControl" (selectionchanged)="selectedCustomer()"
+                                    text="customer_name" id="id" placeholder="Search Salesman">
+                                </app-multiautocomplete>
+
+                            </div>
+                            <div class="mb-4" *ngIf="activeRoute == 'product-summary-by-customer-sales'">
+                                <label for="">Item Category</label>
+                                <app-multiautocomplete isSingle="false" [options]="itemCategoryList"
+                                    [control]="sideFiltersForm.controls['item_category']" id="item_category" text="name"
+                                    id="id" placeholder="Search Item Category">
+                                </app-multiautocomplete>
+                            </div>
+
+
+                        </div>
+
+                        <div class="mb-4" style="padding: 0 25px;" *ngIf="activeRoute=='delivery-export-report'">
+                          <label>Select Report Type</label>
+                          <br>
+                          <br>
+                          <input type="radio"  name="dltype" [(ngModel)]="dlType" (change)="valueFix(1)" style="margin-right:5px;margin-top:2px">
+                          <label for="">Order</label>
+                         <br>
+                         <br>
+
+
+                         <input type="radio"  name="dltype" [(ngModel)]="dlType" (change)="valueFix(2) " style="margin-right:5px;margin-top:2px">
+                         <label for="">Driver</label>
+
+                     </div>
+                    </div>
+                </form>
+
+                <div class="card-footer">
+                    <div class="d-inline float-right">
+                        <button type="button" class="btn btn-sm btn-light mr-2" (click)="close()">Cancel</button>
+                        <button type="submit" class="btn btn-sm btn-p" (click)="runReport()">Run Report</button>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </mat-drawer>
+    <div class=" scrolly container-fluid ">
+        <div class="row h-100 ">
+            <div class="col-md-2 p-0 lrow" [hidden]="!showSidePanle">
+                <div class="heading-row">
+                    <h2><strong>Reports</strong></h2>
+                </div>
+                <div class="rowm">
+                    <div class="scrolly-reportbar">
+                        <div class="lpane-grp">
+                            <ul class="nav nav-pills flex-column">
+                                <li class="nav-item" *ngFor="let navOption of reportNavOptions; let i = index;"
+                                    [hidden]="checkPermission(navOption.label)">
+                                    <a id="ember2314"
+                                        [ngClass]="isActive(navOption.routeTo, navOption.label)  ? 'active' : ''"
+                                        (click)="routeTo(navOption.routeTo,i, navOption.label)"
+                                        class="nav-link ember-view">
+                                        {{ navOption.label }}
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="pl-0" [ngClass]="{ 'col-md-12' : !showSidePanle, 'col-md-10' : showSidePanle}">
+                <div class="heading-row clearfix">
+                    <div id="ember542" class="col-md-8 d-inline float-left">
+
+                        <button class="btn btn-sm btn-white mt-1 mr-2 d-inline float-left" style="height: 31px;"
+                            type="button" (click)="toggleSideNav()">
+                            <i class="fa fa-bars"></i>
+                        </button>
+                        <button class="btn btn-sm btn-white mt-1 mr-2 d-inline float-left" type="button"
+                            (click)="openFilters()">
+                            Filter
+                            <!-- <i class="fa fa-sliders"></i> -->
+                        </button>
+
+                        <!-- <mat-select style="width: 40% !important;" class="form-control form-control-sm mr-2"
+                            (selectionChange)="onChangeInterval($event.value)" [formControl]="intervalSelected">
+                            <mat-option *ngFor="let item of intervals" [value]="item.id">
+                                {{item.name}}
+                            </mat-option>
+                        </mat-select> -->
+                        <!-- <div class="row">
+                            <div class="col-4" *ngIf="activeRoute=='order-details'">
+                                <select class="form-control form-control-sm" placeholder="Date"
+                                    (change)="selectDateRange($event.target.value)">
+                                    <option value="" disabled selected>Date Range</option>
+                                    <option value="del">Delivery Date</option>
+                                    <option value="order">Order Date</option>
+                                </select>
+                            </div>
+                            <ng-container *ngIf="activeRoute=='order-details'">
+                                <div class="col-3" *ngIf="dateRange=='order'">
+                                    <input type="date" class="form-control form-control-sm" [(ngModel)]="start_date"
+                                        placeholder="Start Date">
+                                </div>
+                                <div *ngIf="dateRange=='order'">
+                                    <span>_</span>
+                                </div>
+                                <div class="col-3" *ngIf="dateRange=='order'">
+                                    <input type="date" class="form-control form-control-sm" [(ngModel)]="end_date"
+                                        placeholder="End Date">
+                                </div>
+                                <div class="col-3" *ngIf="dateRange=='del'">
+                                    <input type="date" class="form-control form-control-sm" [(ngModel)]="del_start_date"
+                                        placeholder="Start Date">
+                                </div>
+                                <div *ngIf="dateRange=='del'">
+                                    <span>_</span>
+                                </div>
+                                <div class="col-3" *ngIf="dateRange=='del'">
+                                    <input type="date" class="form-control form-control-sm" [(ngModel)]="del_end_date"
+                                        placeholder="End Date">
+                                </div>
+                                <div class="col-1" *ngIf="dateRange!=''">
+                                    <button type="button" class="btn btn-sm btn-p" (click)="runReport()">Submit</button>
+                                </div>
+                            </ng-container>
+                            <ng-container *ngIf="activeRoute!='order-details'">
+                                <div class="col-3">
+                                    <input type="date" class="form-control form-control-sm" [(ngModel)]="start_date"
+                                        placeholder="Start Date">
+                                </div>
+                                <div>
+                                    <span>_</span>
+                                </div>
+                                <div class="col-3">
+                                    <input type="date" class="form-control form-control-sm" [(ngModel)]="end_date"
+                                        placeholder="End Date">
+                                </div>
+                                <div class="col-1">
+                                    <button type="button" class="btn btn-sm btn-p" (click)="runReport()">Submit</button>
+                                </div>
+                            </ng-container>
+
+                        </div> -->
+                        <mat-select *ngIf="activeRoute == 'store-summary'" style="width: 40% !important;"
+                            class="form-control form-control-sm" (selectionChange)="onChangeCustomer($event)"
+                            [formControl]="customerSelected">
+                            <mat-option *ngFor="let item of customers" [value]="item.id">
+                                {{item.firstname}} {{item.lastname}}
+                            </mat-option>
+                        </mat-select>
+                        <a class="" *ngIf="intervalSelected.value == 'custom'"
+                            (click)="onChangeInterval(intervalSelected.value)"><i class="fa fa-cog"></i> Change Custom
+                            Filter</a>
+                        <!-- <mat-form-field style="width: 40% !important;" appearance="fill">
+                        <mat-label>Customer</mat-label>
+                        <mat-select  class="form-control form-control-sm" (selectionChange)="onChangeCustomer($event)" [formControl]="customerSelected">
+                            <mat-option *ngFor="let item of customers" [value]="item.id">
+                                {{item.name}}
+                            </mat-option>
+                        </mat-select>
+                    </mat-form-field> -->
+                    </div>
+                    <div class="d-inline float-right">
+                        <button class="btn btn-sm btn-white mr-2" type="button">
+                            <i class="fa fa-sliders"></i>
+                        </button>
+                        <button class="btn btn-sm btn-white mr-2" type="button" (click)="openScheduleForm()">
+                            <i class="fa fa-cog"></i> Schedule Report
+                        </button>
+                        <button class="btn btn-sm btn-white mr-2" type="button">
+                            <i class="os-icon os-icon-printer"></i>
+                        </button>
+                        <!-- <button class="btn btn-sm btn-white mr-2" type="button" printSectionId="print-section" printTitle="Report" [printStyle]="{
+                        h1: { color: 'red' },
+                        h2: { border: 'solid 1px' }
+                        }" [useExistingCss]="true" ngxPrint>
+                        <i class="os-icon os-icon-printer"></i>
+                    </button> -->
+
+                        <button class="btn btn-sm btn-white dropdown-toggle mr-2" [matMenuTriggerFor]="menu2">
+                            Export As
+                        </button>
+                        <mat-menu #menu2="matMenu" xPosition="before">
+                            <button mat-menu-item class="height30" (click)="exportReport('PDF')"
+                                *ngIf="activeRoute!=='daily-crf' && activeRoute!=='truck-utilisation' && activeRoute!=='difot' && activeRoute!=='daily-grv' && activeRoute!=='daily-spot-return'">
+                                PDF
+                            </button>
+                            <button mat-menu-item class="height30" (click)="exportReport('CSV')">
+                                CSV (Comma Separated Value)
+                            </button>
+                            <button mat-menu-item class="height30" (click)="exportReport('XLS')">
+                                XLS (Microsoft Excel 1997-2004 Compatible)
+                            </button>
+                            <button mat-menu-item class="height30" (click)="exportReport('XLSX')">
+                                XLSX (Microsoft Excel)
+                            </button>
+                        </mat-menu>
+                    </div>
+                </div>
+                <div class="separator"></div>
+                <div class="heading-row pt-2 pb-2 mb-2 clearfix">
+                    <div class="page-header text-center">
+                        <h3 class="mb-0">{{ org_name }} </h3>
+                        <h2 class="reports-headerspacing font-weight-bold"> {{SelectedRport? SelectedRport:''}} </h2>
+                        <h4 class="mb-1" *ngIf="activeRoute != 'order-details'">
+                            <span>From</span>&nbsp;{{sideFiltersForm.value.start_date}}&nbsp;<span>To</span>&nbsp;{{sideFiltersForm.value.end_date}}
+                        </h4>
+                        <h4 class="mb-1" *ngIf="activeRoute == 'order-details' && dateRange=='order'">
+                            <span>From</span>&nbsp;{{sideFiltersForm.value.start_date}}&nbsp;<span>To</span>&nbsp;{{sideFiltersForm.value.end_date}}
+                        </h4>
+                        <h4 class="mb-1" *ngIf="activeRoute == 'order-details' && dateRange=='del'">
+                            <span>From</span>&nbsp;{{sideFiltersForm.value.del_start_date}}&nbsp;<span>To</span>&nbsp;{{sideFiltersForm.value.del_end_date}}
+                        </h4>
+
+                    </div>
+                </div>
+                <div>
+                    <router-outlet></router-outlet>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</mat-drawer-container>

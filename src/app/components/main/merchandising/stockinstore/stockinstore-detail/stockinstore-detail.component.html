@@ -1,0 +1,340 @@
+<section *ngIf="stock">
+  <div class="pl-3">
+    <div class="row">
+      <h2 class="page-title col-sm-6 font-weight-light">{{stock.activity_name}}</h2>
+      <div class="actions col-sm-6">
+        <div>
+          <button class="btn btn-sm btn-white mr-2 dropdown-toggle" mat-button [matMenuTriggerFor]="menu2">More</button>
+          <mat-menu #menu2="matMenu">
+            <button mat-menu-item (click)="openEditstockinstore()" appPermission [permissions]="userPermissions"
+              [type]="'edit'">Edit</button>
+            <button mat-menu-item (click)="openDeleteBox()" appPermission [permissions]="userPermissions"
+              [type]="'delete'">Delete</button>
+          </mat-menu>
+        </div>
+        <button *ngIf="isDetailVisible" class="btn" (click)="closeDetailView()"><i
+            class="os-icon os-icon-close"></i></button>
+      </div>
+    </div>
+  </div>
+
+  <div class="pl-3 area-data">
+    <div class="row h-100">
+      <div class="col-12">
+        <mat-tab-group class="customertab" [(selectedIndex)]="selectedTab" mat-align-tabs="start"
+          (selectedTabChange)="selectedTabChange($event.index)">
+          <mat-tab label="Overview">
+            <div class="row">
+              <div class="col-xl-5 col-lg-5 col-md-8">
+                <ul class="smhlist mt-2">
+                  <li>
+                    <span> Activity Name: </span>
+                    <strong>{{stock.activity_name}}</strong>
+                  </li>
+                  <li>
+                    <span>Date From: </span>
+                    <strong>{{stock.valid_from}}</strong>
+                  </li>
+                  <li>
+                    <span>Date To: </span>
+                    <strong> {{stock.valid_to}}</strong>
+                  </li>
+                </ul>
+              </div>
+            </div>
+
+            <ng-container *ngIf="stock !== null">
+              <hr>
+              <div class="col-sm-12 data-block">
+                <h2>Customers</h2>
+                <div class="row" *ngIf="stock.assign_inventory_customer.length > 0">
+                  <div class="col-xl-4 col-lg-4" *ngFor="let a_s_c of stock.assign_inventory_customer">
+                    <div class="item-card" *ngIf="a_s_c.customer !== null">
+                      <i class="os-icon os-icon-user mr-2"></i>
+                      {{ a_s_c.customer?.customer_info?.customer_code}}
+                      <h4>
+                        {{ a_s_c.customer?.firstname }}
+                        {{ a_s_c.customer?.lastname }}</h4>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </ng-container>
+          </mat-tab>
+          <mat-tab label="Assign Inventory">
+            <div class="col-sm-12 data-block">
+              <div class="row mt-4  pl-md-4 pl-0">
+                <div class="items-table-box" style="width: 99%;">
+                  <table [formGroup]="AssignInventoryFilterForm" mat-table [dataSource]="itemSource" *ngIf="itemSource?.data.length" class="mat-elevation-z8">
+
+                    <ng-container matColumnDef="item_code">
+                      <th mat-header-cell *matHeaderCellDef>
+                        <app-column-filter title="Item Code" controlName="item_code" (changeSelected)="onColumnFilterOpenAssignInventory($event)"
+                          [selected]="AssignInventorySelectedColumnFilter" (close)="onColumnFilterAssignInventory($event)">
+                          <input class="form-control form-control-sm" placeholder="Item Code" type="text" [formControl]="AssignInventoryFilterForm.get('item_code')">
+                        </app-column-filter>
+                      </th>
+                      <td mat-cell *matCellDef="let element"> {{ element.item_code }} </td>
+                    </ng-container>
+                    <ng-container matColumnDef="item_name">
+                      <th mat-header-cell *matHeaderCellDef>
+                        <app-column-filter (changeSelected)="onColumnFilterOpenAssignInventory($event)"
+                          [selected]="AssignInventorySelectedColumnFilter" (close)="onColumnFilterAssignInventory($event)" title="Item Name" controlName="item">
+                          <input class="form-control form-control-sm mb-2" placeholder="Item" type="text"
+                              [formControl]="AssignInventoryFilterForm.get('item')">
+                        </app-column-filter>
+                      </th>
+                      <td mat-cell *matCellDef="let element"> {{ element.item_name }} </td>
+                    </ng-container>
+                    <ng-container matColumnDef="item_uom">
+                      <th mat-header-cell *matHeaderCellDef>
+                        Item Uom
+                        <!-- <app-column-filter (changeSelected)="onColumnFilterAssignInventory($event)"
+                          [selected]="AssignInventorySelectedColumnFilter" (close)="onColumnFilterAssignInventory($event)" title="Item Uom" controlName="item_uom">
+                          <input class="form-control form-control-sm mb-2" placeholder="Item Uom" type="text"
+                              [formControl]="AssignInventoryFilterForm.get('item_uom')">
+                        </app-column-filter> -->
+                      </th>
+                      <td mat-cell *matCellDef="let element"> {{ element.item_uom }} </td>
+                    </ng-container>
+                    <ng-container matColumnDef="capacity">
+                      <th mat-header-cell *matHeaderCellDef> Capacity </th>
+                      <td mat-cell *matCellDef="let element"> {{ element.capacity ? element.capacity : 'N/A' }} </td>
+                    </ng-container>
+                    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                    <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+                  </table>
+                  <mat-paginator #tbl1 [hidden]="hidePaginator(itemSource?.data.length)" pageSize="5"
+                    [pageSizeOptions]="[5,10]"></mat-paginator>
+                </div>
+              </div>
+            </div>
+          </mat-tab>
+          <mat-tab label="View Inventory Post">
+            <div class="col-sm-12 data-block">
+              <div class="row mb-4 mt-4 pl-md-4 pl-0">
+                <div class="col-md-1 col-form-label">Date
+                </div>
+                <div class="col-md-3">
+                  <input class="form-control form-control-sm" type="date" [formControl]="dateFilterControl">
+                </div>
+                <div class="col-md-1 col-form-label">Customer</div>
+                <div class="col-md-3 mb-2 mb-md-0">
+                  <!-- <mat-select [formControl]="customerControl" class="form-control form-control-sm">
+                    <mat-option *ngFor="let a_s_c of stock.assign_inventory_customer" [value]="a_s_c.customer_id">
+                      {{ a_s_c.customer?.firstname }}
+                    </mat-option>
+                  </mat-select> -->
+                  <app-multiautocomplete isSingle="true" (selectionchanged)="selectionChangedCustomer()" [options]="stock.assign_inventory_customer"
+                      [control]="customerControl" text="" id="customer_id"
+                      objectName="customer" param1="firstname" param2="lastname">
+                  </app-multiautocomplete>
+                </div>
+                <div class="col-md-3 item-add-btn">
+                  <button type="button" (click)="getInventoryPostList('date', true)"
+                    class="mr-2 btn btn-sm btn-primary">Filter</button>
+                  <button type="button" (click)="getInventoryPostList('all', true)"
+                    class="btn btn-sm btn-danger">All</button>
+                </div>
+              </div>
+              <div class="row" style="width: 100% !important;">
+                <div class="items-intentory-table-box pl-md-4 pl-0" style="height: 500px;">
+                  <table [formGroup]="filterForm" mat-table [dataSource]="itemPostSource" class="mat-elevation-z8"
+                    multiTemplateDataRows>
+                    <ng-container matColumnDef="created_at">
+                      <th mat-header-cell *matHeaderCellDef>
+                        <app-column-filter title="Date" controlName="date" (changeSelected)="onColumnFilterOpen($event)"
+                          [selected]="selectedColumnFilter" (close)="onColumnFilter($event)">
+                          <div class="d-flex flex-column" style="width: 100%;">
+                            <input class="form-control form-control-sm mb-2" placeholder="From" type="date"
+                              [formControl]="filterForm.get('date')">
+                          </div>
+                        </app-column-filter>
+                      </th>
+                      <td mat-cell *matCellDef="let element"> {{ element.created_at | date :"d MMM y h:mm a"}} </td>
+                    </ng-container>
+                    <ng-container matColumnDef="item">
+                      <th mat-header-cell *matHeaderCellDef>
+                        <app-column-filter (changeSelected)="onColumnFilterOpen($event)"
+                          [selected]="selectedColumnFilter" (close)="onColumnFilter($event)" title="Item"  controlName="item">
+                          <!-- <app-multiautocomplete style="width: 100%;" [options]="items"
+                            [control]="filterForm.get('item')" text="item_name" id="id">
+                          </app-multiautocomplete> -->
+                          <input class="form-control form-control-sm mb-2" placeholder="Item" type="text"
+                              [formControl]="filterForm.get('item')">
+                        </app-column-filter>
+                      </th>
+                      <td mat-cell *matCellDef="let element"> {{ element.item.item_name }} </td>
+                    </ng-container>
+                    <ng-container matColumnDef="itemCode">
+                      <th mat-header-cell *matHeaderCellDef>
+                        <app-column-filter title="Item Code" controlName="item_code" (changeSelected)="onColumnFilterOpen($event)"
+                          [selected]="selectedColumnFilter" (close)="onColumnFilter($event)">
+                          <input class="form-control form-control-sm" placeholder="Item Code" type="number" [formControl]="filterForm.get('item_code')">
+                        </app-column-filter>
+                      </th>
+                      <td mat-cell *matCellDef="let element"> {{ element.item.item_code }} </td>
+                    </ng-container>
+                    <ng-container matColumnDef="customer">
+                      <th mat-header-cell *matHeaderCellDef>
+                        <app-column-filter title="Customer" controlName="customer" (close)="onColumnFilter($event)"
+                          (changeSelected)="onColumnFilterOpen($event)" [selected]="selectedColumnFilter">
+                          <!-- <app-multiautocomplete style="width: 100%;" [options]="stock.assign_inventory_customer"
+                            [control]="filterForm.get('customer')" text="" id="customer_id" objectName="customer"
+                            param1="firstname" param2="lastname">
+                          </app-multiautocomplete> -->
+                          <input class="form-control form-control-sm mb-2" placeholder="Customer" type="text"
+                              [formControl]="filterForm.get('customer')">
+                        </app-column-filter>
+                      </th>
+                      <td mat-cell *matCellDef="let element"> {{ element.customer.firstname }}
+                        {{ element.customer.lastname }} </td>
+                    </ng-container>
+                    <ng-container matColumnDef="customerCode">
+                      <th mat-header-cell *matHeaderCellDef>
+                        <app-column-filter title="Customer Code" controlName="customer_code" (changeSelected)="onColumnFilterOpen($event)"
+                          [selected]="selectedColumnFilter" (close)="onColumnFilter($event)">
+                          <input class="form-control form-control-sm" placeholder="Customer Code" type="number" [formControl]="filterForm.get('customer_code')">
+                        </app-column-filter>
+                      </th>
+                      <td mat-cell *matCellDef="let element"> {{element.customer?.customer_info ?
+                        element.customer?.customer_info?.customer_code :'N/A' }} </td>
+                    </ng-container>
+                    <ng-container matColumnDef="uom">
+                      <th mat-header-cell *matHeaderCellDef>
+                        <app-column-filter title="UOM" controlName="uom" (changeSelected)="onColumnFilterOpen($event)"
+                          [selected]="selectedColumnFilter" (close)="onColumnFilter($event)">
+                          <!-- <app-multiautocomplete style="width: 100%;" [options]="itemUom"
+                            [control]="filterForm.get('uom')" text="name" id="id">
+                          </app-multiautocomplete> -->
+                          <input class="form-control form-control-sm mb-2" placeholder="Uom" type="text"
+                              [formControl]="filterForm.get('uom')">
+                        </app-column-filter>
+                      </th>
+                      <td mat-cell *matCellDef="let element"> {{ element.item_uom.name }} </td>
+                    </ng-container>
+                    <ng-container matColumnDef="capacity">
+                      <th mat-header-cell *matHeaderCellDef>Capacity
+                        <!-- <app-column-filter title="Capacity" controlName="capacity" (changeSelected)="onColumnFilterOpen($event)"
+                          [selected]="selectedColumnFilter" (close)="onColumnFilter($event)">
+                          <input class="form-control form-control-sm" placeholder="Capacity" type="number" [formControl]="filterForm.get('capacity')">
+                        </app-column-filter> -->
+                      </th>
+                      <td mat-cell *matCellDef="let element"> {{ element.capacity }} </td>
+                    </ng-container>
+                    <ng-container matColumnDef="qty">
+                      <th mat-header-cell *matHeaderCellDef>Good Saleable Qty
+                        <!-- <app-column-filter title="Good Saleable Qty" controlName="qty" (changeSelected)="onColumnFilterOpen($event)"
+                          [selected]="selectedColumnFilter" (close)="onColumnFilter($event)">
+                          <input class="form-control form-control-sm" placeholder="Good Saleable Qty" type="number" [formControl]="filterForm.get('qty')">
+                        </app-column-filter> -->
+                      </th>
+                      <td mat-cell *matCellDef="let element"> {{ element.qty }} </td>
+                    </ng-container>
+                    <ng-container matColumnDef="refill">
+                      <th mat-header-cell *matHeaderCellDef>Refill Qty
+                        <!-- <app-column-filter title="Refill Qty" controlName="refill" (changeSelected)="onColumnFilterOpen($event)"
+                          [selected]="selectedColumnFilter" (close)="onColumnFilter($event)">
+                          <input class="form-control form-control-sm" placeholder="Refill Qty" type="number" [formControl]="filterForm.get('refill')">
+                        </app-column-filter> -->
+                      </th>
+                      <td mat-cell *matCellDef="let element"> {{ element.refill }} </td>
+                    </ng-container>
+                    <ng-container matColumnDef="reorder">
+                      <th mat-header-cell *matHeaderCellDef>Reorder Qty
+                        <!-- <app-column-filter title="Reorder Qty" controlName="reorder" (changeSelected)="onColumnFilterOpen($event)"
+                          [selected]="selectedColumnFilter" (close)="onColumnFilter($event)">
+                          <input class="form-control form-control-sm" placeholder="Reorder Qty" type="number" [formControl]="filterForm.get('reorder')">
+                        </app-column-filter> -->
+                      </th>
+                      <td mat-cell *matCellDef="let element"> {{ element.reorder }} </td>
+                    </ng-container>
+                    <ng-container matColumnDef="fill">
+                      <th mat-header-cell *matHeaderCellDef>Fill
+                        <!-- <app-column-filter title="Fill" controlName="fill" (changeSelected)="onColumnFilterOpen($event)"
+                          [selected]="selectedColumnFilter" (close)="onColumnFilter($event)">
+                          <input class="form-control form-control-sm" placeholder="Fill" type="number" [formControl]="filterForm.get('fill')">
+                        </app-column-filter> -->
+                      </th>
+                      <td mat-cell *matCellDef="let element"> {{ element.fill }} </td>
+                    </ng-container>
+                    <ng-container matColumnDef="out_of_stock">
+                      <th mat-header-cell *matHeaderCellDef>Out Of Stock
+                        <!-- <app-column-filter title="Out Of Stock" controlName="out_of_stock" (changeSelected)="onColumnFilterOpen($event)"
+                          [selected]="selectedColumnFilter" (close)="onColumnFilter($event)">
+                          <mat-select class="form-control form-control-sm" [formControl]="filterForm.get('out_of_stock')">
+                            <mat-option value="1">Yes</mat-option>
+                            <mat-option value="0">No</mat-option>
+                          </mat-select>
+                        </app-column-filter> -->
+                      </th>
+                      <td mat-cell *matCellDef="let element"> {{ element.out_of_stock == 0 ? 'No' : 'Yes' }} </td>
+                    </ng-container>
+                    <ng-container matColumnDef="expandedDetail">
+                      <td mat-cell *matCellDef="let element; let index = dataIndex;"
+                        [attr.colspan]="displayeditemPostColumns.length">
+                        <div class="element-detail w-100"
+                          [@detailExpand]="element == expandedElement ? 'expanded' : 'collapsed'">
+                          <div *ngIf='element' class="w-100">
+                            <div class="row">
+                              <div class="items-intentory-detail-table-box pl-md-4 pl-0">
+                                <table mat-table [dataSource]="itemPostDetailSource" class="mat-elevation-z8">
+                                  <ng-container matColumnDef="created_at">
+                                    <th mat-header-cell *matHeaderCellDef> Date </th>
+                                    <td mat-cell *matCellDef="let element">
+                                      {{ element.created_at | date :"d MMM y h:mm a"}} </td>
+                                  </ng-container>
+                                  <ng-container matColumnDef="item">
+                                    <th mat-header-cell *matHeaderCellDef> Item </th>
+                                    <td mat-cell *matCellDef="let element"> {{ element.item.item_name }} </td>
+                                  </ng-container>
+                                  <!-- <ng-container matColumnDef="customer">
+                                    <th mat-header-cell *matHeaderCellDef> Customer </th>
+                                    <td mat-cell *matCellDef="let element"> {{ element.customer.firstname }}
+                                      {{ element.customer.lastname }} </td>
+                                  </ng-container> -->
+                                  <ng-container matColumnDef="uom">
+                                    <th mat-header-cell *matHeaderCellDef> UOM </th>
+                                    <td mat-cell *matCellDef="let element"> {{ element.item_uom.name }} </td>
+                                  </ng-container>
+                                  <ng-container matColumnDef="expiry_date">
+                                    <th mat-header-cell *matHeaderCellDef> Expiry Date </th>
+                                    <td mat-cell *matCellDef="let element"> {{ element.expiry_date }} </td>
+                                  </ng-container>
+                                  <ng-container matColumnDef="qty">
+                                    <th mat-header-cell *matHeaderCellDef> Qty </th>
+                                    <td mat-cell *matCellDef="let element"> {{ element.qty }} </td>
+                                  </ng-container>
+
+                                  <tr mat-header-row *matHeaderRowDef="displayeditemPostDetailColumns"></tr>
+                                  <tr mat-row *matRowDef="let row; columns: displayeditemPostDetailColumns;"></tr>
+                                </table>
+                                <mat-paginator #tbl3 [hidden]="hidePaginator(itemPostDetailSource?.data.length)"
+                                  pageSize="5" [pageSizeOptions]="[5,10]"></mat-paginator>
+                              </div>
+                            </div>
+                          </div>
+                          <br />
+                        </div>
+                      </td>
+                    </ng-container>
+                    <tr mat-header-row *matHeaderRowDef="displayeditemPostColumns"></tr>
+                    <tr mat-row *matRowDef="let row; columns: displayeditemPostColumns; let i = dataIndex"
+                      (click)="expandList(row, i)" class="element-row"
+                      [class.expanded-row]="row === expandedElement ? true : false"></tr>
+                    <tr mat-row *matRowDef="let row;let i = index; columns: ['expandedDetail']" class="detail-row"></tr>
+                  </table>
+                  <mat-paginator #tbl2 [hidden]="hidePaginator(itemPostSource?.data.length)" pageSize="5"
+                    [pageSizeOptions]="[5,10]"></mat-paginator>
+                </div>
+              </div>
+            </div>
+          </mat-tab>
+          <mat-tab label="Damaged">
+            <app-demage-list [damageData]="damageData" [stockId]="stock.id"></app-demage-list>
+          </mat-tab>
+        </mat-tab-group>
+      </div>
+    </div>
+  </div>
+</section>

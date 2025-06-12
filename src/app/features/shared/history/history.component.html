@@ -1,0 +1,46 @@
+<div>
+  <div class="card-header pt-3 pb-3">
+    <span class="h6 font-weight-bold">Comments & History</span>
+    <a class="closeicon settingclose" (click)="onClose()">
+      <i class="os-icon os-icon-x"></i></a>
+  </div>
+</div>
+
+<div class=" w-100">
+  <form class="p-3" (ngSubmit)="onSubmit()" [formGroup]="historyForm">
+    <div class="form-group">
+      <textarea rows="3" formControlName="comment" class="ember-text-area form-control ember-view"
+        spellcheck="false"></textarea>
+      <div class="text-muted"><small>(For Internal Use)</small></div>
+    </div>
+    <div class="">
+      <button class="btn btn-primary ember-view btn-sm" type="submit" [disabled]="historyForm.invalid">
+        Add Comment
+      </button>
+    </div>
+  </form>
+  <div class="tree-structure comments">
+
+    <div class="row" *ngFor="let item of comments; let i = index">
+      <div class="tree-node col-lg-10">
+        <div class="tree-node-leaf">
+          <div class="arrow"></div>
+          <div class="delete-action">
+            <i class="os-icon os-icon-trash-2" aria-hidden="true" (click)="deleteComment(i, item.uuid)"></i>
+          </div>
+          <div class="description">
+            <div class="text-muted">
+              <small>{{ item.created_at | date: "medium" }} </small>
+            </div>
+            <div class="text">
+              <span style="font-size:15px">{{ item.comment }}</span>
+              <br />
+              <span class="text-muted">by &nbsp;</span>
+              <strong><small>{{ item.user?.firstname }}</small> </strong>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

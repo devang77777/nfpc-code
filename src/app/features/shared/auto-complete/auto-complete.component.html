@@ -1,0 +1,13 @@
+<mat-form-field class="example-full-width">
+    <input type="text" class="form-control" style="    height: 16px;"
+        placeholder="{{placeholder?placeholder :'Search'}}" matInput [formControl]="control" [matAutocomplete]="auto">
+    <mat-autocomplete autoActiveFirstOption #auto="matAutocomplete" [displayWith]="displayFn">
+        <mat-option *ngFor="let item of filteredData" [value]="item[id]">
+            <ng-container *ngIf="objectName; else elsePart">
+                {{  objectName=='root' ?  item[param1] : item[objectName][param1] +' ' + item[objectName][param2]}}
+            </ng-container>
+            <ng-template #elsePart>{{item[text]}}</ng-template>
+        </mat-option>
+        <ng-content></ng-content>
+    </mat-autocomplete>
+</mat-form-field>

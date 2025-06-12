@@ -1,0 +1,98 @@
+<div class="card">
+        <div class="arrow-up"></div>
+        <div class="card-header">
+                <span class="h6 font-weight-bold text-secondary">Notifications</span>
+                <button mat-flat-button class="btn" type="button"  (click)="deleteAll()">
+                        Delete All
+                </button>
+                <button mat-flat-button class="btn" type="button"  (click)="markAsRead()">
+                        Mark As Read
+                </button>
+                <a (click)="close()" class="closeicon settingclose"><i class="os-icon os-icon-x"></i></a>
+
+        </div>
+        <div class="settingmenu settingmenuholder">
+                <mat-list>
+                        <mat-list-item *ngFor="let notification of notifications"
+                                [class.notification-unread]="notification.is_read==0"
+                                (click)="readNotification(notification)">
+                                <div style="display: block;">
+                                        <p matLine>
+                                                <span class="demo-2"
+                                                        style="display: block;">{{notification.message}}</span>
+                                        </p>
+                                        <div mat-line class="col-12"> {{notification?.postTiming}} <b
+                                                        style="margin-right: 2px;" *ngIf="notification.approval_status"
+                                                        [ngStyle]="{'color': getColor(notification)}">{{getNotificationStatus(notification)}}</b>
+                                        </div>
+                                        <div mat-line class="col-12" *ngIf="notification.reason"><b>Reason:</b>
+                                                {{notification.reason}}</div>
+                                        <mat-accordion *ngIf="notification.type=='Geo Approval'"> 
+                                                <mat-expansion-panel (opened)="panelOpenState = true"
+                                                        (closed)="panelOpenState = false">
+                                                        <mat-expansion-panel-header>
+                                                                <mat-panel-title> More Details </mat-panel-title>
+                                                        </mat-expansion-panel-header>
+                                                        <div mat-line class="col-12"><b>Customer : lat:</b>
+                                                                {{notification?.customer_lat}} <b>long:</b>
+                                                                {{notification?.customer_long}}</div>
+                                                        <div mat-line class="col-12"><b>Salesman : lat:</b>
+                                                                {{notification?.salesman_lat}} <b>long:</b>
+                                                                {{notification?.salesman_long}}</div>
+                                                </mat-expansion-panel>
+                                        </mat-accordion>
+                                        <!-- <div class="accordion" id="accordionExample">
+                                                <div class="card">
+                                                        <div class="card-header" id="headingOne">
+                                                                <h2 class="mb-0">
+                                                                        <button class="btn btn-link" type="button" data-toggle="collapse" data-target="#collapseOne"
+                                                                                aria-expanded="true" aria-controls="collapseOne">
+                                                                                Collapsible Group Item #1
+                                                                        </button>
+                                                                </h2>
+                                                        </div>
+                                                
+                                                        <div id="collapseOne" class="collapse show" aria-labelledby="headingOne" data-parent="#accordionExample">
+                                                                <div class="card-body">
+                                                                        Anim pariatur cliche reprehenderit, enim eiusmod high life accusamus terry richardson ad squid.
+                                                                        3 wolf moon officia aute, non cupidatat skateboard dolor brunch. Food truck quinoa nesciunt
+                                                                        laborum eiusmod. Brunch 3 wolf moon tempor, sunt aliqua put a bird on it squid single-origin
+                                                                        coffee nulla assumenda shoreditch et. Nihil anim keffiyeh helvetica, craft beer labore wes
+                                                                        anderson cred nesciunt sapiente ea proident. Ad vegan excepteur butcher vice lomo. Leggings
+                                                                        occaecat craft beer farm-to-table, raw denim aesthetic synth nesciunt you probably haven't heard
+                                                                        of them accusamus labore sustainable VHS.
+                                                                </div>
+                                                        </div>
+                                                </div>
+                                        </div> -->
+                                </div>
+                                <mat-divider></mat-divider>
+                                <div class="btn-block"
+                                        *ngIf="(notification.type == 'Geo Approval' || notification.type == 'Route Deviation') && (notification.approval_status== 'Pending' || !notification.approval_status)">
+                                        <!-- <div class="btn-block"> -->
+                                        <button mat-flat-button class="btn-approve" (click)="onApprove(notification)">
+                                                <mat-icon class="icon-done">done</mat-icon> Approve
+                                        </button>
+                                        <button mat-flat-button class="btn-reject" (click)="onReject(notification)">
+                                                <mat-icon class="icon-done">close</mat-icon> Reject
+                                        </button>
+                                </div>
+                                <mat-divider></mat-divider>
+                        </mat-list-item>
+                        <mat-list-item (click)="loadNotification()"
+                                *ngIf="paginationModel.total_records != notifications.length">
+                                <p matLine class="text-center">
+                                        <span class="demo-2"> <strong> Load More </strong></span>
+                                </p>
+                                <mat-divider></mat-divider>
+                        </mat-list-item>
+                </mat-list>
+        </div>
+        <!-- <div class="settingmenu settingmenuholder">
+                <a *ngFor="let notification of notifications;" (click)="readNotification(notification.id)"
+                        class="menus">
+                        <span>{{notification.message}}</span>
+                </a>
+
+        </div> -->
+</div>

@@ -1,0 +1,112 @@
+.table{
+    width: 95%;
+}
+.items-table-box {
+    overflow-y: scroll !important;
+    min-width: 45%;
+    mat-paginator,
+    .mat-table {
+      max-width: 100%;
+    }
+    button {
+      background-color: transparent;
+      border: none;
+      font-size: 15px;
+      &:active {
+        outline: none;
+      }
+    }
+  }
+
+  .table thead, .table thead tr, .mat-header-row{
+    background-color: black !important;
+    th{
+      background: black;
+      color: #fff;
+    }
+  }
+
+  tr.detail-row {
+    height: 0 !important;
+  }
+  
+  tr.element-row:not(.expanded-row):hover {
+    background: whitesmoke;
+  }
+  
+  tr.element-row:not(.expanded-row):active {
+    background: #efefef;
+  }
+  
+  .element-row td {
+    background: #f7f7f7;
+    word-wrap: break-word !important;
+    white-space: unset !important;
+    flex: 0 0 25% !important;
+    width: 25% !important;
+    overflow-wrap: break-word;
+    word-wrap: break-word;
+
+    word-break: break-word;
+
+    -ms-hyphens: auto;
+    -moz-hyphens: auto;
+    -webkit-hyphens: auto;
+    hyphens: auto;
+    td {
+      border-bottom-width: 0;
+    }
+  }
+  
+  .element-detail {
+    overflow: hidden;
+    display: flex;
+  
+  }
+
+  .show-images {
+    display: block;
+    overflow-x: visible;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+  }
+  
+  .mat-cell {
+    position: relative;
+  
+    button {
+      position: absolute;
+      top: 6px;
+      left: 10px;
+    }
+  }
+  
+  .img-position {
+    position: relative;
+    margin: 3px;
+  }
+
+  .imageCard{
+    .iconsbar{
+        display: none;
+        position: absolute;
+        bottom: 60px;
+        left: 0;
+        width: 100%;
+        justify-content: space-evenly;
+
+        a{
+            background-color: #333333;
+            padding: 10px;
+            border-radius: 50%;
+            font-size: 25px;
+            color: white;
+        }
+    }
+    &:hover{
+        .iconsbar{
+            display: flex;
+        }
+    }
+}

@@ -1,0 +1,60 @@
+<mat-drawer-container class="formdrawer-container" hasBackdrop="false">
+  <mat-drawer
+    id="formDrawer"
+    mode="over"
+    position="end"
+    #formDrawer
+    class="border"
+  >
+    <div style="min-width: 400px;">
+      <app-add-van-form (updateTableData)="updateTableData($event)"></app-add-van-form>
+    </div>
+  </mat-drawer>
+  <section>
+    <div class="table-box" [ngClass]="{ collapsed: isDetailVisible }">
+      <div class="heading-row">
+        <h2 class="d-inline" [hidden]="isDetailVisible">Van Master</h2>
+        <div
+          class="float-right d-inline"
+          [ngClass]="{ 'expanded-action': isDetailVisible }"
+        >
+          <button
+            appPermission
+            [permissions]="userPermissions"
+            [type]="'create'"
+            class="btn btn-sm btn-p"
+            mat-button
+            (click)="openAddVan()"
+          >
+            <i class="fa fa-plus mr-2" aria-hidden="true"></i>New
+          </button>
+          <button *ngIf="checkedRows.length > 0" class="btn btn-sm btn-white dropdown-toggle ml-2" mat-button
+            [matMenuTriggerFor]="menu2">
+            Bulk Actions
+          </button>
+          <mat-menu #menu2="matMenu">
+            <button mat-menu-item (click)="bulkAction('active')">Mark as Active</button>
+            <button mat-menu-item (click)="bulkAction('inactive')" >Mark as Inactive</button>
+            <!-- <button mat-menu-item (click)="bulkAction('delete')" appPermission [permissions]="userPermissions" [type]="'delete'">
+              Delete
+            </button> -->
+          </mat-menu>
+        </div>
+      </div>
+      <app-van-master-dt
+        [newVanData] = "newVanData"
+        (itemClicked)="itemClicked($event)"
+        (selectedRows)="selectedRows($event)"
+      ></app-van-master-dt>
+    </div>
+    <div class="details-box" [ngClass]="{ expanded: isDetailVisible }">
+      <app-van-detail
+        (updateTableData)="updateTableData($event)"
+        (detailsClosed)="closeClicked()"
+        [isDetailVisible]="isDetailVisible"
+        [vanData]="vanData"
+      >
+      </app-van-detail>
+    </div>
+  </section>
+</mat-drawer-container>

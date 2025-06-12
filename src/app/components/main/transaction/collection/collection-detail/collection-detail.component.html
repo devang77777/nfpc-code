@@ -1,0 +1,423 @@
+<section>
+  <div class="heading-row clearfix">
+    <h2 class="d-md-inline">
+      <i class="fa fa-calendar-check-o mr-2"></i>Collection #{{
+      collectionData?.collection_number
+      }}
+    </h2>
+    <div class="d-inline float-right">
+      <div class="btn-group btnrow mr-2">
+        <button class="btn" type="button" [autoClose]="'outside'" triggers="manual" #email="ngbPopover"
+          placement="bottom" (click)="email.open();" [ngbPopover]="emailPopContent" [popoverTitle]="emailPopTitle">
+          <i class="os-icon os-icon-mail"></i>
+        </button>
+        <button
+          *ngIf="collectionData?.current_stage=='Pending' || collectionData?.current_stage=='Created' ||collectionData?.current_stage=='Updated'"
+          [hidden]="isEdit" class="btn" type="button" (click)="editTable()">
+          <i class="os-icon os-icon-edit-32"></i>
+        </button>
+        <button class="btn" type="button" (click)="getDocument('pdf')">
+          <mat-icon [inline]="true">picture_as_pdf</mat-icon>
+        </button>
+        <button class="btn" type="button" printSectionId="print-section" printTitle="Statement" [printStyle]="{
+          h1: { color: 'red' },
+          h2: { border: 'solid 1px' }
+        }" [useExistingCss]="true" ngxPrint>
+          <i class="os-icon os-icon-printer"></i>
+        </button>
+
+        <!-- <button class="btn" type="button">
+          <i class="os-icon os-icon-mail"></i>
+        </button>
+        <button class="btn" type="button">
+          <mat-icon [inline]="true">attach_file</mat-icon>
+        </button> -->
+        <button (click)="onToggleHistory()" class="btn" type="button">
+          <mat-icon [inline]="true">textsms</mat-icon>
+        </button>
+
+
+        <div
+          *ngIf="collectionData?.payemnt_type == 2 && (collectionData?.collection_status !== 'Posted' || collectionData?.collection_status !== 'Bounce')"
+          [hidden]="collectionData?.collection_status === 'Bounce' || collectionData?.collection_status === 'Release'">
+          <button class="btn btn-sm btn-white" mat-button [matMenuTriggerFor]="menu2">
+            More
+          </button>
+          <mat-menu #menu2="matMenu">
+            <!-- <button mat-menu-item (click)="toggleStatus()">Mark as
+            {{ area.area_status === 0 ? 'Active' : 'Inactive' }}</button> -->
+            <button mat-menu-item class="btn" *ngIf="collectionData?.collection_status !== 'Posted'"
+              (click)="saveRelease()">
+              Release
+            </button>
+            <button mat-menu-item class="btn" *ngIf="collectionData?.collection_status !== 'Posted'" (click)="
+              saveBounce()">
+              Bounce
+            </button>
+
+          </mat-menu>
+        </div>
+        <button *ngIf="collectionData?.pdc_status" (click)="savePost()" class="btn-sm btn-white" type="button">
+          Release Post to ERP
+        </button>
+      </div>
+
+
+      <button class="btn" (click)="closeDetailView()">
+        <i class="os-icon os-icon-close"></i>
+      </button>
+    </div>
+  </div>
+  <div class="separator"></div>
+  <!-- *ngIf="collectionIsApproved" -->
+  <div class="approval-holder" *ngIf="hasApprovalPending">
+    <div class="approval-box">
+      <div class="approve-icon">
+        <i class="fa fa-check-square-o"></i>
+      </div>
+      <div class="approve-content">
+        <h2>Approve this Collection</h2>
+        <p>
+          This Collection has been submitted for approval. Verify and approve
+          the Collection.
+        </p>
+      </div>
+      <div class="approve-actions">
+        <button mat-button class="approve mr-2" (click)="approve()">
+          Approve
+        </button>
+        <button mat-button class="reject" (click)="reject()">Reject</button>
+      </div>
+    </div>
+  </div>
+  <div class="scrolly">
+
+    <form class="order-form custom-mat ">
+      <div class="card-header active-form">
+        <div class="row">
+          <div class="col-md-4">
+            <div class="form-group">
+              <label for="">Customer</label>
+              <input type="text" class="form-control form-control-sm non-editable" [value]="
+                collectionData
+                  ? collectionData.customer.firstname +
+                    ' ' +
+                    collectionData.customer.lastname
+                  : ''
+              " disabled />
+            </div>
+          </div>
+        </div>
+        <!-- <div class="row">
+        <div class="col-md-4">
+          <div class="form-group">
+            <label for="">Customer Lob</label>
+            <input type="text" class="form-control form-control-sm non-editable" [value]="
+                collectionData
+                  ? collectionData?.lob?.name : ''" disabled />
+          </div>
+        </div>
+      </div> -->
+      </div>
+
+      <div class="card-body overview">
+        <div class="row justify-content-between">
+          <div class="col-md-4">
+            <div class="form-group">
+              <label for="">Customer Lob</label>
+              <input type="text" class="form-control form-control-sm non-editable" [value]="
+                collectionData
+                  ? collectionData?.lob?.name : ''" disabled />
+            </div>
+          </div>
+        </div>
+        <div class="row justify-content-between">
+          <div class="col-md-4">
+            <div class="form-group">
+              <label for="">Payment Mode </label>
+              <input type="text" class="form-control form-control-sm non-editable"
+                [value]="getPaymentName(collectionData?.payemnt_type)" disabled />
+            </div>
+            <div class="form-group">
+              <label for="">Paid Amount </label>
+              <input type="text" class="form-control form-control-sm non-editable"
+                [value]="collectionData?.invoice_amount" disabled />
+            </div>
+            <div class="form-group">
+              <label for="">Allocated Amount </label>
+              <input type="text" class="form-control form-control-sm non-editable"
+                [value]="collectionData?.allocate_amount" [formControl]="allocatedAmountFormControl" disabled />
+            </div>
+            <div class="form-group">
+              <label for="">Discount </label>
+              <input type="text" [formControl]="discount" (change)="applyDiscount($event.target.value)"
+                class="form-control form-control-sm" [readonly]="!isEdit" />
+            </div>
+            <div class="form-group">
+              <label for="">Clear Amount </label>
+              <input type="text" [formControl]="clearAmt" class="form-control form-control-sm" disabled />
+            </div>
+            <div class="form-group">
+              <label for="">Shelf Rent</label>
+              <input type="text" [formControl]="shelf_rent" class="form-control form-control-sm non-editable"
+                [value]="collectionData?.shelf_rent" disabled />
+            </div>
+          </div>
+          <div class="col-md-4">
+            <div class="form-group">
+              <label for="">Collection Number </label>
+              <div class="position-relative">
+                <input type="text" class="form-control form-control-sm" [value]="collectionData?.collection_number"
+                  id="numberField" disabled />
+                <!-- <span class="setting-btn"><button><i class="fa fa-gear"></i></button> -->
+              </div>
+            </div>
+            <div class="form-group">
+              <label for="">Collection Date </label>
+              <input type="text" class="form-control form-control-sm"
+                [value]="collectionData?.created_at | date : 'dd-MM-y'" id="collectionDate" disabled />
+            </div>
+            <div class="form-group" *ngIf="collectionData?.collection_note">
+              <label for="">Collection Note </label>
+              <input type="text" class="form-control form-control-sm" [value]="collectionData?.collection_note"
+                id="collectionNote" disabled />
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="card-body overview custom-mat check-detail-box" *ngIf="collectionData?.payemnt_type == 2">
+        <div class="d-flex overview-container justify-content-center">
+          <div class="row align-items-center w-100 border">
+            <div class="col-sm-4">
+              <div class="mb-2 form-group row align-items-center">
+                <label for="" class="col-sm-4 col-form-label">Check Number</label>
+                <div class="col-sm-8">
+                  <input type="text" class="form-control form-control-sm" [value]="collectionData?.cheque_number" />
+                </div>
+              </div>
+            </div>
+            <div class="col-sm-4">
+              <div class="mb-2 form-group row align-items-center">
+                <label for="" class="col-sm-4 col-form-label">Bank Name</label>
+                <div class="col-sm-8">
+                  <input type="text" class="form-control form-control-sm" [value]="collectionData?.bank_info" />
+                </div>
+              </div>
+            </div>
+            <div class="col-sm-4">
+              <div class="mb-2 form-group row align-items-center">
+                <label for="" class="col-sm-4 col-form-label">Check Date</label>
+                <div class="col-sm-8">
+                  <input type="date" class="form-control form-control-sm" [value]="collectionData?.cheque_date" />
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="item-container custom-mat custom-mat-no-border" style="margin-bottom: 40px;">
+        <h2 class="d-md-inline">
+          <i class="fa fa-list-alt mr-2"></i>Selected Invoices
+        </h2>
+        <table class="table table-hover" mat-table [dataSource]="selectedInvoiceDataSource">
+
+          <ng-container matColumnDef="customer_code">
+            <th mat-header-cell *matHeaderCellDef>
+              <app-column-filter title="Customer Code" (changeSelected)="onColumnFilterOpen($event)"
+                [selected]="selectedColumnFilter" (close)="onColumnFilter($event)" controlName="customer_code">
+
+                <input class="form-control form-control-sm" placeholder="Enter Customer Code"
+                  (keyup)="applyFilter($event.target.value)" type="text">
+              </app-column-filter>
+            </th>
+            <td mat-cell *matCellDef="let element">{{ element.customer_code }}</td>
+          </ng-container>
+          <ng-container matColumnDef="customername">
+            <th mat-header-cell *matHeaderCellDef>
+              <app-column-filter title="Customer Name" (changeSelected)="onColumnFilterOpen($event)"
+                [selected]="selectedColumnFilter" (close)="onColumnFilter($event)" controlName="customername">
+
+                <input class="form-control form-control-sm" placeholder="Enter Customer Name"
+                  (keyup)="applyFilter($event.target.value)" type="text">
+              </app-column-filter>
+            </th>
+            <td mat-cell *matCellDef="let element">{{ element.customername }}</td>
+          </ng-container>
+          <ng-container matColumnDef="invoicenumber">
+            <th mat-header-cell *matHeaderCellDef>
+              <app-column-filter title="Invoice Number" (changeSelected)="onColumnFilterOpen($event)"
+                [selected]="selectedColumnFilter" (close)="onColumnFilter($event)" controlName="invoicenumber">
+
+                <input class="form-control form-control-sm" placeholder="Enter Invoice Number"
+                  (keyup)="applyFilter($event.target.value)" type="text">
+              </app-column-filter>
+            </th>
+            <td mat-cell *matCellDef="let element">{{ element.invoicenumber }}</td>
+          </ng-container>
+
+          <ng-container matColumnDef="grand_total">
+            <th mat-header-cell *matHeaderCellDef>
+              <app-column-filter title="Grand Total" (changeSelected)="onColumnFilterOpen($event)"
+                [selected]="selectedColumnFilter" (close)="onColumnFilter($event)" controlName="grand_total">
+
+                <input class="form-control form-control-sm" placeholder="Enter Grand Total"
+                  (keyup)="applyFilter($event.target.value)" type="number">
+              </app-column-filter>
+            </th>
+            <td mat-cell *matCellDef="let element">{{ element.grand_total }}</td>
+          </ng-container>
+
+          <ng-container matColumnDef="pending_amount">
+            <th mat-header-cell *matHeaderCellDef>
+              <app-column-filter title="Pending Amount" (changeSelected)="onColumnFilterOpen($event)"
+                [selected]="selectedColumnFilter" (close)="onColumnFilter($event)" controlName="pending_amount">
+
+                <input class="form-control form-control-sm" placeholder="Enter Pending Amount"
+                  (keyup)="applyFilter($event.target.value)" type="text">
+              </app-column-filter>
+            </th>
+            <td mat-cell *matCellDef="let element">{{ element.pending_amount }}</td>
+          </ng-container>
+
+          <ng-container matColumnDef="paid_amount">
+            <th mat-header-cell *matHeaderCellDef>
+              Paid Amount
+            </th>
+            <td mat-cell *matCellDef="let element">
+              <input class="form-control form-control-sm" [(ngModel)]="paidAmountArr[element.position]"
+                [ngModelOptions]="{standalone: true}" (change)="checkPaidAmount(element,$event.target.value)"
+                placeholder="Enter Paid Amount" type="number" [disabled]="!isEdit">
+            </td>
+          </ng-container>
+          <ng-container matColumnDef="Action">
+            <th *matHeaderCellDef [hidden]="!isEdit"> Action </th>
+            <td *matCellDef="let row" [hidden]="!isEdit">
+              <button class="trash-btn" (click)="deleteItemRow(row)"><i class="fa fa-close"></i></button>
+            </td>
+          </ng-container>
+          <ng-container matColumnDef="itype">
+            <th *matHeaderCellDef> type </th>
+            <td *matCellDef="let row">
+              {{row.itype}}
+            </td>
+          </ng-container>
+          <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+          <tr mat-row *matRowDef="let row;  columns: displayedColumns;"></tr>
+        </table>
+        <mat-paginator #selectedInvoiceMatPaginator pageSize="5" [pageSizeOptions]="[1,10]">
+        </mat-paginator>
+
+      </div>
+
+
+      <div class="item-container custom-mat custom-mat-no-border" [hidden]="!isEdit" style="margin-bottom: 100px;">
+        <h2 class="d-md-inline">
+          <i class="fa fa-list-alt mr-2"></i>Invoices
+        </h2>
+        <table class="table table-hover" mat-table [dataSource]="invoiceDataSource">
+          <ng-container matColumnDef="select">
+            <th *matHeaderCellDef> </th>
+            <td *matCellDef="let row">
+              <mat-checkbox class="row-checkbox" [(ngModel)]="checkboxStates[row.position]"
+                [ngModelOptions]="{standalone: true}" (click)="$event.stopPropagation()"
+                (change)="updatePaidBal($event,row)">
+              </mat-checkbox>
+            </td>
+          </ng-container>
+          <ng-container matColumnDef="customer_code">
+            <th mat-header-cell *matHeaderCellDef>
+              <app-column-filter title="Customer Code" (changeSelected)="onColumnFilterOpen($event)"
+                [selected]="selectedColumnFilter" (close)="onColumnFilter($event)" controlName="customer_code">
+
+                <input class="form-control form-control-sm" placeholder="Enter Customer Code"
+                  (keyup)="applyInvoiceFilter($event.target.value)" type="text">
+              </app-column-filter>
+            </th>
+            <td mat-cell *matCellDef="let element">{{ element.customer_code }}</td>
+          </ng-container>
+          <ng-container matColumnDef="customername">
+            <th mat-header-cell *matHeaderCellDef>
+              <app-column-filter title="Customer Name" (changeSelected)="onColumnFilterOpen($event)"
+                [selected]="selectedColumnFilter" (close)="onColumnFilter($event)" controlName="customername">
+
+                <input class="form-control form-control-sm" placeholder="Enter Customer Name"
+                  (keyup)="applyInvoiceFilter($event.target.value)" type="text">
+              </app-column-filter>
+            </th>
+            <td mat-cell *matCellDef="let element">{{ element.customername }}</td>
+          </ng-container>
+          <ng-container matColumnDef="invoicenumber">
+            <th mat-header-cell *matHeaderCellDef>
+              <app-column-filter title="Invoice Number" (changeSelected)="onColumnFilterOpen($event)"
+                [selected]="selectedColumnFilter" (close)="onColumnFilter($event)" controlName="invoicenumber">
+
+                <input class="form-control form-control-sm" placeholder="Enter Invoice Number"
+                  (keyup)="applyInvoiceFilter($event.target.value)" type="text">
+              </app-column-filter>
+            </th>
+            <td mat-cell *matCellDef="let element">{{ element.invoicenumber }}</td>
+          </ng-container>
+
+          <ng-container matColumnDef="grand_total">
+            <th mat-header-cell *matHeaderCellDef>
+              <app-column-filter title="Grand Total" (changeSelected)="onColumnFilterOpen($event)"
+                [selected]="selectedColumnFilter" (close)="onColumnFilter($event)" controlName="grand_total">
+
+                <input class="form-control form-control-sm" placeholder="Enter Grand Total"
+                  (keyup)="applyInvoiceFilter($event.target.value)" type="number">
+              </app-column-filter>
+            </th>
+            <td mat-cell *matCellDef="let element">{{ element.grand_total }}</td>
+          </ng-container>
+
+          <ng-container matColumnDef="pending_amount">
+            <th mat-header-cell *matHeaderCellDef>
+              <app-column-filter title="Pending Amount" (changeSelected)="onColumnFilterOpen($event)"
+                [selected]="selectedColumnFilter" (close)="onColumnFilter($event)" controlName="pending_amount">
+
+                <input class="form-control form-control-sm" placeholder="Enter Pending Amount"
+                  (keyup)="applyInvoiceFilter($event.target.value)" type="text">
+              </app-column-filter>
+            </th>
+            <td mat-cell *matCellDef="let element">{{ element.pending_amount }}</td>
+          </ng-container>
+          <ng-container matColumnDef="itype">
+            <th *matHeaderCellDef> type </th>
+            <td *matCellDef="let row">
+              {{row.itype}}
+            </td>
+          </ng-container>
+
+          <tr mat-header-row *matHeaderRowDef="displayedInvoiceColumns"></tr>
+          <tr mat-row *matRowDef="let row;  columns: displayedInvoiceColumns;"></tr>
+        </table>
+        <mat-paginator #invoiceMatPaginator pageSize="10" [pageSizeOptions]="[5,10]">
+        </mat-paginator>
+
+      </div>
+      <div *ngIf="isEdit" class="card-footer" style="position: fixed;width: 100%;bottom: 0;background-color: rgba(0, 0, 0, 0.03);
+      left: 0;">
+        <div class="d-inline float-right">
+          <button class="btn btn-p mr-1" (click)="cancelEdit()">Cancel</button>
+          <!-- <button *ngIf="showEditInvoice" class="btn btn-p mr-4" (click)="openInvoiceDetail()">Next</button>
+      <button *ngIf="showAddInvoice" class="btn btn-p mr-1" (click)="openInvoiceAddDetail()">Previous</button> -->
+          <button class="btn btn-p mr-4" (click)="saveCollection()">Save</button>
+        </div>
+      </div>
+    </form>
+  </div>
+  <!-- <div class="footer-block"></div> -->
+</section>
+<!-- 
+<div class="card border" id="print-section">
+  <div class="card-body" [innerHTML]="collectionTemplate"></div>
+</div>-->
+
+<ng-template #emailPopTitle>
+  <span>Sent collection {{collectionData.collection_number}}</span>
+</ng-template>
+<ng-template #emailPopContent>
+  <app-send-email [data]="emailData" (close)="email.close()"></app-send-email>
+</ng-template>

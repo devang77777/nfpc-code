@@ -1,0 +1,4 @@
+<label class="check-box" [for]="config.id">
+  <input class="form-control" type="checkbox" [name]="config?.name" [formControl]="config.control" (change)="updateWeekCheckbox($event)" id="{{ config.id }}">
+  <span class="checkmark"></span>
+</label>

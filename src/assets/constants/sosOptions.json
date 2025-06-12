@@ -1,0 +1,14 @@
+[
+    {
+        "label": "Share of Assortment",
+        "routeTo": "merchandising/sos/share-of-assortment"
+    },
+    {
+        "label": "Share of Display",
+        "routeTo": "merchandising/sos/share-of-display"
+    },
+    {
+        "label": "Share of Shelf",
+        "routeTo": "merchandising/sos/share-of-shelf"
+    }
+]

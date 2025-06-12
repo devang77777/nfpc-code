@@ -1,0 +1,93 @@
+<section *ngIf="outletProductData" [ngClass]="{ 'detail-visible': isDetailVisible }">
+
+  <div class="pl-3">
+    <div class="row">
+      <h2 class="page-title col-sm-6 font-weight-light">{{ outletProductData.name }}</h2>
+      <div class="actions col-sm-6">
+        <button appPermission [permissions]="userPermissions" [type]="'edit'" class="iconbtn"
+          (click)="openEditOutletProduct()">
+          <i class="os-icon os-icon-edit" aria-hidden="true"></i>
+        </button>
+        <div>
+          <button class="btn btn-sm btn-white  dropdown-toggle" mat-button [matMenuTriggerFor]="menu2">
+            More
+          </button>
+          <mat-menu #menu2="matMenu">
+            <button mat-menu-item (click)="openDeleteBox()" appPermission [permissions]="userPermissions"
+              [type]="'delete'">
+              Delete
+            </button>
+          </mat-menu>
+        </div>
+        <button *ngIf="isDetailVisible" class="btn" (click)="closeDetailView()">
+          <i class="os-icon os-icon-close"></i>
+        </button>
+      </div>
+    </div>
+  </div>
+
+
+
+
+
+
+  <div class="pl-3">
+    <div class="row h-100">
+      <div class="col-12 border-left">
+        <mat-tab-group class="customertab" mat-align-tabs="start">
+          <mat-tab label="Overview">
+            <mat-list>
+              <mat-list-item>Code: {{ outletProductData.code }}</mat-list-item>
+              <mat-list-item>Name: {{ outletProductData.name }}</mat-list-item>
+            </mat-list>
+            <ng-container *ngIf="outletProductData.outlet_product_code_customers.length">
+              <hr />
+              <div class="col-sm-12 data-block">
+                <h2>Customers</h2>
+                <div class="row">
+                  <div class="col-sm-3 customer-card" *ngFor="
+                      let c of outletProductData.outlet_product_code_customers
+                    ">
+                    <h4>
+                      <i class="fa fa-user"></i><span>{{
+                        c.customer
+                          ? c.customer.firstname + " " + c.customer.lastname
+                          : "User"
+                      }}</span>
+                    </h4>
+
+                  </div>
+                </div>
+              </div>
+            </ng-container>
+            <ng-container *ngIf="outletProductData.outlet_product_code_items.length">
+              <hr />
+              <div class="col-sm-12 data-block">
+                <h2>Items</h2>
+                <div class="row">
+                  <div class="col-sm-3 item-card" *ngFor="
+                      let item of outletProductData.outlet_product_code_items
+                    ">
+                    <h4>
+                      Item Name :<span>{{ item.item?.item_code + '/' + item.item?.item_name }}</span>
+
+                    </h4>
+                    <h4>Product Code: <span>{{ item.outlet_product_code }}</span></h4>
+                  </div>
+                </div>
+              </div>
+            </ng-container>
+          </mat-tab>
+          <mat-tab label="Sales">
+            <mat-list>
+              <mat-list-item>Sales 1</mat-list-item>
+              <mat-list-item>Sales 2</mat-list-item>
+              <mat-list-item>Sales 3</mat-list-item>
+              <mat-list-item>Sales 4</mat-list-item>
+            </mat-list>
+          </mat-tab>
+        </mat-tab-group>
+      </div>
+    </div>
+  </div>
+</section>

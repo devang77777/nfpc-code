@@ -1,0 +1,286 @@
+<section *ngIf="salesMan">
+  <div class="pl-3">
+    <div class="row">
+      <h2 class="page-title col-sm-10 font-weight-light">{{salesMan?.firstname}} {{ salesMan?.lastname }}</h2>
+      <div class="actions col-sm-2">
+        <button (click)="openEditSalesMan()" class="iconbtn"><i class="os-icon os-icon-edit"
+            aria-hidden="true"></i></button>&nbsp;
+        <div>
+          <button class="btn btn-sm btn-white dropdown-toggle" mat-button [matMenuTriggerFor]="menu2">More</button>
+          <mat-menu #menu2="matMenu">
+            <button mat-menu-item (click)="toggleStatus()">Mark as
+              {{ salesMan?.status === 1 ? 'Active' : 'Inactive' }}</button>
+            <button appPermission [permissions]="userPermissions" [type]="'delete'" mat-menu-item
+              (click)="openDeleteBox()">Delete</button>
+          </mat-menu>
+        </div>
+        
+        <button *ngIf="isDetailVisible" class="btn" (click)="closeDetailView()"><i
+            class="os-icon os-icon-close"></i></button>
+      </div>
+    </div>
+  </div>
+  <div class="pl-3 salesMan-data">
+    <div class="row h-100">
+      <div class="col-12">
+        <mat-tab-group mat-align-tabs="start" [(selectedIndex)]="selectedTab"
+          (selectedTabChange)="selectedTabChange($event.index)">
+          <mat-tab label="Overview">
+
+            <div class="row mb-3 ml-0" *ngIf="salesMan.need_to_approve=='yes'">
+              <div class="approval-holder">
+                <div class="approval-box">
+                  <div class="approve-icon">
+                    <i class="fa fa-check-square-o"></i>
+                  </div>
+                  <div class="approve-content">
+                    <h2>Approve this Salesman</h2>
+                    <p>This salesman has been submitted for approval. Verify and approve the salesman.</p>
+                  </div>
+                  <div class="approve-actions">
+                    <button mat-button class="approve" (click)="approve()">Approve</button>
+                    <button mat-button class="reject" (click)="reject()">Reject</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="row scrolly">
+              <div class="col-xl-5 col-lg-5 col-md-8">
+                <ul class="smhlist mt-2">
+                  <li>
+                    <span>{{ domain == "merchandising" || domain == 'nfpc' ? 'Merchandiser' : 'Salesman' }} Code:</span>
+                    <strong>{{ salesMan?.salesman_code }}</strong>
+                  </li>
+                  <li>
+                    <span>Profile Image:</span>
+                    <strong><img class="cp-pic mr-2"
+                        src="{{ salesMan?.profile_image || 'https://secure.gravatar.com/avatar/1aedb8d9dc4751e229a335e371db8058?&amp;d=mm' }}"
+                        alt=""></strong>
+                  </li>
+                  <li>
+                    <span>Name:</span>
+                    <strong>{{ salesMan?.user?.firstname }} {{ salesMan?.user?.lastname }}</strong>
+                  </li>
+                  <li>
+                    <span> {{ domain == "merchandising" || domain == 'nfpc' ? 'Merchandiser' : 'Salesman' }} Mobile:
+                    </span>
+                    <strong>{{ salesMan?.user?.mobile }}</strong>
+                  </li>
+                  <li>
+                    <span> {{ domain == "merchandising" || domain == 'nfpc' ? 'Merchandiser' : 'Salesman' }}
+                      Type:</span>
+                    <strong>{{ salesMan?.salesman_type?.name }}</strong>
+                  </li>
+                  <li>
+                    <span>SalesMan Category:</span>
+                    <strong [ngSwitch]=" salesMan?.category_id">
+                      <ng-container *ngSwitchCase="'1'">Salesman</ng-container>
+                      <ng-container *ngSwitchCase="'2'">Salesman cum driver</ng-container>
+                      <ng-container *ngSwitchCase="'3'">Helper</ng-container>
+                      <ng-container *ngSwitchCase="'4'">Driver cum helper</ng-container>
+                      <ng-container *ngSwitchDefault>{{salesMan?.category_id}}</ng-container>
+                    </strong>
+                  </li>
+                  <li>
+                    <span>Email:</span>
+                    <strong>{{ salesMan?.user?.email }}</strong>
+                  </li>
+                  <li> <span>{{ domain == "merchandising" || domain == 'nfpc' ? 'Merchandiser' : 'Salesman' }} Role:
+                    </span><strong>{{ salesMan?.salesman_role?.name }} </strong></li>
+                  <li> <span> Route Code:
+                    </span><strong>{{ salesMan?.route?.route_code }} </strong></li>
+                  <li> <span> Route:
+                    </span><strong>{{ salesMan?.route?.route_name }} </strong></li>
+                  <li> <span>Date Of Joining:</span><strong> {{ salesMan?.created_at | date :"d MMM y h:mm a" }}
+                    </strong></li>
+
+                  <li> <span>Is Block:</span><strong> {{ salesMan?.is_block==1 ?'Yes':'No' }}
+                    </strong></li>
+
+                  <ng-container *ngIf="salesMan?.is_block==1">
+                    <li> <span>Block Start Date:</span><strong> {{ salesMan?.block_start_date | date :"d MMM y h:mm a"
+                        }}
+                      </strong></li>
+                    <li> <span>Block End Date:</span><strong> {{ salesMan?.block_end_date | date :"d MMM y h:mm a" }}
+                      </strong></li>
+                  </ng-container>
+
+                  <ng-container>
+                    <table>
+                      <tr>
+                        <span style="padding-left: 8px;">Salesman Lob:</span>
+                      </tr>
+                      <tbody>
+                        <tr *ngFor="let temp of salesMan.salesmanlob">
+                          <td style="height: 10px;"><strong>{{ temp?.lob?.name }}</strong></td>
+                        </tr>
+                      </tbody>
+                    </table>
+                  </ng-container>
+                  <!-- <dl>
+                      <dt><span>SalesMan Lob:</span></dt>
+                      <dd *ngFor = "let temp of salesMan.salesmanlob"><strong>{{ temp.lob.name }}</strong></dd>
+                    </dl> -->
+
+
+                  <!-- <ng-container >
+                    <div class="col-md-6">
+                      <span>SalesMan Lob:</span>
+                      </div>
+                      <div class="col-md-6"><span *ngFor = "let temp of salesMan.salesmanlob"><strong>{{ temp.lob.name }}</strong></span>
+                      </div>
+                  </ng-container> -->
+
+                  <li> <span>{{ domain == "merchandising" || domain == 'nfpc' ? 'Merchandiser' : 'Salesman' }}
+                      Supervisor: </span><strong>{{ salesMan?.salesman_supervisor?.firstname }} {{
+                      salesMan?.salesman_supervisor?.lastname }} </strong></li>
+                  <li> <span>Status: </span><strong>{{ salesMan?.status === 0 ? 'Inactive' : 'Active' }}</strong></li>
+                  <li> <span>Geo Flag: </span><strong>{{ salesMan?.geo_flag === 0 ? 'No' : 'Yes' }}</strong></li>
+
+                </ul>
+                <div class="row-mb-4" *ngIf="">
+                  <strong>Number Range</strong>
+                  <hr>
+                  <div class="">
+                    <div class="row mb-2 mt-3">
+                      <div class="col">
+                        <label for=""> Customer From:</label>
+                        {{salesMan.salesman_range?.customer_from}}
+                      </div>
+                      <div class="col">
+                        <label for="">Customer To:</label>
+                        <strong>{{salesMan.salesman_range?.customer_to}}</strong>
+                      </div>
+                    </div>
+                    <!-- <small
+                          *ngIf="!isCustomerRange && (salesManRoleFormControl.value == 2 || salesManRoleFormControl.value == 3)"
+                          class="text-danger">Please fill both form and to range</small> -->
+                    <div class="row mb-2 mt-3">
+                      <div class="col">
+                        <label for=""> Order From:</label>
+                        {{salesMan.salesman_range?.order_from}}
+                      </div>
+                      <div class="col">
+                        <label for="">Order To:</label>
+                        {{salesMan.salesman_range?.order_to}}
+
+                      </div>
+                    </div>
+                    <!-- <small *ngIf="!isOrderRange && salesManRoleFormControl.value !== 4" class="text-danger">Please fill
+                          both form and to range</small> -->
+                    <div class="row mb-2">
+                      <div class=" col">
+                        <label for="">Invoice from:</label>
+                        {{salesMan.salesman_range?.invoice_from}}
+
+                      </div>
+                      <div class="col">
+                        <label for="">Invoice To:</label>
+                        {{salesMan.salesman_range?.invoice_to}}
+
+                      </div>
+                    </div>
+                    <!-- <small *ngIf="!isInvoiceRange && salesManRoleFormControl.value !== 1" class="text-danger">Please fill
+                          both form and to range</small> -->
+                    <div class="row mb-2">
+                      <div class="col">
+                        <label for="">Collection From:</label>
+                        {{salesMan.salesman_range?.collection_from}}
+
+                      </div>
+                      <div class="col">
+                        <label for="">Collection To:</label>
+                        {{salesMan.salesman_range?.collection_to}}
+
+                      </div>
+                    </div>
+                    <!-- <small *ngIf="!isCollectionRange" class="text-danger">Please fill both form and to range</small> -->
+                    <div class="row mb-2">
+                      <div class="col">
+                        <label for="">Return From:</label>
+                        {{salesMan.salesman_range?.credit_note_from}}
+
+                      </div>
+                      <div class="col">
+                        <label for="">Return To:</label>
+                        {{salesMan.salesman_range?.credit_note_to}}
+
+                      </div>
+                    </div>
+                    <!-- <small *ngIf="!isReturnRange" class="text-danger">Please fill both form and to range</small> -->
+                    <div class="row mb-2">
+                      <div class="col">
+                        <label for="">Unload From:</label>
+                        {{salesMan.salesman_range?.unload_from}}
+
+                      </div>
+                      <div class="col">
+                        <label for="">Unload to:</label>
+                        {{salesMan.salesman_range?.unload_to}}
+
+                      </div>
+                    </div>
+                    <!-- <small
+                          *ngIf="!isUnloadRange && (salesManRoleFormControl.value == 2 || salesManRoleFormControl.value == 3)"
+                          class="text-danger">Please fill both form and to range</small> -->
+                  </div>
+                </div>
+              </div>
+            </div>
+          </mat-tab>
+          <mat-tab label="Sales">
+            <div class="row">
+              <div class="col-xl-4 col-lg-5 col-md-8">
+                <ul class="smhlist mt-2">
+                  <li>
+                    <strong>Sales 1</strong>
+                  </li>
+                  <li>
+                    <strong>Sales 2</strong>
+                  </li>
+                  <li>
+                    <strong>Sales 3</strong>
+                  </li>
+                  <li>
+                    <strong>Sales 4</strong>
+                  </li>
+                </ul>
+              </div>
+            </div>
+          </mat-tab>
+          <mat-tab label="Custom Fields">
+            <div class="row">
+              <div class="col-xl-3 col-lg-5 col-md-8">
+                <ng-container *ngIf="
+                    salesMan.custom_field_value_save &&
+                    salesMan.custom_field_value_save.length > 0
+                  ">
+                  <ul class="smhlist mt-2">
+                    <li *ngFor="let item of salesMan.custom_field_value_save">
+                      <span *ngIf="
+                          item.custom_field &&
+                            item.custom_field.field_type === 'check_box';
+                          else others
+                        ">{{ item.custom_field.field_label }} :
+                        {{
+                        item.custom_field_value == "1" ? "Yes" : "No"
+                        }}</span>
+                      <ng-template #others>
+                        <span *ngIf="item.custom_field">{{ item.custom_field?.field_label }} :
+                          {{ item.custom_field_value }}</span>
+                      </ng-template>
+                    </li>
+                  </ul>
+                </ng-container>
+              </div>
+            </div>
+          </mat-tab>
+          <mat-tab label="Login Info">
+            <app-login-info [loginData]="loginData" [merchandiser_id]="salesMan?.user?.id"></app-login-info>
+          </mat-tab>
+        </mat-tab-group>
+      </div>
+    </div>
+  </div>
+</section>

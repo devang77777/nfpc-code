@@ -1,0 +1,197 @@
+<div class="container" style="overflow: scroll;padding-top: 30px;
+height: 100%;">
+    <header>
+        <div class="container mt-3">
+            <div class="row">
+                <div class="col-md-12">
+                    <form [formGroup]="filterForm" (ngSubmit)="applyFilter()">
+                        <div class="form-group row">
+                            <div class="col-sm-12">
+                                <div class="row">
+                                    <div class="col">
+                                        <input type="date" formControlName="startdate" (change)="applyFilter()"
+                                            class="form-control form-control-sm" placeholder="Start Date">
+                                    </div>
+                                    <div class="">
+                                        <span>_</span>
+                                    </div>
+                                    <div class="col">
+                                        <input type="date" formControlName="enddate" (change)="applyFilter()"
+                                            class="form-control form-control-sm" placeholder="End Date">
+                                    </div>
+                                    <div class="col">
+                                        <mat-select formControlName="selectType"
+                                            (selectionChange)="changeFilterType($event.value)"
+                                            class="form-control form-control-sm" placeholder="Filter Type">
+                                            <mat-option *ngFor="let item of filtersList" [value]="item">{{item}}
+                                            </mat-option>
+                                        </mat-select>
+                                    </div>
+                                    <div class="col" *ngIf="filterForm.controls['selectType'].value == 'Channel'">
+                                        <app-multiautocomplete isSingle="false"
+                                            [control]="filterForm.controls['channel']" [options]="channelList"
+                                            (selectionchanged)="applyFilter()" text="name" id="id"
+                                            placeholder="Search channel">
+                                        </app-multiautocomplete>
+                                    </div>
+                                    <div class="col" *ngIf="filterForm.controls['selectType'].value == 'Region'">
+                                        <app-multiautocomplete isSingle="false" [options]="regionList"
+                                            (selectionchanged)="applyFilter()" [control]="filterForm.controls['region']"
+                                            text="region_name" id="id" placeholder="Search region">
+                                        </app-multiautocomplete>
+                                    </div>
+                                    <div class="col" *ngIf="filterForm.controls['selectType'].value == 'Merchandiser'">
+                                        <app-multiautocomplete isSingle="false" [options]="merchandiserList"
+                                            (selectionchanged)="applyFilter()"
+                                            [control]="filterForm.controls['salesman']" text="" id="user_id"
+                                            objectName="user" param1="firstname" param2="lastname"
+                                            placeholder="Search merchandiser">
+                                        </app-multiautocomplete>
+                                    </div>
+                                    <div class="col" *ngIf="filterForm.controls['selectType'].value == 'Supervisor'">
+                                        <app-multiautocomplete isSingle="false" [options]="supervisorList"
+                                            (selectionchanged)="applyFilter()"
+                                            [control]="filterForm.controls['supervisor']" text="salesman_supervisor"
+                                            id="id" objectName="user-root" param1="firstname" param2="lastname"
+                                            placeholder="Search supervisor">
+                                        </app-multiautocomplete>
+                                    </div>
+                                    <div class="col" *ngIf="filterForm.controls['selectType'].value == 'NSM'">
+                                        <app-multiautocomplete isSingle="false" [options]="nsmList"
+                                            (selectionchanged)="applyFilter()"
+                                            [control]="filterForm.controls['nsm']" text="name"
+                                            id="id" objectName="user-root" param1="firstname" param2="lastname"
+                                            placeholder="Search NSM">
+                                        </app-multiautocomplete>
+                                    </div>
+                                    <div class="col" *ngIf="filterForm.controls['selectType'].value == 'ASM'">
+                                        <app-multiautocomplete isSingle="false" [options]="asmList"
+                                            (selectionchanged)="applyFilter()"
+                                            [control]="filterForm.controls['asm']" text="name"
+                                            id="id" objectName="user-root" param1="firstname" param2="lastname"
+                                            placeholder="Search ASM">
+                                        </app-multiautocomplete>
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+
+            </div>
+
+        </div>
+    </header>
+    <hr>
+    <div class="row mt-3">
+        <div class="col-md-12 d-flex align-items-end">
+            <div style="    margin-bottom: 12px;">
+                <h2><strong>Merchandising</strong></h2>
+            </div>
+
+            <div class="d-flex " style=" margin-left: 5px; width: 100%;">
+                <div class="row" style="width: 100%;">
+                    <div class="col-md-3">
+                        <label for="">Select Filter</label>
+                        <mat-select [formControl]="filterControl" class="form-control form-control-sm"
+                            placeholder="Filter Type">
+                            <mat-option *ngFor="let item of merchanidisingFiltersList" [value]="item.id">{{item.title}}
+                            </mat-option>
+                        </mat-select> &nbsp;&nbsp;
+                    </div>
+                    <ng-container *ngIf="filterControl.value==='sos' || filterControl.value==='shelf-price' || filterControl.value==='soa' || filterControl.value==='oos' ||
+                        filterControl.value==='mustStock'">
+                        <div class="col-md-3">
+                            <label for="">Select Brand</label>
+                            <app-multiautocomplete isSingle="false" [control]="filterForm.controls['brand']"
+                                [options]="brandList" (selectionchanged)="applyFilter()" text="brand_name" id="id"
+                                placeholder="Select Brand">
+                            </app-multiautocomplete>
+                            &nbsp;&nbsp;
+                        </div>
+                        <div class="col-md-3 ">
+                            <label for="">Select Category</label>
+                            <app-tree-dropdown class="tree-dropdown" [dataSource]="categoryList"
+                                [dataService]="categoryProvider()" (whenItemSelected)="categorySelected($event)"
+                                [selectFormControl]="filterForm.controls['category']" [placeHolder]="'Select category'"
+                                ngDefaultControl>
+                            </app-tree-dropdown>
+                            &nbsp;&nbsp;
+                        </div>
+                    </ng-container>
+                    <ng-container *ngIf="
+                    filterControl.value==='oos'||
+                     filterControl.value==='shelf-price'|| 
+                    filterControl.value==='mustStock'">
+                        <div class="col-md-3">
+                            <label for="">Select Item</label>
+                            <app-multiautocomplete isSingle="false" [control]="filterForm.controls['item']"
+                                [options]="itemList" (selectionchanged)="applyFilter()" text="item_name" id="id"
+                                placeholder="Select Item">
+                            </app-multiautocomplete>
+                        </div>
+                    </ng-container>
+
+                </div>
+            </div>
+        </div>
+        <!-- <div class="col-md-6 text-right">
+            <strong>Last Reload Date: 12/12/2020</strong>
+        </div> -->
+    </div>
+    <hr>
+    <div class="d-flex flex-wrap">
+        <div class="border-grey box d-flex flex-column">
+            <div style="padding:5px" class="text-warning">
+                <strong>Snapshot</strong>
+            </div>
+            <div class="d-flex justify-content-end" style="    padding: 0px 20px;">
+                <mat-icon class="dir">arrow_drop_up</mat-icon>
+            </div>
+            <div class="d-flex justify-content-center align-items-center" style=" height: 100%;">
+                <h1>{{dashboardData?.percentage || '0%'}}</h1>
+            </div>
+        </div>
+        <div class=" box border-grey">
+            <div style="padding:5px" class="text-warning">
+                <strong>Trend</strong>
+            </div>
+            <div id="chartdivs21" class="charts"></div>
+        </div>
+        <div class=" box border-grey">
+            <div style="padding:5px" class="text-warning">
+                <strong>Contribution</strong>
+            </div>
+            <div id="chartdivs22" class="charts"></div>
+        </div>
+        <div class=" box-bottom1 border-grey">
+            <div style="padding:5px" class="text-warning">
+                <strong>Comparison</strong>
+            </div>
+            <div id="chartdivs23" class="charts"></div>
+        </div>
+        <div class=" box-bottom2 border-grey d-flex flex-column">
+            <div style="padding:5px" class="text-warning">
+                <strong>Detail</strong>
+            </div>
+            <div class="tableFixHead">
+                <table class="table table-responsive" style="    display: table;">
+                    <thead>
+                        <tr>
+                            <th class="th-custom" *ngFor="let item of tableConfig"><strong>{{item.header}}</strong></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let row of detailsTable; let i = index;" class=" tr-brown ">
+                            <td>{{row[tableConfig[0].key]}}</td>
+                            <td>{{row[tableConfig[1].key] ? row[tableConfig[1].key] :'0'}}</td>
+                            <td>{{row[tableConfig[2].key] ? row[tableConfig[2].key] :'0'}}</td>
+                            <td>{{row[tableConfig[3].key] ? row[tableConfig[3].key] :'0'}}</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>

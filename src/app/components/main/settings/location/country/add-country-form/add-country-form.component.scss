@@ -1,0 +1,39 @@
+a {
+  cursor: pointer;
+}
+.card{
+  width: 550px;
+}
+.card-footer {
+  position: fixed;
+  width: 550px;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.03);
+}
+
+.form-box {
+  max-height: calc(100vh - 170px);
+  overflow-y: scroll;
+}
+.markred
+{
+  color: red;
+}
+.settingIcon
+{
+  position: absolute;
+  top: 4px;
+  left: 325px !important;
+    i{
+      font-size: 20px;
+    }
+}
+@media (max-width: 991px) {
+
+  .card{
+    width: 350px;
+  }
+  .card-footer {
+    width: 350px;
+  }
+}

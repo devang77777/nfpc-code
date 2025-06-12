@@ -1,0 +1,111 @@
+<section>
+  <div class="heading-row">
+    <h2 class="d-inline">
+      <i class="fa fa-truck fa-flip-horizontal mr-2"></i>Van To Van
+      Transfer<span class="order-number"> #{{ vanToVanData[0].code }}</span>
+    </h2>
+    <div class="d-inline float-right">
+      <span>
+        <button mat-button class="mat-inherit-line-height more-btn" [matMenuTriggerFor]="menu2">
+          More
+        </button>
+        <mat-menu #menu2="matMenu" xPosition="before">
+          <button mat-menu-item class="height-40" (click)="editOrder()" appPermission [permissions]="userPermissions"
+            [type]="'edit'">
+            Edit
+          </button>
+          <button mat-menu-item class="height-40" (click)="openDeleteBox()" appPermission
+            [permissions]="userPermissions" [type]="'delete'">
+            Delete
+          </button>
+        </mat-menu>
+      </span>
+      <button mat-button class="mat-inherit-line-height" (click)="goToVan()">
+        <i class="fa fa-chevron-left"></i>
+        <span class="back-btn"> Back</span>
+      </button>
+    </div>
+  </div>
+  <div class="separator"></div>
+  <form class="order-form custom-mat square">
+    <div class="card-body active-form overview">
+      <div class="d-flex overview-container">
+        <table class="form-col d-inline">
+          <tr class="spacer"></tr>
+        </table>
+      </div>
+    </div>
+    <div class="card-body overview scrolly">
+      <div class="d-flex justify-content-between overview-container">
+        <table class="form-col d-inline">
+          <tr>
+            <td>Source Van</td>
+            <td>
+              <input type="text" class="form-control form-control-sm non-editable"
+                [value]="vanToVanData[0].sourceroute?.route_name" disabled />
+            </td>
+          </tr>
+          <tr class="spacer"></tr>
+          <tr>
+            <td>Destination Van</td>
+            <td>
+              <input type="text" class="form-control form-control-sm non-editable"
+                [value]="vanToVanData[0].destinationroute?.route_name" disabled />
+            </td>
+          </tr>
+        </table>
+
+        <table class="form-col d-inline">
+          <tr>
+            <td class="ml-2">Code</td>
+            <td>
+              <input type="text" class="form-control form-control-sm non-editable" [value]="vanToVanData[0].code"
+                disabled />
+            </td>
+          </tr>
+          <tr class="spacer"></tr>
+          <tr>
+            <td class="ml-2">Date</td>
+            <td>
+              <input type="date" class="form-control form-control-sm non-editable" [value]="vanToVanData[0].date"
+                disabled />
+            </td>
+          </tr>
+        </table>
+      </div>
+    </div>
+    <div>
+      <div class="item-container custom-mat custom-mat-no-border">
+        <table>
+          <thead>
+            <tr>
+              <th class="head" *ngFor="let head of itemTableHeaders">
+                {{ head.label }}
+              </th>
+            </tr>
+          </thead>
+          <tbody class="form-body">
+            <tr class="item-row" *ngFor="
+                let item of vanToVanData[0].vantovantransferdetail;
+                let i = index
+              ">
+              <td>{{ i + 1 }}</td>
+              <td class="item-name">
+                <input type="text" class="form-control form-control-sm non-editable" [value]="item.item?.item_name"
+                  disabled />
+              </td>
+              <td class="uom-td">
+                <input type="text" class="form-control form-control-sm non-editable" [value]="item.item_uom?.name"
+                  disabled />
+              </td>
+              <td>
+                <input type="number" min="0" class="form-control non-editable" [value]="item.quantity" disabled />
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </form>
+  <div class="footer-block"></div>
+</section>

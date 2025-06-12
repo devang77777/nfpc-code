@@ -1,0 +1,14 @@
+[
+    {
+        "label": "Tax Rates",
+        "routeTo": "settings/tax/tax-rates"
+    },
+    {
+      "label": "Tax Settings",
+      "routeTo": "settings/tax/tax-settings"
+    },
+    {
+      "label": "Gst Settings",
+      "routeTo": "settings/tax/gst-settings"
+    }
+  ]

@@ -1,0 +1,227 @@
+<div style="padding:20 10;">
+    <h2 style="margin-left: 10px;"> <strong>Pricing Check</strong></h2>
+
+    <div class="pl-3 items-table-box w-100">
+        <div class="table-responsive">
+            <table mat-table [dataSource]="itemSource" class="mat-elevation-z8 table table-hover" multiTemplateDataRows>
+                <ng-container matColumnDef="date">
+                    <th mat-header-cell *matHeaderCellDef>
+                        <app-column-filter title="Date" (changeSelected)="onColumnFilterOpen($event)"
+                            [selected]="selectedColumnFilter" controlName="date" (close)="onColumnFilter($event)">
+                            <input class="form-control form-control-sm" [formControl]="filterForm.get('date')" placeholder="Enter Date" type="date">
+                        </app-column-filter>
+                    </th>
+                    <td mat-cell *matCellDef="let element">
+                        <ng-container *ngIf="element.created_at; else elseTemplate">
+                            {{ element.created_at | date :"d MMM y h:mm a" }}
+                        </ng-container>
+                    </td>
+                </ng-container>
+
+                <ng-container matColumnDef="merchandiser">
+                    <th mat-header-cell *matHeaderCellDef>
+                        <app-column-filter title="Merchandiser" (changeSelected)="onColumnFilterOpen($event)"
+                            [selected]="selectedColumnFilter" controlName="salesman_name" (close)="onColumnFilter($event)">
+                            <input class="form-control form-control-sm" [formControl]="filterForm.get('salesman_name')" placeholder="Enter Merchandiser" type="text">
+                        </app-column-filter>
+                    </th>
+                    <td mat-cell *matCellDef="let element">
+                        <ng-container *ngIf="element.salesman; else elseTemplate">
+                            {{ element.salesman?.firstname }}
+                            {{ element.salesman?.lastname }}
+                        </ng-container>
+
+                    </td>
+                </ng-container>
+                <ng-container matColumnDef="customer_code">
+                    <th mat-header-cell *matHeaderCellDef>
+                        <app-column-filter title="Customer Code" (changeSelected)="onColumnFilterOpen($event)"
+                            [selected]="selectedColumnFilter" controlName="customer_code" (close)="onColumnFilter($event)">
+                            <input class="form-control form-control-sm" [formControl]="filterForm.get('customer_code')" placeholder="Enter Customer Code" type="text">
+                        </app-column-filter>
+                    </th>
+                    <td mat-cell *matCellDef="let element">
+                        <ng-container *ngIf="element.customer; else elseTemplate">
+                            {{ element.customer?.customer_info.customer_code }}
+                        </ng-container>
+                    </td>
+                </ng-container>
+                <ng-container matColumnDef="customer">
+                    <th mat-header-cell *matHeaderCellDef>
+                        <app-column-filter title="Customer " (changeSelected)="onColumnFilterOpen($event)"
+                            [selected]="selectedColumnFilter" controlName="customer_name" (close)="onColumnFilter($event)">
+                            <input class="form-control form-control-sm" [formControl]="filterForm.get('customer_name')" placeholder="Enter Customer " type="text">
+                        </app-column-filter>
+                    </th>
+                    <td mat-cell *matCellDef="let element">
+                        <ng-container *ngIf="element.customer; else elseTemplate">
+                            {{ element.customer?.firstname }}
+                            {{ element.customer?.lastname }}
+                        </ng-container>
+                    </td>
+                </ng-container>
+                <ng-container matColumnDef="brand">
+                    <th mat-header-cell *matHeaderCellDef>
+                        <app-column-filter title="Brand " (changeSelected)="onColumnFilterOpen($event)"
+                            [selected]="selectedColumnFilter" controlName="brand" (close)="onColumnFilter($event)">
+                            <input class="form-control form-control-sm" [formControl]="filterForm.get('brand')" placeholder="Enter Brand " type="text">
+                        </app-column-filter>
+                    </th>
+                    <td mat-cell *matCellDef="let element">
+                        <ng-container *ngIf="element.brand; else elseTemplate">
+                            {{ element.brand.brand_name }}
+                        </ng-container>
+                    </td>
+                </ng-container>
+                <ng-container matColumnDef="expandedDetail">
+                    <td mat-cell *matCellDef="let element" [attr.colspan]="displayedColumns.length">
+                        <div class="element-detail w-100"
+                            [@detailExpand]="element == expandedElement ? 'expanded' : 'collapsed'">
+                            <div *ngIf='element' class="w-100">
+                                <div class="hscroll">
+                                    <div class="table-responsive">
+                                        <table class="table table-hover">
+                                            <thead>
+                                                <th>Item Code
+                                                    <!-- <app-column-filter title="Item Code"
+                                                        (changeSelected)="onColumnFilterOpen($event)"
+                                                        [selected]="selectedColumnFilter"
+                                                        (close)="onColumnFilter($event)">
+                                                        <input class="form-control form-control-sm"
+                                                            placeholder="Enter Item Code" type="text">
+                                                    </app-column-filter> -->
+                                                </th>
+                                                <th>Item
+                                                    <!-- <app-column-filter title="Item"
+                                                        (changeSelected)="onColumnFilterOpen($event)"
+                                                        [selected]="selectedColumnFilter"
+                                                        (close)="onColumnFilter($event)">
+                                                        <input class="form-control form-control-sm"
+                                                            placeholder="Enter Item" type="text">
+                                                    </app-column-filter> -->
+                                                </th>
+                                                <th>Category
+                                                    <!-- <app-column-filter title="Category"
+                                                        (changeSelected)="onColumnFilterOpen($event)"
+                                                        [selected]="selectedColumnFilter"
+                                                        (close)="onColumnFilter($event)">
+                                                        <input class="form-control form-control-sm"
+                                                            placeholder="Enter Category" type="text">
+                                                    </app-column-filter> -->
+                                                </th>
+                                                <th>Day 1 </th>
+                                                <th>Day 2 </th>
+                                                <th>Day 3 </th>
+                                                <th>Day 4 </th>
+                                                <th>Day 5 </th>
+                                                <th>Day 6 </th>
+                                                <th>Day 7 </th>
+                                                <th>Day 8 </th>
+                                                <th>Day 9 </th>
+                                                <th>Day 10 </th>
+                                            </thead>
+                                            <tbody>
+                                                <tr *ngFor="let row of element.pricing_details; let i = index;">
+                                                    <td>
+                                                        <ng-container *ngIf="row.item?.item_code; else elseTemplate">
+                                                            {{row.item?.item_code}}
+                                                        </ng-container>
+                                                    </td>
+                                                    <td>
+                                                        <ng-container *ngIf="row.item?.item_name; else elseTemplate">
+                                                            {{row.item?.item_name}}
+                                                        </ng-container>
+                                                    </td>
+                                                    <td>
+                                                        <ng-container
+                                                            *ngIf="row.item_major_category?.name; else elseTemplate">
+                                                            {{row.item_major_category?.name}}
+                                                        </ng-container>
+                                                    </td>
+                                                    <td>
+                                                        <ng-container
+                                                            *ngIf="row.pricing_check_detail_prices[0]; else elseTemplate">
+                                                            {{numberFormatWithSymbol(row.pricing_check_detail_prices[0].price)}}
+                                                        </ng-container>
+                                                    </td>
+                                                    <td>
+                                                        <ng-container
+                                                            *ngIf="row.pricing_check_detail_prices[1]; else elseTemplate">
+                                                            {{numberFormatWithSymbol(row.pricing_check_detail_prices[1].price)}}
+                                                        </ng-container>
+                                                    </td>
+                                                    <td>
+                                                        <ng-container
+                                                            *ngIf="row.pricing_check_detail_prices[2]; else elseTemplate">
+                                                            {{numberFormatWithSymbol(row.pricing_check_detail_prices[2].price)}}
+                                                        </ng-container>
+                                                    </td>
+                                                    <td>
+                                                        <ng-container
+                                                            *ngIf="row.pricing_check_detail_prices[3]; else elseTemplate">
+                                                            {{numberFormatWithSymbol(row.pricing_check_detail_prices[3].price)}}
+                                                        </ng-container>
+                                                    </td>
+                                                    <td>
+                                                        <ng-container
+                                                            *ngIf="row.pricing_check_detail_prices[4]; else elseTemplate">
+                                                            {{numberFormatWithSymbol(row.pricing_check_detail_prices[4].price)}}
+                                                        </ng-container>
+                                                    </td>
+                                                    <td>
+                                                        <ng-container
+                                                            *ngIf="row.pricing_check_detail_prices[5]; else elseTemplate">
+                                                            {{numberFormatWithSymbol(row.pricing_check_detail_prices[5].price)}}
+                                                        </ng-container>
+                                                    </td>
+                                                    <td>
+                                                        <ng-container
+                                                            *ngIf="row.pricing_check_detail_prices[6]; else elseTemplate">
+                                                            {{numberFormatWithSymbol(row.pricing_check_detail_prices[6].price)}}
+                                                        </ng-container>
+                                                    </td>
+                                                    <td>
+                                                        <ng-container
+                                                            *ngIf="row.pricing_check_detail_prices[7]; else elseTemplate">
+                                                            {{numberFormatWithSymbol(row.pricing_check_detail_prices[7].price)}}
+                                                        </ng-container>
+                                                    </td>
+                                                    <td>
+                                                        <ng-container
+                                                            *ngIf="row.pricing_check_detail_prices[8]; else elseTemplate">
+                                                            {{numberFormatWithSymbol(row.pricing_check_detail_prices[8].price)}}
+                                                        </ng-container>
+                                                    </td>
+                                                    <td>
+                                                        <ng-container
+                                                            *ngIf="row.pricing_check_detail_prices[9]; else elseTemplate">
+                                                            {{numberFormatWithSymbol(row.pricing_check_detail_prices[9].price)}}
+                                                        </ng-container>
+                                                    </td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                            <br />
+                        </div>
+                    </td>
+                </ng-container>
+                <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                <tr mat-row *matRowDef="let row; columns: displayedColumns; let i = index" (click)="expandList(row)"
+                    class="element-row" [class.expanded-row]="row === expandedElement ? true : false"></tr>
+                <tr mat-row *matRowDef="let row;let i = index; columns: ['expandedDetail']" class="detail-row">
+                </tr>
+            </table>
+        </div>
+        <mat-paginator [hidden]="apiResponse.pagination?.total_records < 5" (page)="onPageFired($event)"
+        [length]="apiResponse.pagination?.total_records" [pageSize]="pageSize" [pageSizeOptions]="[10, 25, 50]">
+        </mat-paginator>
+    </div>
+</div>
+
+
+<ng-template #elseTemplate>
+    <app-default-message></app-default-message>
+</ng-template>

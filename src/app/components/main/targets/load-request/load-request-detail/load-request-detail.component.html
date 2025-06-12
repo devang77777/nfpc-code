@@ -1,0 +1,281 @@
+<section *ngIf="loadRequest">
+  <div class="pl-3">
+    <div class="row">
+      <h2 class="page-title col-sm-6 font-weight-light">
+        <i class="fa fa-file-text-o mr-2"></i> Load No.
+        <span class="order-number">#{{ loadRequest?.load_number }}</span>
+      </h2>
+      <div class="actions col-sm-6">
+        <div class="d-md-inline">
+          <div class="btn-group btnrow mr-2">
+            <button class="btn" type="button" *ngIf="showOptions" [hidden]="isEdit"
+              (click)="editLoadRequest();addRecord=false;">
+              <i class="os-icon os-icon-edit-32"></i>
+            </button>
+            <button style="margin-left:-11px;" class="btn" type="button" (click)="getDocument()">
+              <mat-icon [inline]="true">picture_as_pdf</mat-icon>
+            </button>
+          </div>
+        </div>
+        <div *ngIf="showOptions">
+          <button class="btn btn-sm btn-white mr-2" mat-button [matMenuTriggerFor]="menu2">More</button>
+          <mat-menu #menu2="matMenu">
+            <!-- <button mat-menu-item (click)="openConfirmBox('approve')">Approve</button>
+                        <button mat-menu-item (click)="openConfirmBox('reject')">Reject</button> -->
+            <button mat-menu-item (click)="openConfirmBox('2','Delete')">Delete</button>
+            <button mat-menu-item (click)="openConfirmBox('3','Generate to load')">Generate to Load</button>
+
+          </mat-menu>
+        </div>
+        <button *ngIf="isDetailVisible" class="btn" (click)="closeDetailView()">
+          <i class="os-icon os-icon-close"></i>
+        </button>
+      </div>
+    </div>
+  </div>
+  <div class="scrolly">
+    <div class="mb-4" *ngIf="loadIsApproved">
+      <div class="approval-holder">
+        <div class="approval-box">
+          <div class="approve-icon">
+            <i class="fa fa-check-square-o"></i>
+          </div>
+          <div class="approve-content">
+            <h2>Approve this Load Request</h2>
+            <p>This Load Request has been submitted for approval. Verify and approve the Load Request.</p>
+          </div>
+          <div class="approve-actions">
+            <button mat-button class="approve" (click)="openConfirmBox('1','Approve')">Approve</button>
+            <button mat-button class="reject" (click)="openConfirmBox('0','Reject')">Reject</button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <form class="order-form custom-mat square customertab">
+      <div class="card-header active-form overview">
+        <div class="row justify-content-between">
+          <div class="col-md-4">
+            <div class="form-group">
+              <label>Load Type</label>
+              <input type="text" class="form-control form-control-sm non-editable" [value]="loadRequest.load_type"
+                disabled />
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="card-body overview">
+        <div class="row justify-content-between">
+          <div class="col-md-4">
+            <div class="form-group">
+              <label>SalesMan</label>
+              <input type="text" class="form-control form-control-sm non-editable" [value]="
+                    loadRequest.salesman?.firstname +
+                        ' ' +
+                        loadRequest.salesman?.lastname
+                      " disabled />
+            </div>
+            <div class="form-group">
+              <label>Load No.</label>
+              <input type="text" class="form-control form-control-sm non-editable" [value]="loadRequest.load_number"
+                disabled />
+            </div>
+            <!-- <div class="form-group" *ngIf="!isDepotOrder">
+                    <label>{{domain == 'nfpc' || domain == 'merchandising' ? 'Merchandiser' : 'Salesman'}}</label>
+                    <input type="text" class="form-control form-control-sm non-editable" [value]="
+                        orderData?.salesman ? orderData?.salesman?.firstname + orderData?.salesman?.lastname : ''
+                      " disabled />
+                  </div> -->
+          </div>
+
+          <div class="col-md-4">
+            <div class="form-group">
+              <label>Load Type</label>
+              <input type="text" class="form-control form-control-sm non-editable" [value]="loadRequest?.load_type"
+                disabled />
+            </div>
+
+            <div class="form-group">
+              <label> Date</label>
+              <input type="date" class="form-control form-control-sm non-editable" [value]="loadRequest?.load_date"
+                disabled />
+            </div>
+
+            <div class="form-group">
+              <label>Route</label>
+              <input type="text" class="form-control form-control-sm non-editable"
+                [value]="loadRequest?.route?.route_name +' - ' + loadRequest?.route?.route_code" disabled />
+            </div>
+
+          </div>
+        </div>
+      </div>
+      <div class="item-container custom-mat custom-mat-no-border" [formGroup]="LoadRequestForm">
+        <div class="table-responsive" [ngClass]="{'disablediv': !isEdit}">
+          <table class="cardtable item-table">
+            <thead>
+              <tr>
+                <th class="head" *ngFor="let head of itemTableHeaders">
+                  {{ head }}
+                </th>
+                <th *ngIf="isEdit">On Hand Quantity</th>
+                <th *ngIf="isEdit">Action</th>
+              </tr>
+            </thead>
+            <tbody class="form-body">
+              <tr formArrayName="items" class="item-row" *ngFor="let el of itemFormControls.controls; let i = index;">
+                <ng-container [formGroupName]="i">
+                  <td data-th="#">{{ i + 1 }}</td>
+                  <td>
+                    <input type="text" class="form-control" placeholder="Item Code" formControlName="item_code">
+                  </td>
+                  <td class="item-name" data-th="item Name">
+                    <input type="text" class="form-control" [hidden]="isEdit" placeholder="Item Name"
+                      formControlName="item_name">
+                    <ng-container *ngIf="isEdit">
+                      <mat-form-field class="item-name-field">
+                        <input type="text" placeholder="Search an item" matInput formControlName="item"
+                          [matAutocomplete]="auto" (keyup)="searchItem($event.target.value)">
+                        <mat-autocomplete appOptionScroll (optionsScroll)="onScrollItem()" #auto="matAutocomplete"
+                          [displayWith]="itemsControlDisplayValue"
+                          (optionSelected)="itemDidSearched($event.option.value, i,null);addRecord=true">
+                          <mat-option *ngFor="let item of filteredItems" [value]="itemControlValue(item)"
+                            style="height: unset;padding-bottom: 3px!important;padding-top: 5px;">
+                            <span class="mat-option-text">{{item.item_code}} - {{ item.item_name }}</span>
+                          </mat-option>
+                          <mat-option *ngIf="isLoading && filteredItems.length >= 10 || !filteredItems.length">
+                            <div class="select-placeholder-container">
+                              <mat-spinner class="spinner" diameter="20"></mat-spinner>
+                            </div>
+                          </mat-option>
+                        </mat-autocomplete>
+                      </mat-form-field>
+                    </ng-container>
+                    <!-- <mat-form-field class="item-name-field" *ngIf="isEdit">
+                      <input type="text" required placeholder="Search an item" matInput formControlName="item"
+                        [matAutocomplete]="auto">
+                      <mat-autocomplete #auto="matAutocomplete"
+                        (optionSelected)="itemDidSearched($event.option.value, i,null)"
+                        [displayWith]="itemsControlDisplayValue">
+                        <mat-option *ngFor="let fitem of filteredItems" [value]="itemControlValue(fitem)">
+                          {{ fitem.item_name }} - {{fitem.item_code}} </mat-option>
+                        <hr class="customerHr">
+                      </mat-autocomplete>
+                    </mat-form-field> -->
+                  </td>
+                  <td class="uom-td" data-th="UOM">
+                    <select class="custom-select" required formControlName="item_uom_id"
+                      (change)="isStockCheck(el);addRecord=false;">
+                      <option [ngValue]="uom.id" *ngFor="let uom of el.get('item_uom_list').value">{{ uom.name }}
+                      </option>
+                    </select>
+                  </td>
+                  <td class="stats-cell" data-th="Quantity"
+                    [ngClass]="{'itemQtyAvlaible' : itemQtyAvlaible[el.get('item')?.value?.id] == false}">
+                    <input type="number" min="0" class="form-control" placeholder="Quantity" formControlName="item_qty">
+                  </td>
+                  <td *ngIf='loadRequest.approval_status != "Load Created"' data-th="Requested Quantity">
+                    <input type="text" min="0" disabled class="form-control" placeholder="Requested Quantity"
+                      formControlName="requested_qty">
+                  </td>
+                  <td *ngIf='isEdit' data-th="On Hand Qty">
+                    <input type="text" min="0" disabled class="form-control" placeholder="On Hand Qty"
+                      formControlName="onhand_qty">
+                  </td>
+                  <td *ngIf="isEdit" data-th="Action"> <button [disabled]="(itemFormControls.length <= 1)"
+                      class="trash-btn" (click)="deleteItemRow(i)"><i class="fa fa-close"></i></button></td>
+                </ng-container>
+              </tr>
+            </tbody>
+          </table>
+          <button *ngIf="isEdit" mat-button class="mat-inherit-line-height add-item-btn"
+            (click)="addItem();addRecord=true">
+            <!--            <i class="os-icon os-icon-plus"></i>-->
+            Add Item
+          </button>
+        </div>
+      </div>
+      <div class="card-footer" *ngIf="isEdit">
+        <div class="d-inline float-right">
+          <button class="btn btn-sm btn-light mr-2" type="button" (click)="cancelEdit()">
+            Cancel
+          </button>
+          <button class="btn btn-sm btn-p" type="button" (click)="saveLoadReqItems()">
+            Save
+          </button>
+        </div>
+      </div>
+    </form>
+  </div>
+</section>
+
+
+<!-- <div class="area-data scrolly">
+    <div class="row h-100">
+        <div class="col-12 border-left">
+            <mat-tab-group class="customertab" mat-align-tabs="start">
+                <mat-tab label="Overview">
+                    <div class="row">
+                        <div class="col-xl-5 col-lg-5 col-md-8">
+                            <ul class="smhlist mt-2">
+                                <li>
+                                    <span> Date: </span>
+                                    <strong>{{loadRequest.created_at | date :"d MMM y h:mm a"}}</strong>
+                                </li>
+                                <li>
+                                    <span> Load No. </span>
+                                    <strong>{{loadRequest.load_number}}</strong>
+                                </li>
+                                <li>
+                                    <span> Salesman: </span>
+                                    <strong>{{loadRequest.salesman?.firstname}}
+                                        {{loadRequest.salesman?.lastname}}</strong>
+                                </li>
+                                <li>
+                                    <span> Load Type: </span>
+                                    <strong>{{loadRequest.load_type}}</strong>
+                                </li>
+                                <li>
+                                    <span> Route: </span>
+                                    <strong>{{loadRequest.route?.route_name}}</strong>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+
+
+                    <ng-container *ngIf="loadRequest !== null">
+                        <hr>
+                        <div class="col-sm-12 data-block">
+                            <div class="item-container custom-mat">
+                                <table>
+                                    <thead>
+                                        <tr>
+                                            <th class="head" *ngFor="let head of itemTableHeaders">{{ head }}</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody class="form-body">
+                                        <tr class="item-row"
+                                            *ngFor="let item of loadRequest.load_request_detail; let i = index;">
+                                            <ng-container>
+                                                <td>
+                                                    {{item.item?.item_name}}
+                                                </td>
+                                                <td>
+                                                    {{item.item_uom?.name}}
+                                                </td>
+                                                <td>
+                                                    {{item.qty}}
+                                                </td>
+                                            </ng-container>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </ng-container>
+                </mat-tab>
+            </mat-tab-group>
+        </div>
+    </div>
+</div>  -->

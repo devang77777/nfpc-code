@@ -1,0 +1,27 @@
+<section>
+  <div class="table-box">
+    <div class="heading-row">
+      <h2 class="d-md-inline">
+        <i class="fa fa-home mr-2"></i>Stock Adjustments
+      </h2>
+      <div class="d-md-inline float-md-right text-right">
+        <button class="btn btn-sm btn-p mr-2" mat-button (click)="openForm()" appPermission
+          [permissions]="userPermissions" [type]="'create'">
+          <i class="os-icon os-icon-plus mr-2" aria-hidden="true"></i>New
+        </button>
+        <button *ngIf="checkedRows.length > 0" class="btn btn-sm btn-white dropdown-toggle ml-2" mat-button
+          [matMenuTriggerFor]="menu2">
+          Bulk Actions
+        </button>
+        <mat-menu #menu2="matMenu">
+          <button mat-menu-item (click)="bulkAction('active')">Mark as Active</button>
+          <button mat-menu-item (click)="bulkAction('inactive')" >Mark as Inactive</button>
+          <!-- <button mat-menu-item (click)="bulkAction('delete')" appPermission [permissions]="userPermissions" [type]="'delete'">
+            Delete
+          </button> -->
+        </mat-menu>
+      </div>
+    </div>
+    <app-sa-data-table [newSAData]="newSAData" (selectedRows)="selectedRows($event)"></app-sa-data-table>
+  </div>
+</section>

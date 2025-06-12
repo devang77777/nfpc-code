@@ -1,0 +1,37 @@
+<div class="card">
+        <div class="arrow-up"></div>
+        <div class="card-header">
+                <span class="h6 font-weight-bold text-secondary">Settings</span>
+                <a (click)="close()" class="closeicon settingclose"><i class="os-icon os-icon-x"></i></a>
+
+        </div>
+        <div class="m-2 search-input">
+                <span class="material-icons"> search </span>
+                <input placeholder="Search" style="border:none; width: 100%;">
+        </div>
+        <div class="settingmenu settingmenuholder">
+                <a *ngFor="let menu of sidebarSettingConfig;"
+                        [hidden]="settingFeatureCheck(menu.label, menu.hasSubmenu)" (click)="navigateTo(menu.routeTo)"
+                        class="menus">
+                        <i class="{{menu.icon}} mr-2" aria-hidden="true"></i>
+                        <span>{{menu.label}}</span>
+                </a>
+                <mat-expansion-panel *ngFor="let menu of sidebarSettingConfig;"
+                        [hidden]="(sumenuExistCheck(menu.submenu, menu.hasSubmenu))" (opened)="panelOpenState = true"
+                        (closed)="panelOpenState = false">
+                        <mat-expansion-panel-header [collapsedHeight]="'35px'" [expandedHeight]="'35px'">
+                                <mat-panel-title>
+                                        <span class="p-2">{{menu.label}}</span>
+                                </mat-panel-title>
+
+                        </mat-expansion-panel-header>
+                        <a *ngFor="let submenu of menu['submenu'];" (click)="navigateTo(submenu.routeTo)"
+                                [hidden]="settingFeatureCheckDropDowns(submenu.label)" [routerLink]="submenu.routeTo"
+                                class="menus"><i class="{{submenu.icon}} mr-2"
+                                        aria-hidden="true"></i><span>{{submenu.label}}</span>
+                        </a>
+                </mat-expansion-panel>
+                <!-- <a class="menus" (click)="navigateTo('settings/subscriptions')"> <i class="fa fa-envelope-open mr-2"
+                                aria-hidden="true"></i>Subscriptions</a> -->
+        </div>
+</div>

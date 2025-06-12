@@ -1,0 +1,24 @@
+<mat-drawer-container class="formdrawer-container" hasBackdrop="false">
+  <mat-drawer id="formDrawer" mode="over" position="end" #formDrawer class="border">
+    <div style="min-width: 400px;">
+      <app-add-salesman></app-add-salesman>
+    </div>
+  </mat-drawer>
+  <section>
+    <div class="table-box" [ngClass]="{ 'collapsed': isDetailVisible }">
+      <div class="heading-row">
+        <p class="h4 font-weight-light d-inline pl-4" *ngIf="!isDetailVisible">SalesPerson</p>
+        <div class="d-inline float-right mr-4">
+          <button type="button" class="btn btn-sm btn-p mr-4" (click)="openAddBank()"><i class="fa fa-plus mr-2"
+              aria-hidden="true"></i>New</button>
+        </div>
+
+      </div>
+      <app-salesmandt (itemClicked)="itemClicked($event)"></app-salesmandt>
+    </div>
+    <!-- <div class="details-box" [ngClass]="{ 'expanded': isDetailVisible }">
+    <app-bank-detail (detailsClosed)="closeClicked()" [isDetailVisible]="isDetailVisible" [bank]="bank">
+    </app-bank-detail>
+  </div> -->
+  </section>
+</mat-drawer-container>

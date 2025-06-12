@@ -1,0 +1,29 @@
+<div class="pl-3  items-table-box">
+    <div class="table-responsive">
+        <table mat-table [dataSource]="itemSource" class="mat-elevation-z8 table table-hover">
+            <ng-container matColumnDef="created_at">
+                <th mat-header-cell *matHeaderCellDef> Date </th>
+                <td mat-cell *matCellDef="let element"> {{ element.created_at | date :"d MMM y h:mm a"}} </td>
+            </ng-container>
+            <ng-container matColumnDef="photo_text">
+                <th mat-header-cell *matHeaderCellDef> Photo Text </th>
+                <td mat-cell *matCellDef="let element"> {{ element.photo_text }} </td>
+            </ng-container>
+            <ng-container matColumnDef="photo_date">
+                <th mat-header-cell *matHeaderCellDef> Photo Date </th>
+                <td mat-cell *matCellDef="let element"> {{ element.photo_date }} </td>
+            </ng-container>
+            <ng-container matColumnDef="photo">
+                <th mat-header-cell *matHeaderCellDef> Photo </th>
+                <td mat-cell *matCellDef="let element"> {{ element.photo }} </td>
+            </ng-container>
+            <ng-container matColumnDef="photo_size">
+                <th mat-header-cell *matHeaderCellDef> Photo Size </th>
+                <td mat-cell *matCellDef="let element"> {{ element.photo_size }} </td>
+            </ng-container>
+            <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+            <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+        </table>
+    </div>
+    <!-- <mat-paginator pageSize="50" [pageSizeOptions]="[5,10,15,25,50,100]"></mat-paginator> -->
+</div>

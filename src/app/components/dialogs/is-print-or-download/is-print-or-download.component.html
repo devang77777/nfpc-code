@@ -1,0 +1,17 @@
+<!-- <h1 mat-dialog-title>Dialog with elements</h1>
+<div mat-dialog-content>This dialog showcases the title, close, content and actions elements.</div>
+<div mat-dialog-actions>
+    <button mat-button mat-dialog-close>Close</button>
+</div> -->
+
+
+<div class="dialog-box">
+    <i class="os-icon os-icon-alert-circle"></i>
+    <h3 class="title">Do you want to print or PDF PickSlip?</h3>
+    <!-- <p class="description">This dialog showcases the title, close, content and actions elements.</p> -->
+
+    <div class="dialogbtn">
+        <button class="btn btn-secondary mr-3" (click)="printPic()">Print</button>
+        <button class="btn btn-danger" cdkFocusInitial (click)="generatePdf()">PDF</button>
+    </div>
+</div>

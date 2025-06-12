@@ -1,0 +1,301 @@
+<mat-sidenav-container [hidden]="openDetailType == 'chart' ? true : false" hasBackdrop="false">
+    <mat-sidenav style="width: 100%;" fullscreen opened mode="over" [opened]="isOpened" position="end">
+        <div>
+            <app-merchandising-detail-dashboard-4 [selected]="selected" [merchandiserList]="merchandiserList"
+                [supervisorList]="supervisorList" [regionList]="regionList" [nsmList]="nsmList" [asmList]="asmList"
+                [filtersList]="filtersList" [channelList]="channelList" [detailsTable]="detailsTable"
+                [mDashboardData]="dashboardData" [opened]="isOpened" [formFilter]="filterForm.value"
+                (close)="isOpened=false">
+            </app-merchandising-detail-dashboard-4>
+        </div>
+    </mat-sidenav>
+    <div style="    height: 100%;
+    overflow: scroll;">
+        <header>
+            <div class="container mt-3">
+                <div class="row">
+                    <div class="col-md-12">
+                        <form [formGroup]="filterForm" (ngSubmit)="applyFilter()">
+                            <div class="form-group row">
+                                <div class="col-sm-12">
+                                    <div class="row">
+                                        <div class="col">
+                                            <input type="date" formControlName="startdate"
+                                                class="form-control form-control-sm" placeholder="Start Date">
+                                        </div>
+                                        <div class="">
+                                            <span>_</span>
+                                        </div>
+                                        <div class="col">
+                                            <input type="date" formControlName="enddate"
+                                                class="form-control form-control-sm" placeholder="End Date">
+                                        </div>
+                                        <div class="col">
+                                            <mat-select formControlName="type" class="form-control form-control-sm"
+                                                placeholder="Filter Type">
+                                                <mat-option *ngFor="let item of filtersList" [value]="item">{{item}}
+                                                </mat-option>
+                                            </mat-select>
+                                        </div>
+                                        <div class="col" *ngIf="filterForm.controls['type'].value == 'Channel'">
+                                            <app-multiautocomplete isSingle="false"
+                                                [control]="filterForm.controls['channel']" [options]="channelList"
+                                                text="name" id="id" placeholder="Search channel">
+                                            </app-multiautocomplete>
+                                        </div>
+                                        <div class="col" *ngIf="filterForm.controls['type'].value == 'Region'">
+                                            <app-multiautocomplete isSingle="false" [options]="regionList"
+                                                [control]="filterForm.controls['region']" text="region_name" id="id"
+                                                placeholder="Search region">
+                                            </app-multiautocomplete>
+                                        </div>
+                                        <div class="col" *ngIf="filterForm.controls['type'].value == 'Merchandiser'">
+                                            <app-multiautocomplete isSingle="false" [options]="merchandiserList"
+                                                [control]="filterForm.controls['salesman']" text="" id="user_id"
+                                                objectName="user" param1="firstname" param2="lastname"
+                                                placeholder="Search merchandiser">
+                                            </app-multiautocomplete>
+                                        </div>
+                                        <div class="col" *ngIf="filterForm.controls['type'].value == 'Supervisor'">
+                                            <app-multiautocomplete isSingle="false" [options]="supervisorList"
+                                                [control]="filterForm.controls['supervisor']" text="salesman_supervisor"
+                                                id="id" objectName="user-root" param1="firstname" param2="lastname"
+                                                placeholder="Search supervisor">
+                                            </app-multiautocomplete>
+                                        </div>
+                                        <div class="col" *ngIf="filterForm.controls['type'].value == 'NSM'">
+                                            <app-multiautocomplete isSingle="false" [options]="nsmList"
+                                                [control]="filterForm.controls['nsm']" text="name" id="id"
+                                                objectName="user-root" param1="firstname" param2="lastname"
+                                                placeholder="Search NSM">
+                                            </app-multiautocomplete>
+                                        </div>
+                                        <div class="col" *ngIf="filterForm.controls['type'].value == 'ASM'">
+                                            <app-multiautocomplete isSingle="false" [options]="asmList"
+                                                [control]="filterForm.controls['asm']" text="name" id="id"
+                                                objectName="user-root" param1="firstname" param2="lastname"
+                                                placeholder="Search ASM">
+                                            </app-multiautocomplete>
+                                        </div>
+                                        <div class="">
+                                            <button type="submit" class="btn btn-sm btn-info mr-1">
+                                                <i class="fa fa-arrow-right" style="height: 27px;font-size: 26px;"></i>
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                    <!-- <div class="col-md-5 d-flex justify-content-end">
+                    <div>
+                        <button class="btn btn-sm btn-secondary mr-1">Filters</button>
+                        <button class="btn  btn-sm btn-secondary  mr-1"> Clear</button>
+                        <button class="btn  btn-sm btn-secondary  mr-1">Current Selections</button>
+                    </div> &nbsp;
+                    <div> <input type="text" style="height: 30px;" placeholder="Search" class="form-control"></div>
+                </div> -->
+                </div>
+                <div class="row mt-3">
+                    <div class="col-md-12 d-flex align-items-end">
+                        <h2><strong>Merchandising</strong></h2>
+                        &nbsp; <h4>Reach-{{selected}}</h4>
+                        &nbsp;
+                        <div class="d-flex " style=" margin-left: 5px; width: 100%;">
+                            <div class="row" style="width: 100%;">
+                                <ng-container *ngIf="filterControl.value==='outofstock' || filterControl.value==='sos'">
+                                    <div class="col-md-3">
+                                        <label for="">Select Brand</label>
+                                        <app-multiautocomplete isSingle="false" [control]="filterForm.controls['brand']"
+                                            [options]="brandList" (selectionchanged)="applyFilter()" text="brand_name"
+                                            id="id" placeholder="Select Brand">
+                                        </app-multiautocomplete>
+                                        &nbsp;&nbsp;
+                                    </div>
+                                    <div class="col-md-3 ">
+                                        <label for="">Select Category</label>
+                                        <app-tree-dropdown class="tree-dropdown" [dataSource]="categoryList"
+                                            [dataService]="categoryProvider()"
+                                            (whenItemSelected)="categorySelected($event)"
+                                            [selectFormControl]="filterForm.controls['category']"
+                                            [placeHolder]="'Select category'" ngDefaultControl>
+                                        </app-tree-dropdown>
+                                        &nbsp;&nbsp;
+                                    </div>
+                                    <div class="col-md-3" *ngIf="filterControl.value!=='sos'">
+                                        <label for="">Select Item</label>
+                                        <app-multiautocomplete isSingle="false" [control]="filterForm.controls['item']"
+                                            [options]="itemList" (selectionchanged)="applyFilter()" text="item_name"
+                                            id="id" placeholder="Select Item">
+                                        </app-multiautocomplete>
+                                    </div>
+                                </ng-container>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-12 text-right">
+                        <strong>Last Reload Date: 12/12/2020</strong>
+                    </div>
+                </div>
+            </div>
+        </header>
+        <hr>
+        <div class="container mb-5" *ngIf="dataShowOrNot()">
+            <div class="row">
+
+                <div class=" col-md-12 d-flex flex-wrap ">
+                    <div class="d-flex flex-column col-md-4 p-0">
+                        <div class="shelf-title-border bg-green rounded-1 ">
+                            <div class="d-flex header-bottom">
+                                <div class="flex12 d-flex justify-content-center pb-3  pt-3">
+                                    <h2><strong
+                                            class="text-yellow fs-2 title-text">{{dashboardData['coverage']?.details[0]?.RES}}</strong>
+                                    </h2>
+                                </div>
+                            </div>
+                            <div class="d-flex flex-column justify-content-center">
+                                <div class="d-flex justify-content-center align-items-center basis ">
+                                    <span
+                                        class=" data-chart bg-white d-flex justify-content-center align-items-center fs-5">{{dashboardData['coverage']?.details[0]?.EXECUTION}}%</span>
+                                </div>
+                                <div class=" performer-box d-flex justify-content-center pt-2 ">
+                                    <p class="text-capitalize text-yellow">Top Performer</p>
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4"></div>
+                    <div class="d-flex flex-column col-md-4 p-0">
+                        <div class="shelf-title-border bg-red rounded-1 ">
+                            <div class="d-flex header-bottom">
+                                <div class="flex12 d-flex justify-content-center pb-3  pt-3">
+                                    <h2><strong
+                                            class="text-yellow fs-2 title-text">{{dashboardData['coverage']?.details[dashboardData['coverage']?.details?.length
+                                            - 1]?.RES}}</strong>
+                                    </h2>
+                                </div>
+                            </div>
+                            <div class="d-flex flex-column justify-content-center">
+                                <div class="d-flex justify-content-center align-items-center basis ">
+                                    <span
+                                        class=" data-chart bg-white d-flex justify-content-center align-items-center fs-5">{{dashboardData['coverage']?.details[dashboardData['coverage']?.details?.length
+                                        - 1]?.EXECUTION}}%</span>
+                                </div>
+                                <div class=" performer-box d-flex justify-content-center pt-2 ">
+                                    <p class="text-capitalize text-yellow">Lower Performer</p>
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- <div class="col-md-12 d-flex flex-wrap ">
+                    <div class="d-flex flex-column col-md-4 p-0"
+                        >
+                        <div class="shelf-title-border bg-purple rounded-1 ">
+                            <div class="d-flex header-bottom">
+                                <div class="flex12 d-flex justify-content-center pb-3  pt-3"><h2><strong class="text-light fs-2 title-text">Share Of
+                                        Shelf</strong></h2>
+                                </div> 
+                            </div>
+                            <div class="d-flex flex-column justify-content-center">
+                                <div class="d-flex justify-content-center align-items-center basis ">
+                                    <span class=" data-chart bg-orange d-flex justify-content-center align-items-center fs-5">91%</span>
+                                </div>
+                                <div class=" performer-box d-flex justify-content-center pt-2 "> 
+                                <p class="text-capitalize text-light">top performer kam</p>
+                                
+                                </div> 
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4"></div>
+                    <div class="d-flex flex-column col-md-4 p-0"
+                        >
+                        <div class="shelf-title-border bg-purple rounded-1 ">
+                            <div class="d-flex header-bottom">
+                                <div class="flex12 d-flex justify-content-center pb-3  pt-3"><h2><strong class="text-light fs-2 title-text">Share Of
+                                        Shelf</strong></h2>
+                                </div> 
+                            </div>
+                            <div class="d-flex flex-column justify-content-center">
+                                <div class="d-flex justify-content-center align-items-center basis ">
+                                    <span class=" data-chart bg-orange d-flex justify-content-center align-items-center fs-5">91%</span>
+                                </div>
+                                <div class=" performer-box d-flex justify-content-center pt-2 "> 
+                                <p class="text-capitalize text-light">top performer kam</p>
+                                
+                                </div> 
+                            </div>
+                        </div>
+                    </div>
+                </div> -->
+                <div class=" col-md-12 d-flex flex-wrap ">
+                    <ng-container *ngFor="let db of dashboardData['coverage']?.details;let i = index">
+                        <div class="d-flex flex-column col-md-4 p-0"
+                            *ngIf="i != 0 && i != (dashboardData['coverage']?.details?.length - 1)">
+                            <div class="shelf-title-border bg-purple rounded-1">
+                                <div class="d-flex header-bottom">
+                                    <div class="flex12 d-flex justify-content-center pb-3  pt-3">
+                                        <h2><strong class="text-yellow fs-2 title-text">{{db?.RES}}</strong></h2>
+                                    </div>
+                                </div>
+                                <div class="d-flex flex-column justify-content-center">
+                                    <div class="d-flex justify-content-center align-items-center basis ">
+                                        <span
+                                            class=" data-chart bg-orange d-flex justify-content-center align-items-center fs-5">{{db?.EXECUTION}}%</span>
+                                    </div>
+                                    <div class=" performer-box d-flex justify-content-center pt-2 ">
+                                        <p class="text-capitalize text-yellow">Coverage</p>
+
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </ng-container>
+                    <!-- <div class="d-flex flex-column col-md-4 p-0"
+                        >
+                        <div class="shelf-title-border bg-purple rounded-1 ">
+                            <div class="d-flex header-bottom">
+                                <div class="flex12 d-flex justify-content-center pb-3  pt-3"><h2><strong class="text-light fs-2 title-text">Share Of
+                                        Shelf</strong></h2>
+                                </div> 
+                            </div>
+                            <div class="d-flex flex-column justify-content-center">
+                                <div class="d-flex justify-content-center align-items-center basis ">
+                                    <span class=" data-chart bg-orange d-flex justify-content-center align-items-center fs-5">91%</span>
+                                </div>
+                                <div class=" performer-box d-flex justify-content-center pt-2 "> 
+                                <p class="text-capitalize text-light">JP Compliance</p>
+                                
+                                </div> 
+                            </div>
+                        </div>
+                    </div>
+                    <div class="d-flex flex-column col-md-4 p-0"
+                        >
+                        <div class="shelf-title-border bg-purple rounded-1 ">
+                            <div class="d-flex header-bottom">
+                                <div class="flex12 d-flex justify-content-center pb-3  pt-3"><h2><strong class="text-light fs-2 title-text">Share Of
+                                        Shelf</strong></h2>
+                                </div> 
+                            </div>
+                            <div class="d-flex flex-column justify-content-center">
+                                <div class="d-flex justify-content-center align-items-center basis ">
+                                    <span class=" data-chart bg-orange d-flex justify-content-center align-items-center fs-5">91%</span>
+                                </div>
+                                <div class=" performer-box d-flex justify-content-center pt-2 "> 
+                                <p class="text-capitalize text-light">JP Compliance</p>
+                                
+                                </div> 
+                            </div>
+                        </div>
+                    </div> -->
+                </div>
+            </div>
+
+
+        </div>
+    </div>
+</mat-sidenav-container>

@@ -1,0 +1,31 @@
+<!-- <div class="dialog-box">
+<h3 mat-dialog-title>Reason for Reject</h3>
+<div mat-dialog-content>
+  <mat-form-field appearance="fill">
+    <mat-label>Reason</mat-label>
+        <textarea matInput cdkTextareaAutosize cdkAutosizeMinRows="1" cdkAutosizeMaxRows="5"
+            [(ngModel)]="data.reason"></textarea>
+  </mat-form-field>
+</div>
+<div mat-dialog-actions class="mat-buttons">
+  <button mat-button (click)="onNoClick()">No Thanks</button>
+  <button mat-button [mat-dialog-close]="data.reason" cdkFocusInitial>Ok</button>
+</div>
+</div> -->
+
+<div class="dialog-box">
+    <i class="os-icon os-icon-alert-circle"></i>
+    <h3 class="title">Reason for Reject</h3>
+    <div mat-dialog-content>
+        <mat-form-field style="width:350px !important" appearance="outline">
+          <mat-label>Reason</mat-label>
+              <textarea multiline matInput rows="8"
+                  [(ngModel)]="data.reason"></textarea>
+          <!-- <input matInput [(ngModel)]="data.reason"> -->
+        </mat-form-field>
+      </div>
+    <div class="dialogbtn">
+      <button (click)="onNoClick()" class="btn btn-cancel mr-3">Cancel Reject</button>
+      <button class="btn btn-submit" [disabled]="!data.reason" [mat-dialog-close]="data.reason" cdkFocusInitial>Submit</button>
+    </div>
+  </div>

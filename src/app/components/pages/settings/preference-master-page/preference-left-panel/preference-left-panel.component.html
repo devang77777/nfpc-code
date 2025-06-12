@@ -1,0 +1,14 @@
+<div class="scrollable">
+	<div class="lpane-grp">
+		<ul class="nav nav-pills flex-column">
+			<li class="nav-item" *ngFor="let navOption of preferenceNavOptions; let i = index;"> 
+				<a id="ember2314" 
+					[ngClass]="i == activeRoute ? 'active' : ''" 
+					(click)="routeTo(navOption.routeTo,i)" 
+					class="nav-link ember-view"
+				> {{ navOption.label }} 
+				</a>
+			</li>
+		</ul>
+	</div>
+</div>

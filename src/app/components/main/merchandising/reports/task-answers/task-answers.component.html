@@ -1,0 +1,95 @@
+<div class="pl-3  items-table-box">
+    <div class="table-responsive">
+        <table mat-table [dataSource]="itemSource" class="mat-elevation-z8 table table-hover" multiTemplateDataRows>
+            <ng-container matColumnDef="created_at">
+                <th mat-header-cell *matHeaderCellDef>
+                    <app-column-filter title="Date" (changeSelected)="onColumnFilterOpen($event)"
+                        [selected]="selectedColumnFilter" controlName="date" (close)="onColumnFilter($event)">
+                        <input class="form-control form-control-sm" [formControl]="filterForm.get('date')" placeholder="Enter Date" type="date">
+                    </app-column-filter>
+                </th>
+                <td mat-cell *matCellDef="let element"> {{ element.createdAt | date :"d MMM y h:mm a"}} </td>
+            </ng-container>
+            <ng-container matColumnDef="task_name">
+                <th mat-header-cell *matHeaderCellDef>
+                    <app-column-filter title="task name" (changeSelected)="onColumnFilterOpen($event)"
+                        [selected]="selectedColumnFilter" controlName="survey_type" (close)="onColumnFilter($event)">
+                        <input class="form-control form-control-sm" [formControl]="filterForm.get('survey_type')" placeholder="Enter task name" type="text">
+                    </app-column-filter>
+                </th>
+                <td mat-cell *matCellDef="let element"> {{ element.taskName }} </td>
+            </ng-container>
+            <ng-container matColumnDef="survey_name">
+                <th mat-header-cell *matHeaderCellDef>
+                    <app-column-filter title="survey name" (changeSelected)="onColumnFilterOpen($event)"
+                        [selected]="selectedColumnFilter" controlName="survey_name" (close)="onColumnFilter($event)">
+                        <input class="form-control form-control-sm" [formControl]="filterForm.get('survey_name')" placeholder="Enter survey name" type="text">
+                    </app-column-filter>
+                </th>
+                <td mat-cell *matCellDef="let element"> {{ element.surveyName }} </td>
+            </ng-container>
+            <ng-container matColumnDef="customer_name">
+                <th mat-header-cell *matHeaderCellDef>
+                    <app-column-filter title="customer name " (changeSelected)="onColumnFilterOpen($event)"
+                        [selected]="selectedColumnFilter" controlName="customer_name" (close)="onColumnFilter($event)">
+                        <input class="form-control form-control-sm" [formControl]="filterForm.get('customer_name')" placeholder="Enter customer name " type="text">
+                    </app-column-filter>
+                </th>
+                <td mat-cell *matCellDef="let element"> {{ element.customerName }} </td>
+            </ng-container>
+            <ng-container matColumnDef="customer_code">
+                <th mat-header-cell *matHeaderCellDef>
+                    <app-column-filter title="customer code" (changeSelected)="onColumnFilterOpen($event)"
+                        [selected]="selectedColumnFilter" controlName="customer_code" (close)="onColumnFilter($event)">
+                        <input class="form-control form-control-sm" [formControl]="filterForm.get('customer_code')" placeholder="Enter customer code" type="text">
+                    </app-column-filter>
+                </th>
+                <td mat-cell *matCellDef="let element"> {{ element.customerCode }} </td>
+            </ng-container>
+            <ng-container matColumnDef="ans_completed">
+                <th mat-header-cell *matHeaderCellDef>Answer completed
+                    <!-- <app-column-filter title="Answer completed" (changeSelected)="onColumnFilterOpen($event)"
+                        [selected]="selectedColumnFilter" (close)="onColumnFilter($event)">
+                        <input class="form-control form-control-sm" placeholder="Enter Answer completed" type="text">
+                    </app-column-filter> -->
+                </th>
+                <td mat-cell *matCellDef="let element"> {{ element.answerComplete }} </td>
+            </ng-container>
+            <ng-container matColumnDef="question">
+                <th mat-header-cell *matHeaderCellDef> Question </th>
+                <td mat-cell *matCellDef="let element"> {{ element.question }} </td>
+            </ng-container>
+            <ng-container matColumnDef="ans_type">
+                <th mat-header-cell *matHeaderCellDef>Answer Type
+                    <!-- <app-column-filter title="Answer Type" (changeSelected)="onColumnFilterOpen($event)"
+                        [selected]="selectedColumnFilter" (close)="onColumnFilter($event)">
+                        <input class="form-control form-control-sm" placeholder="Enter Answer Type" type="text">
+                    </app-column-filter> -->
+
+                </th>
+                <td mat-cell *matCellDef="let element"> {{ element.answerType }} </td>
+            </ng-container>
+            <ng-container matColumnDef="ans">
+                <th mat-header-cell *matHeaderCellDef> Answer </th>
+                <td mat-cell *matCellDef="let element"> {{ element.answer }} </td>
+            </ng-container>
+            <ng-container matColumnDef="expandedDetail">
+                <td mat-cell *matCellDef="let element" [attr.colspan]="displayedColumns.length">
+                    <div class="element-detail w-100"
+                        [@detailExpand]="element == expandedElement ? 'expanded' : 'collapsed'">
+                        <div *ngIf='element' class="w-100">
+                            <app-subanswertable [displayData]="element.survey_question_answer_detail">
+                            </app-subanswertable>
+                        </div>
+                        <br />
+                    </div>
+                </td>
+            </ng-container>
+            <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+            <tr mat-row *matRowDef="let row; columns: displayedColumns; let i = index" (click)="expandList(row)"
+                class="element-row" [class.expanded-row]="row === expandedElement ? true : false"></tr>
+            <tr mat-row *matRowDef="let row;let i = index; columns: ['expandedDetail']" class="detail-row"></tr>
+        </table>
+    </div>
+    <!-- <mat-paginator pageSize="50" [pageSizeOptions]="[5,10,15,25,50,100]"></mat-paginator> -->
+</div>

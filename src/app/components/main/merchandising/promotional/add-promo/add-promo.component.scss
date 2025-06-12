@@ -1,0 +1,201 @@
+a {
+    cursor: pointer;
+  }
+  
+  .card-footer {
+    position: fixed;
+    width: 550px;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.03);
+  }
+  
+  .form-box {
+    max-height: calc(100vh - 170px);
+    overflow-y: scroll;
+  }
+  
+  .settingIcon {
+    position: absolute;
+    top: 4px;
+    left: 325px !important;
+  
+    i {
+      font-size: 20px;
+    }
+  }
+  
+  a {
+    cursor: pointer;
+  }
+  
+  .card-footer {
+    position: fixed;
+    width: 550px;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.03);
+  }
+  
+  .form-box {
+    max-height: calc(100vh - 170px);
+    overflow-y: scroll;
+  }
+  
+  button:active {
+    outline: none !important;
+  }
+  
+  .selection-label {
+    position: relative;
+  
+    span {
+      position: absolute;
+      top: 10px;
+    }
+  }
+  
+  .item-add-btn {
+    display: flex;
+    flex-direction: row-reverse;
+  
+    button {
+      margin-right: 72px;
+      border-radius: 5px;
+      font-size: 14px;
+      max-width: 80px;
+      border: none;
+      background-color: #1abc9c;
+      color: white;
+  
+      i {
+        margin-right: 8px;
+      }
+    }
+  }
+  
+  .items-table-box {
+    margin-bottom: 50px;
+    padding-bottom: 50px;
+    overflow-y: scroll !important;
+  
+    mat-paginator,
+    .mat-table {
+      max-width: 75%;
+      margin: auto;
+    }
+  
+  
+    button {
+      background-color: transparent;
+      border: none;
+      font-size: 15px;
+  
+      &:active {
+        outline: none;
+      }
+    }
+  }
+  
+  .changeMargin {
+    margin-top: -30px;
+  }
+  
+  .settingIcon {
+    position: absolute;
+    top: 4px;
+    left: 325px !important;
+  
+    i {
+      font-size: 20px;
+    }
+  }
+  
+  .card {
+    width: 550px;
+  }
+  
+  input[type="file"] {
+    visibility: hidden;
+    overflow: hidden;
+  }
+  
+  table {
+    width: 100%;
+  }
+  
+  tr.detail-row {
+    height: 0 !important;
+  }
+  
+  tr.element-row:not(.expanded-row):hover {
+    background: whitesmoke;
+  }
+  
+  tr.element-row:not(.expanded-row):active {
+    background: #efefef;
+  }
+  
+  .element-row td {
+    background: #f7f7f7;
+  
+    td {
+      border-bottom-width: 0;
+    }
+  }
+  
+  .element-detail {
+    overflow: hidden;
+    display: flex;
+  
+  }
+  
+  .w-100 {
+    width: 100%;
+  }
+  
+  .show-images {
+    display: block;
+    overflow-x: visible;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+  }
+  
+  .mat-cell {
+    position: relative;
+  
+    button {
+      position: absolute;
+      top: 6px;
+      left: 10px;
+    }
+  }
+  
+  .img-position {
+    position: relative;
+    margin: 3px;
+  }
+  
+  .delete-circle {
+    position: absolute;
+    top: 0px;
+    right: 0px;
+  }
+  
+  .table thead,
+  .table thead tr,
+  .table tbody,
+  .table tbody tr,
+  .mat-header-row {
+    justify-content: space-between;
+  
+    th {
+      min-width: 270px;
+      // justify-content: center;
+    }
+  
+    td {
+      min-width: 270px;
+      // justify-content: center;
+    }
+  }
+  

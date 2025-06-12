@@ -1,0 +1,42 @@
+.card-footer {
+  position: fixed;
+  width: 100%;
+  bottom: 0;
+  z-index: 99999;
+  background-color: rgba(0, 0, 0, 0.03);
+  left: 0;
+  text-align: right;
+}
+
+.btn-p {
+  padding: 2px 7px;
+  border-radius: 3px;
+  color: #fff;
+  border-color: #1abc9c;
+  background-color: #1abc9c;
+}
+.form-box {
+  overflow-y: scroll !important;
+}
+mat-table {
+  margin-left: 60px;
+  margin-right: 60px;
+  position: relative !important;
+  box-shadow: none;
+}
+.fixPosition {
+  position: relative;
+  top: -370px;
+}
+.positionFix {
+  position: relative;
+  top: -300px;
+}
+.btn-disable {
+  background-color: #1abc9c91 !important;
+  border-color: #1abc9c91 !important;
+}
+
+.mat-tab-body-content {
+  height: 104% !important;
+}

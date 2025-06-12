@@ -1,0 +1,52 @@
+<section class="pl-3">
+  <div class="table-responsive">
+    <table class="table table-hover" mat-table [dataSource]="dataSource" multiTemplateDataRows>
+      <tr mat-header-row class="table-header" *matHeaderRowDef="columnsToDisplay"></tr>
+      <tr mat-row *matRowDef="let element; columns: columnsToDisplay;" (click)="getCustomerItems(element)"
+        class="element-row" [class.expanded-row]="expandedElement === element">
+      </tr>
+      <tr mat-row *matRowDef="let row;let i = index; columns: ['expandedDetail']" class="detail-row"></tr>
+      <ng-container matColumnDef="name">
+        <th mat-header-cell *matHeaderCellDef>
+          <app-column-filter title="Name" (changeSelected)="onColumnFilterOpen($event)"
+            [selected]="selectedColumnFilter" (close)="onColumnFilter($event)">
+            <input class="form-control form-control-sm" placeholder="Enter Name" type="text">
+          </app-column-filter>
+        </th>
+        <td mat-cell *matCellDef="let element"> {{element.customer?.firstname}} {{element.customer?.lastname}} </td>
+      </ng-container>
+      <ng-container matColumnDef="code">
+        <th mat-header-cell *matHeaderCellDef>
+          <app-column-filter title="Code" (changeSelected)="onColumnFilterOpen($event)"
+            [selected]="selectedColumnFilter" (close)="onColumnFilter($event)">
+            <input class="form-control form-control-sm" placeholder="Enter Code" type="text">
+          </app-column-filter>
+        </th>
+        <td mat-cell *matCellDef="let element"> {{element.customer?.customer_info ?
+          element.customer?.customer_info?.customer_code :'N/A' }} </td>
+      </ng-container>
+      <ng-container matColumnDef="action">
+        <th mat-header-cell *matHeaderCellDef> Actions </th>
+        <td mat-cell *matCellDef="let element;">
+          <button (click)="addItemPopup($event, element)" class="btn btn-sm btn-p ml-1 mr-1">
+            <i class="os-icon os-icon-plus mr-2" aria-hidden="true" appPermission [permissions]="userPermissions"
+            [type]="'create'"></i> Add</button>
+        </td>
+      </ng-container>
+
+      <!-- Expanded Content Column - The detail row is made up of this one column that spans across all columns -->
+      <ng-container matColumnDef="expandedDetail">
+        <td mat-cell *matCellDef="let element" [attr.colspan]="columnsToDisplay.length">
+          <div class="element-detail" [@detailExpand]="element == expandedElement ? 'expanded' : 'collapsed'">
+            <div *ngIf="itemsData[element.customer_id] !== undefined" class="w-100">
+              <app-modelstock-dt (getCustomerItems)="getCustomerItems($event)" [customerData]="expandedElement" [itemsData]="itemsData[element.customer_id][0]"></app-modelstock-dt>
+            </div>
+          </div>
+        </td>
+      </ng-container>
+    </table>
+  </div>
+  <!-- <pre>{{output | json}}</pre> -->
+
+
+</section>

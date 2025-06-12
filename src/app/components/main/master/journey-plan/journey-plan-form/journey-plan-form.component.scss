@@ -1,0 +1,26 @@
+section {
+  display: block;
+}
+// .form-holder {
+//   padding: 40px;
+// }
+
+.actions {
+  button {
+    &:focus {
+      outline: none;
+    }
+
+    &:disabled {
+      background-color: #e9ecef;
+      color: #495057;
+      cursor: not-allowed;
+    }
+  }
+}
+
+.mat-tab-body-content {
+  height: 100%;
+  overflow: auto;
+  background: #fff;
+}

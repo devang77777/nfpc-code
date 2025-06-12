@@ -1,0 +1,28 @@
+<section>
+  <div class="table-box">
+    <div class="heading-row">
+      <h2 class="h4 font-weight-light d-inline">
+        <i class="os-icon os-icon-truck fa-flip-horizontal mr-2"></i>Van To Van
+        Transfer
+      </h2>
+      <div class="d-inline float-right mb-2">
+        <button class="btn btn-sm btn-p mr-2" (click)="openForm()" appPermission [permissions]="userPermissions"
+          [type]="'create'">
+          <i class="os-icon os-icon-plus mr-2" aria-hidden="true"></i>New
+        </button>
+        <button *ngIf="checkedRows.length > 0" class="btn btn-sm btn-white dropdown-toggle ml-2" mat-button
+          [matMenuTriggerFor]="menu2">
+          Bulk Actions
+        </button>
+        <mat-menu #menu2="matMenu">
+          <button mat-menu-item (click)="bulkAction('active')">Mark as Active</button>
+          <button mat-menu-item (click)="bulkAction('inactive')" >Mark as Inactive</button>
+          <!-- <button mat-menu-item (click)="bulkAction('delete')" appPermission [permissions]="userPermissions" [type]="'delete'">
+            Delete
+          </button> -->
+        </mat-menu>
+      </div>
+    </div>
+    <app-van-to-van-dt (selectedRows)="selectedRows($event)" [newVantovanData]="newVantovanData"></app-van-to-van-dt>
+  </div>
+</section>

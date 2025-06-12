@@ -1,0 +1,382 @@
+<div class="salesbody">
+  <div class="row mb-4">
+    <div class="col-md-3">
+      <mat-select [formControl]="tabFilter" placeholder="Go to transactions" class="form-control form-control-sm">
+        <mat-option *ngFor="let item of transactionList" [value]="item.id">
+          <button mat-button> {{ item.value }} </button>
+        </mat-option>
+      </mat-select>
+    </div>
+  </div>
+  <div class="bs-example accClass scrolldiv">
+    <div class="accordion" id="accordion">
+      <div class="card borderCls mb-4">
+        <div class="card-header">
+          <h2 class="mb-0">
+            <button type="button" id="invoiceBtn" data-parent="#accordion" class="btn btn-link" data-toggle="collapse"
+              data-target="#invoice" data-parent="#accordion" (click)="onToggleTab('invoice')"><i class="fa"
+                [ngClass]="!salesmanTabs.invoice ? 'fa-caret-right' : 'fa-caret-down'"></i> Invoice</button>
+          </h2>
+          <div class="dropWith">
+            <app-sales-filter [selected]="salesmanTabs.invoice" [salesOptions]="salesOptions"></app-sales-filter>
+            <a [routerLink]="['/transaction/invoice/add']" class="addnew"><i class="fa fa-plus addSign"
+                aria-hidden="true"></i>Add New</a>
+          </div>
+        </div>
+        <div id="invoice" [ngClass]="salesmanTabs.invoice ? 'show' : ''" class="collapse  tabCls"
+          aria-labelledby="headingOne">
+          <div class="card-body">
+            <div class="table-responsive">
+              <ng-container *ngIf="salesmanTabs.invoice && dataSource.data.length > 0; else noData">
+                <mat-table [dataSource]="dataSource" class="mat-elevation-z8 cardstable">
+                  <ng-container matColumnDef="date">
+                    <mat-header-cell class="makeRed" *matHeaderCellDef> Date </mat-header-cell>
+                    <mat-cell *matCellDef="let element" data-th="Date"> {{ element.invoice_date }} </mat-cell>
+
+                  </ng-container>
+                  <ng-container matColumnDef="invoice">
+                    <mat-header-cell *matHeaderCellDef> Invoice# </mat-header-cell>
+                    <mat-cell *matCellDef="let element" data-th="Invoice#"> {{ element.invoice_number }} </mat-cell>
+                    >
+                  </ng-container>
+                  <ng-container matColumnDef="amount">
+                    <mat-header-cell *matHeaderCellDef> Amount </mat-header-cell>
+                    <mat-cell *matCellDef="let element" data-th="Amount"> {{ element.grand_total }} </mat-cell>
+                    >
+                  </ng-container>
+                  <ng-container matColumnDef="balancedue">
+                    <mat-header-cell *matHeaderCellDef> Balance Due </mat-header-cell>
+                    <mat-cell *matCellDef="let element" data-th=" Balance Due"> {{ element.pending_amount }} </mat-cell>
+                    >
+                  </ng-container>
+                  <ng-container matColumnDef="status">
+                    <mat-header-cell *matHeaderCellDef> Status </mat-header-cell>
+                    <mat-cell *matCellDef="let element" data-th="Status"> {{ element.status }} </mat-cell>
+                  </ng-container>
+                  <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+                  <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
+                </mat-table>
+                <div class="paging-center">
+                  <mat-paginator (page)="onPageFired($event)" [length]="response?.total_records" [pageSize]="pageSize"
+                    [pageSizeOptions]="[5, 10]"> </mat-paginator>
+                </div>
+              </ng-container>
+
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="card borderCls mb-4">
+        <div class="card-header">
+          <h2 class="mb-0">
+            <button type="button" id="collectionBtn" data-parent="#accordion" class="btn btn-link"
+              data-toggle="collapse" data-target="#collection" data-parent="#accordion"
+              (click)="onToggleTab('collection')"><i class="fa"
+                [ngClass]="!salesmanTabs.collection ? 'fa-caret-right' : 'fa-caret-down'"></i> Customer Payment</button>
+          </h2>
+          <div class="dropWith">
+            <app-sales-filter [selected]="salesmanTabs.collection" [salesOptions]="salesOptions"></app-sales-filter>
+            <a [routerLink]="['/transaction/collection/add']" class="addnew"><i class="fa fa-plus addSign"
+                aria-hidden="true"></i>Add New</a>
+          </div>
+        </div>
+        <div id="collection" [ngClass]="salesmanTabs.collection ? 'show' : ''" class="collapse tabCls"
+          aria-labelledby="headingOne">
+          <div class="card-body">
+            <div class="table-responsive">
+              <ng-container *ngIf="salesmanTabs.collection && dataSource.data.length > 0; else noData">
+                <mat-table [dataSource]="dataSource" class="mat-elevation-z8 cardstable cardstable">
+                  <ng-container matColumnDef="collection_number">
+                    <mat-header-cell *matHeaderCellDef> Collection# </mat-header-cell>
+                    <mat-cell *matCellDef="let element" data-th="Collection#"> {{ element.collection_number }}
+                    </mat-cell>
+                    <mat-footer-cell *matFooterCellDef></mat-footer-cell>
+                  </ng-container>
+                  <ng-container matColumnDef="invoice_amount">
+                    <mat-header-cell *matHeaderCellDef> Invoice Amount </mat-header-cell>
+                    <mat-cell *matCellDef="let element" data-th="Invoice Amount"> {{ element.invoice_amount }}
+                    </mat-cell>
+                    <mat-footer-cell *matFooterCellDef></mat-footer-cell>
+                  </ng-container>
+                  <ng-container matColumnDef="payment_mode">
+                    <mat-header-cell *matHeaderCellDef> Payment Mode </mat-header-cell>
+                    <mat-cell *matCellDef="let element" data-th="Payment Mode"> {{ element.payment_mode }} </mat-cell>
+                    <mat-footer-cell *matFooterCellDef></mat-footer-cell>
+                  </ng-container>
+
+                  <mat-header-row *matHeaderRowDef="displayedColumnsCollection"></mat-header-row>
+                  <mat-row *matRowDef="let row; columns: displayedColumnsCollection;"></mat-row>
+
+                </mat-table>
+                <div class="paging-center">
+                  <mat-paginator (page)="onPageFired($event)" [length]="response?.total_records" [pageSize]="pageSize"
+                    [pageSizeOptions]="[5, 10]"> </mat-paginator>
+                </div>
+              </ng-container>
+
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="card borderCls mb-4">
+        <div class="card-header">
+          <h2 class="mb-0">
+            <button type="button" id="estimationBtn" data-parent="#accordion" class="btn btn-link"
+              data-toggle="collapse" data-target="#estimation" data-parent="#accordion"
+              (click)="onToggleTab('estimation')"><i class="fa"
+                [ngClass]="!salesmanTabs.estimation ? 'fa-caret-right' : 'fa-caret-down'"></i> Estimates</button>
+          </h2>
+          <div class="dropWith">
+            <app-sales-filter [selected]="salesmanTabs.estimation" [salesOptions]="salesOptions"></app-sales-filter>
+            <a [routerLink]="['//estimate/add']" class="addnew"><i class="fa fa-plus addSign" aria-hidden="true"></i>Add
+              New</a>
+          </div>
+        </div>
+        <div id="estimation" [ngClass]="salesmanTabs.estimation ? 'show' : ''" class="collapse tabCls"
+          aria-labelledby="headingOne">
+          <div class="card-body">
+            <div class="table-responsive">
+              <ng-container *ngIf="salesmanTabs.estimation && dataSource.data.length > 0; else noData">
+                <mat-table [dataSource]="dataSource" class="mat-elevation-z8 cardstable">
+                  <ng-container matColumnDef="date">
+                    <mat-header-cell class="makeRed" *matHeaderCellDef> Date </mat-header-cell>
+                    <mat-cell *matCellDef="let element" data-th="Date"> {{ element.invoice_date }} </mat-cell>
+                    <mat-footer-cell *matFooterCellDef>Total Count</mat-footer-cell>
+                  </ng-container>
+                  <ng-container matColumnDef="invoice">
+                    <mat-header-cell *matHeaderCellDef> Invoice# </mat-header-cell>
+                    <mat-cell *matCellDef="let element" data-th="Invoice#"> {{ element.invoice_number }} </mat-cell>
+                    <mat-footer-cell *matFooterCellDef></mat-footer-cell>
+                  </ng-container>
+                  <ng-container matColumnDef="reference">
+                    <mat-header-cell *matHeaderCellDef> Reference# </mat-header-cell>
+                    <mat-cell *matCellDef="let element" data-th="Reference#"> {{ element.reference }} </mat-cell>
+                    <mat-footer-cell *matFooterCellDef></mat-footer-cell>
+                  </ng-container>
+                  <ng-container matColumnDef="amount">
+                    <mat-header-cell *matHeaderCellDef> Amount </mat-header-cell>
+                    <mat-cell *matCellDef="let element" data-th="Amount"> {{ element.grand_total }} </mat-cell>
+                    <mat-footer-cell *matFooterCellDef></mat-footer-cell>
+                  </ng-container>
+                  <ng-container matColumnDef="balancedue">
+                    <mat-header-cell *matHeaderCellDef> Balance Due </mat-header-cell>
+                    <mat-cell *matCellDef="let element" data-th="Balance Due"> {{ element.balancedue }} </mat-cell>
+                    <mat-footer-cell *matFooterCellDef></mat-footer-cell>
+                  </ng-container>
+                  <ng-container matColumnDef="status">
+                    <mat-header-cell *matHeaderCellDef> Status </mat-header-cell>
+                    <mat-cell *matCellDef="let element" data-th="Status"> {{ element.status }} </mat-cell>
+                    <mat-footer-cell *matFooterCellDef>
+                      <p class="paginatorClass"><i class="fa fa-caret-left" aria-hidden="true"></i><span>2- 2</span><i
+                          class="fa fa-caret-right" aria-hidden="true"></i></p>
+                    </mat-footer-cell>
+                  </ng-container>
+                  <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+                  <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
+                </mat-table>
+                <div class="paging-center">
+                  <mat-paginator (page)="onPageFired($event)" [length]="response?.total_records" [pageSize]="pageSize"
+                    [pageSizeOptions]="[5, 10]"> </mat-paginator>
+                </div>
+              </ng-container>
+
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="card borderCls mb-4">
+        <div class="card-header">
+          <h2 class="mb-0">
+            <button type="button" id="delivery_detailBtn" data-parent="#accordion" class="btn btn-link"
+              data-toggle="collapse" data-target="#delivery_detail" data-parent="#accordion"
+              (click)="onToggleTab('delivery_detail')"><i class="fa"
+                [ngClass]="!salesmanTabs.delivery_detail ? 'fa-caret-right' : 'fa-caret-down'"></i> Deliver
+              Challan</button>
+          </h2>
+          <div class="dropWith">
+            <app-sales-filter [selected]="salesmanTabs.delivery_detail" [salesOptions]="salesOptions">
+            </app-sales-filter>
+            <a [routerLink]="['/transaction/delivery/add']" class="addnew"><i class="fa fa-plus addSign"
+                aria-hidden="true"></i>Add New</a>
+          </div>
+        </div>
+        <div id="delivery_detail" [ngClass]="salesmanTabs.delivery_detail ? 'show' : ''" class="collapse tabCls"
+          aria-labelledby="headingOne">
+          <div class="card-body">
+            <div class="table-responsive">
+              <ng-container *ngIf="salesmanTabs.delivery_detail && dataSource.data.length > 0; else noData">
+                <mat-table [dataSource]="dataSource" class="mat-elevation-z8 cardstable">
+                  <ng-container matColumnDef="delivery_date">
+                    <mat-header-cell class="makeRed" *matHeaderCellDef>Delivery Date </mat-header-cell>
+                    <mat-cell *matCellDef="let element" data-th="Delivery Date"> {{ element.delivery_date }} </mat-cell>
+                    <mat-footer-cell *matFooterCellDef>Total Count</mat-footer-cell>
+                  </ng-container>
+                  <ng-container matColumnDef="delivery_number">
+                    <mat-header-cell *matHeaderCellDef> Delivery# </mat-header-cell>
+                    <mat-cell *matCellDef="let element" data-th="Delivery#"> {{ element.delivery_number }} </mat-cell>
+                    <mat-footer-cell *matFooterCellDef></mat-footer-cell>
+                  </ng-container>
+
+                  <ng-container matColumnDef="grand_total">
+                    <mat-header-cell *matHeaderCellDef> Grand Total </mat-header-cell>
+                    <mat-cell *matCellDef="let element" data-th="Grand Total"> {{ element.grand_total }} </mat-cell>
+                    <mat-footer-cell *matFooterCellDef></mat-footer-cell>
+                  </ng-container>
+
+                  <ng-container matColumnDef="status">
+                    <mat-header-cell *matHeaderCellDef> Status </mat-header-cell>
+                    <mat-cell *matCellDef="let element" data-th="Status"> {{ element.status }} </mat-cell>
+                    <mat-footer-cell *matFooterCellDef>
+                      <p class="paginatorClass"><i class="fa fa-caret-left" aria-hidden="true"></i><span>2- 2</span><i
+                          class="fa fa-caret-right" aria-hidden="true"></i></p>
+                    </mat-footer-cell>
+                  </ng-container>
+                  <mat-header-row *matHeaderRowDef="displayedColumnsDelivery"></mat-header-row>
+                  <mat-row *matRowDef="let row; columns: displayedColumnsDelivery;"></mat-row>
+                </mat-table>
+                <div class="paging-center">
+                  <mat-paginator (page)="onPageFired($event)" [length]="response?.total_records" [pageSize]="pageSize"
+                    [pageSizeOptions]="[5, 10]"> </mat-paginator>
+                </div>
+              </ng-container>
+
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="card borderCls mb-4">
+        <div class="card-header">
+          <h2 class="mb-0">
+            <button type="button" id="expenseBtn" data-parent="#accordion" class="btn btn-link" data-toggle="collapse"
+              data-target="#expense" data-parent="#accordion" (click)="onToggleTab('expense')"><i class="fa"
+                [ngClass]="!salesmanTabs.expense ? 'fa-caret-right' : 'fa-caret-down'"></i> Expense</button>
+          </h2>
+          <div class="dropWith">
+            <app-sales-filter [selected]="salesmanTabs.expense" [salesOptions]="salesOptions"></app-sales-filter>
+            <a [routerLink]="['/expense/expenses']" class="addnew"><i class="fa fa-plus addSign"
+                aria-hidden="true"></i>Add New</a>
+          </div>
+        </div>
+        <div id="expense" [ngClass]="salesmanTabs.expense ? 'show' : ''" class="collapse tabCls"
+          aria-labelledby="headingOne">
+          <div class="card-body">
+            <div class="table-responsive">
+              <ng-container *ngIf="salesmanTabs.expense && dataSource.data.length > 0; else noData">
+                <mat-table [dataSource]="dataSource" class="mat-elevation-z8 cardstable">
+                  <ng-container matColumnDef="expense_date">
+                    <mat-header-cell class="makeRed" *matHeaderCellDef> Date </mat-header-cell>
+                    <mat-cell *matCellDef="let element" data-th="Date"> {{ element.expense_date }} </mat-cell>
+                    <mat-footer-cell *matFooterCellDef>Total Count</mat-footer-cell>
+                  </ng-container>
+                  <ng-container matColumnDef="expense_category">
+                    <mat-header-cell *matHeaderCellDef> Expense Category </mat-header-cell>
+                    <mat-cell *matCellDef="let element" data-th="Invoice# "> {{ element.expense_category }} </mat-cell>
+                    <mat-footer-cell *matFooterCellDef></mat-footer-cell>
+                  </ng-container>
+                  <ng-container matColumnDef="reference">
+                    <mat-header-cell *matHeaderCellDef> Reference# </mat-header-cell>
+                    <mat-cell *matCellDef="let element" data-th="Reference# "> {{ element.reference }} </mat-cell>
+                    <mat-footer-cell *matFooterCellDef></mat-footer-cell>
+                  </ng-container>
+                  <ng-container matColumnDef="amount">
+                    <mat-header-cell *matHeaderCellDef> Amount </mat-header-cell>
+                    <mat-cell *matCellDef="let element" data-th="Amount"> {{ element.amount }} </mat-cell>
+                    <mat-footer-cell *matFooterCellDef></mat-footer-cell>
+                  </ng-container>
+                  <ng-container matColumnDef="balancedue">
+                    <mat-header-cell *matHeaderCellDef> Balance Due </mat-header-cell>
+                    <mat-cell *matCellDef="let element" data-th="Balance Due"> {{ element.balancedue }} </mat-cell>
+                    <mat-footer-cell *matFooterCellDef></mat-footer-cell>
+                  </ng-container>
+                  <ng-container matColumnDef="status">
+                    <mat-header-cell *matHeaderCellDef> Status </mat-header-cell>
+                    <mat-cell *matCellDef="let element" data-th="Status"> {{ element.status }} </mat-cell>
+                    <mat-footer-cell *matFooterCellDef>
+                      <p class="paginatorClass"><i class="fa fa-caret-left" aria-hidden="true"></i><span>2- 2</span><i
+                          class="fa fa-caret-right" aria-hidden="true"></i></p>
+                    </mat-footer-cell>
+                  </ng-container>
+                  <mat-header-row *matHeaderRowDef="displayedColumnsExpense"></mat-header-row>
+                  <mat-row *matRowDef="let row; columns: displayedColumnsExpense;"></mat-row>
+                </mat-table>
+                <div class="paging-center">
+                  <mat-paginator (page)="onPageFired($event)" [length]="response?.total_records" [pageSize]="pageSize"
+                    [pageSizeOptions]="[5, 10]"> </mat-paginator>
+                </div>
+              </ng-container>
+
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="card borderCls mb-4">
+        <div class="card-header">
+          <h2 class="mb-0">
+            <button type="button" id="creditnoteBtn" data-parent="#accordion" class="btn btn-link"
+              data-toggle="collapse" data-target="#creditnote" data-parent="#accordion"
+              (click)="onToggleTab('creditnote')"><i class="fa"
+                [ngClass]="!salesmanTabs.creditnote ? 'fa-caret-right' : 'fa-caret-down'"></i> Credit Note</button>
+          </h2>
+          <div class="dropWith">
+            <app-sales-filter [selected]="salesmanTabs.creditnote" [salesOptions]="salesOptions"></app-sales-filter>
+            <a [routerLink]="['/transaction/credit-note/add']" class="addnew"><i class="fa fa-plus addSign"
+                aria-hidden="true"></i>Add New</a>
+          </div>
+        </div>
+        <div id="creditnote" [ngClass]="salesmanTabs.creditnote ? 'show' : ''" class="collapse tabCls"
+          aria-labelledby="headingOne">
+          <div class="card-body">
+            <div class="table-responsive">
+              <ng-container *ngIf="salesmanTabs.creditnote  && dataSource.data.length > 0; else noData">
+                <mat-table [dataSource]="dataSource" class="mat-elevation-z8 cardstable">
+                  <ng-container matColumnDef="credit_note_date">
+                    <mat-header-cell class="makeRed" *matHeaderCellDef> Date </mat-header-cell>
+                    <mat-cell *matCellDef="let element" data-th="Date"> {{ element.credit_note_date }} </mat-cell>
+                    <mat-footer-cell *matFooterCellDef>Total count</mat-footer-cell>
+                  </ng-container>
+                  <ng-container matColumnDef="credit_note_number">
+                    <mat-header-cell *matHeaderCellDef> CreditNotes# </mat-header-cell>
+                    <mat-cell *matCellDef="let element" data-th="CreditNotes# "> {{ element.credit_note_number }}
+                    </mat-cell>
+                    <mat-footer-cell *matFooterCellDef></mat-footer-cell>
+                  </ng-container>
+                  <ng-container matColumnDef="grand_total">
+                    <mat-header-cell *matHeaderCellDef> GrandTotal </mat-header-cell>
+                    <mat-cell *matCellDef="let element" data-th="GrandTotal"> {{ element.grand_total }} </mat-cell>
+                    <mat-footer-cell *matFooterCellDef></mat-footer-cell>
+                  </ng-container>
+                  <ng-container matColumnDef="status">
+                    <mat-header-cell *matHeaderCellDef> Status </mat-header-cell>
+                    <mat-cell *matCellDef="let element" data-th="Status"> {{ element.status }} </mat-cell>
+                    <mat-footer-cell *matFooterCellDef>
+                      <p class="paginatorClass"><i class="fa fa-caret-left" aria-hidden="true"></i><span>2- 2</span><i
+                          class="fa fa-caret-right" aria-hidden="true"></i></p>
+                    </mat-footer-cell>
+                  </ng-container>
+                  <mat-header-row *matHeaderRowDef="displayedColumnsCreditNotes"></mat-header-row>
+                  <mat-row *matRowDef="let row; columns: displayedColumnsCreditNotes;"></mat-row>
+                </mat-table>
+                <div class="paging-center">
+                  <mat-paginator (page)="onPageFired($event)" [length]="response?.total_records" [pageSize]="pageSize"
+                    [pageSizeOptions]="[5, 10]"> </mat-paginator>
+                </div>
+              </ng-container>
+
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+
+
+<ng-template #noData>
+  <strong>No record found</strong>
+</ng-template>

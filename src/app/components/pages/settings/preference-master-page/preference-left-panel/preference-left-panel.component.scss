@@ -1,0 +1,31 @@
+.lpane-grp {
+  margin-bottom: 40px;
+}
+.flex-column {
+  flex-direction: column!important;
+}
+.nav {
+  flex-wrap: wrap;
+  padding-left: 0;
+  list-style: none;
+}
+li {
+  display: list-item;
+  text-align: -webkit-match-parent;
+}
+.lpane-grp .nav-pills .nav-link {
+  padding: 6px 10px;
+  border-radius: 0;
+  color: #333;
+  border-top: 1px solid transparent;
+  border-bottom: 1px solid transparent;
+  background-color: transparent;
+}
+nav .nav-link {
+  position: relative;
+}
+.lpane-grp .nav-pills .nav-link.active {
+  border-top: 1px solid #ececec;
+  border-bottom: 1px solid #ececec;
+  background-color: #f2f2f2;
+}

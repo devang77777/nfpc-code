@@ -1,0 +1,316 @@
+<section>
+  <div class="heading-row">
+    <h2 class="d-inline"><i class="fa fa-credit-card-alt mr-2"></i>{{ pageTitle }}</h2>
+    <div class="d-inline float-right text-right">
+      <button mat-button class="btn btn-sm btn-secondary ml-1" (click)="goBackToCreditList()"><i
+          class="fa fa-angle-left mr-1"></i><span class="back-btn"> Back</span></button>
+    </div>
+  </div>
+  <div class="separator"></div>
+  <form [formGroup]="creditNoteForm" class="order-form custom-mat square scrolly">
+    <div class="card-header overview active-form">
+      <div class="row" *ngIf="!isDepotOrder">
+        <div class="col-md-4">
+          <label for="">Customer</label>
+          <div class="form-group smmatinput">
+            <mat-form-field class="example-full-width" id="customerFormField">
+              <input type="text" placeholder="Search Customer" (blur)="checkFormValidation()" matInput required
+                [formControl]="customerFormControl" (keyup)="keyUp.next($event)" [matAutocomplete]="auto">
+              <mat-autocomplete appOptionScroll (optionsScroll)="onScroll()" #auto="matAutocomplete"
+                (optionSelected)="customerSelected($event.option.value)" [displayWith]="customerControlDisplayValue">
+                <mat-option *ngFor="let customer of filterCustomer" [value]="customer">
+                  {{ customer.customer_code }} - {{ customer.name }} </mat-option>
+
+                <!-- <mat-option id="custBtn" class="in-opt-btn"><button (click)="addCustomer()"><i
+                      class="os-icon os-icon-plus"></i>
+                    Add Customer</button></mat-option> -->
+              </mat-autocomplete>
+              <mat-error *ngIf="customerFormControl.hasError('required')">Please select a customer</mat-error>
+            </mat-form-field>
+          </div>
+        </div>
+      </div>
+    </div>
+
+
+    <div [ngClass]="{ 'inactive-form': customerFormControl.invalid }">
+
+      <div class="card-body overview">
+        <div class="row mt-3 justify-content-between"
+          *ngIf="creditLimit?.credit_limit_type && creditLimit?.credit_limit_type == 2">
+          <div class="col-md-4">
+            <div *ngIf="is_lob" class="form-group row mb-3 m-0 p-0">
+              <label> Customer Lob:</label>
+              <div class="col-11 p-0">
+                <app-multiautocomplete isSingle="true" [options]="customerLobList" [control]="customerLobFormControl"
+                  text="name" id="lob_id" placeholder="Select Lob" objectName="lob" param1="name" param2=""
+                  (selectionchanged)="customerLobSelected()">
+                </app-multiautocomplete>
+                <mat-error *ngIf="customerLobFormControl.hasError('required')">Please select a Customer Lob</mat-error>
+              </div>
+              <!-- <div class="col-1 p-2 mt-2">
+                      <a (click)="openItemLob()" class="ml-2 settingIcon"><i
+                          class="os-icon os-icon-ui-46" aria-hidden="true"></i></a>
+                  </div> -->
+            </div>
+            <div class="form-group smmatinput" *ngIf="isCustomerlobShow">
+              <label for="">Warehouse</label>
+              <div>
+                <input type="text" class="form-control form-control-sm"
+                  [value]="getStorageLocationName(creditNoteData?.storageocation)" *ngIf="!showWareHs && isEditForm"
+                  (focus)="openWarehouse()">
+                <!-- <input type="text" class="form-control form-control-sm"
+              [value]="warehouseMappingDetails?warehouseMappingDetails:'Select Options'"
+              *ngIf="!showWareHs && !isEditForm" (focus)="openWarehouse()"> -->
+                <app-multiautocomplete isSingle="true" [ngStyle]="{'display':showWareHs || !isEditForm?'block':'none' }"
+                  [options]="storageLocationList" [control]="warehouseFormControl" text="name" id="id"
+                  placeholder="Select Warehouse" objectName="customer-root-ddl" [param1]="'code'" [param2]="'name'">
+                </app-multiautocomplete>
+              </div>
+            </div>
+          </div>
+
+          <!-- <div class="col-md-4"> -->
+          <!-- <div class="form-group smmatinput">
+              <label for="">Invoice </label>
+              <div class="col-11 p-0">
+                <mat-radio-group aria-label="Select an option" [formControl]="creditNoteTypeFormControl">
+                  <mat-radio-button class="mr-4" value="0">With Inovice</mat-radio-button>
+                  <mat-radio-button value="1">Without Inovice</mat-radio-button>
+                </mat-radio-group>
+              </div>
+            </div> -->
+
+          <!-- <div class="form-group smmatinput" *ngIf="isCreditTypeIsInvoice">
+              <label for="">Invoice </label>
+              <mat-form-field id="reasonFormField">
+                <mat-label>Select a Invoice</mat-label>
+                <mat-select class="no-disabled-text" (selectionChange)="getSelectedInvoiceData($event.value)"
+                  [formControl]="invoiceFormControl">
+                  <mat-option *ngFor="let invoice of invoices" [value]="invoice.id">{{ invoice.invoice_number }}
+                  </mat-option>
+                </mat-select>
+                <mat-error>
+                  <app-mat-error [control]="invoiceFormControl"></app-mat-error>
+                </mat-error>
+              </mat-form-field>
+            </div> -->
+          <!-- <div class="form-group smmatinput">
+              <label for="">Reason </label>
+              <app-multiautocomplete isSingle="true" [options]="returnReasons" [control]="reasonFormControl" text="name"
+                id="id" placeholder="Select a Reason">
+              </app-multiautocomplete>
+              <mat-form-field id="reasonFormField">
+                <mat-label>Select a Reason</mat-label>
+                <mat-select class="no-disabled-text" (blur)="checkFormValidation()" [formControl]="reasonFormControl">
+                  <mat-option *ngFor="let reason of returnReasons" [value]="reason.name">{{ reason.name }}</mat-option>
+                </mat-select>
+                <mat-error>
+                  <app-mat-error [control]="reasonFormControl"></app-mat-error>
+                </mat-error>
+
+              </mat-form-field>
+            </div> -->
+          <!-- <div class="form-group smmatinput">
+              <label for="">Return </label>
+              <div class="col-11 p-0">
+                <mat-radio-group aria-label="Select an option" [formControl]="reasonFormControl">
+                  <mat-radio-button class="mr-4" value="0">Bad Return Reason</mat-radio-button>
+                  <mat-radio-button value="1">Good Return Reason</mat-radio-button>
+                </mat-radio-group>
+              </div>
+            </div> -->
+          <!-- <div class="form-group smmatinput">
+              <label for="">Salesman</label>
+              <div>
+                <app-multiautocomplete isSingle="true" [options]="salesmen" [control]="salesmanFormControl" text="user"
+                  id="user_id" placeholder="Select Salesman" objectName="user" param1="firstname" param2="lastname">
+                </app-multiautocomplete>
+              </div>
+            </div> -->
+          <!-- </div> -->
+          <div class="col-md-4">
+            <div class="form-group">
+              <label for="">Credit Note Number </label>
+              <div class="position-relative">
+                <input type="text" class="form-control form-control-sm" [formControl]="numberFormControl"
+                  (keypress)="restrictLength($event)" id="numberField">
+                <app-validation-message [control]="numberFormControl"></app-validation-message>
+                <span [hidden]="isEditForm" class="setting-btn"><button (click)="openNumberSettings()"><i
+                      class="os-icon os-icon-settings"></i></button></span>
+              </div>
+            </div>
+            <div class="form-group">
+              <label for="">Credit Note Date</label>
+              <input type="date" class="form-control form-control-sm" [formControl]="creditNoteDateFormControl"
+                id="deliveryDate">
+              <app-validation-message [control]="creditNoteDateFormControl"></app-validation-message>
+            </div>
+            <div class="form-group" *ngIf="creditNoteData?.exchange_number">
+              <label for="">Exchange Number</label>
+              <input type="text" class="form-control non-editable" formContorlName="exchange_number"
+                [value]="creditNoteData?.exchange_number" disabled>
+            </div>
+            <div class="form-group">
+              <label for="">Customer GRV No</label>
+              <input type="text" class="form-control form-control-sm" id="customerGRVNo"
+                [formControl]="customerGRVNoFormControl">
+            </div>
+            <div class="form-group">
+              <label for="">Customer GRV Amount</label>
+              <input type="text" class="form-control form-control-sm" id="customerGRVAmount"
+                [formControl]="customerGRVAmountFormControl">
+            </div>
+
+            <!-- <div class="form-group">
+              <label for="">Credit Note Number </label>
+              <input type="text" class="form-control form-control-sm" [formControl]="numberFormControl"
+                id="numberField">
+              <app-validation-message [control]="numberFormControl"></app-validation-message>
+            </div> -->
+          </div>
+        </div>
+      </div>
+      <div class="bottom-form">
+        <div class="item-container custom-mat custom-mat-no-border"
+          [ngClass]="{ 'inactive-form': isDepotOrder ? depotFormControl.invalid : customerFormControl.invalid }">
+          <div class="item-table-div table-responsive">
+            <table class="item-table cardtable table">
+              <thead>
+                <tr>
+                  <th class="head" *ngFor="let head of itemTableHeaders">{{ head.label }}</th>
+                  <th>Action</th>
+                </tr>
+              </thead>
+              <tbody class="form-body">
+                <tr formArrayName="items" class="item-row" *ngFor="let item of itemFormControls; let i = index;">
+                  <ng-container [formGroupName]="i">
+                    <td data-th="#"> <span>{{ i + 1 }}</span></td>
+                    <td data-th="Item Code" class="item-name">
+                      <mat-form-field class="item-name-field item-code">
+                        <input type="text" required placeholder="Search an item" matInput formControlName="item"
+                          [matAutocomplete]="auto" (keyup)="filterItems($event.target.value)">
+                        <mat-autocomplete appOptionScroll #auto="matAutocomplete" (opened)="checkFormValidation()"
+                          (optionSelected)="itemDidSearched($event.option.value, i)"
+                          [displayWith]="itemsControlDisplayValue">
+                          <mat-option *ngFor="let item of filteredItems" [value]="itemControlValue(item)">
+                            {{item.item_code}} - {{ item.item_name }}</mat-option>
+                          <!-- <mat-option *ngIf="isLoading && filteredItems.length >= 10">
+                            <div class="select-placeholder-container">
+                              <span>Loading...</span>
+                              <mat-spinner class="spinner" diameter="20"></mat-spinner>
+                            </div>
+                          </mat-option>
+                          <hr class="customerHr">
+                          <mat-option id="custBtn" class="in-opt-btn"><button (click)="redirectToItem()"><i
+                                class="os-icon os-icon-plus"></i> Add Item</button></mat-option> -->
+                        </mat-autocomplete>
+                      </mat-form-field>
+                    </td>
+                    <td data-th="Item Name" class="item-name">
+                      <input type="text" class="form-control form-control-sm non-editable item-name"
+                        formControlName="item_name" disabled>
+                    </td>
+
+                    <!-- <td data-th="Invoice Number" class="stats-cell"><input type="text" formContorlName="invoice_number"
+                        class="form-control " [value]="selected_invoice?.invoice_number"
+                        [ngClass]="{'non-editable':isCreditTypeIsInvoice}" [disabled]="isCreditTypeIsInvoice"></td>
+                    <td data-th="Invoice Amount" class="stats-cell">
+                      <input type="text" class="form-control non-editable" formContorlName="invoice_total"
+                        [value]="selected_invoice?.grand_total" [ngClass]="{'non-editable':isCreditTypeIsInvoice}"
+                        [disabled]="isCreditTypeIsInvoice">
+                    </td> -->
+                    <td data-th="Uom" class="uom-td">
+                      <select class="custom-select" required formControlName="item_uom_id">
+                        <option [value]="uom.id" *ngFor="let uom of item?.value?.item_uom_list">{{ uom.name }}</option>
+                      </select>
+                    </td>
+                    <td data-th="Quantity" class="stats-cell item-code"><input type="number" min="0"
+                        class="form-control" placeholder="Quantity" [max]="payloadItems[i]?.item_qty"
+                        formControlName="item_qty"></td>
+                    <td data-th="Expiry Date" class="stats-cell item-code"><input type="date" class="form-control"
+                        placeholder="Expiry Date" formControlName="item_expiry_date"></td>
+                    <td data-th="Reason" class="item-code">
+                      <select class="custom-select" required formControlName="reason">
+                        <option [value]="reason.name" *ngFor="let reason of returnReasons">{{ reason.name }}</option>
+                      </select>
+                    </td>
+                    <td data-th="Price" class="stats-cell item-code"><input type="text"
+                        class="form-control non-editable"
+                        [value]="payloadItems[i]?.item_price ? numberFormat(payloadItems[i]?.item_price) : numberFormat(0)"
+                        disabled></td>
+                    <td data-th="Excise" class="stats-cell item-code"><input type="text"
+                        class="form-control non-editable"
+                        [value]=" payloadItems[i]?.item_excise ? numberFormat(payloadItems[i]?.item_excise) : numberFormat(0)"
+                        disabled></td>
+                    <td data-th="Discount" class="stats-cell item-code"><input type="text"
+                        class="form-control non-editable"
+                        [value]="payloadItems[i]?.item_discount_amount ? numberFormat(payloadItems[i]?.item_discount_amount) : numberFormat(0)"
+                        disabled></td>
+                    <td data-th="Vat" class="stats-cell item-code"><input type="text" class="form-control non-editable"
+                        [value]=" payloadItems[i]?.item_vat ? numberFormat(payloadItems[i]?.item_vat) : numberFormat(0)"
+                        disabled></td>
+                    <td data-th="Net" class="stats-cell item-code"><input type="text" class="form-control non-editable"
+                        [value]=" payloadItems[i]?.item_net ? numberFormat(payloadItems[i]?.item_net) : numberFormat(0)"
+                        disabled></td>
+
+                    <td data-th="Total" class="stats-cell item-code"><input type="text"
+                        class="form-control non-editable"
+                        [value]=" payloadItems[i]?.item_grand_total ? numberFormat(payloadItems[i]?.item_grand_total) : numberFormat(0)"
+                        disabled>
+                    </td>
+                    <td data-th="Action"><button [disabled]="(itemFormControls.length <= 1)" class="trash-btn"
+                        (click)="deleteItemRow(i)"><i class="fa fa-close"></i></button></td>
+                  </ng-container>
+                </tr>
+              </tbody>
+            </table>
+            <button class="add-item-btn" mat-button (click)="openItemDialog()">
+              <!--            <i class="os-icon os-icon-plus"></i>-->
+              Add Item
+            </button>
+            <button *ngIf="!isCreditTypeIsInvoice" mat-button class="mat-inherit-line-height add-item-btn"
+              style="margin-left: 5px;" (click)="openBulkItemSelectionPopup()">
+              Add Bulk Item
+            </button>
+          </div>
+
+          <!-- <table class="table-check">
+            <thead>
+            <tr><th class="head"></th></tr>
+            </thead>
+            <tbody>
+            <tr class="item-row" *ngFor="let item of payloadItems; let i = index;">
+              <button [disabled]="(itemFormControls.length <= 1)" class="trash-btn" (click)="deleteItemRow(i)"><i class="fa fa-close"></i></button>
+            </tr>
+            </tbody>
+          </table> -->
+        </div>
+        <div class=" footer-overview-container">
+          <div class="row justify-content-end">
+            <!--          <div class="form-group col-sm-5">-->
+            <!--            <label for="note">Customer Note</label>-->
+            <!--            <textarea class="form-control form-control-sm" [formControl]="noteFormControl" id="note"></textarea>-->
+            <!--          </div>-->
+            <div class=" col-sm-4">
+              <div class="overall-stats-table">
+                <div *ngFor="let stat of objectValues(creditNoteStats)">
+                  <span class="stat-label">{{ stat.label }}</span>
+                  <span class="stat-value">{{ numberFormatWithSymbol(stat.value) }}</span>
+                </div>
+                <div>
+                  <span class="stat-label final-total">{{ creditNoteStats.grand_total.label }}</span>
+                  <span class="stat-value final-total">{{ numberFormatWithSymbol(creditNoteStats.grand_total.value)
+                    }}</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </form>
+  <div class="actions">
+    <button class="btn btn-primary" (click)="postFinalPayload()">Save & Submit</button>
+  </div>
+</section>

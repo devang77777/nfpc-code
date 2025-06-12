@@ -1,0 +1,51 @@
+.dialog-box {
+  padding: 30px;
+  text-align: center;
+  h3{
+    color: #575757;
+    font-size: 20px;
+    margin:25px 0;
+  }
+}
+
+.title,
+.description {
+  text-align: center;
+}
+
+
+
+.confirm-btn {
+  background-color: lightgrey;
+}
+.btn-danger{
+  background-color: rgb(221, 107, 85);
+  box-shadow: rgba(221, 107, 85, 0.8) 0px 0px 2px, rgba(0, 0, 0, 0.05) 0px 0px 0px 1px inset;
+  color:#fff;
+  &:hover{
+    background-color: #ca5f4a;
+  }
+}
+.btn-secondary{
+  background-color: #c1c1c1;
+  color:#fff;
+  border: 1px solid #adabab;
+  &:hover{
+    background-color: #adabab;
+  }
+}
+i.os-icon{
+  font-size: 72px;
+  color: #f8bb86;
+  margin-bottom: 10px;
+  display: inline-block;
+
+}
+.dialogbtn{
+  .btn{
+    font-size: 18px;
+    font-weight: 500;
+    padding: 10px 32px;
+    min-width: 170px;
+  }
+}

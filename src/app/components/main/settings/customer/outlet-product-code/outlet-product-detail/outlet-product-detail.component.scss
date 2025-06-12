@@ -1,0 +1,42 @@
+section {
+  transition: visibility 0.4s, opacity 0.4s;
+  visibility: hidden;
+  opacity: 0;
+
+  &.detail-visible {
+    transition: visibility 0.4s, opacity 0.4s;
+    visibility: visible;
+    opacity: 1;
+  }
+}
+
+button:active {
+  outline: none;
+}
+
+button.mat-menu-item {
+  height: 30px;
+  line-height: normal;
+
+  &:focus {
+    outline: none;
+  }
+}
+
+.data-block {
+  i {
+    margin-right: 8px;
+  }
+}
+
+.item-card,
+.customer-card {
+  padding: 12px !important;
+  border-radius: 10px;
+  background-color: #d3d3d352;
+  margin-right: 12px;
+
+  h4,p {
+    margin: 0;
+  }
+}

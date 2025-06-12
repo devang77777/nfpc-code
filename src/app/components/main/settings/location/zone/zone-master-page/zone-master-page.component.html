@@ -1,0 +1,24 @@
+<mat-drawer-container class="formdrawer-container" hasBackdrop="false">
+  <mat-drawer id="formDrawer" mode="over" position="end" #formDrawer class="border">
+    <div style="min-width: 320px;">
+      <app-add-zone-form (updateTableData)="updateTableData($event)"></app-add-zone-form>
+    </div>
+  </mat-drawer>
+  <section>
+    <div class="table-box" [ngClass]="{ collapsed: isDetailVisible }">
+      <div class="heading-row">
+        <p class="h4 font-weight-light d-inline" *ngIf="!isDetailVisible">
+          Zone Master
+        </p>
+        <div class="d-inline float-right">
+          <button type="button" class="btn btn-sm btn-p mr-2" appPermission [permissions]="userPermissions"
+            [type]="'create'" (click)="openAddZone()">
+            <i class="os-icon os-icon-plus mr-2" aria-hidden="true"></i>New
+          </button>
+        </div>
+      </div>
+      <app-zone-master-dt [newZoneData]="newZoneData" (itemClicked)="itemClicked($event)"
+        (selectedRows)="selectedRows($event)"></app-zone-master-dt>
+    </div>
+  </section>
+</mat-drawer-container>

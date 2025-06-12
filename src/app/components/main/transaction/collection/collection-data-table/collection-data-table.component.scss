@@ -1,0 +1,109 @@
+:host {
+  float: left;
+  width: 100%;
+}
+
+.cdk-column-select {
+  position: relative;
+  width: 4%;
+  .filter-btn {
+    position: absolute;
+    left: 0px;
+    top: 0;
+    height: 35px;
+    line-height: 35px;
+    width: 30px;
+    padding: 0;
+    margin: 0;
+    text-align: center;
+    display: block;
+  }
+}
+.filter-btn {
+  &:focus {
+    outline: none;
+    box-shadow: 0 0;
+  }
+}
+
+.head-checkbox {
+  display: inline-block;
+  margin-left: 4px;
+  position: relative;
+  top: 0;
+}
+
+.row-checkbox {
+  margin-left: 4px;
+  position: relative;
+  top: -2px;
+}
+
+.misc-row {
+  height: 52px !important;
+}
+
+.misc-cell {
+  position: relative;
+}
+
+.col-name {
+  position: absolute;
+  top: 8px;
+}
+
+.col-price {
+  position: absolute;
+  right: 16px;
+  top: 8px;
+  color: #181925;
+}
+
+.col-date {
+  font-size: 10px;
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  color: #777777;
+}
+
+.col-code {
+  font-size: 10px;
+  position: absolute;
+  right: 16px;
+  color: #777777;
+}
+
+// New Styles
+
+td.mat-column-code {
+  color: #1b6ac4;
+}
+
+[mat-header-row] {
+  background-color: #f3f3f3;
+}
+::ng-deep .mat-paginator {
+  .mat-paginator-container {
+    // justify-content: center;
+  }
+
+  // override material paginator page switch
+  .mat-paginator-range-label {
+    order: 2;
+  }
+
+  .mat-paginator-navigation-previous {
+    order: 1;
+  }
+  .mat-paginator-navigation-next {
+    order: 3;
+  }
+}
+
+.erp-status {
+  width: 109px;
+  display: block;
+  text-align: center;
+  padding: 12px 0px 19px 0px !important;
+}

@@ -1,0 +1,36 @@
+<div class="comments w-100">
+  <div class="tree-structure">
+    <div class="row" *ngIf="notOpenedFromOverViewRightPanel">
+      <div class="tree-node col-lg-8">
+        <div class="tree-node-leaf">
+          <form [formGroup]="commentForm">
+            <div class="form-group">
+              <textarea rows="3" formControlName="comment" class="ember-text-area form-control ember-view" spellcheck="false"></textarea>
+              <div class="text-muted"><small>(For Internal Use)</small>
+              </div>
+            </div>
+            <div class="btn-group">
+              <button class="btn btn-primary ember-view btn-sm" type="submit"(click)="onSubmit()" 
+              [disabled]="commentForm.invalid">
+                Add Comment</button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+    <div class="row" *ngFor="let item of commentData; let i = index ">
+      <div class="tree-node col-lg-8">
+        <div class="time text-muted"><small>{{ today | date : 'EEEE, MMMM d, h:mm' }} {{ today | date : 'a' | lowercase }}</small>
+        </div>
+        <div class="tree-node-leaf">
+          <div class="arrow"></div>
+          <div class="delete-action">
+            <i class="os-icon os-icon-trash-2" aria-hidden="true"(click)="deleteComent(i, item.id)"></i>
+          </div>
+          <div class="description">{{item.comment}}</div>
+          <div class="text-muted font-xs"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

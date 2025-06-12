@@ -1,0 +1,38 @@
+<mat-drawer-container class="formdrawer-container" hasBackdrop="false">
+    <mat-drawer id="formDrawer" mode="over" position="end" #formDrawer class="border">
+        <div style="min-width: 860px;">
+            <app-add-survey-wizard (updateTableData)="updateTableData($event)">
+            </app-add-survey-wizard>
+        </div>
+    </mat-drawer>
+    <section class="scrollxy">
+        <div class="table-box" [ngClass]="{ 'collapsed': isDetailVisible }">
+            <div class="heading-row">
+                <p class="h4 font-weight-light d-inline" *ngIf="!isDetailVisible">Sensory Survey</p>
+                <div class="d-inline float-right ">
+                    <button type="button" *ngIf="!isDetailVisible" class="btn btn-sm btn-p mr-2"
+                        (click)="openAddSurvey()" appPermission [permissions]="userPermissions" [type]="'create'"><i
+                            class="os-icon os-icon-plus mr-2" aria-hidden="true"></i>New</button>
+                            <button *ngIf="checkedRows.length > 0" class="btn btn-sm btn-white dropdown-toggle ml-2" mat-button
+                                [matMenuTriggerFor]="menu2">
+                                Bulk Actions
+                              </button>
+                              <mat-menu #menu2="matMenu">
+                                <button mat-menu-item (click)="bulkAction('active')">Mark as Active</button>
+                                <button mat-menu-item (click)="bulkAction('inactive')" >Mark as Inactive</button>
+                                <!-- <button mat-menu-item (click)="bulkAction('delete')" appPermission [permissions]="userPermissions" [type]="'delete'">
+                                  Delete
+                                </button> -->
+                              </mat-menu>
+                </div>
+            </div>
+            <app-sensory-survey-dt (selectedRows)="selectedRows($event)" (itemClicked)="itemClicked($event)" [newSensorySurveyData]="newSensorySurveyData">
+            </app-sensory-survey-dt>
+        </div>
+        <div class="details-box" [ngClass]="{ 'expanded': isDetailVisible }">
+            <app-sensory-survey-detail (updateTableData)="updateTableData($event)"
+                (detailsClosed)="closeClicked()" [isDetailVisible]="isDetailVisible"  [loadChnages]="loadChnages" [Survey]="Survey">
+            </app-sensory-survey-detail>
+        </div>
+    </section>
+</mat-drawer-container>

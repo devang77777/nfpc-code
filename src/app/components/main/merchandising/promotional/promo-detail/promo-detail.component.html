@@ -1,0 +1,50 @@
+<section *ngIf="Promotional">
+    <div class="pl-3">
+        <div class="row">
+            <h2 class="page-title col-sm-6 font-weight-light">
+                {{ Promotional.item.item_name }}
+            </h2>
+            <div class="actions col-sm-6">
+                <div>
+                    <button class="btn btn-sm btn-white mr-2" mat-button [matMenuTriggerFor]="menu2">More</button>
+                    <mat-menu #menu2="matMenu">
+                        <button mat-menu-item (click)="openEditPromotion()" appPermission
+                            [permissions]="userPermissions" [type]="'edit'">Edit</button>
+                        <button mat-menu-item (click)="openDeleteBox()" appPermission [permissions]="userPermissions"
+                            [type]="'delete'">Delete</button>
+                    </mat-menu>
+                </div>
+                <button *ngIf="isDetailVisible" class="btn" (click)="closeDetailView()">
+                    <i class="os-icon os-icon-close"></i>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <div class="pl-3 area-data">
+        <div class="row h-100">
+            <div class="col-12">
+                <mat-tab-group class="customertab" [(selectedIndex)]="selectedTab" mat-align-tabs="start"
+                    (selectedTabChange)="selectedTabChange($event.index)">
+                    <mat-tab label="Overview">
+                        <mat-list>
+                            <mat-list-item>
+                                Date:
+                                {{
+                    Promotional.created_at | date: "d MMM y h:mm a"
+                  }}
+                            </mat-list-item>
+                            <mat-list-item> Amount: {{ Promotional.amount }}</mat-list-item>
+                            <mat-list-item> Item: {{ Promotional.item.item_name }}</mat-list-item>
+                            <mat-list-item> From Date: {{ Promotional.start_date }}</mat-list-item>
+                            <mat-list-item> To Date: {{ Promotional.end_date }}</mat-list-item>
+                        </mat-list>
+                    </mat-tab>
+                    <mat-tab label="Promotional Post">
+                        <app-view-post-list [postList]="postList" [promotion_id]="Promotional.id"></app-view-post-list>
+                    </mat-tab>
+                </mat-tab-group>
+            </div>
+        </div>
+    </div>
+</section>

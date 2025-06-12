@@ -1,0 +1,65 @@
+<div class="title">
+    <strong>Send Payment Reminder</strong>
+    <a class="closeicon settingclose" (click)="onClose()">
+        <i class="os-icon os-icon-x"></i></a>
+</div>
+<div class="container not-body">
+    <form style="width:80%" [formGroup]="form" (ngSubmit)="onSubmit()">
+        <div style="width: 100%;" class="form-group row d-flex">
+            <strong style="width:20%">Subject:</strong>
+            <p style="width:80%">Reminder: Invoice({{invoiceData?.invoice_number}}) from {{orgName}} is over
+                due</p>
+        </div>
+        <div class="form-group row">
+            <textarea class="form-control" placeholder="Enter description" cols="30" rows="2"
+                formControlName="message"></textarea>
+        </div>
+        <div class="form-group row">
+            <div class="form-check">
+                <input class="form-check-input" type="checkbox" formControlName="is_automatically" value=""
+                    id="defaultCheck1">
+                <label class="form-check-label" for="defaultCheck1">
+                    Automatically send payment reminders for this client's invoices.
+                </label>
+            </div>
+        </div>
+        <hr>
+        <ng-container *ngIf="!form.get('is_automatically').value">
+            <ng-container formArrayName="reminder">
+                <div class="inputs" *ngFor="let item of form.get('reminder')['controls']; let i = index;">
+                    <ng-container [formGroupName]="i">
+                        <input formControlName="reminder_day" placeholder="Days" class="form-control days p-all"
+                            type="text" style="width:50px">
+                        <app-validation-message [control]="item.get('reminder_day')"></app-validation-message>
+                        <span class="p-all">days</span>
+                        <select formControlName="date_prefix" class="form-control p-all days">
+                            <option value="before">before</option>
+                            <option value="after">after</option>
+                        </select>
+                        <span class="p-all p-all">due date</span>
+                        <a (click)="remove(i)" style="font-size: x-large;cursor: pointer;">
+                            <mat-icon [inline]="true">cancel</mat-icon>
+                        </a>
+                    </ng-container>
+                    <br>
+                </div>
+            </ng-container>
+
+            <br> <br>
+            <div style="display:flex; justify-content:center" *ngIf="form.get('reminder')['controls'].length<3">
+                <button (click)="addItem()" type="button" class="btn btn-sm btn-white">
+                    <mat-icon [inline]="true">library_add</mat-icon> Add More
+                </button> &nbsp;
+            </div>
+            <hr>
+        </ng-container>
+        <div style="display:flex; justify-content:flex-end">
+            <button type="button" (click)="onClose()" class="btn btn-sm btn-white">
+                Cancel
+            </button> &nbsp;
+            <button [disabled]="form.invalid" type="submit" class="btn btn-sm btn-p">
+                Submit
+            </button>
+        </div>
+    </form>
+</div>

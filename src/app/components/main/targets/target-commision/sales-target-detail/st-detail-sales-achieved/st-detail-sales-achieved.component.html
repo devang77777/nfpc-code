@@ -1,0 +1,66 @@
+<section>
+  <div class="container custom-mat square">
+    <div class="row header-selection">
+      <div class="col-sm-2">Select Owner</div>
+      <div class="col-sm-6">
+        <mat-form-field id="targetOwner">
+          <mat-label>Select a target owner</mat-label>
+          <mat-select class="no-disabled-text">
+            <mat-option *ngFor="let owner of owners" [value]="owner.id">{{ owner.name }}</mat-option>
+          </mat-select>
+        </mat-form-field>
+      </div>
+    </div>
+
+    <div *ngIf="isItemLevel" class="row item-select">
+      <div class="col-sm-2">Select Item</div>
+      <div class="col-sm-6">
+        <mat-form-field>
+          <mat-label>Select an item</mat-label>
+          <mat-select class="no-disabled-text">
+            <mat-option *ngFor="let item of salesTargetData.items_detail" [value]="item.item_id">{{ item.item_name }}</mat-option>
+          </mat-select>
+        </mat-form-field>
+      </div>
+    </div>
+
+    <div class="stats-block">
+      <table>
+        <thead>
+        <tr>
+          <th>{{ statsData.month_name }} {{ statsData.year }}</th>
+          <th>{{ currencyCode }}</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr>
+          <td>Month's Target</td>
+          <td>{{ statsData.month_target }}</td>
+        </tr>
+        <tr>
+          <td>Today's Sale</td>
+          <td>{{ statsData.today_sale }}</td>
+        </tr>
+        <tr>
+          <td>MTD Sale</td>
+          <td>{{ statsData.month_to_date_sale }}</td>
+        </tr>
+        <tr>
+          <td>BTG</td>
+          <td>{{ statsData.btg }}</td>
+        </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="calendar-view">
+      <h2 class="title">Day-wise Sales</h2>
+      <div class="tile-holder">
+        <div class="tiles" *ngFor="let day of statsData.dates_stat; index as i">
+          <h2>{{ day.date }}</h2>
+          <p>{{ day.total_sale ? day.total_sale : '-' }}</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

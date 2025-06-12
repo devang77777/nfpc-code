@@ -1,0 +1,97 @@
+<section class="collection-scrolly" style="width:500px;">
+  <div class="heading-row">
+    <h2 class="d-inline">Invoice Collection #<strong>{{ invoiceData?.invoice_number }}</strong></h2>
+    <div class="d-inline float-right">
+      <button mat-button class="btn btn-sm btn-white" (click)="closeForm()">Close</button>
+    </div>
+  </div>
+  <div class="separator"></div>
+  <form [formGroup]="collectionForm" class="order-form w-100">
+    <div class=" card-body custom-mat pt-3">
+      <div class="row">
+        <div class="col-md-12">
+          <div class="form-group">
+            <label for="">Customer</label>
+            <input type="text" class="form-control form-control-sm"
+              [value]="invoiceData?.user?.firstname+' '+invoiceData?.user?.lastname" disabled>
+          </div>
+        </div>
+      </div>
+
+    </div>
+    <div class="card-body  custom-mat">
+      <div class="row">
+        <div class="col-md-12">
+          <div class="form-group">
+            <label for="">Payment Mode</label>
+            <mat-form-field>
+              <mat-label>Select Payment Mode</mat-label>
+              <mat-select class="no-disabled-text" id="modeField" [formControl]="modeFormControl" required>
+                <mat-option *ngFor="let mode of payModes" [value]="mode.id">{{ mode.name }}</mat-option>
+              </mat-select>
+              <mat-error *ngIf="modeFormControl.hasError('required')">Please select a payment mode</mat-error>
+            </mat-form-field>
+          </div>
+          <div class="form-group" [ngClass]="amountFormControl.hasError('max') ? 'erros' : ''">
+            <label [ngClass]="amountFormControl.hasError('max') ? 'fixpadding' : ''"> Amount Received</label>
+            <input type="number" min="0" required placeholder="Enter amount to pay" [formControl]="amountFormControl"
+              class="form-control form-control-sm">
+            <mat-error *ngIf="amountFormControl.hasError('max')">Amount should be less than {{
+              +invoiceData.pending_credit
+              }} </mat-error>
+          </div>
+        </div>
+        <div class="col-md-12">
+          <div class="form-group">
+            <label for="">Collection Number</label>
+            <div class="position-relative">
+              <span class="number-box"><input type="text" class="form-control form-control-sm" style="width:95%;"
+                  [formControl]="numberFormControl" [disabled]="numberFormControl.value.length" id="numberField"></span>
+              <span class="setting-btn"><button (click)="openNumberSettings()"><i
+                    class="fa fa-gear"></i></button></span>
+            </div>
+
+          </div>
+          <div class="form-group">
+            <label for="">Collection Date</label>
+            <input [min]="todayDate" type="date" class="form-control form-control-sm" required
+              [formControl]="dateFormControl" id="collectionDate">
+          </div>
+        </div>
+        <div>
+
+        </div>
+      </div>
+
+    </div>
+    <div class="card-body custom-mat check-detail-box" *ngIf="modeFormControl?.value === 2">
+      <div class="row">
+        <div class="col-md-6">
+          <div class="from-group">
+            <label for="">Check Number</label>
+            <input [formControl]="chequenumberFormControl" type="text" class="form-control form-control-sm">
+          </div>
+        </div>
+        <div class="col-md-6">
+          <div class="from-group">
+            <label for="">Bank Name</label>
+            <mat-select class="form-control form-control-sm" id="modeField" [formControl]="bankFormControl" required>
+              <mat-option *ngFor="let mode of bankList" [value]="mode.id">{{ mode.bank_name }}</mat-option>
+            </mat-select>
+          </div>
+        </div>
+        <div class="col-md-12">
+          <div class="from-group">
+            <label for="">Check Date</label>
+            <input type="date" [formControl]="chequedateFormControl" class="form-control form-control-sm">
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <div class="text-right col-12">
+      <button mat-button class="btn btn-secondary btn-sm" (click)="saveCollection()">Record Collection</button>
+    </div>
+  </form>
+</section>

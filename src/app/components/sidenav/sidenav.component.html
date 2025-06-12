@@ -1,0 +1,86 @@
+<!-- <div class="_sidenav " [ngClass]="{'collapse_sidenav': !showTitle }"> -->
+<div class="_sidenav">
+  <!-- (click)="showTitle = !showTitle" -->
+  <button class="sidenav-toggler" (click)="onToggle()">
+    <i class="os-icon os-icon-arrow-right4 righticon" aria-hidden="true"></i>
+    <i class="os-icon os-icon-arrow-left2 lefticon" aria-hidden="true"></i>
+  </button>
+  <!-- <button class="sidenav-toggler d-block d-sm-none mobileclick"  (click)="onToggle()">
+        <i  class=" os-icon os-icon-arrow-right4 righticon" aria-hidden="true"></i>
+      <i class="os-icon os-icon-arrow-left2 lefticon" aria-hidden="true"></i>
+    </button> -->
+  <!-- <div class="logo-container">
+        <img *ngIf="showTitle;else mini_logo" class="_logo" src="assets/images/logo.png" alt="logo">
+        <ng-template #mini_logo>
+            <img class="logomin" src="assets/images/logo_mini.png" alt="logo" height="40px">
+        </ng-template>
+    </div> -->
+  <div class="logo-container" *ngIf="domain == 'presales'">
+    <img class="_logo" src="assets/images/PresaleLogo.png" alt="logo" height="40px" />
+    <img class="logomin" src="assets/images/PresaleLogo.png" alt="logo" height="40px" />
+  </div>
+  <div class="logo-container" *ngIf="domain == 'vansales'">
+    <img class="_logo" src="assets/images/VansalesLogo.png" alt="logo" height="40px" />
+    <img class="logomin" src="assets/images/VansalesLogo.png" alt="logo" height="40px" />
+  </div>
+  <div class="logo-container" *ngIf="domain == 'invoice'">
+    <img class="_logo" src="assets/images/InvoiceLogo.png" alt="logo" height="40px" />
+    <img class="logomin" src="assets/images/InvoiceLogo.png" alt="logo" height="40px" />
+  </div>
+  <div class="logo-container" *ngIf="domain == 'merchandising' || domain == 'presales-prodmobiato.nfpc.net' || domain == 'prodmobiato.nfpc.net'">
+    <img class="_logo" src="assets/images/MerchandisingLogo.png" alt="logo" height="40px" />
+    <img class="logomin" src="assets/images/MerchandisingLogo.png" alt="logo" height="40px" />
+  </div>
+  <div class="logo-container" *ngIf="domain == 'mobiato-msfa' || domain == 'localhost:4200'">
+    <img class="_logo" src="assets/images/MerchandisingLogo.png" alt="logo" height="40px" />
+    <img class="logomin" src="assets/images/MerchandisingLogo.png" alt="logo" height="40px" />
+  </div>
+  <div *ngIf="settingsNav; else elseBlock">
+    <div class="settingmenuholder">
+      <!-- <a (click)="navigateBack()" class="back-arr"><i class="fa fa-arrow-left mr-2"
+          aria-hidden="true"></i><span>Back</span>
+      </a> -->
+      <a href="javascript:void(0)" (click)="navigateBack()" class="back-arr">
+  <i class="fa fa-arrow-left mr-2" aria-hidden="true"></i>
+  <span>Back</span>
+</a>
+      <p class="ml-3 text-muted h6"><span>Settings</span></p>
+
+      <a *ngFor="let menu of sidebarSettingConfig;" [hidden]="settingFeatureCheck(menu.label, menu.hasSubmenu)"
+        [routerLink]="menu.routeTo" [ngClass]="{ active: isActive(menu.active)}">
+        <i class="{{menu.icon}} mr-2" aria-hidden="true"></i>
+        <span>{{menu.label}}</span>
+      </a>
+
+      <mat-expansion-panel *ngFor="let menu of sidebarSettingConfig;" class="expansion"
+        [hidden]="sumenuExistCheck(menu.submenu, menu.hasSubmenu)" (opened)="panelOpenState = true"
+        (closed)="panelOpenState = false">
+        <mat-expansion-panel-header [collapsedHeight]="'35px'" [expandedHeight]="'35px'">
+          <mat-panel-title>
+            <span class="p-2 expansion-title">{{menu.label}}</span>
+          </mat-panel-title>
+        </mat-expansion-panel-header>
+        <a *ngFor="let submenu of menu['submenu'];" (click)="navigateTo(submenu.routeTo)"
+          [hidden]="settingFeatureCheckDropDowns(submenu.label)" [routerLink]="submenu.routeTo"
+          [ngClass]="{ active: isActive(submenu.active) }"><i class="{{submenu.icon}} mr-2"
+            aria-hidden="true"></i><span>{{submenu.label}}</span>
+        </a>
+        
+      </mat-expansion-panel>
+      <!-- <a (click)="navigateTo('settings/subscriptions')" [ngClass]="{ active: isActive('settings/subscriptions') }">
+        <i class="fa fa-envelope-open mr-2" aria-hidden="true"></i><span>Subscriptions</span>
+      </a> -->
+    </div>
+  </div>
+
+  <ng-template #elseBlock>
+    <div class="menuholder">
+      <a *ngFor="let menu of sidebarConfig;" [hidden]="featureCheck(menu.label)" [routerLink]="menu.routeTo"
+        [ngClass]="{ active: isActive(menu.active), spacing : isSpacing(menu.label)}">
+        <i class="{{menu.icon}} mr-2" aria-hidden="true"></i>
+        <span>{{menu.label}}</span>
+      </a>
+      <hr />
+    </div>
+  </ng-template>
+</div>

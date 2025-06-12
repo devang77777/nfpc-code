@@ -1,0 +1,72 @@
+.table {
+  width: 100%;
+}
+
+.items-table-box {
+  overflow-y: scroll !important;
+  min-width: 45%;
+
+  mat-paginator,
+  .mat-table {
+    max-width: 100%;
+  }
+}
+
+img {
+  height: 50px;
+}
+
+.table thead,
+.table thead tr,
+.mat-header-row {
+  background-color: black !important;
+
+  th {
+    background: black;
+    color: #fff;
+  }
+}
+
+.imageCard {
+  position: relative;
+
+  .iconsbar {
+    display: none;
+    position: absolute;
+    bottom: 18px;
+    left: 0;
+    text-align: center;
+    width: 100%;
+
+    a {
+      background-color: #333333;
+      padding: 6px;
+      border-radius: 50%;
+      font-size: 10px;
+      color: white;
+    }
+  }
+
+  &:hover {
+    .iconsbar {
+      display: inline-block;
+    }
+  }
+}
+
+
+::ng-deep .mat-paginator {
+
+  // override material paginator page switch
+  .mat-paginator-range-label {
+    order: 2;
+  }
+
+  .mat-paginator-navigation-previous {
+    order: 1;
+  }
+
+  .mat-paginator-navigation-next {
+    order: 3;
+  }
+}

@@ -1,0 +1,67 @@
+<form [formGroup]="form" novalidate>
+
+    <div class="row">
+        <div class="col-md-6">
+            <div class="form-group row">
+                <label class="col-sm-3 col-form-label">Date Range</label>
+                <!-- <div class="col-sm-9" style="display:flex;">
+                    <input type="date" formControlName="startdate" class="form-control form-control-sm" placeholder="Start Date">
+                   &nbsp; &nbsp;<span>_</span>&nbsp;&nbsp;
+                   <input type="date" formControlName="enddate" class="form-control form-control-sm" placeholder="End Date">
+                </div> -->
+                <div class="col-sm-9" >
+                    <div class="row">
+                        <div class="col">
+                            <input type="date" formControlName="startdate" class="form-control form-control-sm" placeholder="Start Date">
+                        </div>
+                        <div class="col-1 p-0">
+                            &nbsp; &nbsp;<span>_</span>&nbsp;&nbsp;
+                        </div>
+                        <div class="col">
+                            <input type="date" formControlName="enddate" class="form-control form-control-sm" placeholder="End Date">
+                        </div>
+                    </div>
+                 
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="form-group row">
+                <label class="col-sm-3 col-form-label">Total Range</label>
+                <div class="col-sm-9" style="display:flex;">
+                    <input type="text" formControlName="startrange" class="form-control form-control-sm" placeholder="Start Range">
+                   &nbsp; &nbsp;<span>_</span>&nbsp;&nbsp;
+                    <input type="text" formControlName="endrange" class="form-control form-control-sm" placeholder="End Range">
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="form-group row">
+                <label class="col-sm-3 col-form-label">Expected Delivery Range</label>
+                <div class="col-sm-9" style="display:flex;">
+                    <input type="date" formControlName="expected_delivery_start_date" class="form-control form-control-sm" placeholder="Expected Delivery Start Date">
+                   &nbsp; &nbsp;<span>_</span>&nbsp;&nbsp;
+                   <input type="date" formControlName="expected_delivery_end_date" class="form-control form-control-sm" placeholder="Expected Delivery End Date">
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="form-group row">
+                <label class="col-sm-3 col-form-label">Purchase Order No</label>
+                <div class="col-sm-9">
+                    <input type="text"  formControlName="purchase_order_no"class="form-control form-control-sm" placeholder="Purchase Order No">
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="form-group row">
+                <label class="col-sm-3 col-form-label">Vendor  Name</label>
+                <div class="col-sm-9">
+                    <input type="text" formControlName="vendor_name" class="form-control form-control-sm" placeholder="Vendor  Name">
+                </div>
+            </div>
+        </div>
+      
+     
+    </div>
+</form>

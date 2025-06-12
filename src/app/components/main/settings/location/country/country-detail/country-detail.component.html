@@ -1,0 +1,118 @@
+<section *ngIf="country">
+  <div class="pl-3">
+    <div class="row">
+      <h2 class="page-title col-sm-10 font-weight-light">{{ country.name }}</h2>
+      <div class="actions col-sm-2">
+        <button
+          (click)="openEditCountry()"
+          appPermission
+          [permissions]="userPermissions"
+          [type]="'edit'"
+          class="iconbtn"
+        >
+          <i class="os-icon os-icon-edit" aria-hidden="true"></i>
+        </button>
+        <div>
+          <button
+            class="btn btn-sm btn-white"
+            mat-button
+            [matMenuTriggerFor]="menu2"
+          >
+            More
+          </button>
+          <mat-menu #menu2="matMenu">
+            <button mat-menu-item (click)="toggleStatus()">
+              Mark as {{ country.country_status === 0 ? "Active" : "Inactive" }}
+            </button>
+            <button
+              mat-menu-item
+              (click)="openDeleteBox()"
+              appPermission
+              [permissions]="userPermissions"
+              [type]="'delete'"
+            >
+              Delete
+            </button>
+          </mat-menu>
+        </div>
+        <button *ngIf="isDetailVisible" class="btn" (click)="closeDetailView()">
+          <i class="os-icon os-icon-close"></i>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <div class="pl-3 region-data">
+    <div class="row h-100">
+      <div class="col-12 border-left">
+        <mat-tab-group class="customertab" mat-align-tabs="start">
+          <mat-tab label="Overview">
+            <div class="row">
+              <div class="col-xl-4 col-lg-6 col-md-9">
+                <ul class="smhlist mt-2">
+                  <li>
+                    <span> Country Code: </span>
+                    <strong>{{ country.country_code }}</strong>
+                  </li>
+                  <li>
+                    <span>Dial Code:</span>
+                    <strong>{{ country.dial_code }}</strong>
+                  </li>
+                  <li>
+                    <span>Currency:</span>
+                    <strong>{{ country.currency }}</strong>
+                  </li>
+                  <li>
+                    <span>Currnecy Code:</span>
+                    <strong> {{ country.currency_code }}</strong>
+                  </li>
+                </ul>
+                <ul
+                  class="smhlist mt-2"
+                  *ngIf="country.custom_field_value_save.length > 0"
+                >
+                  <li>
+                    <h3 class="m-0"><strong>Custom Fields</strong></h3>
+                  </li>
+                  <li *ngFor="let item of country.custom_field_value_save">
+                    <span
+                      *ngIf="
+                        item.custom_field &&
+                          item.custom_field.field_type === 'check_box';
+                        else others
+                      "
+                      >{{ item.custom_field.field_label }} :
+                      {{ item.custom_field_value == "1" ? "Yes" : "No" }}</span
+                    >
+                    <ng-template #others>
+                      <span *ngIf="item.custom_field"
+                        >{{ item.custom_field?.field_label }} :
+                        {{ item.custom_field_value }}</span
+                      >
+                    </ng-template>
+                  </li>
+                </ul>
+              </div>
+            </div>
+          </mat-tab>
+          <mat-tab label="Sales">
+            <ul class="smhlist mt-2">
+              <li>
+                <strong>Sales 1</strong>
+              </li>
+              <li>
+                <strong>Sales 2</strong>
+              </li>
+              <li>
+                <strong>Sales 3</strong>
+              </li>
+              <li>
+                <strong>Sales 4</strong>
+              </li>
+            </ul>
+          </mat-tab>
+        </mat-tab-group>
+      </div>
+    </div>
+  </div>
+</section>

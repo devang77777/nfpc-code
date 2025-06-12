@@ -1,0 +1,158 @@
+<div class="item-form">
+  <div class="card">
+    <div class="card-header pt-4">
+      <span class="h6 font-weight-bold text-secondary">{{ formType }} Warehouse</span>
+      <a (click)="close()" class="closeicon settingclose"><i class="os-icon os-icon-close float-right"
+          aria-hidden="true"></i></a>
+    </div>
+    <div class="card-body">
+      <form [formGroup]="warehouseFormGroup">
+        <div class="row mb-3">
+          <div class="col">
+            <div class="row">
+              <div class="col mt-1">
+                <label class="">Warehouse Code:</label>
+              </div>
+              <div class="col">
+                <input type="text" class="form-control form-control-sm" (keypress)="restrictLength($event)"
+                  [formControl]="warehouseCodeFormControl" />
+                <a [hidden]="formType == 'Edit'" (click)="open()" class="ml-2 settingIcon"><i
+                    class="os-icon os-icon-ui-46" aria-hidden="true"></i></a>
+                <mat-error class="mt-1 font-fix" *ngIf="
+                    warehouseFormSubmitted &&
+                    warehouseCodeFormControl.hasError('required')
+                  ">Code is required</mat-error>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="row mb-3">
+          <div class="col">
+            <div class="row">
+              <div class="col mt-1">
+                <label class="">Warehouse Name*:</label>
+              </div>
+              <div class="col">
+                <input type="text" class="form-control form-control-sm" [formControl]="warehouseNameFormControl" />
+                <app-validation-message [control]="warehouseNameFormControl"></app-validation-message>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="row mb-3">
+          <div class="col">
+            <div class="row">
+              <div class="col mt-1">
+                <label>Warehouse Manager:</label>
+              </div>
+              <div class="col">
+                <input type="text" class="form-control form-control-sm" [formControl]="warehouseManagerFormControl" />
+                <mat-error class="mt-1 font-fix" *ngIf="
+                    warehouseFormSubmitted &&
+                    warehouseManagerFormControl.hasError('required')
+                  ">Warehouse Manager is required</mat-error>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="row mb-3">
+          <div class="col">
+            <div class="row">
+              <div class="col mt-1">
+                <label>Main Warehouse:</label>
+              </div>
+              <div class="col">
+                <mat-slide-toggle [formControl]="mainWareHouseFormControl" [checked]="mainWareHouseFormControl.value">
+
+                </mat-slide-toggle>
+                <!-- <input type="checkbox" [formControl]="mainWareHouseFormControl" /> -->
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="row mb-3" *ngIf="!mainWareHouseFormControl.value">
+          <div class="col">
+            <div class="row">
+              <div class="col mt-1">
+                <label>Primary Warehouse:</label>
+              </div>
+              <div class="col">
+                <mat-select [formControl]="primaryWarehouseFormControl" class="form-control form-control-sm">
+                  <mat-option *ngFor="let item of warehousedate" [value]="item.id">
+                    {{ item.name }}
+                  </mat-option>
+                </mat-select>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="row mb-3" *ngIf="!mainWareHouseFormControl.value">
+          <div class="col">
+            <div class="row">
+              <div class="col mt-1">
+                <label>Select Depot:</label>
+              </div>
+              <div class="col">
+                <mat-select [formControl]="depotFormControl" (selectionChange)="findUsersForUsers($event.value)"
+                  class="form-control form-control-sm">
+                  <mat-option *ngFor="let item of depot" [value]="item.id">
+                    {{ item.depot_name }}
+                  </mat-option>
+                </mat-select>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="row mb-3">
+          <div class="col">
+            <div class="row">
+              <div class="col mt-1">
+                <label>Location:</label>
+              </div>
+              <div class="col">
+                <input type="text" class="form-control form-control-sm" #locationSrch
+                  [formControl]="locationFormControl" />
+                <mat-error class="mt-1 font-fix" *ngIf="
+                    warehouseFormSubmitted &&
+                    locationFormControl.hasError('required')
+                  ">Location is required</mat-error>
+              </div>
+            </div>
+          </div>
+        </div>
+        <!-- <div class="row mb-3" *ngIf="!mainWareHouseFormControl.value">
+          <div class="col">
+            <div class="row">
+              <div class="col mt-1">
+                <label>Route:</label>
+              </div>
+              <div class="col">
+                <mat-select [formControl]="routeFormControl" class="form-control form-control-sm">
+                  <mat-option *ngFor="let item of selectedRoute" [value]="item.id">
+                    {{ item.route_name }}
+                  </mat-option>
+                </mat-select>
+              </div>
+            </div>
+          </div>
+        </div> -->
+        <div class="row">
+
+          <ng-container *ngIf="isCustomField">
+            <app-custom-field-form [editData]="editData" (change)="onCustomFieldUpdated($event)" [module]="moduleId">
+            </app-custom-field-form>
+          </ng-container>
+        </div>
+      </form>
+    </div>
+    <br /><br />
+    <div class="card-footer">
+      <div class="d-inline float-right">
+        <button class="btn btn-sm btn-light mr-2" (click)="close()">
+          Cancel
+        </button>
+        <button class="btn btn-sm btn-p" [disabled]="warehouseFormGroup.invalid" (click)="saveWarehouse()">Save</button>
+      </div>
+    </div>
+  </div>
+</div>

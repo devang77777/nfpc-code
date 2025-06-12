@@ -1,0 +1,80 @@
+<section>
+    <div class="bg-white">
+        <form class="form-box">
+            <div class="form-group">
+                <label for="name">Name</label>
+                <input type="text" class="form-control" [formControl]="nameFormControl" id="name">
+            </div>
+            <div class="form-group">
+                <div class="row">
+                    <div class="col-sm-6">
+                        <label for="sdate">Start Date</label>
+                        <input type="date" class="form-control" [formControl]="sdateFormControl" id="sdate">
+                    </div>
+                    <div class="col-sm-6">
+                        <label for="edate">End Date</label>
+                        <input type="date" class="form-control" [formControl]="edateFormControl" id="edate">
+                    </div>
+                </div>
+            </div>
+        </form>
+        <form [formGroup]="itemPriceFormGroup">
+            <!-- pricing table -->
+            <table class="table table-hover" mat-table [dataSource]="dataSource" multiTemplateDataRows>
+                <tr mat-header-row class="table-header" *matHeaderRowDef="columnsToDisplay"></tr>
+                <tr mat-row *matRowDef="let element; columns: columnsToDisplay;" class="element-row"
+                    [ngClass]="{'hidden': isItemSelected(element)}" [class.expanded-row]="expandedElement === element">
+                </tr>
+                <tr mat-row *matRowDef="let row;let i = index; columns: ['expandedDetail']" class="detail-row"></tr>
+                <ng-container matColumnDef="name">
+                    <th mat-header-cell *matHeaderCellDef> Name </th>
+                    <td mat-cell *matCellDef="let element"> {{element.item_name}} </td>
+                </ng-container>
+                <ng-container matColumnDef="description">
+                    <th mat-header-cell *matHeaderCellDef> Description </th>
+                    <td mat-cell *matCellDef="let element"> {{element.item_description}} </td>
+                </ng-container>
+                <ng-container matColumnDef="actions">
+                    <th mat-header-cell *matHeaderCellDef> Actions </th>
+                    <td mat-cell *matCellDef="let element" class="tabtns">
+                        <button class="btn btn-sm btn-primary mr-2"
+                            (click)="expandedElement = expandedElement === element ? null : element">Add
+                            Price</button>
+                        <button class="btn btn-sm btn-dark" (click)="removeElement(element)">Delete</button>
+                    </td>
+                </ng-container>
+
+                <!-- Expanded Content Column - The detail row is made up of this one column that spans across all columns -->
+                <ng-container matColumnDef="expandedDetail" formArrayName="itemPriceFormArray">
+                    <td mat-cell *matCellDef="let element;let i = index"
+                        formArrayName="{{dataSource.data.indexOf(element)}}" [attr.colspan]="columnsToDisplay.length">
+                        <div class="element-detail"
+                            [@detailExpand]="element == expandedElement ? 'expanded' : 'collapsed'">
+
+                            <div *ngIf="itempriceForm.at(dataSource.data.indexOf(element))"
+                                class="element-description p-3 d-flex justify-content-around w-100">
+                                <!-- <div>
+                                    {{element.lower_unit_uom_id}}:
+                                    <input class="input-control" type="text" class="" [formControl]="baseUomPrice">
+                                </div> -->
+                                <div class="row"
+                                    *ngFor="let uom of itempriceForm.at(dataSource.data.indexOf(element))?.controls; let j = index"
+                                    [formGroupName]="j">
+                                    {{uom.value.item_uom_name}}:
+                                    <input class="input-control" type="text" class="" formControlName="price">
+                                    <input class="input-control" *ngIf="isPriceRangeActive" type="text" class=""
+                                        formControlName="max_price">
+                                </div>
+
+                            </div>
+                        </div>
+                    </td>
+                </ng-container>
+
+
+            </table>
+        </form>
+    </div>
+    <!-- <pre>{{itemPriceFormGroup?.value | json}}</pre> -->
+    <!-- <pre>{{editData?.p_d_p_items | json}}</pre> -->
+</section>

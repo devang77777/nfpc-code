@@ -1,0 +1,151 @@
+<section class="dasboard" style="overflow: scroll;
+height: 100%;">
+    <header>
+        <div class="row align-items-center">
+            <div class="col-md-8">
+                <div class="title">
+                    <h1>Mobiato</h1>
+                    <div class="subtitle">
+                        <h2 class="">Subtitle text </h2>
+                        <span class="circle"></span>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="media">
+                    <div class="media-body">
+                        <h4>John Smith</h4>
+                        <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Asperiores itaque quas sit ad </p>
+                    </div>
+                    <img src="/assets/images/js.png" class="mimg" alt="">
+                </div>
+
+            </div>
+        </div>
+    </header>
+    <div class="innercard">
+        <div class="row">
+            <div class="col-md-3">
+                <div class="card">
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col text-center">
+                                <h2 class="btitle">95</h2>
+                                <p class="subtxt">Mobiato Sub text in the dashboard</p>
+                                <div class="progress">
+                                    <div class="progress-bar" role="progressbar" style="width: 33%" aria-valuenow="33"
+                                        aria-valuemin="0" aria-valuemax="100"></div>
+                                    <div class="progress-bar bg-success" role="progressbar" style="width: 33%"
+                                        aria-valuenow="33" aria-valuemin="0" aria-valuemax="100"></div>
+                                    <div class="progress-bar bg-info" role="progressbar" style="width: 33%"
+                                        aria-valuenow="33" aria-valuemin="0" aria-valuemax="100"></div>
+                                </div>
+                            </div>
+                            <div class="border-left col text-center">
+                                <h2 class="btitle">102</h2>
+                                <p class="subtxt">Mobiato Sub text in the dashboard</p>
+                                <div class="progress">
+                                    <div class="progress-bar" role="progressbar" style="width: 33%" aria-valuenow="33"
+                                        aria-valuemin="0" aria-valuemax="100"></div>
+                                    <div class="progress-bar bg-success" role="progressbar" style="width: 33%"
+                                        aria-valuenow="33" aria-valuemin="0" aria-valuemax="100"></div>
+                                    <div class="progress-bar bg-info" role="progressbar" style="width: 33%"
+                                        aria-valuenow="33" aria-valuemin="0" aria-valuemax="100"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="card">
+                    <div class="card-body">
+                        <div id="chartdiv2" style="width: 100%; height: 160px; position: relative; top:17px;"></div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="card">
+                    <div class="card-body">
+                        <span style="    position: absolute;
+                        top: 65px;
+                        left: 77px;">▲</span>
+                        <span style="    position: absolute;top: 65px;    left: 194px;">▼</span>
+                        <div id="chartdiv3" style="width: 100%; height: 160px; position: relative; top:17px;"></div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="card">
+                    <div class="card-body" style="padding: 0px;">
+                        <div id="chartdiv4" style="width: 100%; height: 200px;"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row secondrow">
+            <div class="col-md-4">
+                <div class="card">
+                    <div class="card-body" style="padding: 0px;">
+                        <div id="chartdiv5" style="width: 100%; height: 393px"></div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card">
+                    <div class="card-body">
+                        <div class="row text-center">
+                            <div class="col-md-12">
+                                {{ viewDate | calendarDate:(view + 'ViewTitle'):'en' }}
+                            </div>
+
+                        </div>
+                        <hr>
+                        <mwl-calendar-month-view [viewDate]="viewDate">
+                        </mwl-calendar-month-view>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card">
+                    <div class="card-body vrcenter">
+                        <!-- <img src="/assets/images/double.png" class="img-fluid" alt=""> -->
+                        <div id="chartdiv6" style="width: 100%; height: 180px"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row thirdrow">
+            <div class="col-md-12">
+                <div class="card">
+                    <div class="card-body">
+                        <div class="row align-items-center">
+                            <div class="col-md-6">
+                                <div id="chartdiv7" style="width: 100%; height: 310px"></div>
+                            </div>
+                            <div class="col-md-3 border-left  border-right ">
+                                <div class="bcard">
+                                    <h2>10, 452 <ul class="bullets">
+                                            <li class="light"></li>
+                                            <li class="medium"></li>
+                                            <li class="dark"></li>
+                                        </ul>
+                                    </h2>
+                                    <p>
+                                        <small>Lorem ipsum dolor sit amet consectetur adipisicing elit. Tempore
+                                            repudiandae tempora nostrum repellendus.</small>
+                                    </p>
+                                </div>
+
+                            </div>
+                            <div class="col-md-3 ">
+                                <div id="chartdiv10" style="width: 100%; height: 250px"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</section>

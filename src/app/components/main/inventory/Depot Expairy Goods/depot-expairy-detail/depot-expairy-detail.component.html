@@ -1,0 +1,99 @@
+<section>
+  <div class="heading-row">
+    <h2 class="d-md-inline">
+      <i class="fa fa-home mr-2"></i>Depot Expairy
+      <span class="order-number">#{{ stckAdjData.reference_code }}</span>
+    </h2>
+    <div class="d-md-inline float-md-right text-right">
+      <span>
+        <button mat-button class="btn btn-sm btn-white mr-2" [matMenuTriggerFor]="menu2">
+          More
+        </button>
+        <mat-menu #menu2="matMenu" xPosition="before">
+          <button mat-menu-item class="height-40" (click)="editOrder()" appPermission [permissions]="userPermissions"
+            [type]="'edit'">
+            Edit
+          </button>
+          <button mat-menu-item class="height-40" (click)="openDeleteBox()" appPermission
+            [permissions]="userPermissions" [type]="'delete'">
+            Delete
+          </button>
+        </mat-menu>
+      </span>
+      <button mat-button class="btn btn-sm btn-white" (click)="goToList()">
+        <i class="fa fa-chevron-left"></i><span class="back-btn"> Back</span>
+      </button>
+    </div>
+  </div>
+  <div class="separator"></div>
+
+  <form class="order-form custom-mat square scrolly">
+    <div class="card-body active-form overview">
+      <div class="row justify-content-between">
+        <div class="col-md-4">
+          <div class="form-group">
+            <label for="">Date </label>
+            <input type="text" class="form-control form-control-sm non-editable" [value]="stckAdjData.date" disabled />
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card-body overview">
+      <div class="row justify-content-between">
+        <div class="col-md-4">
+          <div class="form-group">
+            <label for="">Depot </label>
+            <input type="text" class="form-control form-control-sm non-editable" [value]="stckAdjData.depot?.depot_name"
+              disabled />
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div class="form-group">
+            <label for="">Reference </label>
+            <input type="text" class="form-control form-control-sm non-editable" [value]="stckAdjData.reference_code"
+              disabled />
+          </div>
+        </div>
+      </div>
+    </div>
+    <div>
+      <div class="item-container custom-mat custom-mat-no-border">
+        <table>
+          <thead>
+            <tr>
+              <th class="head" *ngFor="let head of depotExpairyTableHeaders">
+                {{ head.label }}
+              </th>
+            </tr>
+          </thead>
+          <tbody class="form-body">
+            <tr class="item-row" *ngFor="
+                let item of stckAdjData.depotdamageexpiry_detail;
+                let i = index
+              ">
+              <td>{{ i + 1 }}</td>
+              <td class="item-name">
+                <input type="text" class="form-control form-control-sm non-editable" [value]="item.item[0].item_name"
+                  disabled />
+              </td>
+
+              <td class="uom-td">
+                <input type="text" class="form-control form-control-sm non-editable" [value]="item.item_uom[0].name"
+                  disabled />
+              </td>
+
+              <td>
+                <input type="number" min="0" class="form-control non-editable" [value]="item.qty" disabled />
+              </td>
+              <td>
+                <input type="text" min="0" class="form-control non-editable" [value]="item.reason[0].name" disabled />
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </form>
+  <div class="footer-block"></div>
+</section>

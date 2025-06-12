@@ -1,0 +1,28 @@
+<div class="card">
+    <div class="card-header">
+        <a (click)="close()" class="closeicon settingclose "><i class="os-icon os-icon-x"></i></a>
+        <div class="d-block p-4 text-center">
+            <img [src]="avatarImage" alt="avatar image" class="img-rounded">
+            <p class="h6 mt-2">{{firstname}} {{lastname}}</p>
+            <p class="text-lighter text-secondary">{{email}}</p>
+            <p><a routerLink="settings/organization" class="mr-2">My Account</a>|<a class="text-danger ml-2"
+                    (click)="signOut()">Sign Out</a></p>
+        </div>
+    </div>
+    <div class="card-body">
+        <div class="d-flex justify-content-between">
+            <span class="text-secondary">MY ORGANIZATION</span>
+            <a routerLink="settings/organization">Manage</a>
+        </div>
+        <div class="row mt-2 subdomains">
+          
+            <div *ngFor="let app of subdomains" class="col-md-4 subdomain">
+                <a class="avatarImage" (click)="getAppUrl(app)">
+                    <div><img src="{{app.img}}" alt=""></div>
+                    <div>{{app.name}}</div>
+                    <i [hidden]="checkAppActive(app.name)" class="icon-set fa fa-user-circle" aria-hidden="true"></i>
+                </a>
+            </div>
+        </div>
+    </div>
+</div>

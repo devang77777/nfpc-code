@@ -1,0 +1,28 @@
+<mat-drawer-container class="formdrawer-container" hasBackdrop="false">
+    <mat-drawer id="formDrawer" mode="over" position="end" #formDrawer class="border">
+        <div style="min-width: 400px;">
+            <app-driver-replacement-create (updateTableData)="updateTableData($event)" [salesmanList]="salesmanList"
+                [vehicleList]="vehiclesList" [reasonList]="reasonsList">
+            </app-driver-replacement-create>
+        </div>
+    </mat-drawer>
+    <section>
+        <div class="table-box customerbox">
+            <div class="heading-row clearfix">
+                <p class="h4 font-weight-light d-inline">
+                    Driver Replacement
+                </p>
+                <div class="d-inline float-right">
+                    <button type="button" class="btn btn-sm btn-p" (click)="addReplace()">
+                        <i class="os-icon os-icon-plus mr-2" aria-hidden="true"></i>New
+                    </button>
+
+                </div>
+            </div>
+            <app-driver-replacement-dt (updateTableData)="updateTableData($event)" [data]="replaceList">
+            </app-driver-replacement-dt>
+        </div>
+    </section>
+
+
+</mat-drawer-container>

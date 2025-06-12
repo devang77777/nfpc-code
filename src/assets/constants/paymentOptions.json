@@ -1,0 +1,32 @@
+[
+  {
+    "id": "1",
+    "netDays": "6",
+    "netTerms": "net6"
+  },
+  {
+    "id": "2",
+    "netDays": "7",
+    "netTerms": "net7"
+  },
+  {
+    "id": "3",
+    "netDays": "2",
+    "netTerms": "net2"
+  },
+  {
+    "id": "4",
+    "netDays": "10",
+    "netTerms": "net10"
+  },
+  {
+    "id": "5",
+    "netDays": "8",
+    "netTerms": "net8"
+  },
+  {
+    "id": "6",
+    "netDays": "9",
+    "netTerms": "net9"
+  }
+]

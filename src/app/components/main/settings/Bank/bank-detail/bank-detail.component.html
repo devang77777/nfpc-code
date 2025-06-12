@@ -1,0 +1,117 @@
+<section *ngIf="bank">
+  <div class="pl-3">
+    <div class="row">
+      <h2 class="page-title col-sm-10 font-weight-light">
+        {{ bank.bank_name }}
+      </h2>
+      <div class="actions col-sm-2">
+        <button
+          (click)="openEditBank()"
+          appPermission
+          [permissions]="userPermissions"
+          [type]="'edit'"
+          class="iconbtn"
+        >
+          <i class="os-icon os-icon-edit" aria-hidden="true"></i>
+        </button>
+        <div>
+          <button
+            class="btn btn-sm btn-white"
+            mat-button
+            [matMenuTriggerFor]="menu2"
+          >
+            More
+          </button>
+          <mat-menu #menu2="matMenu">
+            <button mat-menu-item (click)="toggleStatus()">
+              Mark as {{ bank.status === 0 ? "Active" : "Inactive" }}
+            </button>
+            <button
+              mat-menu-item
+              (click)="openDeleteBox()"
+              appPermission
+              [permissions]="userPermissions"
+              [type]="'delete'"
+            >
+              Delete
+            </button>
+          </mat-menu>
+        </div>
+        <button *ngIf="isDetailVisible" class="btn" (click)="closeDetailView()">
+          <i class="os-icon os-icon-close"></i>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <div class="pl-3 area-data">
+    <div class="row h-100">
+      <div class="col-12 border-left">
+        <mat-tab-group mat-align-tabs="start">
+          <mat-tab label="Overview">
+            <mat-list>
+              <mat-list-item> Bank code: {{ bank.bank_code }}</mat-list-item>
+              <mat-list-item>Bank name: {{ bank.bank_name }}</mat-list-item>
+              <mat-list-item>
+                Account Number: {{ bank.account_number }}</mat-list-item
+              >
+              <mat-list-item>ADDRESS: {{ bank.bank_address }}</mat-list-item>
+              <mat-list-item
+                >Status:
+                {{ bank.status === 0 ? "Inactive" : "Active" }}</mat-list-item
+              >
+              <ng-container
+                *ngIf="
+                  bank.custom_field_value_save &&
+                  bank.custom_field_value_save.length > 0
+                "
+              >
+                <mat-list-item><strong>Custom Fields</strong></mat-list-item>
+                <mat-list-item
+                  *ngFor="let item of bank.custom_field_value_save"
+                >
+                  <span
+                    *ngIf="
+                      item.custom_field &&
+                        item.custom_field.field_type === 'check_box';
+                      else others
+                    "
+                    >{{ item.custom_field.field_label }} :
+                    {{ item.custom_field_value == "1" ? "Yes" : "No" }}</span
+                  >
+
+                  <ng-template #others>
+                    <span *ngIf="item.custom_field"
+                      >{{ item.custom_field?.field_label }} :
+                      {{ item.custom_field_value }}</span
+                    >
+                  </ng-template>
+                </mat-list-item>
+              </ng-container>
+            </mat-list>
+          </mat-tab>
+          <mat-tab label="Sales">
+            <div class="row">
+              <div class="col-xl-4 col-lg-6 col-md-9">
+                <ul class="smhlist mt-2">
+                  <li>
+                    <strong>Sales 1</strong>
+                  </li>
+                  <li>
+                    <strong>Sales 2</strong>
+                  </li>
+                  <li>
+                    <strong>Sales 3</strong>
+                  </li>
+                  <li>
+                    <strong>Sales 4</strong>
+                  </li>
+                </ul>
+              </div>
+            </div>
+          </mat-tab>
+        </mat-tab-group>
+      </div>
+    </div>
+  </div>
+</section>

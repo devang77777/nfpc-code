@@ -1,0 +1,135 @@
+<section>
+  <div class="heading-row">
+    <h2>ADD SESSION ENDROSSMENT</h2>
+  </div>
+  <div class="separator">
+  </div>
+  <form [formGroup]="SessionFormGroup" class="order-form custom-mat square">
+    <div class="card-body active-form overview">
+      <div class="d-flex overview-container">
+        <table class="form-col d-inline">
+          <tr>
+            <td>Route</td>
+            <td>
+              <mat-form-field>
+                <mat-label>Select Route</mat-label>
+                <mat-select
+                  (selectionChange)="checkChange(routeFormControl)"
+                  [formControl]="routeFormControl"
+                  class="form-control form-control-sm"
+                >
+                  <mat-option *ngFor="let item of storeRoute" [value]="item.id">
+                    {{ item.route_name }}
+                  </mat-option>
+                </mat-select>
+                <mat-error
+                  class="mt-1"
+                  *ngIf="routeFormControl.hasError('required')"
+                  >Please select route</mat-error
+                >
+              </mat-form-field>
+            </td>
+            <td style="padding: 21px;" [ngClass]="{ 'inactive-form': routeFormControl.invalid }">DATE</td>
+            <td [ngClass]="{ 'inactive-form': routeFormControl.invalid }">
+              <input
+                class="form-control fixWidthsame form-control-sm"
+                (change)="checkChange(dateFormControl)"
+                type="date"
+                [formControl]="dateFormControl"
+              />
+              <!-- <mat-error
+                class="mt-0"
+                *ngIf="dateFormControl.hasError('required')"
+                >Please select Date</mat-error
+              > -->
+          </td>
+          <td>
+            <div style="margin-left: 80px;margin-left: 80px;
+            position: static;" *ngIf="dateFormControl.valid">
+              <button class="button" (click)="openStepper()">ENDO BY SUPERVISOR</button>
+          </div>
+          </td>
+           </tr>
+        </table>
+      </div>
+    </div>
+
+  </form>
+  <div *ngIf="showStepper">
+  <mat-vertical-stepper>
+    <mat-step>
+      <ng-template matStepLabel>INVOICE</ng-template>
+      <app-add-invoice-form></app-add-invoice-form>
+      <button class="stepper mt-5" mat-button matStepperNext>Next</button>
+    </mat-step>
+    <mat-step>
+      <ng-template matStepLabel>CALL</ng-template>
+      <app-add-call></app-add-call>
+      <button  mat-button matStepperPrevious>Back</button>
+      <button class="stepper mt-5"  mat-button matStepperNext>Next</button>
+    </mat-step>
+    <mat-step>
+      <ng-template matStepLabel>FOC</ng-template>
+      <app-add-foc></app-add-foc>
+      <button  mat-button matStepperPrevious>Back</button>
+      <button  class="stepper mt-5" mat-button matStepperNext>Next</button>
+    </mat-step>
+    <mat-step>
+      <ng-template matStepLabel>BYCHANNEL</ng-template>
+      <app-add-by-channel></app-add-by-channel>
+      <button  mat-button matStepperPrevious>Back</button>
+      <button class="stepper mt-5" mat-button matStepperNext>Next</button>
+    </mat-step>
+    <mat-step>
+      <ng-template matStepLabel>MISSED CALLS</ng-template>
+      <app-add-missedcall></app-add-missedcall>
+      <button  mat-button matStepperPrevious>Back</button>
+      <button class="stepper mt-5" mat-button matStepperNext>Next</button>
+    </mat-step>
+    <mat-step>
+      <ng-template matStepLabel>ITEM GROUP</ng-template>
+      <app-add-item-group></app-add-item-group>
+      <button  mat-button matStepperPrevious>Back</button>
+      <button class="stepper mt-5" mat-button matStepperNext>Next</button>
+    </mat-step>
+    <mat-step>
+      <ng-template matStepLabel>CARRY OVER</ng-template>
+      <app-add-carryover></app-add-carryover>
+      <button  mat-button matStepperPrevious>Back</button>
+      <button class="stepper mt-5" mat-button matStepperNext>Next</button>
+    </mat-step>
+    <mat-step>
+      <ng-template matStepLabel>PRE TRIP INSEPECTION</ng-template>
+      <app-add-pretripinspection></app-add-pretripinspection>
+      <button  mat-button matStepperPrevious>Back</button>
+      <button class="stepper mt-5" mat-button matStepperNext>Next</button>
+    </mat-step>
+    <mat-step>
+      <ng-template matStepLabel>ITEM WISE</ng-template>
+      <label >ITEM WISE</label>
+      <app-add-itemwise></app-add-itemwise>
+      <button  mat-button matStepperPrevious>Back</button>
+      <button class="stepper mt-5" mat-button matStepperNext>Next</button>
+    </mat-step>
+    <mat-step>
+      <ng-template matStepLabel>ROUTE TRANSFER</ng-template>
+      <app-add-routetransfer></app-add-routetransfer>
+      <button  mat-button matStepperPrevious>Back</button>
+      <button class="stepper mt-5" mat-button matStepperNext>Next</button>
+    </mat-step>
+      <mat-step>
+        <ng-template matStepLabel>PRE SALES ALLOCATION</ng-template>
+        <app-add-presales-allocation></app-add-presales-allocation>
+        <button  mat-button matStepperPrevious>Back</button>
+        <button class="stepper mt-5" mat-button matStepperNext>Next</button>
+      </mat-step>
+      <mat-step>
+      <ng-template matStepLabel>WASTAGE</ng-template>
+      <app-add-wastage></app-add-wastage>
+      <button  mat-button matStepperPrevious>Back</button>
+    </mat-step>
+
+  </mat-vertical-stepper>
+  </div>
+</section>
+

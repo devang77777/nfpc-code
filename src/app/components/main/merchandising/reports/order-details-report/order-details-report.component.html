@@ -1,0 +1,15 @@
+<div class="table-container">
+    <div class="table-responsive">
+        <mat-table [dataSource]="itemSource" class="mat-elevation-z8 table-hover table-scroll">
+            <ng-container *ngFor="let column of columns; let i = index" [matColumnDef]="column?.field">
+                <mat-header-cell *matHeaderCellDef>
+                    {{ column.field }}
+                </mat-header-cell>
+                <mat-cell *matCellDef="let row"> {{ row[column?.value] }} </mat-cell>
+            </ng-container>
+            <mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></mat-header-row>
+            <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
+        </mat-table>
+    </div>
+    <!-- <mat-paginator pageSize="50" [pageSizeOptions]="[5,10,15,25,50,100]"></mat-paginator> -->
+</div>

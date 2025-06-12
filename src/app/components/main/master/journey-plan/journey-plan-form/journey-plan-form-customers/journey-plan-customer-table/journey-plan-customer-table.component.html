@@ -1,0 +1,65 @@
+<section>
+  <div class="daily-config">
+    <div class="row">
+      <div class="col-sm-6">
+        <div class="form-group">
+          <button *ngIf="isWeekly" class="btn btn-primary btn-sm border" (click)="copyToAllWeeks()">Copy to all Weeks</button>
+          <button class="btn btn-primary btn-sm border" (click)="copyToAllDays()">Copy to all Days</button>
+          <button class="btn btn-primary btn-sm border" (click)="addJpCustomer()">Add Customers</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="daily-table">
+    <mat-table class="table table-hover" [dataSource]="usersSource"
+               class="list-container" cdkDropList
+               [cdkDropListData]="usersSource.data"
+               (cdkDropListDropped)="elementDropped($event)" id="table1">
+
+      <ng-container matColumnDef="sequence">
+        <mat-header-cell *matHeaderCellDef> Sequence </mat-header-cell>
+        <mat-cell *matCellDef="let element"> {{element.day_customer_sequence}} </mat-cell>
+      </ng-container>
+      <ng-container matColumnDef="customerCode">
+        <th mat-header-cell *matHeaderCellDef> 
+          <app-column-filter title="Code" (changeSelected)="onColumnFilterOpen($event)"
+              [selected]="selectedColumnFilter" (close)="onColumnFilter($event)"  controlName="customer_code">
+            <input class="form-control form-control-sm" [formControl]="filterForm.get('customer_code')" placeholder="Enter Code" type="text">
+          </app-column-filter>
+        </th>
+        <mat-cell *matCellDef="let element"> {{element.customer_code}} </mat-cell>
+      </ng-container>
+      <ng-container matColumnDef="customer">
+        <th mat-header-cell *matHeaderCellDef> 
+          <app-column-filter title="Customer" (changeSelected)="onColumnFilterOpen($event)"
+          [selected]="selectedColumnFilter" (close)="onColumnFilter($event)"  controlName="customer">
+          <input class="form-control form-control-sm" [formControl]="filterForm.get('customer')" placeholder="Enter Name" type="text">
+        </app-column-filter>  
+        </th>
+        <mat-cell *matCellDef="let element"> {{element.name}} </mat-cell>
+      </ng-container>
+      <ng-container matColumnDef="startTime">
+        <mat-header-cell *matHeaderCellDef> Start Time </mat-header-cell>
+        <mat-cell *matCellDef="let element; index as index">
+          <input class="date-control" type="time" (change)="updateStartTime(index, $event)" [value]="element.day_start_time">
+        </mat-cell>
+      </ng-container>
+      <ng-container matColumnDef="endTime">
+        <mat-header-cell *matHeaderCellDef> End Time </mat-header-cell>
+        <mat-cell *matCellDef="let element; index as index">
+          <input class="date-control" type="time" (change)="updateEndTime(index, $event)" [value]="element.day_end_time">
+        </mat-cell>
+      </ng-container>
+      <ng-container matColumnDef="action">
+        <mat-header-cell *matHeaderCellDef> Action </mat-header-cell>
+        <mat-cell *matCellDef="let element">
+          <button class="badge badge-dark" (click)="deleteUser(element)"><i class="os-icon os-icon-trash-2"></i> Delete</button>
+        </mat-cell>
+      </ng-container>
+
+      <mat-header-row *matHeaderRowDef="tableHeaders; sticky: true"></mat-header-row>
+      <mat-row class="list-row" *matRowDef="let row; columns: tableHeaders;" cdkDragPreviewClass="preview" cdkDrag></mat-row>
+    </mat-table>
+
+  </div>
+</section>

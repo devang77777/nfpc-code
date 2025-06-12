@@ -1,0 +1,31 @@
+<section *ngIf="cashier" class="scrollxy">
+  <div class="heading-row clearfix">
+    <h2 class="d-inline font-weight-light">
+      {{ cashier.firstname }} {{ cashier.lastname }}
+    </h2>
+    <div class="d-inline float-right">
+      <button mat-raised-button *ngIf="isDetailVisible" (click)="closeDetailView()"></button>
+      <button [matMenuTriggerFor]="menu2" class="btn btn-sm btn-white">
+        <i class="fa fa-angle-left backArrow"></i> More
+      </button>
+      <mat-menu #menu2="matMenu" xPosition="before">
+        <button mat-menu-item class="height-40" (click)="closeDetailView()">
+          Back
+        </button>
+        <button mat-menu-item class="height-40" (click)="openDeleteBox()" appPermission [permissions]="userPermissions"
+          [type]="'delete'">
+          Delete
+        </button>
+      </mat-menu>
+    </div>
+  </div>
+
+  <mat-tab-group class="customertab" mat-align-tabs="start">
+    <mat-tab label="Overview">
+      <app-add-cashier-receipt-overview [isOpenedForDetail]="true"></app-add-cashier-receipt-overview>
+    </mat-tab>
+    <mat-tab label="Slip">
+      <app-add-cashier-receipt-slip [isOpenedForDetail]="true"></app-add-cashier-receipt-slip>
+    </mat-tab>
+  </mat-tab-group>
+</section>

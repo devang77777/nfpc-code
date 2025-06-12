@@ -1,0 +1,67 @@
+<section>
+	<div class="card-header">
+	  <span class="h6">Manage Reason</span>
+	  <button class="dialog-close-btn" mat-dialog-close><i class="fa fa-times fa-lg" aria-hidden="true"></i></button>
+	</div>
+	<div class="form-container" *ngIf="showForm">
+	  <form [formGroup]="reasonForm">
+
+		<div class="">
+		  <div class="row mb-2">
+			<div class="col-md-4">Reason Name</div>
+			<div class="col-md-8">
+			  <input
+				[ngClass]="{'invalid-input': reasonFormControl.invalid && (reasonFormControl.dirty || reasonFormControl.touched)}"
+				class="form-control form-control-sm"
+				type="text" [formControl]="reasonFormControl">
+			  <div *ngIf="reasonFormControl.invalid && (reasonFormControl.dirty || reasonFormControl.touched)" class="text-danger">
+				<div><small>Reason name is required.</small></div>
+			  </div>
+			</div>
+		  </div>
+		  <div class="row mb-2">
+			<div class="col-md-4">Parent Reason</div>
+			<div class="col-md-8">
+			  <app-tree-dropdown
+				class="reason-dropdown"
+				[isManageable]="false"
+				[dataSource]="reasonData"
+				[dataService]="reasonProvider()"
+				(whenItemSelected)="reasonSelected($event)"
+                [selectFormControl]="parentFormControl"
+				[placeHolder]="'Search a parent reason'"
+				ngDefaultControl>
+			  </app-tree-dropdown>
+			</div>
+		  </div>
+		</div>
+
+		<div class="save-btn">
+		  <button mat-button class="mat-inherit-line-height btn-green" (click)="saveReasonData()">Save</button>
+		  <button mat-button class="mat-inherit-line-height" (click)="showForm = false">Cancel</button>
+		</div>
+
+	  </form>
+	</div>
+
+	<div class="categories-title">
+	  <h4>Categories <span class="add-new-label"><button *ngIf="reasonData.length > 0" (click)="addNewReason()"><i class="fa fa-plus-circle"></i>Add New Reason</button></span></h4>
+	</div>
+	<div class="empty-list text-center mt-4" *ngIf="isLoaded">
+		<p class="text-muted" *ngIf="reasonData.length == 0">No Reason available</p>
+		<button mat-button class="add-new-btn" *ngIf="reasonData.length == 0 && !showForm" (click)="addNewReason()">Add
+			New Reason</button>
+	</div>
+	<div class="reason-holder">
+	  <app-tree-container
+		(applyData)="applyReason($event)"
+		(editData)="editReason($event)"
+		(deleteData)="deleteReason($event)"
+		[treeData]="reasonData">
+	  </app-tree-container>
+	</div>
+
+	<div class="cancel-btn">
+	  <button mat-button class="mat-inherit-line-height height-40" mat-dialog-close>Cancel</button>
+	</div>
+  </section>

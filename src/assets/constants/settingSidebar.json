@@ -1,0 +1,143 @@
+[
+    {
+        "label": "Users & Roles",
+        "routeTo": "settings/users",
+        "active": "/settings/users",
+        "icon": "os-icon os-icon-users",
+        "hasSubmenu": false,
+        "submenu": []
+    },
+    {
+        "label": "Master Data Download",
+        "routeTo": "settings/master-download",
+        "active": "/settings/master-download",
+        "icon": "os-icon os-icon-download",
+        "hasSubmenu": false,
+        "submenu": []
+    },
+    {
+        "label": "Preferences",
+        "routeTo": "settings/preference",
+        "active": "/settings/preference",
+        "icon": "os-icon os-icon-sliders",
+        "hasSubmenu": false,
+        "submenu": []
+    },
+    {
+        "label": "Reason",
+        "routeTo": "settings/reason",
+        "active": "/reason",
+        "icon": "os-icon os-icon-home-09",
+        "hasSubmenu": false,
+        "submenu": []
+    },
+    {
+        "label": "Driver Replacement",
+        "routeTo": "settings/driver-replacement",
+        "active": "/driver-replacement",
+        "icon": "os-icon os-icon-home-09",
+        "hasSubmenu": false,
+        "submenu": []
+    },
+    {
+        "label": "Warehouse",
+        "routeTo": "settings/warehouse",
+        "active": "/warehouse",
+        "icon": "os-icon os-icon-home-09",
+        "hasSubmenu": false,
+        "submenu": []
+    },
+    {
+        "label": "Location",
+        "routeTo": "",
+        "active": "",
+        "icon": "",
+        "hasSubmenu": true,
+        "submenu": [
+            {
+                "label": "Country",
+                "routeTo": "settings/location/country",
+                "active": "/settings/location/country",
+                "icon": "fa fa-globe"
+            },
+            {
+                "label": "Region",
+                "routeTo": "settings/location/region",
+                "active": "/settings/location/region",
+                "icon": "fa fa-map-signs"
+            },
+            {
+                "label": "Zone",
+                "routeTo": "settings/location/zone",
+                "active": "/settings/location/zone",
+                "icon": "fa fa-map-signs"
+            },
+            {
+                "label": "Branch/Depot",
+                "routeTo": "settings/location/depot",
+                "active": "/settings/location/depot",
+                "icon": "os-icon os-icon-home-09"
+            },
+            {
+                "label": "Van Master",
+                "routeTo": "settings/location/van",
+                "active": "/settings/location/van",
+                "icon": "os-icon os-icon-home-09"
+            },
+            {
+                "label": "Route",
+                "routeTo": "settings/location/route",
+                "active": "/settings/location/route",
+                "icon": "os-icon os-icon-map"
+            }
+        ]
+    },
+    {
+        "label": "Customer",
+        "routeTo": "",
+        "active": "",
+        "icon": "",
+        "hasSubmenu": true,
+        "submenu": [
+            {
+                "label": "Customer Category",
+                "routeTo": "settings/customer/customer-category",
+                "active": "/settings/customer/customer-category",
+                "icon": "fa fa-users"
+            },
+            {
+                "label": "Credit Limits",
+                "routeTo": "settings/customer/credit-limits",
+                "active": "/settings/customer/credit-limits",
+                "icon": "fa fa-credit-card"
+            },
+            {
+                "label": "Outlet Product Code",
+                "routeTo": "settings/customer/outlet-product-code",
+                "active": "/settings/customer/outlet-product-code",
+                "icon": "fa fa-file-text-o"
+            }
+        ]
+    },
+    {
+        "label": "Item",
+        "routeTo": "",
+        "active": "",
+        "icon": "",
+        "hasSubmenu": true,
+        "submenu": [
+            {
+                "label": "Item Group",
+                "routeTo": "settings/item/item-group",
+                "active": "/settings/item/item-group",
+                "icon": "fa fa-th-large"
+            },
+            {
+                "label": "UOM",
+                "routeTo": "settings/item/item-uom",
+                "active": "/settings/item/item-uom",
+                "icon": "fa fa-balance-scale"
+            }
+        ]
+    }
+]

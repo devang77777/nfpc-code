@@ -1,0 +1,47 @@
+<!--
+<section *ngIf="branddata">
+  <div class="container">
+    <div class="row">
+      <h2 class="page-title col-sm-10 font-weight-light">{{ branddata.brand_name }}</h2>
+      <div class="actions col-sm-2">
+        <button (click)="openEdititem()"><i class="fa fa-pencil" aria-hidden="true"></i></button>
+        <div>
+          <button class="btn btn-sm border" mat-button [matMenuTriggerFor]="menu2">More</button>
+          <mat-menu #menu2="matMenu">
+            <button mat-menu-item (click)="toggleStatus()">Mark as {{ branddata.status === 0 ? 'Active' : 'Inactive' }}</button>
+            <button mat-menu-item (click)="openDeleteBox()">Delete</button>
+          </mat-menu>
+        </div>
+        <button *ngIf="isDetailVisible" class="" (click)="closeDetailView()"><i class="fa fa-close"></i></button>
+      </div>
+    </div>
+  </div>
+
+
+  <div class="container">
+    <div class="row h-100">
+      <div class="col-12 border-left">
+        <mat-tab-group mat-align-tabs="start">
+          <mat-tab label="Overview">
+            <mat-list>
+
+              <mat-list-item>BRAND NAME: {{ branddata.brand_name }}</mat-list-item>
+              <mat-list-item>Oraganization_id: {{ branddata.organisation_id }}</mat-list-item>
+              <mat-list-item>BRAND CODE: {{ branddata.brand_code }}</mat-list-item>
+              <mat-list-item>Status: {{ branddata.status === 0 ? 'Inactive' : 'Active' }}</mat-list-item>
+            </mat-list>
+          </mat-tab>
+          <mat-tab label="Sales">
+            <mat-list>
+              <mat-list-item>Sales 1</mat-list-item>
+              <mat-list-item>Sales 2</mat-list-item>
+              <mat-list-item>Sales 3</mat-list-item>
+              <mat-list-item>Sales 4</mat-list-item>
+            </mat-list>
+          </mat-tab>
+        </mat-tab-group>
+      </div>
+    </div>
+  </div>
+</section>
+ -->

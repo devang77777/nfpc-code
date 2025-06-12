@@ -1,0 +1,65 @@
+<div id="ember612" class="modal-header ember-view">
+  <h2 class="modal-title">{{ codeData.title }}</h2>
+  <button class="close no-outline" (click)="close()" type="button">
+    &times;
+  </button>
+</div>
+<form>
+  <div class="modal-body">
+    <address class="font-small">
+      Your {{ codeData.title }} number are set an auto generate mode to save
+      your time. Are you sure about changing this setting?
+    </address>
+    <div class="row" *ngFor="let radiobutton of radioItems">
+      <ng-container *ngIf="radiobutton.key == 'autogenerate'">
+        <div class="col-lg-6">
+          <div class="form-check">
+            <input id="aa468370a" [disabled]="!showFooterOption" (click)="selectedResponse(radiobutton)"
+              [checked]="radiobutton.checked" [value]="radiobutton.key" name="options"
+              class="form-check-input ember-view" type="radio" />
+            <label class="form-check-label" for="aa468370a">{{
+              radiobutton.label
+            }}</label>
+          </div>
+        </div>
+        <ng-container *ngIf="showautogenerateIndex">
+          <form class="col-lg-6" [formGroup]="autoGenerateFormGroup">
+            <div class="row">
+              <div class="col-lg-6 mtleft">
+                <small>Prefix</small>
+                <input id="ember619" formControlName="prefixCode" (keypress)="restrictLength($event)"
+                  [disabled]="disabledInput" class="form-control ember-text-field ember-view" type="text" />
+                <app-validation-message [control]="autoGenerateFormGroup.get('prefixCode')"></app-validation-message>
+              </div>
+              <div class="col-lg-6">
+                <small>Next Number</small>
+                <input id="ember620" formControlName="nextNumber" [disabled]="disabledInput"
+                  (keypress)="restrictLength($event)" class="form-control ember-text-field1 ember-view" type="text" />
+                  <app-validation-message [control]="autoGenerateFormGroup.get('nextNumber')"></app-validation-message>
+               
+              </div>
+            </div>
+          </form>
+        </ng-container>
+      </ng-container>
+      <ng-container *ngIf="radiobutton.key == 'manual'">
+        <div class="col-lg-12">
+          <div class="form-check">
+            <input id="aa468370" [disabled]="!showFooterOption" (click)="selectedResponse(radiobutton)"
+              [checked]="radiobutton.checked" [value]="radiobutton.key" name="options"
+              class="form-check-input ember-view" type="radio" />
+            <label class="form-check-label" for="aa468370">{{
+              radiobutton.label
+            }}</label>
+          </div>
+        </div>
+      </ng-container>
+    </div>
+   
+  </div>
+  <div class="modal-footer" *ngIf="showFooterOption">
+    <button class="btn btn-primary ember-view" [disabled]="autoGenerateFormGroup.invalid && showautogenerateIndex" type="submit" (click)="save()">
+      Save</button>&nbsp;
+    <button class="btn btn-secondary" (click)="close()">Cancel</button>
+  </div>
+</form>

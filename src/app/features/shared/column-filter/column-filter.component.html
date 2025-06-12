@@ -1,0 +1,24 @@
+<div class="d-flex">
+    <span>{{title}}</span>
+    <mat-icon [ngClass]="{'selected':active}" (click)="filter()" class="search">search</mat-icon>
+</div>
+<div class="s008">
+    <form>
+        <div class="inner-form">
+            <div class="row search-box">
+                <div class="col-8" style="position: absolute;">
+                    <div *ngIf="isFilter" class="advance-search" [@slideInOut]>
+                        <div class="d-flex">
+                            <ng-content></ng-content>
+                        </div>
+                        <div class="d-flex action justify-content-end">
+                            <mat-icon (click)="onClose()" class="btn-action">close</mat-icon>
+                            <mat-icon (click)="onSubmit()" class="btn-action">check</mat-icon>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </form>
+</div>

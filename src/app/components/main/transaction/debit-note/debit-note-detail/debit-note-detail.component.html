@@ -1,0 +1,301 @@
+<section>
+    <div class="heading-row clearfix">
+        <h2 class="d-md-inline">
+            <i class="fa fa-credit-card-alt mr-2"></i>Debit Note
+            <span class="order-number">#{{ debitNoteData?.debit_note_number }}</span>
+        </h2>
+        <div class="d-inline float-right">
+            <div class="btn-group btnrow mr-2" *ngIf="debitNoteData?.approval_status!=='Approved'">
+                <button class="btn" type="button" [autoClose]="'outside'" triggers="manual" #email="ngbPopover"
+                    placement="bottom" (click)="email.open();" [ngbPopover]="emailPopContent"
+                    [popoverTitle]="emailPopTitle">
+                    <i class="os-icon os-icon-mail"></i>
+                </button>
+                <button *ngIf="showOrderStatusOptions" class="btn" type="button"
+                    [routerLink]="['/transaction/debit-note/edit', debitNoteData?.uuid]">
+                    <i class="os-icon os-icon-edit-32"></i>
+                </button>
+                <button class="btn" type="button" (click)="getDocument('pdf')">
+                    <mat-icon [inline]="true">picture_as_pdf</mat-icon>
+                </button>
+                <button class="btn" type="button" printSectionId="print-section" printTitle="Statement" [printStyle]="{
+          h1: { color: 'red' },
+          h2: { border: 'solid 1px' }
+        }" [useExistingCss]="true" ngxPrint>
+                    <i class="os-icon os-icon-printer"></i>
+                </button>
+
+                <!-- <button class="btn" type="button">
+          <mat-icon [inline]="true">attach_file</mat-icon>
+        </button> -->
+                <button (click)="onToggleHistory()" class="btn" type="button">
+                    <mat-icon [inline]="true">textsms</mat-icon>
+                </button>
+            </div>
+            <span *ngIf="debitNoteData?.approval_status!=='Approved'">
+
+                <button mat-button class="btn btn-white btn-sm dropdown-toggle mr-2" [matMenuTriggerFor]="menu2">
+                    More
+                </button>
+                <mat-menu #menu2="matMenu" xPosition="before">
+                    <!-- <button mat-menu-item class="height-40">Clone</button> -->
+                    <!-- <button mat-menu-item class="height-40">Void</button> -->
+                    <button *ngIf="showOrderStatusOptions" mat-menu-item class="height-40" appPermission
+                        [permissions]="userPermissions" [type]="'delete'" (click)="openDeleteBox()">
+                        Delete
+                    </button>
+                    <!-- <button *ngIf="showOrderStatusOptions" mat-menu-item class="height-40">Clear with Invoice</button> -->
+                </mat-menu>
+            </span>
+            <button class="btn" (click)="closeDetailView()">
+                <i class="os-icon os-icon-close"></i>
+            </button>
+        </div>
+    </div>
+    <div class="separator"></div>
+
+    <div class="approval-box" *ngIf="hasApprovalPending">
+        <div class="approve-icon">
+            <i class="fa fa-check-square-o"></i>
+        </div>
+        <div class="approve-content">
+            <h2>Approve this Debit Note</h2>
+            <p>
+                This debit note has been submitted for approval. Verify and approve the debit note.
+            </p>
+        </div>
+        <div class="approve-actions">
+            <button mat-button class="approve" (click)="approve()">Approve</button>
+            <button mat-button class="reject" (click)="reject()">Reject</button>
+        </div>
+    </div>
+
+    <form class="order-form custom-mat square scrolly">
+        <div class="card-body active-form overview">
+            <div class="row">
+                <div class="col-md-4">
+                    <div class="form-group" *ngIf="!isDepotOrder">
+                        <label for="">Customer</label>
+                        <input type="text" class="form-control form-control-sm non-editable" [value]="
+                debitNoteData?.customer.firstname +
+                ' ' +
+                debitNoteData?.customer.lastname
+              " disabled />
+                    </div>
+
+                    <div class="form-group" *ngIf="isDepotOrder">
+                        <label for="">Depot</label>
+                        <input type="text" class="form-control form-control-sm non-editable"
+                            [value]="debitNoteData?.depot.depot_name" disabled />
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="card-body overview">
+            <div class="row justify-content-between">
+                <div class="col-md-4">
+                    <div *ngIf="showCustomerLob">
+                        <div class="form-group" *ngIf="!isDepotOrder">
+                            <label for="">Customer Lob</label>
+                            <input type="text" class="form-control form-control-sm non-editable" [value]="
+              debitNoteData?.lob?.name || ''" disabled />
+                        </div>
+                    </div>
+                    <div class="form-group" *ngIf="showReasone">
+                        <label for="">Reason</label>
+                        <input type="text" class="form-control form-control-sm non-editable" [value]="reasonTitle"
+                            disabled />
+                    </div>
+                    <!--          <tr>-->
+                    <!--            <td>Order Type</td>-->
+                    <!--            <td><input type="text" class="form-control form-control-sm non-editable" [value]="orderTypeTitle" disabled></td>-->
+                    <!--          </tr>-->
+                </div>
+                <div class="col-md-4">
+                    <div class="form-group">
+                        <label for="">Debit Note Number</label>
+                        <input type="text" class="form-control form-control-sm non-editable"
+                            [value]="debitNoteData?.debit_note_number" disabled />
+                    </div>
+                    <div class="form-group">
+                        <label for="">Debit Note Date</label>
+                        <input type="date" class="form-control form-control-sm non-editable"
+                            [value]="debitNoteData?.debit_note_date" disabled />
+                    </div>
+                    <!--          <tr class="spacer"></tr>-->
+                    <!--          <tr>-->
+                    <!--            <td>Payment Terms</td>-->
+                    <!--            <td><input type="text" class="form-control form-control-sm non-editable" [value]="paymentTermTitle ? paymentTermTitle : ''" disabled></td>-->
+                    <!--          </tr>-->
+                    <!--          <tr class="spacer"></tr>-->
+                    <!--          <tr>-->
+                    <!--            <td>Due Date</td>-->
+                    <!--            <td><input type="date" class="form-control form-control-sm non-editable" [value]="orderData.due_date" disabled></td>-->
+                    <!--          </tr>-->
+                </div>
+            </div>
+        </div>
+        <div>
+            <div>
+                <div class="item-container custom-mat custom-mat-no-border" *ngIf="debitNoteData?.is_debit_note == '1'">
+                    <table class="table table-hover cardtable">
+                        <thead>
+                            <tr>
+                                <ng-container *ngFor="let head of itemTableHeaders">
+                                    <th class="head" *ngIf="head.show == true">
+                                        {{ head.label }}
+                                    </th>
+                                </ng-container>
+                            </tr>
+                        </thead>
+                        <tbody class="form-body">
+                            <tr class="item-row" *ngFor="
+                let item of debitNoteData?.debit_note_details;
+                let i = index
+              ">
+                                <td data-th="#">
+                                    <span>{{ i + 1 }}</span>
+                                </td>
+                                <td data-th="ITEM CODE" style="width: 150px;" class="item-name">
+                                    <!-- <input type="text" class="form-control form-control-sm non-editable" [value]="item?.item?.item_name"
+                    disabled /> -->
+                                    <span
+                                        style="word-break: break-word; font-size: 11px;">{{item?.item?.item_code}}</span>
+                                </td>
+                                <td data-th="Item Name" class="item-name" style="width: 150px;">
+                                    <!-- <input type="text" class="form-control form-control-sm non-editable" [value]="item.item.item_name"
+                    disabled /> -->
+                                    <span
+                                        style="word-break: break-word; font-size: 11px;">{{item?.item?.item_name}}</span>
+                                </td>
+                                <td data-th="UOM" class="uom-td">
+                                    <input type="text" class="form-control form-control-sm non-editable"
+                                        [value]="item?.item_uom?.name" disabled />
+                                </td>
+                                <!-- <td data-th="REASON" class="uom-td">
+                  <input type="text" class="form-control form-control-sm non-editable" [value]="item.reason" disabled />
+                </td> -->
+                                <td data-th="QUANTITY">
+                                    <input type="number" min="0" class="form-control non-editable"
+                                        [value]="item.item_qty" disabled />
+                                </td>
+                                <td data-th="PRICE	">
+                                    <input type="text" class="form-control non-editable"
+                                        [value]="numberFormat(item.item_price)" disabled />
+                                </td>
+                                <td data-th="DISCOUNT">
+                                    <input type="text" class="form-control non-editable"
+                                        [value]="numberFormat(item.item_discount_amount)" disabled />
+                                </td>
+                                <td data-th="VAT">
+                                    <input type="text" class="form-control non-editable"
+                                        [value]="numberFormat(item.item_vat)" disabled />
+                                </td>
+                                <td data-th="NET">
+                                    <input type="text" class="form-control non-editable"
+                                        [value]="numberFormat(item.item_net)" disabled />
+                                </td>
+                                <td data-th="TOTAL">
+                                    <input type="text" class="form-control non-editable"
+                                        [value]="numberFormat(item.item_grand_total)" disabled />
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="item-container custom-mat custom-mat-no-border" *ngIf="debitNoteData?.is_debit_note == '0'">
+                    <table class="table table-hover cardtable">
+                        <thead>
+                            <tr>
+                                <ng-container *ngFor="let head of itemTableHeaders0">
+                                    <th class="head" *ngIf="head.show == true">
+                                        {{ head.label }}
+                                    </th>
+                                </ng-container>
+                            </tr>
+                        </thead>
+                        <tbody class="form-body">
+                            <tr class="item-row" *ngFor="
+                let item of debitNoteData?.debit_note_listingfee_shelfrent_rebatediscount_details;
+                let i = index
+              ">
+                                <td data-th="#">
+                                    <span>{{ i + 1 }}</span>
+                                </td>
+                                <td data-th="ITEM NAME	" class="item-name">
+                                    <input type="text" class="form-control form-control-sm non-editable"
+                                        [value]="item?.item_name" disabled />
+                                </td>
+                                <td data-th="AMOUNT	" *ngIf="debitNoteData?.is_debit_note == 1">
+                                    <input type="text" class="form-control non-editable"
+                                        [value]="numberFormat(item?.amount)" disabled />
+                                </td>
+                                <td data-th="PRICE">
+                                    <input type="text" class="form-control non-editable"
+                                        [value]="numberFormat(item?.item_price)" disabled />
+                                </td>
+                                <td data-th="DISCOUNT">
+                                    <input type="text" class="form-control non-editable"
+                                        [value]="numberFormat(item?.item_discount_amount)" disabled />
+                                </td>
+                                <td data-th="VAT">
+                                    <input type="text" class="form-control non-editable"
+                                        [value]="numberFormat(item?.item_vat) || ''" disabled />
+                                </td>
+                                <td data-th="NET">
+                                    <input type="text" class="form-control non-editable"
+                                        [value]="numberFormat(item?.item_net) || ''" disabled />
+                                </td>
+                                <!-- <td data-th="EXCISE">
+                  <input type="text" class="form-control non-editable" [value]="numberFormat(item?.item_excise) || ''"
+                    disabled />
+                </td> -->
+                                <td data-th="TOTAL">
+                                    <input type="text" class="form-control non-editable"
+                                        [value]="numberFormat(item?.item_grand_total) || ''" disabled />
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="container footer-overview-container">
+                    <div class="row justify-content-end">
+                        <!--          <div class="form-group col-sm-5">-->
+                        <!--            <label for="note">Customer Note</label>-->
+                        <!--            <textarea class="form-control form-control-sm" id="note" [value]="orderData.customer_note ? orderData.customer_note : ''" disabled></textarea>-->
+                        <!--          </div>-->
+                        <div class="col-sm-4">
+                            <div class="overall-stats-table">
+                                <div *ngFor="let stat of orderStats.slice(0, orderStats.length - 1)">
+                                    <span class="stat-label">{{ stat.label }}</span>
+                                    <span class="stat-value">{{
+                                        debitNoteData && numberFormatWithSymbol(debitNoteData[stat.key])
+
+                                        }}</span>
+                                </div>
+                                <div>
+                                    <span class="stat-label final-total">Total</span>
+                                    <span class="stat-value final-total">{{
+                                        numberFormatWithSymbol(debitNoteData?.grand_total)
+                                        }}</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </form>
+</section>
+
+<ng-template #emailPopTitle>
+    <span>Sent Debit Note {{debitNoteData.debit_note_number}}</span>
+</ng-template>
+<ng-template #emailPopContent>
+    <app-send-email [data]="emailData" (close)="email?.close()"></app-send-email>
+</ng-template>
+<div class="card border" id="print-section">
+    <div class="card-body" [innerHTML]="debitNoteTemplate"></div>
+</div>

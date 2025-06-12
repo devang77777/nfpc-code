@@ -1,0 +1,70 @@
+<div class="pl-3  items-table-box">
+  <div class="table-responsive table-scroll" >
+    <table mat-table [dataSource]="itemSource" class="mat-elevation-z8 table table-hover ">
+      <ng-container matColumnDef="created_at">
+        <th mat-header-cell *matHeaderCellDef>
+          <app-column-filter title="Date" (changeSelected)="onColumnFilterOpen($event)"
+            [selected]="selectedColumnFilter" controlName="date" (close)="onColumnFilter($event)">
+            <input class="form-control form-control-sm" [formControl]="filterForm.get('date')" placeholder="Enter Date"
+              type="date">
+          </app-column-filter>
+        </th>
+        <td mat-cell *matCellDef="let element"> {{ element.created_at | date :"d MMM y h:mm a"}} </td>
+      </ng-container>
+      <ng-container matColumnDef="salesman">
+        <th mat-header-cell *matHeaderCellDef>
+          <app-column-filter title="Merchandiser" (changeSelected)="onColumnFilterOpen($event)"
+            [selected]="selectedColumnFilter" controlName="salesman_name" (close)="onColumnFilter($event)">
+            <input class="form-control form-control-sm" [formControl]="filterForm.get('salesman_name')"
+              placeholder="Enter Merchandiser" type="text">
+          </app-column-filter>
+        </th>
+        <td mat-cell *matCellDef="let element">
+          {{ element.salesman?.firstname }} {{ element.salesman?.lastname }}
+        </td>
+      </ng-container>
+      <ng-container matColumnDef="company">
+        <th mat-header-cell *matHeaderCellDef>
+          <app-column-filter title="Company" (changeSelected)="onColumnFilterOpen($event)"
+            [selected]="selectedColumnFilter" controlName="company" (close)="onColumnFilter($event)">
+            <input class="form-control form-control-sm" [formControl]="filterForm.get('company')"
+              placeholder="Enter Company" type="text">
+          </app-column-filter>
+        </th>
+        <td mat-cell *matCellDef="let element">{{ element.company }}</td>
+      </ng-container>
+      <ng-container matColumnDef="brand">
+        <th mat-header-cell *matHeaderCellDef>
+          <app-column-filter title="Brand" (changeSelected)="onColumnFilterOpen($event)"
+            [selected]="selectedColumnFilter" controlName="brand" (close)="onColumnFilter($event)">
+            <input class="form-control form-control-sm" [formControl]="filterForm.get('brand')"
+              placeholder="Enter Brand" type="text">
+          </app-column-filter>
+        </th>
+        <td mat-cell *matCellDef="let element">{{ element.brand }}</td>
+      </ng-container>
+      <ng-container matColumnDef="item">
+        <th mat-header-cell *matHeaderCellDef>
+          <app-column-filter title="Item" (changeSelected)="onColumnFilterOpen($event)"
+            [selected]="selectedColumnFilter" controlName="item" (close)="onColumnFilter($event)">
+            <input class="form-control form-control-sm" [formControl]="filterForm.get('item')" placeholder="Enter Item"
+              type="text">
+          </app-column-filter>
+        </th>
+        <td mat-cell *matCellDef="let element">{{ element.item }}</td>
+      </ng-container>
+      <ng-container matColumnDef="price">
+        <th mat-header-cell *matHeaderCellDef>Price
+          <!-- <app-column-filter title="Price" (changeSelected)="onColumnFilterOpen($event)"
+            [selected]="selectedColumnFilter" (close)="onColumnFilter($event)">
+            <input class="form-control form-control-sm" placeholder="Enter Price" type="text">
+          </app-column-filter> -->
+        </th>
+        <td mat-cell *matCellDef="let element">{{ element.price }}</td>
+      </ng-container>
+      <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true">
+      <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+    </table>
+  </div>
+  <!-- <mat-paginator pageSize="50" [pageSizeOptions]="[5,10,15,25,50,100]"></mat-paginator> -->
+</div>

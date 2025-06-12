@@ -1,0 +1,17 @@
+
+<div class="container">
+  <table class="table table-bordered">
+    <thead>
+      <tr>
+        <th *ngFor="let head of displayedColumns" scope="col">{{head}} </th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let el of ELEMENT_DATA">
+      <td>{{el.itemcode}}</td>
+      <td>{{el.itemdescription}}</td>
+      <td>{{el.CGname}}</td>
+      </tr>
+    </tbody>
+  </table>
+</div>

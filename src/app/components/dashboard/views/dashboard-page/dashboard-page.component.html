@@ -1,0 +1,30 @@
+<!-- <mat-tab-group (selectedTabChange)="tabChanged($event)" mat-align-tabs="center">
+    <mat-tab label="Dashboard 1">
+        <app-merchandising-dashboard></app-merchandising-dashboard>
+    </mat-tab>
+    <mat-tab label="Dashboard 2">
+        <app-merchandising-dashboard2 [dashboardIndex]="dashboardIndex"></app-merchandising-dashboard2>
+    </mat-tab>
+    <mat-tab label="Dashboard 3">
+        <app-merchanidising-dashboard3></app-merchanidising-dashboard3>
+    </mat-tab>
+    <mat-tab label="Dashboard 4">
+        <app-merchandising-dashboard4></app-merchandising-dashboard4>
+    </mat-tab>
+    <mat-tab label="Dashboard 5">
+        <app-common-dashboard [dashboardIndex]="dashboardIndex"></app-common-dashboard>
+    </mat-tab>
+</mat-tab-group> -->
+
+<div class="d-flex justify-content-center">
+    <nav mat-tab-nav-bar>
+        <a mat-tab-link  *ngFor="let link of navLinks" [routerLink]="link.link" routerLinkActive #rla="routerLinkActive"
+            [active]="rla.isActive">
+            {{link.label}}
+        </a>
+    </nav>
+</div>
+<hr>
+<div>
+    <router-outlet></router-outlet>
+</div>

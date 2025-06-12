@@ -1,0 +1,35 @@
+
+<div class="heading-row">
+  <h2 ><strong> Custom Fields</strong></h2>
+</div>
+
+    <div class="row">
+      <div class="col-md-5">
+        <div class="card ">
+        
+          <div class="card-body">
+            <div class="action-header">
+              <form [formGroup]="form" (ngSubmit)="submit()">
+                <div formArrayName="modules" *ngFor="let module of modulesFormArray.controls; let indx = index">
+                 <label>
+                  <ng-container >
+                    <input type="checkbox" [formControlName]="indx">
+                  </ng-container>
+               &nbsp;   {{modulesArray[indx].module_name}}
+                 </label>
+                </div>
+              <div *ngIf="modulesArray.length>0">
+                <br>
+                <div *ngIf="!form.valid">At least one module must be selected</div>
+                <br>
+                <button [disabled]="!form.valid" class="btn btn-primary changebtn" > Submit</button>
+              </div>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+   
+    </div>
+
+  

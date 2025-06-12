@@ -1,0 +1,139 @@
+[
+    {
+        "label": "Dashboard",
+        "routeTo": "/dashboard/board1",
+        "active": "/dashboard/board1",
+        "icon": "os-icon os-icon-bar-chart-stats-up"
+    },
+    {
+        "label": "Customer",
+        "routeTo": "masters/customer",
+        "active": "/customer",
+        "icon": "os-icon os-icon-user"
+    },
+    {
+        "label": "Customer Region",
+        "routeTo": "masters/customer-region",
+        "active": "masters/customer-region",
+        "icon": "os-icon os-icon-user"
+    },
+    {
+        "label": "Customer Branch Plant",
+        "routeTo": "masters/customer-branch-plant",
+        "active": "masters/customer-branch-plant",
+        "icon": "os-icon os-icon-user"
+    },
+     {
+        "label": "Customer Supervisor",
+        "routeTo": "masters/customer-supervisor",
+        "active": "masters/customer-supervisor",
+        "icon": "os-icon os-icon-user"
+    },
+    {
+        "label": "Customer KSM/KAM Mapping",
+        "routeTo": "masters/customer-ksm-mapping",
+        "active": "masters/customer-ksm-mapping",
+        "icon": "os-icon os-icon-user"
+    },
+    {
+        "label": "Item",
+        "routeTo": "masters/item",
+        "active": "/item",
+        "icon": "os-icon os-icon-shopping-bag"
+    },
+    {
+        "label": "Item Branch Plant",
+        "routeTo": "masters/item-branch-plant",
+        "active": "masters/item-branch-plant",
+        "icon": "os-icon os-icon-shopping-bag"
+    },
+    {
+        "label": "Salesman",
+        "routeTo": "masters/salesman",
+        "active": "/salesman",
+        "icon": "os-icon os-icon-briefcase"
+    },
+   
+    {
+        "label": "Pricing",
+        "routeTo": "pricing-plan/pricing",
+        "active": "/pricing-plan/pricing",
+        "icon": "os-icon os-icon-dollar-sign"
+    },
+    
+    {
+        "label": "Order",
+        "routeTo": "transaction/order",
+        "active": "/order",
+        "icon": "os-icon os-icon-shopping-cart"
+    },
+    {
+        "label": "Delivery",
+        "routeTo": "transaction/delivery",
+        "active": "/delivery",
+        "icon": "os-icon os-icon-truck"
+    },
+    {
+        "label": "Invoice",
+        "routeTo": "transaction/invoice",
+        "active": "/invoice",
+        "icon": "os-icon os-icon-file-text"
+    },
+    {
+        "label": "Credit Note",
+        "routeTo": "transaction/credit-note",
+        "active": "/credit-note",
+        "icon": "fa fa-credit-card"
+    },
+    {
+        "label": "Debit Note",
+        "routeTo": "transaction/debit-note",
+        "active": "/debit-note",
+        "icon": "fa fa-credit-card-alt"
+    },
+   
+    {
+        "label": "Route Item Grouping",
+        "routeTo": "grouping/route-item-group",
+        "active": "/route-item-group",
+        "icon": "os-icon os-icon-layers"
+    },
+    {
+        "label": "Portfolio Management",
+        "routeTo": "grouping/portfolio-management",
+        "active": "/portfolio-management",
+        "icon": "fa fa-address-book-o"
+    },
+    {
+        "label": "Salesman Load",
+        "routeTo": "target/salesman-load",
+        "active": "/target/salesman-load",
+        "icon": "os-icon os-icon-truck"
+    },
+   
+    {
+        "label": "Salesman Unload",
+        "routeTo": "target/salesman-unload",
+        "active": "/target/salesman-unload",
+        "icon": "os-icon os-icon-truck"
+    },
+    {
+        "label": "Pallet",
+        "routeTo": "target/pallet",
+        "active": "/target/pallet",
+        "icon": "os-icon os-icon-truck"
+    },
+   
+    {
+        "label": "GRN",
+        "routeTo": "inventory/grn",
+        "active": "/grn",
+        "icon": "fa fa-sticky-note-o"
+    },
+       {
+        "label": "Reports",
+        "routeTo": "reports",
+        "active": "/reports",
+        "icon": "os-icon os-icon-file-text"
+    }
+]

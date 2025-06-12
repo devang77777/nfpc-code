@@ -1,0 +1,175 @@
+.storageList {
+  table {
+    width: 100%;
+  }
+
+  tr.detail-row {
+    height: 0 !important;
+  }
+
+  tr.element-row:not(.expanded-row):hover {
+    background: whitesmoke;
+  }
+
+  tr.element-row:not(.expanded-row):active {
+    background: #efefef;
+  }
+
+  .element-row td {
+    background: #f7f7f7;
+
+    td {
+      border-bottom-width: 0;
+    }
+  }
+
+  .element-detail {
+    overflow: hidden;
+    display: flex;
+
+  }
+
+  .delete-btn {
+    background-color: #181824;
+    color: white;
+    border-radius: 0.25rem;
+
+    &:focus {
+      outline: none;
+    }
+  }
+
+
+
+
+  .items-table-box {
+
+    .mat-table {
+      max-width: 95%;
+      margin: auto;
+    }
+
+  }
+
+  .items-table-box {
+    margin-bottom: 50px;
+    padding-bottom: 50px;
+    overflow-y: scroll !important;
+
+    mat-paginator,
+    .mat-table {
+      max-width: 75%;
+      margin: auto;
+    }
+
+    button {
+      background-color: transparent;
+      border: none;
+      font-size: 15px;
+
+      &:active {
+        outline: none;
+      }
+    }
+  }
+
+  .w-100 {
+    width: 100%;
+  }
+}
+
+button:focus {
+  outline: none;
+}
+
+.header-row {
+  float: left;
+  width: 100%;
+  position: relative;
+}
+
+button:active {
+  outline: none;
+}
+
+
+.data-body {
+  height: 200px;
+  overflow: scroll;
+}
+
+.head-container {
+  background-color: #181824;
+  color: white;
+  margin-top: 8px;
+}
+
+.head-row {
+  padding: 8px 15px;
+}
+
+mat-row,
+mat-header-row,
+mat-footer-row {
+
+  justify-content: space-between;
+}
+
+.table thead,
+.table thead tr,
+.mat-header-row {
+  justify-content: space-between;
+  background-color: black !important;
+
+  th {
+    border: 0 !important;
+    background: black;
+    color: #fff;
+    min-width: 160px;
+  }
+}
+
+td.mat-cell {
+  border: 0 !important;
+  min-width: 160px;
+}
+
+.data-row {
+  padding: 4px 0 4px 4px;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.12);
+
+  &:hover {
+    background-color: #f0f0f0;
+  }
+}
+
+.warehouseTable {
+  margin-top: 10px;
+  width: 40% !important;
+}
+
+@media (max-width: 575px) {
+
+  th.mat-header-cell:first-of-type,
+  td.mat-cell:first-of-type,
+  td.mat-footer-cell:first-of-type {
+    padding-left: 8px !important;
+  }
+
+  .table thead,
+  .table thead tr,
+  .mat-header-row {
+
+    th {
+
+      min-width: 100px;
+    }
+  }
+
+  td.mat-cell {
+
+    min-width: 100px;
+  }
+}
+
+//------------------------------------------------------------------------------

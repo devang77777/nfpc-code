@@ -1,0 +1,12 @@
+<div class="dropdown" [hidden]="!selected" [ngClass]="selected ? 'show' : ''" style="    display: inline-block;">
+    <button type="button" class="btn btn-sm btn-light dropdown-toggle " style="  font-size: 12px;
+    background-color: transparent;
+    margin-right: 6px;" (click)="isActive=!isActive"  data-toggle="dropdown" [attr.aria-expanded]="selected">
+      Status : <span *ngIf="!selected"> All </span> 
+    </button>
+    <div class="dropdown-menu" [ngClass]="isActive ? 'show' : ''">
+      <ng-container *ngFor="let item of salesOptions">
+        <a class="dropdown-item" > {{ item }} </a>
+      </ng-container>
+    </div>
+  </div>

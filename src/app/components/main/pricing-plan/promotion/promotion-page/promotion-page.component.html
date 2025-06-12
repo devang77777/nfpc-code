@@ -1,0 +1,42 @@
+<section>
+  <div class="table-box" [ngClass]="{ collapsed: isDetailVisible }">
+    <div class="heading-row">
+      <p class="h5 d-inline" *ngIf="!isDetailVisible">
+        <i class="fa fa-gift mr-2" aria-hidden="true"></i>Promotion
+      </p>
+      <div class="d-inline float-right">
+        <button type="button" class="btn btn-sm btn-p" (click)="openAddPromotion()" appPermission
+          [permissions]="userPermissions" [type]="'create'">
+          <i class="os-icon os-icon-plus mr-2" aria-hidden="true"></i>New
+        </button>
+        <button *ngIf="checkedRows.length > 0" class="btn btn-sm btn-white dropdown-toggle ml-2" mat-button
+          [matMenuTriggerFor]="menu2">
+          Bulk Actions
+        </button>
+        <mat-menu #menu2="matMenu">
+          <button mat-menu-item (click)="bulkAction('active')">Mark as Active</button>
+          <button mat-menu-item (click)="bulkAction('inactive')" >Mark as Inactive</button>
+          <!-- <button mat-menu-item (click)="bulkAction('delete')" appPermission [permissions]="userPermissions" [type]="'delete'">
+            Delete
+          </button> -->
+        </mat-menu>
+        <!-- impot /Export  -->
+        <button class="btn btn-sm btn-white ml-2 dropdown-toggle" [matMenuTriggerFor]="menu3">
+          <i class="fa fa-bars" aria-hidden="true"></i>
+        </button>
+        <mat-menu #menu3="matMenu">
+          <button mat-menu-item (click)="openImportPromotion()">Import Promotion</button>
+          <button mat-menu-item type="button" (click)="openExportpromotion()">Export Promotion</button>
+        </mat-menu>
+
+      </div>
+    </div>
+    <app-promotion-dt [newPromotionData]="newPromotionData" (itemClicked)="itemClicked($event)"
+      (selectedRows)="selectedRows($event)"></app-promotion-dt>
+  </div>
+  <div class="details-box" [ngClass]="{ expanded: isDetailVisible }">
+    <app-promotion-detail (updateTableData)="updateTableData($event)" (detailsClosed)="closeClicked()"
+      [isDetailVisible]="isDetailVisible" [promotion]="promotion">
+    </app-promotion-detail>
+  </div>
+</section>

@@ -1,0 +1,133 @@
+<section class="scrolly">
+  <div class="table-responsive">
+    <table class="table table-hover" mat-table [dataSource]="dataSource">
+      <ng-container matColumnDef="select">
+        <th mat-header-cell *matHeaderCellDef>
+          <mat-checkbox class="head-checkbox" (change)="$event ? toggleSelection() : null" (change)="getSelectedRows()"
+            [checked]="selections.hasValue() && isAllSelected()"
+            [indeterminate]="selections.hasValue() && !isAllSelected()" [aria-label]="checkboxLabel()">
+          </mat-checkbox>
+          <a class="filter-btn" *ngIf="!isDetailVisible" [matMenuTriggerFor]="menu">
+            <i class="fa fa-table" aria-hidden="true"></i>
+          </a>
+          <mat-menu #menu="matMenu">
+            <div class="card-body p-2" style="min-width: 200px;">
+              <ul style="list-style: none; padding-left: 7px;">
+                <li *ngFor="let column of filterColumns">
+                  <input type="checkbox" [(ngModel)]="column.show" class="m-2" (click)="$event.stopPropagation()" />
+                  {{ column.title }}
+                </li>
+              </ul>
+              <div class="float-right mb-2">
+                <button class="btn btn-p bg-secondary">Cancel</button>
+              </div>
+            </div>
+          </mat-menu>
+        </th>
+        <td mat-cell *matCellDef="let row">
+          <mat-checkbox class="row-checkbox" (click)="$event.stopPropagation()"
+            (change)="$event ? selections.toggle(row) : null" (change)="getSelectedRows()"
+            [checked]="selections.isSelected(row)" [aria-label]="checkboxLabel(row)">
+          </mat-checkbox>
+        </td>
+      </ng-container>
+      <ng-container matColumnDef="estimate_date">
+        <th mat-header-cell *matHeaderCellDef>
+          <app-column-filter title="Date" (changeSelected)="onColumnFilterOpen($event)"
+            [selected]="selectedColumnFilter" (close)="onColumnFilter($event)">
+            <input class="form-control form-control-sm" placeholder="Enter Date" type="date">
+          </app-column-filter>
+        </th>
+        <td mat-cell *matCellDef="let element">{{ element.estimate_date }}</td>
+      </ng-container>
+      <ng-container matColumnDef="estimate_code">
+        <th mat-header-cell *matHeaderCellDef>
+          <app-column-filter title="Estimate Number" (changeSelected)="onColumnFilterOpen($event)"
+            [selected]="selectedColumnFilter" (close)="onColumnFilter($event)">
+            <input class="form-control form-control-sm" placeholder="Enter Estimate Number" type="text">
+          </app-column-filter>
+        </th>
+        <td mat-cell *matCellDef="let element">{{ element.estimate_code }}</td>
+      </ng-container>
+      <ng-container matColumnDef="reference">
+        <th mat-header-cell *matHeaderCellDef>
+          <app-column-filter title="Reference Number" (changeSelected)="onColumnFilterOpen($event)"
+            [selected]="selectedColumnFilter" (close)="onColumnFilter($event)">
+            <input class="form-control form-control-sm" placeholder="Enter Reference Number" type="text">
+          </app-column-filter>
+        </th>
+        <td mat-cell *matCellDef="let element">&nbsp;{{ element.reference }}</td>
+      </ng-container>
+      <ng-container matColumnDef="customer_info">
+        <th mat-header-cell *matHeaderCellDef>
+          <app-column-filter title="Customer Name" (changeSelected)="onColumnFilterOpen($event)"
+            [selected]="selectedColumnFilter" (close)="onColumnFilter($event)">
+            <input class="form-control form-control-sm" placeholder="Enter Customer Name" type="text">
+          </app-column-filter>
+        </th>
+        <td mat-cell *matCellDef="let element">
+          &nbsp;{{ element.customer_info.user?.display_name }}
+        </td>
+      </ng-container>
+      <ng-container matColumnDef="customer_code">
+        <th mat-header-cell *matHeaderCellDef>
+          <app-column-filter title="Customer Code" (changeSelected)="onColumnFilterOpen($event)"
+            [selected]="selectedColumnFilter" (close)="onColumnFilter($event)">
+            <input class="form-control form-control-sm" placeholder="Enter Customer Code" type="text">
+          </app-column-filter>
+        </th>
+        <td mat-cell *matCellDef="let element">
+          &nbsp;N/A
+        </td>
+      </ng-container>
+      <ng-container matColumnDef="status">
+        <th mat-header-cell *matHeaderCellDef>
+          <app-column-filter title="Status" (changeSelected)="onColumnFilterOpen($event)"
+            [selected]="selectedColumnFilter" (close)="onColumnFilter($event)">
+            <mat-select class="form-control form-control-sm">
+              <mat-option value="1">Pending</mat-option>
+              <mat-option value="0">Active</mat-option>
+            </mat-select>
+          </app-column-filter>
+        </th>
+        <td mat-cell *matCellDef="let element">
+          {{ element.status === 1 ? "Active" : "Inactive" }}
+        </td>
+      </ng-container>
+      <ng-container matColumnDef="net_total">
+        <th mat-header-cell *matHeaderCellDef>
+          <app-column-filter title="Amount" (changeSelected)="onColumnFilterOpen($event)"
+            [selected]="selectedColumnFilter" (close)="onColumnFilter($event)">
+            <input class="form-control form-control-sm" placeholder="Enter Amount" type="text">
+          </app-column-filter>
+        </th>
+        <td mat-cell *matCellDef="let element">
+          &nbsp;{{ numberFormatWithSymbol(element.net_total) }}</td>
+      </ng-container>
+      <ng-container matColumnDef="expand">
+        <th mat-header-cell *matHeaderCellDef style="display: none;">Detail</th>
+        <td mat-cell *matCellDef="let element">
+          <div style="display: flex; justify-content: space-between;">
+            <strong>
+              {{
+              element.customer_info.user?.display_name}}</strong>
+            <span>
+              {{ numberFormatWithSymbol(element.net_total) }}</span>
+          </div>
+          <div style="display: flex; justify-content: space-between;">
+            <span style="color: #2485e8;">{{ element.estimate_code }}</span>
+            <span style="color: #2485e8;">
+              {{ element.estimate_date | date }}</span>
+          </div>
+        </td>
+      </ng-container>
+      <tr mat-header-row *matHeaderRowDef="getDisplayedColumns()"></tr>
+      <tr mat-row *matRowDef="let row; columns: getDisplayedColumns()" (click)="openDetailView(row)"></tr>
+    </table>
+  </div>
+
+  <mat-paginator [hidden]="apiResponse.pagination?.total_records < 10" (page)="onPageFired($event)"
+    [length]="apiResponse.pagination?.total_records" [pageSize]="pageSize" [pageSizeOptions]="[10, 25, 50]">
+  </mat-paginator>
+
+</section>

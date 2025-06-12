@@ -1,0 +1,49 @@
+<section *ngIf="salesMan">
+    <div class="pl-3">
+      <div class="row">
+        <h2 class="page-title col-sm-10 font-weight-light">{{salesMan.firstname}} {{ salesMan.lastname }}</h2>
+        <div class="actions col-sm-2">
+          <button (click)="openEditSalesMan()"><i class="fa fa-pencil" aria-hidden="true"></i></button>&nbsp;
+          <div>
+            <button class="btn btn-sm border" mat-button [matMenuTriggerFor]="menu2">More</button>
+            <mat-menu #menu2="matMenu">
+              <button mat-menu-item (click)="toggleStatus()">Mark as
+                {{ salesMan.status === 0 ? 'Active' : 'Inactive' }}</button>
+              <button mat-menu-item (click)="openDeleteBox()">Delete</button>
+            </mat-menu>
+          </div>
+          <button *ngIf="isDetailVisible" class="" (click)="closeDetailView()"><i class="fa fa-close"></i></button>
+        </div>
+      </div>
+    </div>
+    <div class="pl-3 salesMan-data">
+      <div class="row h-100">
+        <div class="col-12 border-left">
+          <mat-tab-group mat-align-tabs="start">
+            <mat-tab label="Overview">
+              <mat-list>
+                <mat-list-item> Salesman Code: {{ salesMan.salesman_code }} </mat-list-item>
+                <mat-list-item> Name: {{ salesMan.user?.firstname }} {{ salesMan.user?.lastname }}</mat-list-item>
+                <mat-list-item> Salesman Mobile: {{ salesMan.user.mobile }}</mat-list-item>
+                <mat-list-item> Salesman Type: {{ salesMan.salesman_type.name }}</mat-list-item>
+                <mat-list-item> Salesman Role: {{ salesMan.salesman_role.name }}</mat-list-item>
+                <mat-list-item> Salesman Route: {{ salesMan.route_id }}</mat-list-item>
+                <mat-list-item> Salesman Email: {{ salesMan.user.email }}</mat-list-item>
+                <mat-list-item> Date Of Joining: {{ salesMan?.created_at }}</mat-list-item>
+                <mat-list-item> Salesman Supervisor: {{ salesMan?.salesman_supervisor }}</mat-list-item>
+                <mat-list-item> Status: {{ salesMan.status === 0 ? 'Inactive' : 'Active' }}</mat-list-item>
+              </mat-list>
+            </mat-tab>
+            <mat-tab label="Sales">
+              <mat-list>
+                <mat-list-item>Sales 1</mat-list-item>
+                <mat-list-item>Sales 2</mat-list-item>
+                <mat-list-item>Sales 3</mat-list-item>
+                <mat-list-item>Sales 4</mat-list-item>
+              </mat-list>
+            </mat-tab>
+          </mat-tab-group>
+        </div>
+      </div>
+    </div>
+</section>

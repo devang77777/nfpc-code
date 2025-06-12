@@ -1,0 +1,27 @@
+section {
+  display: block;
+}
+
+.separator {
+  height: 2px;
+  background-color: lightgrey;
+}
+
+
+
+
+table,th,td{
+  width: 100%;
+}
+th.mat-header-cell, td.mat-cell, td.mat-footer-cell {
+  padding: 0;
+  border-bottom-width: 0px;
+  border-bottom-style: none;
+}
+
+mat-header-row.mat-header-row.cdk-header-row.mat-table-sticky {
+  z-index: unset !important;
+}
+mat-form-field {
+  display: block;
+}

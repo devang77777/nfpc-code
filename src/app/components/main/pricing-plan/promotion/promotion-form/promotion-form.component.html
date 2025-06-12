@@ -1,0 +1,41 @@
+<section>
+  <div class="header">
+    <h2>{{ pageTitle }}</h2>
+  </div>
+  <div class="separator"></div>
+  <form [formGroup]="parentFormGroup" class="scrolly">
+    <div class=" p-md-5 p-0 row align-items-center justify-content-center">
+      <div class="col-xl-9 col-lg-10 col-md-11 text-right">
+        <mat-tab-group class=" bg-light mb-3 border custom1 cs2a " [(selectedIndex)]="selectedIndex" mat-stretch-tabs>
+          <mat-tab label="Select Key Combination">
+            <div class="form-holder">
+              <app-promotion-form-key-combination [overviewFormGroup]="parentFormGroup" [editData]="editData">
+              </app-promotion-form-key-combination>
+            </div>
+          </mat-tab>
+          <mat-tab label="Key Value" [disabled]="!isKeyValueTab">
+            <div class="form-holder">
+              <app-promotion-form-key-value [overviewFormGroup]="parentFormGroup" [editData]="editData"
+                [showFormError]="showFormError">
+              </app-promotion-form-key-value>
+            </div>
+          </mat-tab>
+          <mat-tab label="Promotion" [disabled]="!(selectedIndex > 0)">
+            <div class="form-holder">
+              <app-promotion-form-promotion [overviewFormGroup]="parentFormGroup" [editData]="editData">
+              </app-promotion-form-promotion>
+            </div>
+          </mat-tab>
+        </mat-tab-group>
+        <div class="w-100 text-center">
+          <small class="text-danger" *ngIf="showError">
+            * Item must be selected.</small>
+        </div>
+        <button [disabled]="selectedIndex === 0" (click)="previous()" class="btn btn-secondary mr-2">Back</button>
+        <button *ngIf="selectedIndex !== 2" (click)="next()" class="btn btn-primary">Next</button>
+        <button *ngIf="selectedIndex === 2" (click)="savePromotion()" class="btn btn-primary">Save</button>
+      </div>
+    </div>
+  </form>
+
+</section>

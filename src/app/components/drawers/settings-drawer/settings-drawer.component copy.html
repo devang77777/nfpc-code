@@ -1,0 +1,91 @@
+<div class="card">
+        <div class="arrow-up"></div>
+        <div class="card-header">
+                <span class="h6 font-weight-bold text-secondary">Settings</span>
+                <a (click)="close()" class="closeicon settingclose"><i class="os-icon os-icon-x"></i></a>
+              
+        </div>
+        <div class="m-2 search-input">
+                <span class="material-icons"> search </span>
+                <input placeholder="Search" style="border:none; width: 100%;">
+        </div>
+        <div class="settingmenu">
+                <a class="menus" (click)="navigateTo('settings/organization')"> <i class="fa fa-building-o mr-2"
+                                aria-hidden="true"></i>Organization</a>
+                <a *ngIf="displayRoles()" class="menus" (click)="navigateTo('settings/users')"> <i
+                                class="os-icon os-icon-users mr-2" aria-hidden="true"></i>Users & Roles</a>
+                <a class="menus" (click)="navigateTo('settings/taxes')"> <i class="os-icon os-icon-percent mr-2"
+                                aria-hidden="true"></i>Taxes</a>
+                <a class="menus" (click)="navigateTo('settings/preference')"> <i class="os-icon os-icon-sliders mr-2"
+                                aria-hidden="true"></i>Preference</a>
+                <a class="menus" (click)="navigateTo('settings/bank')"> <i class="fa fa-university mr-2"
+                                aria-hidden="true"></i>BANK</a>
+                <!-- <a class="menus" (click)="navigateTo('settings/reason')"> <i class="fa fa-registered mr-2"
+                                aria-hidden="true"></i>Reason</a> -->
+                <a class="menus" (click)="navigateTo('settings/warehouse')"> <i class="os-icon os-icon-home-09 mr-2"
+                                aria-hidden="true"></i>Warehouse</a>
+                <mat-expansion-panel (opened)="panelOpenState = true" (closed)="panelOpenState = false">
+                        <mat-expansion-panel-header [collapsedHeight]="'35px'" [expandedHeight]="'35px'">
+                                <mat-panel-title>
+                                        <span class="p-2">Location</span>
+                                </mat-panel-title>
+                        </mat-expansion-panel-header>
+                        <a class="menus" (click)="navigateTo('settings/location/country')"><i class="os-icon os-icon-globe mr-2"
+                                        aria-hidden="true"></i>Country</a>
+                        <a class="menus" (click)="navigateTo('settings/location/region')"><i class="os-icon os-icon-award mr-2"
+                                        aria-hidden="true"></i>RegionMaster</a>
+                        <a class="menus" (click)="navigateTo('settings/location/depot')"><i class="os-icon os-icon-home-09 mr-2"
+                                        aria-hidden="true"></i>Branch/Depot</a>
+                        <!-- <a class="menus" (click)="navigateTo('settings/area')"><i class="fa fa-map-marker mr-2"
+                                        aria-hidden="true"></i>Area</a>
+                        <a class="menus" (click)="navigateTo('settings/sub-area')"><i class="fa fa-compass mr-2"
+                                        aria-hidden="true"></i>Sub Area</a> -->
+                        <a class="menus" (click)="navigateTo('settings/location/van')"><i class="os-icon os-icon-truck mr-2"
+                                        aria-hidden="true"></i>Van Master</a>
+                        <a class="menus" (click)="navigateTo('settings/location/route')"><i class="os-icon os-icon-map mr-2"
+                                        aria-hidden="true"></i>Route</a>
+                </mat-expansion-panel>
+                <mat-expansion-panel (opened)="panelOpenState = true" (closed)="panelOpenState = false">
+                        <mat-expansion-panel-header [collapsedHeight]="'35px'" [expandedHeight]="'35px'">
+                                <mat-panel-title>
+                                        <span class="p-2">Customer</span>
+                                </mat-panel-title>      
+                        </mat-expansion-panel-header>
+                        <a class="menus" (click)="navigateTo('settings/customer/customer-category')"><i class="os-icon os-icon-users  mr-2"
+                                        aria-hidden="true"></i>Customer Category</a>
+                        <!-- <a class="menus" (click)="navigateTo('settings/sales-organisation')"><i
+                                        class="fa fa-building mr-2" aria-hidden="true"></i>Sales Organisations</a> -->
+                        <!-- <a class="menus" (click)="navigateTo('settings/channel')"><i class="fa fa-compass mr-2"
+                                        aria-hidden="true"></i>Channels</a>
+                        <a class="menus" (click)="navigateTo('settings/sub-channel')"><i class="fa fa-compass mr-2"
+                                        aria-hidden="true"></i>Sub
+                                Channels</a> -->
+                        <a class="menus" (click)="navigateTo('settings/customer/credit-limits')"><i class="fa fa-credit-card mr-2"
+                                        aria-hidden="true"></i>Credit Limits</a>
+                        <a class="menus" (click)="navigateTo('settings/customer/outlet-product-code')"><i
+                                        class="os-icon os-icon-file-text mr-2" aria-hidden="true"></i>Outlet Product Code</a>
+                </mat-expansion-panel>
+                <mat-expansion-panel (opened)="panelOpenState = true" (closed)="panelOpenState = false">
+                        <mat-expansion-panel-header [collapsedHeight]="'35px'" [expandedHeight]="'35px'">
+                                <mat-panel-title>
+                                        <span class="p-2">Item</span>
+                                </mat-panel-title>
+                        </mat-expansion-panel-header>
+                        <!-- <a class="menus" (click)="navigateTo('settings/brand')"><i class="fa fa-font-awesome mr-2"
+                                        aria-hidden="true"></i>Brand</a>
+                        <a class="menus" (click)="navigateTo('settings/subbrand')"><i class="fa fa-tag mr-2"
+                                        aria-hidden="true"></i>Sub
+                                Brand</a>
+                        <a class="menus" (click)="navigateTo('settings/major-category')"><i class="fa fa-th-list mr-2"
+                                        aria-hidden="true"></i>Major Category</a>
+                        <a class="menus" (click)="navigateTo('settings/sub-category')"><i class="fa fa-list-ol mr-2"
+                                        aria-hidden="true"></i>Sub
+                                Category</a> -->
+                        <a class="menus" (click)="navigateTo('settings/item/item-group')"><i class="os-icon os-icon-grid mr-2"
+                                        aria-hidden="true"></i>Item
+                                Group</a>
+                        <a class="menus" (click)="navigateTo('settings/item/item-uom')"><i class="fa fa-balance-scale mr-2"
+                                        aria-hidden="true"></i>UOM</a>
+                </mat-expansion-panel>
+        </div>
+</div>

@@ -1,0 +1,54 @@
+:host {
+  display: block;
+ 
+}
+
+.close-btn {
+  float: right;
+
+  button {
+    width: 32px;
+    height: 32px;
+    position: relative;
+    background-color: transparent;
+    border: 0;
+  }
+}
+
+.actions {
+  margin-top: 26px;
+  display: flex;
+  flex-direction: row-reverse;
+  background-color: #f3f3f3;
+}
+
+button {
+  &:focus{
+    outline: none;
+  }
+}
+
+input.ng-touched.ng-invalid {
+  &:focus {
+    outline: 1px auto red;
+  }
+}
+
+.save-btn,
+.cancel-btn {
+  border-radius: 0.25rem;
+  min-width: 68px;
+  height: 32px;
+  border: 0;
+}
+
+.save-btn {
+  background-color: #181824;
+  color: white;
+}
+
+.cancel-btn {
+  background-color: #eee;
+  color: #495057;
+  margin-right: 12px;
+}

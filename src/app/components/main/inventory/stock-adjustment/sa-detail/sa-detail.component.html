@@ -1,0 +1,161 @@
+<section>
+  <div class="heading-row">
+    <h2 class="d-md-inline">
+      <i class="os-icon os-icon-home mr-2"></i>Stock Adjustment
+      <span class="order-number">#{{ stckAdjData.reference_number }}</span>
+    </h2>
+    <div class="d-md-inline float-md-right text-right">
+      <span>
+        <button mat-button class="btn btn-sm btn-white mr-2" [matMenuTriggerFor]="menu2">
+          More
+        </button>
+        <mat-menu #menu2="matMenu" xPosition="before">
+          <button mat-menu-item class="height-40" (click)="editOrder()" appPermission [permissions]="userPermissions"
+            [type]="'edit'">
+            Edit
+          </button>
+          <button mat-menu-item class="height-40" (click)="openDeleteBox()" appPermission
+            [permissions]="userPermissions" [type]="'delete'">
+            Delete
+          </button>
+          <button mat-menu-item class="height-40" (click)="converttoAdjustment()">
+            Convert to Adjustment
+          </button>
+        </mat-menu>
+      </span>
+      <button mat-button class="btn btn-sm btn-white" (click)="goToList()">
+        <i class="fa fa-chevron-left"></i><span class="back-btn"> Back</span>
+      </button>
+    </div>
+  </div>
+  <div class="separator"></div>
+
+  <form class="order-form custom-mat square scrolly">
+    <div class="card-body active-form overview">
+      <div class="row justify-content-between">
+        <div class="col-md-4">
+          <div class="form-group">
+            <label for="">Adjustment Mode </label>
+            <input type="text" class="form-control form-control-sm non-editable"
+              [value]="stckAdjData[0]?.adjustment_mode" disabled />
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card-body overview">
+      <div class="row justify-content-between">
+        <div class="col-md-4">
+          <div class="form-group">
+            <label for="">Account </label>
+            <input type="text" class="form-control form-control-sm non-editable"
+              [value]="stckAdjData[0].accounts?.account_name" disabled />
+          </div>
+          <div class="form-group">
+            <label for="">Warehouse </label>
+            <input type="text" class="form-control form-control-sm non-editable"
+              [value]="stckAdjData[0].warehouse?.name" disabled />
+          </div>
+          <div class="form-group">
+            <label for="">Reason </label>
+            <input type="text" class="form-control form-control-sm non-editable" [value]="stckAdjData[0].reason?.name"
+              disabled />
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div class="form-group">
+            <label for="">Reference Number </label>
+            <input type="text" class="form-control form-control-sm non-editable"
+              [value]="stckAdjData[0]?.reference_number" disabled />
+          </div>
+          <div class="form-group">
+            <label for="">Stock Adjustment Date </label>
+            <input type="date" class="form-control form-control-sm non-editable"
+              [value]="stckAdjData[0]?.stock_adjustment_date" disabled />
+          </div>
+        </div>
+      </div>
+    </div>
+    <div>
+      <div class="item-container custom-mat custom-mat-no-border">
+        <table class="table table-hover">
+          <thead>
+            <tr *ngIf="stckAdjData[0].adjustment_mode === 'quantity'">
+              <th class="head" *ngFor="let head of qtyTableHeaders">
+                {{ head.label }}
+              </th>
+            </tr>
+            <tr *ngIf="stckAdjData[0].adjustment_mode === 'value'">
+              <th class="head" *ngFor="let head of valueTableHeaders">
+                {{ head.label }}
+              </th>
+            </tr>
+          </thead>
+          <tbody class="form-body">
+            <tr class="item-row" *ngFor="
+                let item of stckAdjData[0].stockadjustmentdetail;
+                let i = index
+              ">
+              <td>{{ i + 1 }}</td>
+              <td class="item-name">
+                <input type="text" class="form-control form-control-sm non-editable" [value]="item.item[0]?.item_name"
+                  disabled />
+              </td>
+              <td class="uom-td">
+                <input type="text" class="form-control form-control-sm non-editable" [value]="item.item_uom[0]?.name"
+                  disabled />
+              </td>
+              <ng-container *ngIf="stckAdjData[0].adjustment_mode === 'quantity'">
+                <td>
+                  <input type="number" min="0" class="form-control non-editable" [value]="item.available_qty"
+                    disabled />
+                </td>
+                <td>
+                  <input type="number" min="0" class="form-control non-editable" [value]="item.new_qty" disabled />
+                </td>
+                <td>
+                  <input type="number" class="form-control non-editable" [value]="item.adjusted_qty" disabled />
+                </td>
+              </ng-container>
+              <ng-container *ngIf="stckAdjData[0].adjustment_mode === 'value'">
+                <td>
+                  <input type="number" min="0" class="form-control non-editable" [value]="item.available_value"
+                    disabled />
+                </td>
+                <td>
+                  <input type="number" min="0" class="form-control non-editable" [value]="item.new_value" disabled />
+                </td>
+                <td>
+                  <input type="number" class="form-control non-editable" [value]="item.adjusted_value" disabled />
+                </td>
+              </ng-container>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="footer-overview-container">
+        <div class="row">
+          <div class="form-group col-sm-5">
+            <label for="note">Description</label>
+            <textarea class="form-control form-control-sm" id="note" [value]="stckAdjData[0].description"
+              disabled></textarea>
+          </div>
+          <!--          <div class="offset-2 col-sm-5">-->
+          <!--            <div class="overall-stats-table">-->
+          <!--              <div *ngFor="let stat of orderStats.slice(0, orderStats.length - 1)">-->
+          <!--                <span class="stat-label">{{ stat.label }}</span>-->
+          <!--                <span class="stat-value">{{ grnData[stat.key] | currency: currencyCode:"symbol": currencyDecimalFormat }}</span>-->
+          <!--              </div>-->
+          <!--              <div>-->
+          <!--                <span class="stat-label final-total">Total</span>-->
+          <!--                <span class="stat-value final-total">{{ grnData['grand_total'] | currency: currencyCode:"symbol": currencyDecimalFormat }}</span>-->
+          <!--              </div>-->
+          <!--            </div>-->
+          <!--          </div>-->
+        </div>
+      </div>
+    </div>
+  </form>
+  <div class="footer-block"></div>
+</section>

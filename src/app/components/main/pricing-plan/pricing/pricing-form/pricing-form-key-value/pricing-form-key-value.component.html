@@ -1,0 +1,148 @@
+<section>
+  <div class="bg-white">
+    <div class="form-box">
+      <div class="">
+        <h4 *ngIf="showLocations()">Location</h4>
+        <div class="form-field-box" *ngIf="overviewFormGroup.value.keyCombination.locations.country">
+          <app-multiautocomplete isSingle="false" [options]="countries" (selectionchanged)="onCountryChange($event)"
+            [control]="selectedCountries" text="name" id="id" placeholder="Select Country">
+          </app-multiautocomplete>
+          <mat-error *ngIf="(!selectedCountries.value.length ) && showFormError">
+            <small>Please select atleast a country.</small>
+          </mat-error>
+        </div>
+        <div class="form-field-box" *ngIf="overviewFormGroup.value.keyCombination.locations.regions">
+          <app-multiautocomplete isSingle="false" [options]="regions" (selectionchanged)="onRegionChange($event)"
+            [control]="selectedRegions" text="region_name" id="id" placeholder="Select Region">
+          </app-multiautocomplete>
+          <mat-error *ngIf="(!selectedRegions.value.length ) && showFormError">
+            <small>Please select atleast a region.</small>
+          </mat-error>
+        </div>
+        <div class="form-field-box" *ngIf="overviewFormGroup.value.keyCombination.locations.area">
+          <app-multiautocomplete isSingle="false" [options]="flatAreaData" (selectionchanged)="onAreaChange($event)"
+            [control]="selectedAreas" text="area_name" id="id" placeholder="Select Area">
+          </app-multiautocomplete>
+          <mat-error *ngIf="(!selectedAreas.value.length ) && showFormError">
+            <small>Please select atleast an area.</small>
+          </mat-error>
+        </div>
+        <div class="form-field-box" *ngIf="overviewFormGroup.value.keyCombination.locations.route">
+          <app-multiautocomplete isSingle="false" [options]="routes" (selectionchanged)="onRouteChange($event)"
+            [control]="selectedRoutes" text="route_name" id="id" placeholder="Select Route">
+          </app-multiautocomplete>
+          <mat-error *ngIf="(!selectedRoutes.value.length) && showFormError">
+            <small>Please select atleast a route.</small>
+          </mat-error>
+        </div>
+
+      </div>
+
+      <div class="">
+        <h4 *ngIf="showCustomers()">Customer</h4>
+        <div class="form-field-box" *ngIf="overviewFormGroup.value.keyCombination.customers.salesOrganisation">
+          <app-multiautocomplete isSingle="false" [options]="flatSalesOrganisationData"
+            (selectionchanged)="onSalesOrganisationChange()" [control]="selectedSalesOrganisations" text="name" id="id"
+            placeholder="Select Customer">
+          </app-multiautocomplete>
+          <mat-error *ngIf="(!selectedSalesOrganisations.value.length) && showFormError">
+            <small>Please select atleast a sales organisation.</small>
+          </mat-error>
+        </div>
+
+        <div class="form-field-box" *ngIf="overviewFormGroup.value.keyCombination.customers.channel">
+          <app-multiautocomplete isSingle="false" [options]="flatChannelData" (selectionchanged)="onChannelChange()"
+            [control]="selectedChannels" text="name" id="id" placeholder="Select Channel">
+          </app-multiautocomplete>
+          <mat-error *ngIf="(!selectedChannels.value.length ) && showFormError">
+            <small>Please select atleast a channel.</small>
+          </mat-error>
+        </div>
+
+        <div class="form-field-box" *ngIf="overviewFormGroup.value.keyCombination.customers.customerCategory">
+          <app-multiautocomplete isSingle="false" [options]="customerCategories"
+            (selectionchanged)="onCustomerCategoryChange()" [control]="selectedCustomerCategories" text="name" id="id"
+            placeholder="Select Category">
+          </app-multiautocomplete>
+          <mat-error *ngIf="(!selectedCustomerCategories.value.length) && showFormError">
+            <small>Please select atleast a customer category.</small>
+          </mat-error>
+        </div>
+
+        <div class="form-field-box" *ngIf="overviewFormGroup.value.keyCombination.customers.customer">
+          <!-- <app-multiautocomplete isSingle="false" [options]="customers" (selectionchanged)="onCustomerChange()"
+            [control]="selectedCustomers" [objectName]="'customer-root'" [param1]="'firstname'" [param2]="'lastname'"
+            text="name" id="id" placeholder="Select Customer">
+          </app-multiautocomplete>
+          <mat-error *ngIf="(!selectedCustomers.value.length ) && showFormError">
+            <small>Please select atleast a customer.</small>
+          </mat-error> -->
+          <div *ngIf="customers.length == 0">
+            <div class="select-placeholder-container">
+              <mat-spinner class="spinner" diameter="20"></mat-spinner>
+            </div>
+          </div>
+
+          <ng-container *ngIf="customers.length >0">
+            <app-multiautocomplete isSingle="false" [options]="customers" (selectionchanged)="onCustomerChange()"
+              [control]="selectedCustomers" text="name" id="id" [objectName]="'customer-root1'"
+              placeholder="Select Customer">
+            </app-multiautocomplete>
+            <!-- <app-lazy-loading isSingle="false" [options]="customers" (selectionchanged)="onCustomerChange()"
+            [control]="selectedCustomers" [objectName]="'customer-root'" text="name" id="id"
+            placeholder="Select Customer">
+          </app-lazy-loading> -->
+            <mat-error *ngIf="(!selectedCustomers.value.length ) && showFormError">
+              <small>Please select atleast a customer.</small>
+            </mat-error>
+          </ng-container>
+        </div>
+
+      </div>
+      <div class="">
+        <h4 *ngIf="showItems()">Item</h4>
+        <div class="form-field-box" *ngIf="overviewFormGroup.value.keyCombination.items.majorCategory">
+          <app-multiautocomplete isSingle="false" [options]="flatCategoryData" (selectionchanged)="onCategoryChange()"
+            [control]="selectedCategories" text="name" id="id" placeholder="Select majorCategory">
+          </app-multiautocomplete>
+          <mat-error *ngIf="(!selectedCategories.value.length) && showFormError">
+            <small>Please select atleast a category.</small>
+          </mat-error>
+        </div>
+        <div class="form-field-box" *ngIf="overviewFormGroup.value.keyCombination.items.itemGroup">
+          <app-multiautocomplete isSingle="false" [options]="itemGroups" (selectionchanged)="onItemGroupChange()"
+            [control]="selectedItemGroups" [objectName]="'code-root'" [param1]="'name'" [param2]="'code'" text="name"
+            id="id" placeholder="Select itemGroup">
+          </app-multiautocomplete>
+          <mat-error *ngIf="(!selectedItemGroups.value.length ) && showFormError">
+            <small>Please select atleast an item group.</small>
+          </mat-error>
+        </div>
+        <div class="form-field-box" *ngIf="overviewFormGroup.value.keyCombination.items.item && items.length >0">
+          <app-multiautocomplete isSingle="false" [options]="items" (selectionchanged)="onItemChange()"
+            [control]="selectedItems" [objectName]="'code-root1'" text="item_code" text="name" id="id"
+            placeholder="Select itemGroup">
+          </app-multiautocomplete>
+          <div *ngIf="items.length == 0">
+            <div class="select-placeholder-container">
+              <mat-spinner class="spinner" diameter="20"></mat-spinner>
+            </div>
+          </div>
+          <!--  <mat-error *ngIf="(!selectedItems.value.length ) && showFormError">
+            <small>Please select atleast an item.</small>
+          </mat-error> -->
+          <!-- <app-lazy-loading isSingle="false" [options]="items" (selectionchanged)="onItemChange()"
+            [control]="selectedItems" [objectName]="'code-root'" id="id" [param1]="'item_name'" [param2]="'item_code'"
+            text="item_code" placeholder="Select itemGroup">
+          </app-lazy-loading> -->
+          <mat-error *ngIf="(!selectedItems.value.length ) && showFormError">
+            <small>Please select atleast an item.</small>
+          </mat-error>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- <pre>{{overviewFormGroup.value | json}}</pre> -->
+  <!-- <pre>{{selectedItems}}</pre> -->
+  <!-- {{selectedIndex}} -->
+</section>

@@ -1,0 +1,201 @@
+<section>
+  <div class="heading-row clearfix">
+    <h2 class="d-md-inline">
+      <i class="os-icon os-icon-shopping-cart mr-2"></i>Purchase Order
+      <span class="order-number">#{{ purchaseOrderData?.purchase_order }}</span>
+    </h2>
+    <div class="d-md-inline float-md-right text-right">
+      <span>
+        <button class="btn btn-sm btn-white mr-2 dropdown-toggle" [matMenuTriggerFor]="menu2">
+          More
+        </button>
+        <mat-menu #menu2="matMenu" xPosition="before">
+          <button mat-menu-item class="height-40" (click)="editOrder()" appPermission [permissions]="userPermissions"
+            [type]="'edit'">
+            Edit
+          </button>
+          <button mat-menu-item class="height-40" (click)="openDeleteBox()" appPermission
+            [permissions]="userPermissions" [type]="'delete'">
+            Delete
+          </button>
+          <button mat-menu-item class="height-40" (click)="startDelivery()">
+            Convert to Delivery
+          </button>
+        </mat-menu>
+      </span>
+      <button class="btn" (click)="closeDetailView()">
+        <i class="os-icon os-icon-close"></i>
+      </button>
+    </div>
+  </div>
+  <div class="separator"></div>
+
+  <!--  <div class="approval-box" *ngIf="hasApprovalPending">-->
+  <!--    <div class="approve-icon">-->
+  <!--      <i class="fa fa-check-square-o"></i>-->
+  <!--    </div>-->
+  <!--    <div class="approve-content">-->
+  <!--      <h2>Approve this order</h2>-->
+  <!--      <p>This order has been submitted for approval. Verify and approve the order.</p>-->
+  <!--    </div>-->
+  <!--    <div class="approve-actions">-->
+  <!--      <button mat-button class="approve">Approve</button>-->
+  <!--      <button mat-button class="reject">Reject</button>-->
+  <!--    </div>-->
+  <!--  </div>-->
+
+  <form class="order-form custom-mat scrolly">
+    <div class="card-body active-form overview">
+      <div class="row justify-content-between">
+        <div class="col-md-4">
+          <div class="form-group">
+            <label for="">Vendor </label>
+            <input type="text" class="form-control form-control-sm non-editable"
+              [value]="purchaseOrderData?.vendor?.firstname" disabled />
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card-body overview">
+      <div class="row justify-content-between">
+        <div class="col-md-4">
+          <div class="form-group">
+            <label for="">Reference# </label>
+            <input type="text" class="form-control form-control-sm non-editable" [value]="purchaseOrderData?.reference"
+              disabled />
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div class="form-group">
+            <label for="">Purchase Order Date </label>
+            <input type="date" class="form-control form-control-sm non-editable"
+              [value]="purchaseOrderData?.purchase_order_date" disabled />
+          </div>
+          <div class="form-group">
+            <label for="">Expected Delivery Date </label>
+            <input type="date" class="form-control form-control-sm non-editable"
+              [value]="purchaseOrderData?.expected_delivery_date" disabled />
+          </div>
+        </div>
+      </div>
+    </div>
+    <div>
+      <div class="item-container custom-mat custom-mat-no-border">
+        <table>
+          <thead>
+            <tr>
+              <th class="head" *ngFor="let head of itemTableHeaders">
+                {{ head.label }}
+              </th>
+            </tr>
+          </thead>
+          <tbody class="form-body">
+            <tr class="item-row" *ngFor="
+                let item of purchaseOrderData?.purchaseorderdetail;
+                let i = index
+              ">
+              <td>{{ i + 1 }}</td>
+              <td class="item-name">
+                <input type="text" class="form-control form-control-sm non-editable item-name"
+                  [value]="item.item?.item_name" disabled />
+              </td>
+              <td class="uom-td">
+                <input type="text" class="form-control form-control-sm non-editable uom-td"
+                  [value]="item.item_uom?.name" disabled />
+              </td>
+              <td>
+                <input type="number" min="0" class="form-control form-control-sm non-editable" [value]="item.qty"
+                  disabled />
+              </td>
+              <td>
+                <input type="text" class="form-control form-control-sm non-editable" [value]="numberFormat(item.price)" disabled />
+              </td>
+              <td>
+                <input type="text" class="form-control form-control-sm non-editable" [value]="numberFormat(item.discount)" disabled />
+              </td>
+              <td>
+                <input type="text" class="form-control form-control-sm non-editable" [value]="numberFormat(item.vat)" disabled />
+              </td>
+              <td>
+                <input type="text" class="form-control form-control-sm non-editable" [value]="numberFormat(item.net)" disabled />
+              </td>
+              <td>
+                <input type="text" class="form-control form-control-sm non-editable" [value]="numberFormat(item.excise)" disabled />
+              </td>
+              <td>
+                <input type="text" class="form-control form-control-sm non-editable" [value]="numberFormat(item.total)" disabled />
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="footer-overview-container">
+        <div class="row justify-content-between">
+          <div class="form-group col-sm-5">
+            <label for="note">Customer Note</label>
+            <textarea class="form-control form-control-sm" id="note" [value]="purchaseOrderData?.customer_note"
+              disabled></textarea>
+          </div>
+          <div class="col-sm-4">
+            <div class="overall-stats-table">
+              <div>
+                <span class="stat-label">Gross Total</span>
+                <span class="stat-value">{{
+                  numberFormatWithSymbol(purchaseOrderData?.gross_total)
+                    
+                }}</span>
+                <span class="stat-label">Discount</span>
+                <span class="stat-value">{{
+                  numberFormatWithSymbol(purchaseOrderData?.discount_total) 
+                }}</span>
+                <span class="stat-label">Vat</span>
+                <span class="stat-value">{{
+                  numberFormatWithSymbol(purchaseOrderData?.vat_total) 
+                }}</span>
+                <span class="stat-label">Net</span>
+                <span class="stat-value">{{
+                  numberFormatWithSymbol(purchaseOrderData?.net_total) 
+                }}</span>
+                <span class="stat-label">Excise</span>
+                <span class="stat-value">{{
+                  numberFormatWithSymbol(purchaseOrderData?.excise_total)
+                    
+                }}</span>
+              </div>
+              <div>
+                <span class="stat-label final-total">Total</span>
+                <span class="stat-value final-total">{{
+                  numberFormatWithSymbol(purchaseOrderData?.net_total) 
+                }}</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- <div class="container footer-overview-container">
+        <div class="row">
+          <div class="form-group col-sm-5">
+            <label for="note">Customer Note</label>
+            <textarea class="form-control form-control-sm" id="note" [value]="purchaseOrderData.customer_note ? purchaseOrderData.customer_note : ''" disabled></textarea>
+          </div>
+          <div class="offset-2 col-sm-5">
+            <div class="overall-stats-table">
+              <div *ngFor="let stat of orderStats.slice(0, orderStats.length - 1)">
+                <span class="stat-label">{{ stat.label }}</span>
+                <span class="stat-value">{{ purchaseOrderData[0].purchaseorderdetail[stat.key]  }}</span>
+              </div>
+              <div>
+                <span class="stat-label final-total">Total</span>
+                <span class="stat-value final-total">{{ purchaseOrderData[0].purchaseorderdetail['total']  }}</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div> -->
+    </div>
+  </form>
+  <!-- <div class="footer-block"></div> -->
+</section>

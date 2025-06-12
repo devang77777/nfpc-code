@@ -1,0 +1,67 @@
+<section *ngIf="competitor">
+  <div class="pl-3">
+    <div class="row">
+      <h2 class="page-title col-sm-6 font-weight-light">
+        {{ competitor.company }}
+      </h2>
+      <div class="actions col-sm-6">
+        <div>
+          <button class="btn btn-sm btn-white mr-2" mat-button [matMenuTriggerFor]="menu2">More</button>
+          <mat-menu #menu2="matMenu">
+            <button mat-menu-item (click)="openEditCompetitor()" appPermission [permissions]="userPermissions" [type]="'edit'">Edit</button>
+            <button mat-menu-item appPermission [permissions]="userPermissions" [type]="'delete'">Delete</button>
+          </mat-menu>
+        </div>
+        <button *ngIf="isDetailVisible" class="btn" (click)="closeDetailView()">
+          <i class="os-icon os-icon-close"></i>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <div class="pl-3 area-data">
+    <div class="row h-100">
+      <div class="col-12">
+        <mat-tab-group class="customertab" mat-align-tabs="start">
+          <mat-tab label="Overview">
+            <mat-list>
+              <mat-list-item>
+                Date:
+                {{
+                  competitor.created_at | date: "d MMM y h:mm a"
+                }}</mat-list-item>
+              <mat-list-item>
+                Merchandiser: {{ competitor.salesman?.firstname }}
+                {{ competitor.salesman?.lastname }}</mat-list-item>
+              <mat-list-item> Company: {{ competitor.company }}</mat-list-item>
+              <mat-list-item> Brand: {{ competitor.brand }}</mat-list-item>
+              <mat-list-item> Compare Brands: <span *ngFor="let row of competitor.competitor_info_our_brand">&nbsp;{{ row.brand?.brand_name }},</span></mat-list-item>
+              <mat-list-item> Item: {{ competitor.item }}</mat-list-item>
+              <mat-list-item> Price: {{ competitor.price }}</mat-list-item>
+              <mat-list-item> Promotion: {{ competitor.promotion }}</mat-list-item>
+              <mat-list-item> Note: {{ competitor.note }}</mat-list-item>
+            </mat-list>
+            <ng-container *ngIf="competitor !== null">
+              <hr />
+              <div class="col-sm-12 data-block">
+                <div class="row" *ngIf="competitor.competitor_info_image.length > 0">
+                  <div class="col-sm-3" *ngFor="let image of competitor.competitor_info_image; let i=index">
+                    <mat-card class="item-card imageCard" *ngIf="image.image_string !== null">
+                      <img height="150" mat-card-image src="{{ image.image_string }}" alt="Compatitor Image" />
+                      <div class="iconsbar">
+                        <a href="javascript:;" (click)="downloadFile(image.image_string)"><i
+                            class="fa fa-download"></i></a>
+                        <a href="{{image.image_string}}" target="_blank"><i class="fa fa-external-link"></i></a>
+                        <a href="javascript:;" (click)="open(i)"><i class="fa fa-eye"></i></a>
+                      </div>
+                    </mat-card>
+                  </div>
+                </div>
+              </div>
+            </ng-container>
+          </mat-tab>
+        </mat-tab-group>
+      </div>
+    </div>
+  </div>
+</section>

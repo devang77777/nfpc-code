@@ -1,0 +1,133 @@
+.list-column.column-small+.content-column {
+    left: 440px;
+  }
+  .content-column>.header {
+    padding: 0 20px;
+  }
+  .column .zerotop {
+    top: 0;
+
+  }
+
+  .column.content-column {
+    margin-left: 10px;
+  }
+  .column .header {
+    border-bottom: 1px solid #eee;
+    height: 65px;
+    overflow: visible;
+  }
+  .column .fill {
+    left: 0;
+    right: 0;
+    position: absolute;
+  }
+  .content-column>.header .btn-toolbar {
+    padding: 16px 0;
+  }
+  .float-right {
+    float: right!important;
+  }
+  .btn-toolbar {
+    flex-wrap: wrap;
+    justify-content: flex-start;
+  }
+  a {
+    color: #2485e8;
+    text-decoration: none;
+    background-color: transparent;
+  }
+  .scrollbox {
+    background: linear-gradient(white 30%,rgba(255,255,255,0)),0 100%,radial-gradient(farthest-corner at 50% 0,rgba(0,0,0,.1),rgba(0,0,0,0)),0 100%;
+    background-repeat: no-repeat;
+    background-color: rgba(255,255,255,0);
+    background-size: 100% 40px,100% 40px,100% 4px,100% 4px;
+    background-attachment: local,local,scroll,scroll;
+  }
+
+
+  .p-4 {
+      padding: 15px!important;
+  }
+  .text-overdue {
+    color: #ff660f;
+  }
+  .d-inline-block {
+    display: inline-block!important;
+  }
+  .font-large {
+    font-size: 16px;
+  }
+  .text-uppercase {
+    text-transform: uppercase!important;
+  }
+
+
+  .line-seperator .coll, .coll {
+    border-right: 1px solid #eee;
+  }
+  .pb-3, .py-3 {
+    padding-bottom: 10px!important;
+  }
+  .pt-3, .py-3 {
+    padding-top: 10px!important;
+  }
+  .pl-5, .px-5 {
+    padding-left: 20px!important;
+  }
+  .pr-5, .px-5 {
+    padding-right: 20px!important;
+  }
+  .d-inline-block {
+    display: inline-block!important;
+  }
+  .font-large {
+    font-size: 16px;
+  }
+  .tooltip-container {
+    position: relative;
+  }
+
+
+  .action-header {
+     width:28%;
+    border-top: 1px solid #eee;
+    background-color: #fafafa;
+  }
+  .btn-group, .btn-group-vertical {
+    position: relative;
+    display: inline-flex;
+    vertical-align: middle;
+  }
+
+  .fill-container .zi-table {
+    border-left: none;
+    border-right: none;
+  }
+  .zi-table {
+    border-bottom: 1px solid #eee;
+    table-layout: fixed;
+  }
+
+  .table {
+    width: 100%;
+    margin-bottom: 10px;
+    color: #212529;
+  }
+  table {
+    border-collapse: collapse;
+  }
+  button.btn.btn-primary, button.btn.btn-primary:active, button.btn.btn-primary:hover  {
+    margin-left: 74%;
+    margin-bottom: 6px;
+    width: 150px;
+    background-color: #1abc9c;
+    border-radius: 0px !important;
+    border-color: unset !important;
+  }
+  .changebtn {
+    font-size: 12px !important;
+    i {
+      font-size: 12px !important;
+    }
+  }

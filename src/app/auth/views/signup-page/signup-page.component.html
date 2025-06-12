@@ -1,0 +1,209 @@
+<mat-progress-bar *ngIf="submitting" mode="indeterminate"></mat-progress-bar>
+<!-- <div class="content-wrapper" style="height: 100vh; ">
+    <div class="text-center">
+        <img src="assets/images/logo.png" alt="" srcset="" width="150px" class="">
+    </div>
+    <div class="row flex-grow">
+        <div class="col-lg-4 mx-auto p-5">
+            <div *ngIf="invalid" class="alert alert-danger" role="alert">
+
+            </div>
+            <div class="card" class="mb-5 rounded" style="border-radius: 5px;">
+                <div class="auth-form-light text-left">
+
+                    <p class="h4 font-weight-light text-center text-secondary">Get your free account!</p>
+
+                    <form [formGroup]="signupForm" (ngSubmit)="signup()">
+                        <input type="text" class="form-control form-rounded" formControlName="firstname"
+                            placeholder="First Name" />
+                        <br>
+                        <input type="text" class="form-control form-rounded" formControlName="lastname"
+                            placeholder="Last Name" />
+                        <br>
+                        <input type="text" class="form-control form-rounded" formControlName="email"
+                            placeholder="Email address" />
+                        <br>
+                        <input type="text" class="form-control form-rounded" formControlName="mobile"
+                            placeholder="Contact Number" />
+                        <br>
+                        <input type="password" class="form-control form-rounded" formControlName="password"
+                            placeholder="Password" />
+                        <br>
+                        <input type="password" class="form-control form-rounded" formControlName="password_confirmation"
+                            placeholder="Retype Password" />
+                        <br>
+                        <select class="form-control form-rounded" formControlName="country_id" placeholder="Country">
+                            <option value="" disabled selected>Select your Country</option>
+                            <option *ngFor="let country of countries" [value]="country.id">{{country.name}}</option>
+                        </select>
+                        <br>
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" [checked]="disabledAgreement"
+                                (change)="disabledAgreement=!disabledAgreement">
+                            <label class="form-check-label">
+                                I agree to the <a href="">Terms of Service</a> and <a href="">Privacy Policy</a> .
+                            </label>
+                        </div>
+                        <div class="text-center mt-2">
+                            <button class="btn btn-info btn-lg btn-login" type="submit"
+                                [disabled]="!signupForm.valid || !disabledAgreement">Signup</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div> -->
+<section id="invoice-login" *ngIf="!submitting">
+    <div class="scrolly-login container-fluid px-1 px-md-5 px-lg-1 px-xl-5 py-5 mx-auto">
+        <div class="card card0 border-0">
+            <div class="row d-flex">
+                <div class="col-lg-6">
+                    <div class="card1 pb-5">
+                        <div class="row px-3 justify-content-center mt-4 mb-5 border-line">
+                            <div class="invoice-login-crousel-outer">
+                                <div class="wrapper">
+                                    <owl-carousel-o [options]="customOptions">
+                                        <ng-container *ngFor="let slide of slider[domain]">
+                                            <ng-template class="slide" carouselSlide [id]="slide.id">
+                                                <img class="d-block w-100 img-wd" [src]="slide.image" [alt]="slide.id"
+                                                    [title]="slide.text">
+                                                <div class="{{slide.textClass}} mb-4"> {{slide.text}}</div>
+                                            </ng-template>
+                                        </ng-container>
+                                    </owl-carousel-o>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-6">
+                    <div class="card2 card border-0 px-4 py-5">
+                        <div class="row mb-4 px-3 invoive-text-center"><img src="/assets/img/inv-logo.png" alt="img"
+                                class="inv-logo" /></div>
+
+                        <div *ngIf="domain == 'invoice'" class="row mb-4 px-3 invoive-text-center">Mobiato Invoice
+                        </div>
+                        <div *ngIf="domain == 'merchandising' || domain == 'presales-prodmobiato.nfpc.net' || domain == 'prodmobiato.nfpc.net'"
+                            class="row mb-4 px-3 invoive-text-center">
+                            <div class="brand-name-pre"><img src="/assets/img/mar-logo.png"></div>
+                        </div>
+                        <div *ngIf="domain == 'presales'" class="row mb-4 px-3 invoive-text-center">
+                            <div class="brand-name-pre"><img src="/assets/img/pre-logo.png"></div>
+                        </div>
+                        <div *ngIf="domain == 'vansales'" class="row mb-4 px-3 invoive-text-center">
+                            <div class="brand-name-pre"><img src="/assets/img/van-logo.png"></div>
+                        </div>
+
+                        <div *ngIf="invalid" class="alert alert-danger" role="alert">
+                            {{message}}
+                        </div>
+                        <form [formGroup]="signupForm" class="needs-validation" (ngSubmit)="signup()">
+                            <div class="row">
+                                <div class="col-md-6 col-sm-6 col-xs-12">
+                                    <label class="mb-2">
+                                        <h6 class="mb-0 text-sm norma-font-inv">First Name*</h6>
+                                    </label>
+                                    <input class="mb-3" type="text" name="name" formControlName="firstname"
+                                        placeholder="First Name">
+                                    <app-validation-message [control]="signupForm.controls['firstname']">
+                                    </app-validation-message>
+                                </div>
+                                <div class="col-md-6 col-sm-6 col-xs-12">
+                                    <label class="mb-2">
+                                        <h6 class="mb-0 text-sm norma-font-inv">Last Name*</h6>
+                                    </label>
+                                    <input class="mb-3" type="email" name="lastname" formControlName="lastname"
+                                        placeholder="Last Name">
+                                    <app-validation-message [control]="signupForm.controls['lastname']">
+                                    </app-validation-message>
+                                </div>
+                                <div class="col-md-6 col-sm-6 col-xs-12">
+                                    <label class="mb-2">
+                                        <h6 class="mb-0 text-sm norma-font-inv">Email*</h6>
+                                    </label>
+                                    <input class="mb-3" type="email" name="email" formControlName="email"
+                                        placeholder="Email">
+                                    <app-validation-message [control]="signupForm.controls['email']">
+                                    </app-validation-message>
+                                </div>
+                                <div class="col-md-6 col-sm-6 col-xs-12">
+                                    <label class="mb-2">
+                                        <h6 class="mb-0 text-sm norma-font-inv">Phone
+                                            No{{ hidePasswords == true ? '' : '*' }}</h6>
+                                    </label>
+                                    <input class="mb-3" type="tel" name="number" formControlName="mobile"
+                                        placeholder="Phone No">
+                                    <app-validation-message [control]="signupForm.controls['mobile']">
+                                    </app-validation-message>
+                                </div>
+                                <div class="col-md-6 col-sm-6 col-xs-12" *ngIf="!hidePasswords">
+                                    <label class="mb-2">
+                                        <h6 class="mb-0 text-sm norma-font-inv">Password*</h6>
+                                    </label>
+                                    <input class="mb-4" type="Password" name="password" formControlName="password"
+                                        placeholder="******">
+                                    <app-validation-message [control]="signupForm.controls['password']">
+                                    </app-validation-message>
+                                </div>
+                                <div class="col-md-6 col-sm-6 col-xs-12" *ngIf="!hidePasswords">
+                                    <label class="mb-2">
+                                        <h6 class="mb-0 text-sm norma-font-inv">Confirm Password*</h6>
+                                    </label>
+                                    <input class="mb-4" type="Password" name="c_password"
+                                        formControlName="password_confirmation" placeholder="******">
+                                    <app-validation-message [control]="signupForm.controls['password_confirmation']">
+                                    </app-validation-message>
+                                </div>
+                                <div class="col-md-6 col-sm-6 col-xs-12">
+                                    <label class="mb-2">
+                                        <h6 class="mb-0 text-sm norma-font-inv">Select Country*</h6>
+                                    </label>
+                                    <app-multiautocomplete isSingle="true" [options]="countries"
+                                        [control]="signupForm.controls['country_id']" text="name" id="id">
+                                    </app-multiautocomplete>
+
+                                    <!-- <select name="country" class="mb-4" formControlName="country_id"
+                                        placeholder="Country">
+                                        <option value="" disabled selected>Select your Country</option>
+                                        <option *ngFor="let country of countries" [value]="country.id">{{country.name}}
+                                        </option>
+                                    </select> -->
+                                    <app-validation-message [control]="signupForm.controls['country_id']">
+                                    </app-validation-message>
+                                </div>
+                                <div class="col-md-12 col-sm-12 col-xs-12">
+                                    <br>
+                                    <input class="checkbox-su mr-1" id="disabledAgreement" type="checkbox"
+                                        [checked]="disabledAgreement" (change)="disabledAgreement=!disabledAgreement">
+                                    <label class="" for="disabledAgreement">
+                                        I agree to the <a href="">Terms of Service</a> and <a href="">Privacy Policy</a>
+                                        .
+                                    </label>
+                                </div>
+                            </div>
+                            <br>
+                            <div class="row mb-3 px-3 button-bg-invoice">
+                                <button type="submit"
+                                    [ngClass]="{presalesz : domain == 'presales' ? true : false, march : domain == 'merchandising' || domain == 'presales-prodmobiato.nfpc.net' || domain == 'prodmobiato.nfpc.net' ? true : false}"
+                                    class="btn btn-blue text-center"
+                                    [disabled]="!signupForm.valid || !disabledAgreement">Signup</button>
+                            </div>
+                        </form>
+                        <div class="row px-3 mb-4">
+                            <div class="line"></div> <small class="or text-center">Or</small>
+                            <div class="line"></div>
+                        </div>
+                        <div class="row mb-4 px-3 invoive-text-center"> <a (click)="signInWithGoogle()"><small><img
+                                        src="/assets/img/inv-g.png" alt="img" class="goo" /> Sign Up With Google
+                                </small></a></div>
+                        <div class="row mb-4 px-3 invoive-text-center"> <small class="">Already have an account? <a
+                                    routerLink="/auth/login" class="blueee"> Sign In</a></small> </div>
+
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</section>

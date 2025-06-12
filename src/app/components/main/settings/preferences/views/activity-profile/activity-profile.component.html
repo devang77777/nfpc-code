@@ -1,0 +1,82 @@
+<div class="heading-row">
+    <h2 class="d-inline"><strong> Activity Profile</strong></h2>
+    <button *ngIf="selections.selected.length > 0" class="btn btn-sm btn-white dropdown-toggle ml-2  float-right" mat-button
+        [matMenuTriggerFor]="menu2">
+        Bulk Actions
+      </button>
+      <mat-menu #menu2="matMenu">
+        <button mat-menu-item (click)="bulkAction('active')">Mark as Active</button>
+        <button mat-menu-item (click)="bulkAction('inactive')" >Mark as Inactive</button>
+        <!-- <button mat-menu-item (click)="bulkAction('delete')" appPermission [permissions]="userPermissions" [type]="'delete'">
+          Delete
+        </button> -->
+      </mat-menu>
+    <button class="btn btn-primary changebtn float-right" (click)="open()">
+        <i class="os-icon os-icon-plus" aria-hidden="true"></i> New </button>
+        
+</div>
+<div class="row">
+    <div class="col-md-12">
+        <div class="card ">
+
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table mat-table [dataSource]="itemSource" class="mat-elevation-z8 table table-hover">
+                        <ng-container matColumnDef="select">
+                            <th mat-header-cell *matHeaderCellDef>
+                              <mat-checkbox
+                                class="head-checkbox"
+                                (change)="$event ? toggleSelection() : null"
+                                [checked]="selections.hasValue() && isAllSelected()"
+                                [indeterminate]="selections.hasValue() && !isAllSelected()"
+                                [aria-label]="checkboxLabel()"
+                              >
+                              </mat-checkbox>
+                            </th>
+                            <td mat-cell *matCellDef="let row">
+                              <mat-checkbox
+                                class="row-checkbox"
+                                (click)="$event.stopPropagation()"
+                                (change)="$event ? selections.toggle(row) : null"
+                                [checked]="selections.isSelected(row)"
+                                [aria-label]="checkboxLabel(row)"
+                              >
+                              </mat-checkbox>
+                            </td>
+                          </ng-container>
+                        <ng-container matColumnDef="activity_name">
+                            <th mat-header-cell *matHeaderCellDef> Activity Name </th>
+                            <td mat-cell *matCellDef="let element"> {{ element.activity_name }} </td>
+                        </ng-container>
+                        <ng-container matColumnDef="valid_from">
+                            <th mat-header-cell *matHeaderCellDef> Valid From </th>
+                            <td mat-cell *matCellDef="let element"> {{ element.valid_from }} </td>
+                        </ng-container>
+                        <ng-container matColumnDef="valid_to">
+                            <th mat-header-cell *matHeaderCellDef> Valid To </th>
+                            <td mat-cell *matCellDef="let element"> {{ element.valid_to }} </td>
+                        </ng-container>
+                        <ng-container matColumnDef="actions">
+                            <th mat-header-cell *matHeaderCellDef> Action </th>
+                            <td mat-cell *matCellDef="let element">
+                                <div class="row-action">
+                                    <small class="fa fa-edit" style="cursor: pointer;"
+                                        (click)="editActivityProfile(element)" click-stop-propagation></small> | <i
+                                        style="cursor: pointer;" class="fa fa-trash-o"
+                                        (click)="deleteActivityProfile(element)" aria-hidden="true"
+                                        click-stop-propagation></i>
+                                </div>
+                            </td>
+                        </ng-container>
+                        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                        <tr mat-row *matRowDef="let row; columns: displayedColumns;" (click)="setActivityProfile(row)">
+                        </tr>
+                    </table>
+                </div>
+                <div class="ember-view">
+                    <mat-paginator [hidden]="apiResponse.pagination?.total_records < 10" (page)="onPageFired($event)" [pageSizeOptions]="[10, 25, 50]"> </mat-paginator>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

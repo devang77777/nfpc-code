@@ -1,0 +1,28 @@
+<div class="heading-row">
+    <mat-chip-list aria-label="Fish selection">
+        <mat-chip (click)="onSelectModule(item.name)" *ngFor="let item of modules"
+            [selected]="selectedModule==item.name" [color]="selectedModule==item.name ? 'primary' : 'default'">
+            {{item.title}}
+        </mat-chip>
+    </mat-chip-list>
+</div>
+<div class="container-fluid pt-3">
+    <div class="row">
+        <div class="col-md-3 " *ngFor="let item of templates; let i=index;">
+            <div class="tempholder selected">
+                <div class="selectedholder">
+                    <span style="display: flex;width: 112px;">
+                        <a class="circleicon" (click)="onSelect(item)">
+                            <i class="os-icon os-icon-check"></i>
+                        </a>
+                        <a class="circleicon" (click)="open(i)">
+                            <mat-icon style="margin-top: 1px;">visibility</mat-icon>
+                        </a>
+                    </span>
+                    <span *ngIf="selected?.id==item.id" class="stext">Selected Template</span>
+                </div>
+                <img [src]="item.src" (click)="onSelect(i)" style="width:100%" alt="Template">
+            </div>
+        </div>
+    </div>
+</div>

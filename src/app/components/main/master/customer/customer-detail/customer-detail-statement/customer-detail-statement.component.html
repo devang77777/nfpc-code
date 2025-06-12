@@ -1,0 +1,182 @@
+<section class="statementCls">
+  <div class="pl-3">
+    <div class="row statementCls1">
+      <div class="col-lg-6 col-md-12 col-sm-12">
+        <mat-select
+          [formControl]="dateFilter"
+          placeholder="Date Filter"
+          class="form-control form-control-sm"
+        >
+          <mat-option *ngFor="let item of salesOptions" [value]="item.id">
+            <button mat-button>{{ item.label }}</button>
+          </mat-option>
+        </mat-select>
+
+        <div class="dropDiv">
+          <!--<div class="dropdown" [ngClass]="showStatus ? 'show' : ''">
+                            <button
+                              type="button"
+                              (click)="showStatus = !showStatus;"
+                              class="btn dropdown-toggle"
+                              [attr.aria-expanded]="showStatus"
+                              data-toggle="dropdown"
+                            >
+                                <i class="fa fa-calendar mr-1" aria-hidden="true"></i>This Month
+                            </button>
+                            <div class="dropdown-menu" [ngClass]="showStatus ? 'show' : ''">
+                                <a class="dropdown-item" *ngFor="let item of salesOptions"> {{ item }} </a>
+                            </div>
+                        </div>-->
+
+          <!--<div class="dropdown ml-3">
+                            <button
+                              type="button"
+                              (click)="showFilter = !showFilter;"
+                              [attr.aria-expanded]="showFilter"
+                              class="btn dropdown-toggle marNot"
+                              data-toggle="dropdown">
+                                <span>Filter:</span> {{ filterSelected === undefined ? 'All' : filterSelected }}
+                            </button>
+                            <div class="dropdown-menu" [ngClass]="showFilter ? 'show' : ''">
+                                <a class="dropdown-item" (click)="filterSelected = item;" *ngFor="let item of salesOptions"> {{ item }} </a>
+                            </div>
+                        </div>-->
+        </div>
+      </div>
+      <div class="col-lg-6 col-md-12 col-sm-12 text-right">
+        <div class="text-right">
+          <div class="btn-group btnrow mr-2">
+            <button
+              class="btn"
+              printSectionId="print-section"
+              printTitle="Statement"
+              [printStyle]="{
+                h1: { color: 'red' },
+                h2: { border: 'solid 1px' }
+              }"
+              [useExistingCss]="true"
+              ngxPrint
+            >
+              <i class="fa fa-print iconCl" aria-hidden="true"></i>
+            </button>
+            <button class="btn" (click)="downloadPdf()">
+              <i class="fa fa-file-pdf-o iconCl" aria-hidden="true"></i>
+            </button>
+          </div>
+          <button class="btn btn-primary btn-sm">
+            <i class="fa fa-envelope-o" aria-hidden="true"></i> &nbsp;Send Email
+          </button>
+        </div>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-md-12">
+        <div class="custmPara text-center">
+          <h4>Customer Statement for test test</h4>
+          <h5>
+            <span>From</span> {{ statement?.accountSummary?.statement_date }}
+          </h5>
+        </div>
+      </div>
+    </div>
+    <!-- tables -->
+
+    <div class="card border" id="print-section">
+      <div class="card-body" [innerHTML]="template"></div>
+    </div>
+
+    <!--
+        <div class="card border">
+
+            <div class="card-body">
+                <div class="pcs-template">
+                    <div class="cusButton">
+                        <button class="sendBtn">
+                            <i _ngcontent-yba-c223="" class="os-icon os-icon-ui-46"></i> &nbsp;Customize
+                        </button>
+                    </div>
+                <div class="tophead ">
+                    <strong>Mobiato Consulting</strong>
+                    <p class="m-0 montypefont">Company ID : 1000<br>
+                        S.G Highway<br>
+                        Ahmedabad Jharkhand 382350<br>
+                        India<br>
+                        GSTIN 204783838383123
+                    </p>
+                </div>
+                <h2 class="text-right m-0"><strong>Statement of Accounts</strong> </h2>
+               <p class="text-right"><span class="text-primary"> 01/06/2020 To 30/06/2020</span></p>
+              <div class="row">
+                <div class="col-md-7">
+                    <p><strong>To</strong></p>
+                    <p><strong><a href="#">test test</a> </strong></p>
+                    <p class="montypefont">
+                        C-104,Shurbhi <br>
+                        Ahmedabad<br>
+                        223 Andaman and Nicobar Islands<br>
+                        India<br>
+                        GSTIN 202020202020202
+                    </p>
+                   </div>
+                   <div class="col-md-5">
+                    <ul class="list-group mb-2">
+                        <li class="list-group-item active">
+                            Account Summary
+                        </li>
+                        <li class="list-group-item">
+                            <span>Opening Balance</span>
+                            <strong class="float-right">₹ 0.00</strong>
+                        </li>
+                        <li class="list-group-item">
+                            <span>Invoiced Amount</span>
+                            <strong class="float-right">₹ 0.00</strong>
+                        </li>
+                        <li class="list-group-item">
+                            <span>Amount Received</span>
+                            <strong class="float-right">₹ 0.00</strong>
+                        </li>
+                        <li class="list-group-item">
+                            <span>Balance Due</span>
+                            <strong class="float-right">₹ 0.00</strong>
+                        </li>
+                        
+                    </ul>
+                   </div>
+              </div>
+              
+              
+              <div class="footTab">
+                <div class="table-responsive">
+                    <table class=" mb-0 table table-hover table-bordered table-striped">
+                        <thead class="thead-dark">
+                            <tr>
+                                <th scope="col" class="text-left box-padding">Date</th>
+                                <th scope="col" class="text-left box-padding">Transactions</th>
+                                <th scope="col" class="text-left box-padding">Details</th>
+                                <th scope="col" class="text-right box-padding">Amount</th>
+                                <th scope="col" class="text-right box-padding">Payments</th>
+                                <th scope="col" class="text-right box-padding">Balance</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td scope="col" class="text-left box-padding">01/06/2020</td>
+                                <td scope="col" class="text-left box-padding">***Opening<br> Balance***</td>
+                                <td scope="col" class="text-left box-padding"></td>
+                                <td scope="col" class="text-right box-padding">0.00</td>
+                                <td scope="col" class="text-right box-padding"></td>
+                                <td scope="col" class="text-right box-padding">0.00</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <br>
+                <p class="alert alert-warning text-right"> Balance Due <strong>₹ 0.00</strong> </p>
+                
+               
+            </div>
+            </div>
+        </div>
+        </div>-->
+  </div>
+</section>

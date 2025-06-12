@@ -1,0 +1,107 @@
+<div class="card">
+    <div class="card-header">
+        <p class="h4 font-weight-light d-inline">
+            PDF Read By OCR
+        </p>
+    </div>
+
+    <mat-horizontal-stepper [linear]="isLinear" #stepper labelPosition="bottom">
+        <div class=" card-body">
+            <mat-step [stepControl]="formNameGroup" label="Customer">
+                <div style="padding-top: 3%;">
+                    <form [formGroup]="formNameGroup">
+                        <!-- <ng-template matStepLabel>Name</ng-template> -->
+                        <div>
+                            <p class="font-medium">
+                                Select the customer which you want to upload the PDF
+                            </p>
+                        </div>
+                        <div class="row">
+                            <div class="form-group smmatinput col-lg-4">
+                                <label for="">Customer</label>
+                                <input type="text" class="example-full-width icon" matInput [matAutocomplete]="auto"
+                                    formControlName="customerFormControl" (input)="keyUp.next($event)">
+                                <mat-autocomplete appOptionScroll (optionsScroll)="onScroll()" #auto="matAutocomplete"
+                                    [displayWith]="customerControlDisplayValue" required>
+                                    <mat-option *ngFor="let customer of filterCustomer" [value]="customer">
+                                        {{ customer.customer_code }} - {{ customer.name }} </mat-option>
+                                    <mat-option *ngIf="isLoading">
+                                        <div class="select-placeholder-container">
+                                            <mat-spinner class="spinner" diameter="20"></mat-spinner>
+                                        </div>
+                                    </mat-option>
+
+                                    <!-- <mat-option id="custBtn" class="in-opt-btn"><button (click)="addCustomer()"><i
+                                                            class="os-icon os-icon-plus"></i> Add Customer</button></mat-option> -->
+                                </mat-autocomplete>
+                                <!-- <mat-error *ngIf="customerFormControl.hasError('required')">Please select a customer
+                                            </mat-error> -->
+                            </div>
+                        </div>
+                        <br />
+                        <div class="card-footer">
+                            <div class="d-inline">
+                                <button mat-button class="btn btn-sm btn-p" matStepperNext>Next</button>
+                                <button mat-button class="btn btn-sm btn-light mr-2 cancle-btn"
+                                    (click)="backToMain()">Cancel</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </mat-step>
+
+            <mat-step [stepControl]="formPasswordGroup" label="File Upload">
+                <div style="padding-top: 3%;">
+                    <form [formGroup]="formPasswordGroup">
+                        <!-- <ng-template matStepLabel>Name</ng-template> -->
+                        <div>
+                            <p class="font-medium">
+                                Upload the PDF file for the customer which you want to generate the order
+                            </p>
+                        </div>
+                        <div class="row">
+                            <div class="col-lg-4"> <label>Upload Files : </label></div>
+                            <div class="col-lg-8">
+                                <input style="display: none" type="file" (change)="onSelectFile($event)"
+                                    formControlName="customer_file" name="customer_file"
+                                    [(ngModel)]="importFile.customer_file" #file required>
+                                <button class="btn btn-sm btn-p" *ngIf='!(filesList.length > 0)'
+                                    (click)="file.click()">Upload
+                                    file</button>
+                                <span *ngIf='!(filesList.length > 0)'>No file selected</span>
+                                <mat-chip-list #chipList aria-label="selection" *ngIf='(filesList.length > 0)'>
+                                    <mat-chip *ngFor="let file of filesList" [removable]="removable"
+                                        (removed)="remove(file)">
+                                        {{file.name}}
+                                        <mat-icon matChipRemove *ngIf="removable">Cancel</mat-icon>
+                                    </mat-chip>
+                                </mat-chip-list>
+                                <div class="font-style"> <small> Maximum File Size: 5 MB
+                                    </small>&nbsp;|&nbsp;
+                                    <small> File Format:
+                                        Pdf </small>
+                                </div>
+                            </div>
+                        </div>
+                        <br />
+                        <div class="card-footer">
+                            <div class="d-inline">
+                                <button mat-button class="btn btn-sm btn-light mr-2 cancle-btn"
+                                    matStepperPrevious>Back</button>
+                                <button mat-button class="btn btn-sm btn-p" (click)="submitFile()">Submit</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </mat-step>
+        </div>
+
+
+
+
+        <!-- <ng-template matStepperIcon="phone">
+      <mat-icon>phone</mat-icon>
+  </ng-template> -->
+
+    </mat-horizontal-stepper>
+</div>

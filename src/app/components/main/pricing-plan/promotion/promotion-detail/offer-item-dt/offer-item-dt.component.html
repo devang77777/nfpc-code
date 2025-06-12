@@ -1,0 +1,26 @@
+<section>
+  <mat-table class="table table-hover" [dataSource]="dataSource">
+    <mat-header-row *matHeaderRowDef="displayColumns; sticky: true"></mat-header-row>
+    <mat-row class="list-row" *matRowDef="let row; columns: displayColumns"></mat-row>
+    <!-- Column definitions -->
+    <ng-container matColumnDef="itemName">
+      <mat-header-cell *matHeaderCellDef> Item Name </mat-header-cell>
+      <mat-cell *matCellDef="let row">
+        {{ row.itemName }}
+      </mat-cell>
+    </ng-container>
+
+    <ng-container matColumnDef="uom">
+      <mat-header-cell *matHeaderCellDef> UOM </mat-header-cell>
+      <mat-cell *matCellDef="let row">
+        {{ row.uom }}
+      </mat-cell>
+    </ng-container>
+    <ng-container matColumnDef="offeredQty">
+      <mat-header-cell *matHeaderCellDef> Offered Quantity </mat-header-cell>
+      <mat-cell *matCellDef="let row">
+        {{ row.offeredQty }}
+      </mat-cell>
+    </ng-container>
+  </mat-table>
+</section>

@@ -1,0 +1,124 @@
+<section *ngIf="discount">
+  <div class="pl-3">
+    <div class="row">
+      <h2 class="page-title col-sm-10 font-weight-light">
+        {{ discount.name }}
+      </h2>
+      <div class="actions col-sm-2">
+        <button (click)="openEditPricing()" class="iconbtn" appPermission [permissions]="userPermissions"
+          [type]="'edit'">
+          <i class="os-icon os-icon-edit" aria-hidden="true"></i>
+        </button>
+        <div>
+          <button class="btn btn-sm btn-white" mat-button [matMenuTriggerFor]="menu2">
+            More
+          </button>
+          <mat-menu #menu2="matMenu">
+            <!-- <button mat-menu-item (click)="toggleStatus()">Mark as
+                {{ area.area_status === 0 ? 'Active' : 'Inactive' }}</button> -->
+            <button mat-menu-item (click)="openDeleteBox()" class="btn" appPermission [permissions]="userPermissions"
+              [type]="'delete'">
+              Delete
+            </button>
+          </mat-menu>
+        </div>
+        <button *ngIf="isDetailVisible" class="btn" (click)="closeDetailView()">
+          <i class="os-icon os-icon-close"></i>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <div class="pl-3 area-data">
+    <div class="row h-100">
+      <div class="col-12 ">
+        <mat-tab-group class="customertab" mat-align-tabs="start">
+          <mat-tab label="Overview">
+            <div class="row">
+              <div class="col-xl-4 col-lg-5 col-md-8">
+                <ul class="smhlist mt-2">
+                  <li>
+                    <span>Start Date</span>
+                    <strong>{{ discount.start_date }}</strong>
+                  </li>
+                  <li>
+                    <span>End Date</span>
+                    <strong>{{ discount.end_date }}</strong>
+                  </li>
+                  <li>
+                    <span>Key Selection</span>
+                    <strong>{{ discount.combination_key_value }}</strong>
+                  </li>
+                </ul>
+              </div>
+            </div>
+          </mat-tab>
+          <mat-tab label="Key Value">
+            <div class="details-container pt-2">
+              <mat-accordion>
+                <div *ngFor="let key of keyCombos" class="mb-1">
+                  <mat-expansion-panel class="mat-elevation-z0" [disabled]="key.data.length == 1">
+                    <mat-expansion-panel-header>
+                      <mat-panel-title>
+                        {{ key.title }}
+                      </mat-panel-title>
+                      <mat-panel-description>
+                        <span *ngIf="key.data.length > 1; else elseBlock">
+                          {{ key.data[0]?.name }} &
+                          {{ key.data.length - 1 }} more..</span>
+                        <ng-template #elseBlock>
+                          {{ key.data[0]?.name }}
+                        </ng-template>
+                      </mat-panel-description>
+                    </mat-expansion-panel-header>
+                    <div class="lists">
+                      <table class="text-right">
+                        <tr *ngFor="let key of key.data">
+                          <td>{{ key?.name }}</td>
+                        </tr>
+                      </table>
+                    </div>
+                  </mat-expansion-panel>
+                </div>
+              </mat-accordion>
+            </div>
+          </mat-tab>
+          <mat-tab label="Discount">
+            <div *ngIf="discount.type === '1'">
+              <div class="row">
+                <div class="col-xl-4 col-lg-5 col-md-8">
+                  <ul class="smhlist mt-2">
+                    <li *ngIf="discount.discount_type === '2'">
+                      <span>Discount Percentage</span>
+                      <strong>{{ discount.discount_percentage }}</strong>
+                    </li>
+                    <li *ngIf="discount.discount_type === '1'">
+                      <span>Discount Value</span>
+                      <strong>{{ discount.discount_value }}</strong>
+                    </li>
+                    <li *ngIf="discount.discount_apply_on === '1'">
+                      <span>Discount Applied on quantity</span>
+                      <strong>{{ discount.qty_to }}</strong>
+                    </li>
+                    <li *ngIf="discount.discount_apply_on === '2'">
+                      <span>Discount Applied on value</span>
+                      <strong>{{ discount.qty_to }}</strong>
+                    </li>
+                  </ul>
+                </div>
+              </div>
+              <!-- <tr>
+                                    <td class="table-title">Discount Apply on</td>
+                                    <td class="table-value">{{discount.discount_apply_on}}</td>
+                                </tr> -->
+            </div>
+            <div *ngIf="discount.type === '2'" class="p-4">
+              <app-discount-detail-slab-table [editData]="discount"></app-discount-detail-slab-table>
+            </div>
+            <!-- <pre>{{discount | json}}</pre> -->
+          </mat-tab>
+        </mat-tab-group>
+      </div>
+    </div>
+  </div>
+</section>

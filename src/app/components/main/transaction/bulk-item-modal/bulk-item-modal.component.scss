@@ -1,0 +1,100 @@
+::ng-deep .mat-item-select-panel::-webkit-scrollbar {
+    -webkit-appearance: none;
+}
+
+::ng-deep .mat-item-select-panel::-webkit-scrollbar:vertical {
+    width: 8px;
+}
+
+::ng-deep .mat-item-select-panel::-webkit-scrollbar:horizontal {
+    height: 8px;
+}
+
+::ng-deep .mat-item-select-panel::-webkit-scrollbar-thumb {
+    background-color: #e0e0e0;
+}
+::ng-deep .mat-item-select-panel::-webkit-scrollbar-track {
+    background-color: #f3f3f3;
+}
+.mat-item-select-panel {
+    height: 415px;
+    max-height: 435px;
+    overflow-y: scroll;
+}
+
+.text-bold {
+    font-weight: bolder;
+}
+
+.item-menu-option {
+    display: flex;
+    padding: 6px 0px 0px 4px;
+}
+.item-menu-option:nth-child(odd) {
+    background: #efeaea;
+}
+
+.item-name-menu-option {
+    width: 65%;
+
+    font-size: 12px;
+    width: 100%;
+    padding: 2px 0;
+    line-height: 1.2;
+    white-space: normal;
+}
+.item-name-menu-option p {
+    font-size: 11px;
+}
+
+.item-stock-menu-option {
+    width: 25%;
+}
+.item-svg-tick {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    width: 10%;
+}
+svg.icon.icon-xlg {
+    height: 20px;
+    width: 20px;
+}
+svg.icon {
+    width: 16px;
+    height: 16px;
+    fill: #c2cbd6;
+}
+.hover-tick {
+    display: none;
+}
+.tick-filled svg {
+    vertical-align: middle;
+    fill: #22dd2e;
+}
+.item-uom-width {
+    width: 100px;
+    display: block;
+    text-align: center;
+}
+
+.item-code-width {
+    width: 104px;
+    display: block;
+    text-align: center;
+}
+.inactive-form {
+    pointer-events: none;
+    opacity: 0.35;
+    cursor: not-allowed;
+}
+.trash-btn {
+    background-color: transparent;
+    width: 24px;
+    height: 24px;
+    border-radius: 12px;
+    position: relative;
+    margin-top: 6px;
+    color: #ff5656;
+    border: 1px solid #ff5656;
+}

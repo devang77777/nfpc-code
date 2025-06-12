@@ -1,0 +1,99 @@
+<div class="item-form">
+    <div class="card">
+        <div class="card-header pt-4">
+            <span class="h6 font-weight-bold">{{ formType }} Pallet</span>
+            <a (click)="close()" class="closeicon settingclose"><i class="os-icon os-icon-x"></i></a>
+        </div>
+        <div class="card-body">
+            <form [formGroup]="palletFormGroup" [ngClass]="{'has-error': formSubmit}">
+                <!-- <div class="row mb-3">
+                    <div class="col">
+                        <label for="">Date<i class="text-red">*</i>:</label>
+                        <div class="siconhol">
+                            <input type="text" class="form-control form-control-sm" formControlName="date" />
+
+                        </div>
+                    </div>
+                </div> -->
+                <div class="row mb-3">
+                    <div class="col">
+                        <label for="">Date<i class="text-red">*</i>:</label>
+                        <input type="date" class="form-control form-control-sm" formControlName="date" />
+                    </div>
+                </div>
+                <div class="row mb-3">
+                    <div class="col">
+                        <label for="">Salesman</label>
+                        <angular2-multiselect [data]="salesmans" [formControl]="palletFormGroup.controls['salesman_id']"
+                            [settings]="salesSetiings">
+                            <c-search>
+                                <ng-template>
+                                    <input type="text" (input)="onSalesmanSearch($event)" placeholder="Search Items"
+                                        style="border: none;widmat-header-cell: 100%; height: 100%;outline: none;" />
+                                </ng-template>
+                            </c-search>
+                            <c-item>
+                                <ng-template let-item="item">
+                                    <label
+                                        style="font-weight: 100 !important;margin-bottom:0 !important">{{item.itemName}}</label>
+                                </ng-template>
+                            </c-item>
+                        </angular2-multiselect>
+                    </div>
+                </div>
+
+                <div class="row mb-3">
+                    <div class="col">
+                        <label for="">Item</label>
+                        <angular2-multiselect [data]="items" [formControl]="palletFormGroup.controls['item_id']"
+                            [settings]="settings">
+                            <c-search>
+                                <ng-template>
+                                    <input type="text" (input)="onSearch($event)" placeholder="Search Items"
+                                        style="border: none;widmat-header-cell: 100%; height: 100%;outline: none;" />
+                                </ng-template>
+                            </c-search>
+                            <c-item>
+                                <ng-template let-item="item">
+                                    <label
+                                        style="font-weight: 100 !important;margin-bottom:0 !important">{{item.itemName}}</label>
+                                </ng-template>
+                            </c-item>
+                        </angular2-multiselect>
+                    </div>
+                </div>
+                <div class="row mb-3">
+                    <div class="col">
+                        <label for="">Qty<i class="text-red">*</i>:</label>
+                        <input type="number" class="form-control form-control-sm" formControlName="qty" />
+                    </div>
+                </div>
+                <div class="row mb-3">
+                    <div class="col">
+                        <label for="" style="width: 15%;">Pallet: </label>
+                        <mat-radio-group aria-label="Select an option" formControlName="type">
+                            <mat-radio-button class="mr-4" style="width: 18%;" value="0">Allocated
+                            </mat-radio-button>
+                            <mat-radio-button value="1">Return</mat-radio-button>
+                        </mat-radio-group>
+                    </div>
+                </div>
+            </form>
+        </div>
+        <br /><br />
+        <div class="card-footer">
+            <div class="d-inline float-right">
+                <button class="btn btn-sm btn-light mr-2" (click)="close()">
+                    Cancel
+                </button>
+                <button class="btn btn-sm btn-p" (click)="savePalletData()" [type]="'create'">
+                    Save
+                </button>
+                <button class="btn btn-sm btn-p" (click)="savePalletData()" *ngIf="isEdit" appPermission
+                    [permissions]="userPermissions" [type]="'edit'">
+                    Save
+                </button>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,95 @@
+<div class="pl-3  items-table-box">
+    <div class="table-responsive">
+        <table mat-table [dataSource]="itemSource" class="mat-elevation-z8 table table-hover">
+            <ng-container matColumnDef="SRNo">
+                <th mat-header-cell *matHeaderCellDef>
+                    SR No.
+                </th>
+                <td mat-cell *matCellDef="let element"> {{ element?.SR_No }} </td>
+            </ng-container>
+            <ng-container matColumnDef="Item">
+                <th mat-header-cell *matHeaderCellDef>
+                    Item Code
+                </th>
+                <td mat-cell *matCellDef="let element"> {{ element?.Item }} </td>
+            </ng-container>
+
+            <ng-container matColumnDef="Item_description">
+                <th mat-header-cell *matHeaderCellDef>
+                    Item Description
+                </th>
+                <td mat-cell *matCellDef="let element"> {{ element?.Item_description }} </td>
+            </ng-container>
+            <ng-container matColumnDef="qty">
+                <th mat-header-cell *matHeaderCellDef>
+                    Qty
+                </th>
+                <td mat-cell *matCellDef="let element"> {{ element?.qty }} </td>
+            </ng-container>
+
+            <ng-container matColumnDef="uom">
+                <th mat-header-cell *matHeaderCellDef>
+                    UOM
+                </th>
+                <td mat-cell *matCellDef="let element"> {{ element?.uom }} </td>
+            </ng-container>
+            <ng-container matColumnDef="sec_qty">
+                <th mat-header-cell *matHeaderCellDef>
+                    Sec. Qty
+                </th>
+                <td mat-cell *matCellDef="let element"> {{ element?.sec_qty }} </td>
+            </ng-container>
+            <ng-container matColumnDef="sec_uom">
+                <th mat-header-cell *matHeaderCellDef>
+                    Sec. UOM
+                </th>
+                <td mat-cell *matCellDef="let element"> {{ element?.sec_uom }} </td>
+            </ng-container>
+            <ng-container matColumnDef="from_location">
+                <th mat-header-cell *matHeaderCellDef>
+                    From Location
+                </th>
+                <td mat-cell *matCellDef="let element"> {{ element?.from_location }} </td>
+            </ng-container>
+            <ng-container matColumnDef="to_location">
+                <th mat-header-cell *matHeaderCellDef>
+                    To Location
+                </th>
+                <td mat-cell *matCellDef="let element"> {{ element?.to_location }} </td>
+            </ng-container>
+            <ng-container matColumnDef="from_lot_serial">
+                <th mat-header-cell *matHeaderCellDef>
+                    From Lot SR.
+                </th>
+                <td mat-cell *matCellDef="let element"> {{ element?.from_lot_serial }} </td>
+            </ng-container>
+            <ng-container matColumnDef="to_lot_number">
+                <th mat-header-cell *matHeaderCellDef>
+                    To Lot No.
+                </th>
+                <td mat-cell *matCellDef="let element"> {{ element?.to_lot_number }} </td>
+            </ng-container>
+            <ng-container matColumnDef="to_lot_status_code">
+                <th mat-header-cell *matHeaderCellDef>
+                    To Lot Status Code
+                </th>
+                <td mat-cell *matCellDef="let element"> {{ element?.to_lot_status_code }} </td>
+            </ng-container>
+            <ng-container matColumnDef="load_date">
+                <th mat-header-cell *matHeaderCellDef>
+                    Load Date
+                </th>
+                <td mat-cell *matCellDef="let element"> {{ element?.load_date }} </td>
+            </ng-container>
+            <ng-container matColumnDef="warehouse">
+                <th mat-header-cell *matHeaderCellDef>
+                    Warehouse
+                </th>
+                <td mat-cell *matCellDef="let element"> {{ element?.warehouse }} </td>
+            </ng-container>
+            <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+            <tr mat-row *matRowDef="let row; columns: displayedColumns; let i = index"></tr>
+        </table>
+    </div>
+    <!-- <mat-paginator pageSize="50" [pageSizeOptions]="[5,10,15,25,50,100]"></mat-paginator> -->
+</div>

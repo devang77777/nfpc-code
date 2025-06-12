@@ -1,0 +1,103 @@
+button:focus {
+  outline: none;
+}
+
+button.mat-menu-item {
+  height: 30px;
+  line-height: normal;
+}
+.mat-button {
+  line-height: normal;
+  height: 30px;
+}
+
+.table-box {
+  float: left;
+  transition: width 0.4s;
+  width: 100%;
+}
+
+.details-box {
+  float: left;
+  transition: width 0.4s, height 2s, visibility 0.4s;
+  width: 0;
+  height: calc(100vh - 68px);
+  visibility: hidden;
+}
+
+.collapsed {
+  transition: width 0.4s;
+  width: 25%;
+  .heading-row {
+    padding: 10px;
+    text-align: right;
+    h2 {
+      margin: 0 0 4px;
+    }
+  }
+}
+
+.expanded {
+  height: calc(100vh - 50px);
+  transition: width 0.4s, visibility 0.4s;
+  width: 75%;
+  border-left: 2px solid lightgray;
+  visibility: visible;
+}
+button.mat-menu-item {
+  height: 30px;
+  line-height: normal;
+}
+// New Styles
+@media (max-width: 575px) {
+  .heading-row {
+    padding: 10px;
+  }
+}
+
+.entity-card {
+  background-color: #f3f4f8;
+  padding: 0px;
+}
+
+.entity-card-pl-1 {
+  background-color: #f9f9fb;
+  padding: 23px 0px 0px 20px;
+  display: flex !important;
+}
+.entity-card-svg {
+  height: 40px;
+  margin-top: -2px !important;
+}
+.entity-card-total {
+  font-size: 14px;
+  color: #777;
+  margin-left: 5px;
+}
+.entity-card-total-amount {
+  font-size: 15px;
+  margin-left: 7px;
+  font-weight: 600;
+  margin-top: 12px;
+}
+.entity-card-total-amount > a {
+  color: #2485e8;
+  font-size: 13px;
+}
+.entity-card-item {
+  background-color: #f9f9fb;
+  padding: 23px 0px 24px;
+}
+.entity-card-end-item {
+  background-color: #f3f4f8;
+  padding: 23px 16px;
+}
+
+.entity-card-item-text {
+  font-size: 14px;
+  color: #777;
+}
+
+.entity-card-fs-15 {
+  font-size: 15px;
+}

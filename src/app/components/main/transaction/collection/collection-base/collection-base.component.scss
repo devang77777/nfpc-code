@@ -1,0 +1,47 @@
+
+.table-box {
+  float: left;
+  transition: width 0.4s;
+  width: 100%;
+}
+button.mat-menu-item {
+  height: 30px;
+  line-height: normal;
+}
+.mat-button{
+  line-height: normal;
+  height: 30px;
+}
+
+.details-box {
+  float: left;
+  transition: width 0.4s, height 2s, visibility 0.4s;
+  width: 0;
+  height: calc(100vh - 68px);
+  visibility: hidden;
+}
+.collapsed {
+  transition:width 0.4s;
+  width: 20%;
+  .heading-row {
+    padding: 10px;
+    text-align: right;
+    h2{
+      margin: 0 0 4px;
+    }
+}
+}
+
+
+.expanded {
+  height: calc(100vh - 50px);
+  transition: width 0.4s, visibility 0.4s;
+  width: 80%;
+  border-left: 2px solid lightgray;
+  visibility: visible;
+}
+@media (max-width: 575px) {
+  .heading-row {
+    padding: 10px;
+  }
+}

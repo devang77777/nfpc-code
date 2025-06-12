@@ -1,0 +1,121 @@
+<section>
+    <div class="pl-3">
+        <div class="row">
+            <h2 class="page-title col-sm-10 font-weight-light">{{domain == '15.184.80.189' || domain == 'merchandising' ? 'Merchandiser' : 'Salesman'}} Activity Map</h2>
+            <div class="actions col-sm-2">
+                <button class="btn" (click)="closeDetailView()"><i class="os-icon os-icon-close"></i></button>
+            </div>
+        </div>
+    </div>
+    <div class="scrolly">
+        <div class="pl-3">
+            <div class="row">
+                <div class="col-md-4" *ngIf="listData">
+                    <div class="pl-3 pr-3 row mb-4 mt-4">
+                        <div class="col-4 col-form-label">{{domain == '15.184.80.189' || domain == 'merchandising' ? 'Merchandiser' : 'Salesman'}}*</div>
+                        <div class="col-8 mb-2 mb-md-0">
+                            <!-- <mat-select [formControl]="salesmanFilterControl" class="form-control form-control-sm">
+                                <mat-option *ngFor="let salesman of salesmen" [value]="salesman.user_id">
+                                    {{salesman.user?.firstname}} {{salesman.user?.lastname}}</mat-option>
+                            </mat-select> -->
+                            <app-multiautocomplete isSingle="true" (selectionchanged)="selectionchangedSalesman()" [options]="salesmen"
+                                [control]="salesmanControl" text="" id="user_id"
+                                objectName="user" param1="firstname" param2="lastname">
+                            </app-multiautocomplete>
+                        </div>
+                    </div>
+
+                    <div class="pl-3 pr-3 row mb-4 mt-4">
+                        <div class="col-4 col-form-label">Date</div>
+                        <div class="col-8 mb-2 mb-md-0">
+                            <input class="form-control form-control-sm" type="date"
+                                [formControl]="startDateFilterControl">
+                        </div>
+                    </div>
+                    <div class="pl-3 pr-3 row mb-4 mt-4">
+                        <div class="col-12 item-add-btn">
+                            <button type="button" (click)="getSalesmanActivityDetails('all')"
+                                class=" btn btn-sm btn-danger float-right">All</button>
+                            <button type="button" (click)="getSalesmanActivityDetails('date')"
+                                class=" mr-2 btn btn-sm btn-primary float-right">Filter</button>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-8 pr-4 pt-1">
+                    <agm-map [fitBounds]="true">
+                        <agm-marker *ngFor="let coordinate of listData; let i=index" [latitude]="+coordinate.latitude"
+                            [longitude]="+coordinate.longitude" [agmFitBounds]="true" [label]="''+(i+1)"></agm-marker>
+                        <agm-polyline [visible]="true" [strokeWeight]="2" [strokeColor]="'#07b57a'">
+                            <agm-polyline-point *ngFor="let coordinate of listData; let i=index"
+                                [latitude]="+coordinate.latitude" [longitude]="+coordinate.longitude">
+                            </agm-polyline-point>
+                        </agm-polyline>
+                    </agm-map>
+                </div>
+            </div>
+        </div>
+        <div class=" salesMan-data">
+            <div class="row h-100 mt-4">
+                <div class="col-12">
+                    <div class="pl-3 items-table-box">
+                        <div class="table-responsive">
+                            <table mat-table [dataSource]="itemSource" class="mat-elevation-z8 table table-hover">
+                                <ng-container matColumnDef="created_at">
+                                    <th mat-header-cell *matHeaderCellDef> Date </th>
+                                    <td mat-cell *matCellDef="let element">
+                                        {{ element.created_at | date :"d MMM y h:mm a"}}
+                                    </td>
+                                </ng-container>
+                                <ng-container matColumnDef="customer">
+                                    <th mat-header-cell *matHeaderCellDef> Customer </th>
+                                    <td mat-cell *matCellDef="let element"> {{ element.customer?.firstname }}
+                                        {{ element.customer?.lastname }} </td>
+                                </ng-container>
+                                <ng-container matColumnDef="start_time">
+                                    <th mat-header-cell *matHeaderCellDef> Start Time </th>
+                                    <td mat-cell *matCellDef="let element"> {{ element.start_time }} </td>
+                                </ng-container>
+                                <ng-container matColumnDef="end_time">
+                                    <th mat-header-cell *matHeaderCellDef> End Time </th>
+                                    <td mat-cell *matCellDef="let element"> {{ element.end_time }} </td>
+                                </ng-container>
+
+                                <ng-container matColumnDef="longitude">
+                                    <th mat-header-cell *matHeaderCellDef> Longitude </th>
+                                    <td mat-cell *matCellDef="let element"> {{ element.longitude }} </td>
+                                </ng-container>
+                                <ng-container matColumnDef="latitude">
+                                    <th mat-header-cell *matHeaderCellDef> Latitude </th>
+                                    <td mat-cell *matCellDef="let element"> {{ element.latitude }} </td>
+                                </ng-container>
+                                <ng-container matColumnDef="is_sequnece">
+                                    <th mat-header-cell *matHeaderCellDef> Seq. </th>
+                                    <td mat-cell *matCellDef="let element"> <i class="fa text-center "
+                                            [ngClass]="{ 'fa-check-circle colorGreen' : element.is_sequnece == '1', 'fa-times-circle colorRed' : element.is_sequnece == '0'}"></i>
+                                    </td>
+                                </ng-container>
+                                <ng-container matColumnDef="shop_status">
+                                    <th mat-header-cell *matHeaderCellDef> Status </th>
+                                    <td mat-cell *matCellDef="let element"> {{ element.shop_status }} </td>
+                                </ng-container>
+                                <ng-container matColumnDef="reason">
+                                    <th mat-header-cell *matHeaderCellDef> Reason </th>
+                                    <td mat-cell *matCellDef="let element"> {{ element.reason }} </td>
+                                </ng-container>
+                                <ng-container matColumnDef="comment">
+                                    <th mat-header-cell *matHeaderCellDef> Comment </th>
+                                    <td mat-cell *matCellDef="let element"> {{ element.comment }} </td>
+                                </ng-container>
+                                <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                                <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+                            </table>
+                        </div>
+                        <mat-paginator [hidden]="apiResponse.pagination?.total_records < 10"
+                            (page)="onPageFired($event)" [length]="apiResponse.pagination?.total_records"
+                            [pageSize]="pageSize" [pageSizeOptions]="[10, 25, 50]"> </mat-paginator>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>

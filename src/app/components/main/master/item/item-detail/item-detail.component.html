@@ -1,0 +1,294 @@
+<section *ngIf="item" class="overflow-hidden">
+  <div class="pl-3">
+    <div class="row">
+      <h2 class="page-title col-md-6 col-sm-5 font-weight-light">
+        {{ item?.item_name }}
+      </h2>
+      <div class="actions col-md-6 col-sm-7">
+        <button appPermission [permissions]="userPermissions" [type]="'edit'" (click)="openEditItem()" class="iconbtn">
+          <i class="os-icon os-icon-edit" aria-hidden="true"></i>
+        </button>
+        <div>
+          <button class="btn btn-sm btn-white dropdown-toggle" mat-button [matMenuTriggerFor]="menu2">
+            More
+          </button>
+          <mat-menu #menu2="matMenu">
+            <button mat-menu-item (click)="toggleStatus()">
+              Mark as {{ item?.item_status === 0 ? "Active" : "Inactive" }}
+            </button>
+            <button appPermission [permissions]="userPermissions" [type]="'delete'" mat-menu-item
+              (click)="openDeleteBox()">
+              Delete
+            </button>
+          </mat-menu>
+        </div>
+        <button *ngIf="isDetailVisible" class="btn" (click)="closeDetailView()">
+          <i class="os-icon os-icon-close"></i>
+        </button>
+      </div>
+    </div>
+    <!-- <button *ngIf="isDetailVisible" class="btn" (click)="closeDetailView()">
+      <i class="os-icon os-icon-close"></i>
+    </button> -->
+  </div>
+  <div class="pl-3 item-data">
+    <div class="row h-100">
+      <div class="col-12">
+        <mat-tab-group class="customertab" at-align-tabs="start">
+          <mat-tab label="General">
+            <div class="details-container">
+              <div class="row">
+                <div class="col-xl-3 col-lg-5 col-md-8">
+                  <ul class="smhlist mt-2">
+                    <li>
+                      <span> Item code</span>
+                      <strong>{{ item?.item_code }}</strong>
+                    </li>
+                    <li>
+                      <span> Item name</span>
+                      <strong> {{ item?.item_name }}</strong>
+                    </li>
+                    <li>
+                      <span>Item barcode </span>
+                      <strong> {{ item?.item_barcode }} </strong>
+                    </li>
+                    <li>
+                      <span> Item description </span>
+                      <strong>{{ item?.item_description }} </strong>
+                    </li>
+                    <li>
+                      <span> Item Lob</span>
+                      <strong> {{ item?.lob?.name }} </strong>
+                    </li>
+                    <li>
+                      <span> Item Weight</span>
+                      <strong> {{ item?.item_weight }}</strong>
+                    </li>
+                    <li>
+                      <span> Item Shelf life </span>
+                      <strong> {{ item?.item_shelf_life }}</strong>
+                    </li>
+                    <li>
+                      <span> Item Group </span>
+                      <strong> {{ item?.item_group?.name }}</strong>
+                    </li>
+                    <li>
+                      <span> Category </span>
+                      <strong> {{ item?.item_major_category?.name }}</strong>
+                    </li>
+                    <li>
+                      <span> Brand </span>
+                      <strong> {{ item?.brand?.brand_name }}</strong>
+                    </li>
+                    <li>
+                      <span> Volume </span>
+                      <strong> {{ item?.volume }}</strong>
+                    </li>
+                    <li>
+                      <span> Tax status </span>
+                      <strong *ngIf="item.is_tax_apply === 1; else elseBlock" class="table-value">
+                        Tax applicable
+                      </strong>
+                      <ng-template #elseBlock>
+                        Tax not applicable
+                      </ng-template>
+                    </li>
+                    <li>
+                      <span> Excise status </span>
+                      <strong *ngIf="item.is_item_excise === 1; else exciseElseBlock" class="table-value">
+                        Excise applicable
+                      </strong>
+                      <ng-template #exciseElseBlock>
+                        Excise not applicable
+                      </ng-template>
+                    </li>
+                    <li>
+                      <span> Excise Value</span>
+                      <strong>
+                        {{ item?.item_excise }}</strong>
+                    </li>
+                    <li>
+                      <span> Excise UOM</span>
+                      <strong>
+                        {{ getUOMName(item?.item_excise_uom_id) }}</strong>
+                    </li>
+                    <li>
+                      <span> Item Vat Percentage</span>
+                      <strong>
+                        {{ item?.item_vat_percentage }}</strong>
+                    </li>
+                  </ul>
+                  <h3><strong>Base UOM</strong></h3>
+                  <ul class="smhlist mt-2">
+                    <li>
+                      <span> Base UOM</span>
+                      <strong>
+                        {{ getUOMName(item?.lower_unit_uom_id) }}</strong>
+                    </li>
+                    <li>
+                      <span>Base UPC</span>
+                      <strong>{{ item?.lower_unit_item_upc }}</strong>
+                    </li>
+                    <li>
+                      <span> Base Price</span>
+                      <strong> {{ item?.lower_unit_item_price }}</strong>
+                    </li>
+                    <li>
+                      <span> Purchase Price</span>
+                      <strong>{{
+                        item?.lower_unit_purchase_order_price
+                        }}</strong>
+                    </li>
+                  </ul>
+                </div>
+
+                <div class="offset-2 col-md-4">
+                  <br><br>
+                  <img [src]="item.item_image" alt="">
+                </div>
+              </div>
+
+            </div>
+          </mat-tab>
+          <mat-tab label="Product Catalog">
+            <div class="details-container"
+              *ngIf="item.product_catalog !== undefined && item.product_catalog[0] !== undefined">
+              <div class="row">
+                <div class="col-xl-3 col-lg-5 col-md-8">
+                  <ul class="smhlist mt-2">
+                    <li>
+                      <span> Net Weight</span>
+                      <strong>{{ item.product_catalog[0].net_weight }}</strong>
+                    </li>
+                    <li>
+                      <span>Flawer</span>
+                      <strong>{{ item.product_catalog[0].flawer }}</strong>
+                    </li>
+                    <li>
+                      <span> Shelf File</span>
+                      <strong>{{ item.product_catalog[0].shelf_file }}</strong>
+                    </li>
+                    <li>
+                      <span> Ingredients</span>
+                      <strong>{{ item.product_catalog[0].ingredients }}</strong>
+                    </li>
+                    <li>
+                      <span> Energy</span>
+                      <strong>{{ item.product_catalog[0].energy }}</strong>
+                    </li>
+                    <li>
+                      <span> Fat</span>
+                      <strong>{{ item.product_catalog[0].fat }}</strong>
+                    </li>
+                    <li>
+                      <span> Protein</span>
+                      <strong>{{ item.product_catalog[0].protein }}</strong>
+                    </li>
+                    <li>
+                      <span> Carbohydrate</span>
+                      <strong>{{ item.product_catalog[0].carbohydrate }}</strong>
+                    </li>
+                    <li>
+                      <span> Calcium</span>
+                      <strong>{{ item.product_catalog[0].calcium }}</strong>
+                    </li>
+                    <li>
+                      <span> Sodium</span>
+                      <strong>{{ item.product_catalog[0].sodium }}</strong>
+                    </li>
+                    <li>
+                      <span> Potassium</span>
+                      <strong>{{ item.product_catalog[0].potassium }}</strong>
+                    </li>
+                    <li>
+                      <span> Crude Fibre</span>
+                      <strong>{{ item.product_catalog[0].crude_fibre }}</strong>
+                    </li>
+                    <li>
+                      <span> Vitamin</span>
+                      <strong>{{ item.product_catalog[0].vitamin }}</strong>
+                    </li>
+                  </ul>
+                </div>
+                <ng-container *ngIf="item !== null">
+                  <hr />
+                  <div class="col-sm-12 data-block">
+                    <div class="row" *ngIf="item.product_catalog[0].image_string">
+                      <div class="col-sm-3">
+                        <mat-card class="item-card" *ngIf="item.product_catalog[0].image_string !== null">
+                          <img height="150" mat-card-image src="{{ item.product_catalog[0].image_string }}"
+                            alt="Product Catalog Image" />
+                        </mat-card>
+                      </div>
+                    </div>
+                  </div>
+                </ng-container>
+              </div>
+            </div>
+          </mat-tab>
+          <mat-tab label="UOM">
+            <div class="row">
+              <div class="col-xl-3 col-lg-5 col-md-8">
+                <ul class="smhlist mt-2" *ngFor="let uom of item.item_main_price; let i = index">
+                  <h3>
+                    <!-- <strong *ngIf="uom?.is_secondary===1">Secondary UOMs</strong>
+                    <strong *ngIf="uom?.item_shipping_uom===1 && uom?.is_secondary!==1">Shipping UOMs</strong>
+                    <strong *ngIf="uom?.is_secondary!==1">Third UOMs</strong>
+                    <strong *ngIf="uom?.is_secondary!==1">Other UOMs</strong> -->
+                    <strong> {{uomItemsTitle(uom)}} </strong>
+
+                    <span class="ml-2 badge badge-primary">{{ i + 2 }}</span>
+                  </h3>
+                  <li>
+                    <span> Item UOM</span>
+                    <strong> {{ uom?.item_uom?.name }}</strong>
+                  </li>
+                  <li>
+                    <span> Item UPC</span>
+                    <strong> {{ uom?.item_upc }}</strong>
+                  </li>
+                  <li>
+                    <span> Item Price</span>
+                    <strong> {{ uom?.item_price }}</strong>
+                  </li>
+                  <li>
+                    <span> Purchase Price</span>
+                    <strong> {{ uom?.purchase_order_price }}</strong>
+                  </li>
+                </ul>
+              </div>
+            </div>
+          </mat-tab>
+          <mat-tab label="Custom Fields">
+            <div class="row">
+              <div class="col-xl-3 col-lg-5 col-md-8">
+                <ng-container *ngIf="
+                    item.custom_field_value_save &&
+                    item.custom_field_value_save.length > 0
+                  ">
+                  <h3><strong>Custom Fields</strong></h3>
+                  <ul class="smhlist mt-2">
+                    <li *ngFor="let item of item.custom_field_value_save">
+                      <span *ngIf="
+                          item.custom_field &&
+                            item.custom_field.field_type === 'check_box';
+                          else others
+                        ">{{ item.custom_field.field_label }} :
+                        {{
+                        item.custom_field_value == "1" ? "Yes" : "No"
+                        }}</span>
+                      <ng-template #others>
+                        <span *ngIf="item.custom_field">{{ item.custom_field?.field_label }} :
+                          {{ item.custom_field_value }}</span>
+                      </ng-template>
+                    </li>
+                  </ul>
+                </ng-container>
+              </div>
+            </div>
+          </mat-tab>
+        </mat-tab-group>
+      </div>
+    </div>
+  </div>
+</section>

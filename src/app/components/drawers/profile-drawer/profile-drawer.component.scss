@@ -1,0 +1,30 @@
+.card-header {
+    background-color: #f3f8fe;
+}
+a{
+    cursor: pointer;
+}
+
+.subdomains{
+    .subdomain{
+        .avatarImage{
+            text-align: center;
+            text-decoration: none;
+            width: 100%;
+            padding: 10px;
+            display: block;
+            img{
+                width: 100px;
+            }
+            .icon-set{
+                position: absolute;
+                right: 30px;
+                top: 2px;
+            }
+            &:hover {
+                background-color: #f3f8fe;
+            }   
+        }
+        
+    }
+}

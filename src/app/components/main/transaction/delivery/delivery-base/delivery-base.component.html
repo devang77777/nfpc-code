@@ -1,0 +1,109 @@
+<mat-drawer-container class="formdrawer-container" hasBackdrop="false">
+  <mat-drawer id="formDrawer" mode="over" position="end" #formDrawer class="border">
+    <div style="min-width: 400px;">
+      <app-history [module]="module" (close)="onClose()"></app-history>
+    </div>
+  </mat-drawer>
+
+
+  <section class="overflow-hidden">
+    <div class="table-box customerbox" [ngClass]="{ collapsed: isDetailVisible }">
+      <div class="heading-row clearfix">
+        <p class="d-md-inline" *ngIf="!isDetailVisible">
+          <i class="os-icon os-icon-user mr-2" aria-hidden="true"></i>
+          Delivery
+        </p>
+        <div class="d-inline float-right">
+          <button type="button" class="btn btn-sm btn-p" (click)="openForm()" appPermission
+            [permissions]="userPermissions" [type]="'create'">
+            <i class="os-icon os-icon-plus mr-2" aria-hidden="true"></i>New
+          </button>
+          <button *ngIf="(checkedRows.length > 0) && (currentRole=='Warehouse' || currentRole=='org-admin') || selections.selected.length> 0 "
+            class="btn btn-sm btn-white dropdown-toggle ml-2" mat-button [matMenuTriggerFor]="menu2">
+            Bulk Actions
+          </button>
+          <mat-menu #menu2="matMenu">
+            <button mat-menu-item (click)="confirmShipment()">Confirm Shipment</button>
+            <button mat-menu-item type="button" (click)="openDialogAllChangeReason()" >
+              Change Trips</button>
+            <!-- <button mat-menu-item (click)="bulkAction('active')">Mark as Active</button>
+            <button mat-menu-item (click)="bulkAction('inactive')">Mark as Inactive</button> -->
+            <!-- <button mat-menu-item (click)="bulkAction('delete')" appPermission [permissions]="userPermissions" [type]="'delete'">
+              Delete
+            </button> -->
+          </mat-menu>
+          <!-- impot /Export  -->
+          <button class="btn btn-sm btn-white ml-2 dropdown-toggle" [matMenuTriggerFor]="menu3">
+            <i class="fa fa-bars" aria-hidden="true"></i>
+          </button>
+          <mat-menu #menu3="matMenu">
+            <!-- <button mat-menu-item (click)="openImportDelivery()">Import Delivery</button> -->
+            <button mat-menu-item type="button" (click)="openExportDelivery()">Export Delivery</button>
+            <!-- <button mat-menu-item type="button" *ngIf="currentRole=='Warehouse'" (click)="sendEmail()">Send Email</button> -->
+            <button mat-menu-item type="button" (click)="openUpdateDelivery()" *ngIf="currentRole=='SC'">Allocate
+              Delivery</button>
+
+
+
+            <!-- <button mat-menu-item type="button" (click)="openUpdateDelivery()" *ngIf="currentRole=='SC'">Allocate
+              Delivery</button> -->
+            <button mat-menu-item type="button" (click)="downloadLuLuPdf()">Download LuLu PDF </button>
+          </mat-menu>
+        </div>
+      </div>
+      <!-- <div class="heading-row clearfix" *ngIf="!isDetailVisible">
+        <mat-card class="entity-card">
+          <div class="col-sm-12 row">
+            <div class="col-sm-3 text-left entity-card-pl-1">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"
+                class="icon icon-xxlg-md mt-2 entity-card-svg">
+                <circle class="outer-circle" cx="256" cy="256" r="256" style="fill: #f3c482;"></circle>
+                <path class="inner-arrow" style="fill: #a17436;"
+                  d="M195.4 332.7h108.8c8.9 0 16.2-7.3 16.2-16.2 0-8.9-7.3-16.2-16.2-16.2h-69.8l93.6-93.6c6.3-6.3 6.3-16.5 0-22.9-6.3-6.3-16.5-6.3-22.9 0l-93.6 93.6v-69.8c0-8.9-7.3-16.2-16.2-16.2-4.5 0-8.5 1.8-11.4 4.7-2.9 2.9-4.7 7-4.7 11.4v108.8c.1 9.2 7.3 16.4 16.2 16.4z">
+                </path>
+              </svg>
+              <div>
+                <div class="entity-card-total">
+                  Total Open Deliveries.
+                </div>
+                <div class="entity-card-total-amount">232 &nbsp;&nbsp;
+                  <a><i class="fa fa-refresh"></i> Refresh</a>
+                </div>
+              </div>
+            </div>
+            <div class="col-sm-2 text-center entity-card-item">
+              <p class="entity-card-item-text"> Due Today</p>
+              <p class="entity-card-fs-15">232</p>
+
+            </div>
+            <div class="col-sm-2 text-center entity-card-item">
+              <p class="entity-card-item-text"> In Picking</p>
+              <p class="entity-card-fs-15">232</p>
+
+            </div>
+            <div class="col-sm-2 text-center entity-card-item">
+              <p class="entity-card-item-text"> Cancelled Deliveries</p>
+              <p class="entity-card-fs-15">232</p>
+
+            </div>
+            <div class="col-sm-3 text-left entity-card-end-item">
+              <p class="entity-card-item-text"> Invoiced</p>
+              <p class="entity-card-fs-15" style="margin-left: 5px;font-weight: 600;">32</p>
+
+            </div>
+          </div>
+        </mat-card>
+      </div> -->
+      <app-delivery-data-table [selections]="selections"  [isOpenAllReason]="isOpenAllReason" [newDeliveryData]="newDeliveryData" (detailsClosed)="closeClicked()"
+        (itemClicked)="itemClicked($event)" (selectedRows)="selectedRows($event)" [isDetailVisible]="isDetailVisible">
+      </app-delivery-data-table>
+    </div>
+    <div class="details-box" [ngClass]="{ expanded: isDetailVisible }">
+      <app-delivery-detail (detailsClosed)="closeClicked()" [isDetailVisible]="isDetailVisible"
+        [deliveryData]="deliveryData" (toggleHistory)="openHistoryView()">
+      </app-delivery-detail>
+    </div>
+
+
+  </section>
+</mat-drawer-container>

@@ -1,0 +1,39 @@
+.settingIcon {
+  right: 0;
+  position: absolute;
+  top: 30px;
+    i{
+      font-size: 20px;
+    }
+}
+.btn-disable {
+  background-color: #1abc9c99 !important;
+}
+.fixWidth {
+  width: 95% !important;
+}
+.fixing {
+  padding-left: 5px !important;
+  font-weight: 600;
+}
+.card-body{
+  height: calc(100vh - 170px);
+  overflow-y: scroll;
+}
+.card-footer {
+  position: fixed;
+  width: 550px;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.03);;
+}
+.card {
+  width: 550px;
+}
+@media (max-width: 575px) {
+  .card-footer {
+    width: 340px;
+  }
+  .card {
+    width: 340px;
+  }
+}

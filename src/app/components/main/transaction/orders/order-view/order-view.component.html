@@ -1,0 +1,163 @@
+<section class="">
+  <div class="heading-row">
+
+    <h2 class="d-inline "><i class="os-icon os-icon-eye mr-2"></i>View Order</h2>
+
+    <div class="d-inline float-right  pl-0">
+      <!-- <button mat-button class="btn btn-sm btn-white mr-2 dropdown-toggle" [matMenuTriggerFor]="menu2">More</button>
+        <mat-menu #menu2="matMenu" xPosition="before">
+          <button *ngIf="showConvertToDelivery" mat-menu-item class="height-40"
+            (click)="postFinalOrder('orderDelivery')">Convert
+            to Delivery</button>
+          <button mat-menu-item class="height-40" (click)="goToOrder()">Go to Orders</button>
+        </mat-menu> -->
+      <button mat-button class="btn btn-sm btn-secondary" (click)="goBackToOrdersList()"><i
+          class="fa fa-angle-left mr-1"></i><span class="back-btn"> Back</span></button>
+    </div>
+  </div>
+  <div class="separator"></div>
+  <div class="card">
+    <form [formGroup]="sideFiltersForm">
+      <div class="card-body">
+        <div class="row">
+          <div class="col-md-2">
+            <div class="form-group smmatinput">
+              <label for="">Order Number</label>
+              <input type="number" class="form-control form-control-sm" formControlName="order_number">
+            </div>
+          </div>
+          <div class="col-md-2">
+            <div class="form-group smmatinput">
+              <label for="">Customer LPO</label>
+              <input type="text" class="form-control form-control-sm" formControlName="customer_lpo">
+            </div>
+          </div>
+          <div class="col-md-4">
+            <label for="">Select Date Range</label>
+            <select class="form-control form-rounded" placeholder="Date" formControlName="dateRange"
+              (change)="selectDateRange($event.target.value)">
+              <option value="" disabled selected>Select Date Range</option>
+              <option value="del">Delivery Date</option>
+              <option value="order">Order Date</option>
+            </select>
+          </div>
+          <ng-container *ngIf="dateRange=='order'">
+            <div class="col-md-2">
+              <div class="form-group smmatinput">
+                <label for="">Start date</label>
+                <input type="date" formControlName="start_date" class="form-control form-control-sm">
+              </div>
+            </div>
+            <div class="col-md-2">
+              <div class="form-group smmatinput">
+                <label for="">End date</label>
+                <input type="date" formControlName="end_date" class="form-control form-control-sm">
+              </div>
+            </div>
+          </ng-container>
+          <ng-container *ngIf="dateRange=='del'">
+            <div class="col-md-2">
+              <div class="form-group smmatinput">
+                <label for="">Start Delivery date</label>
+                <input type="date" formControlName="del_start_date" class="form-control form-control-sm">
+              </div>
+            </div>
+            <div class="col-md-2">
+              <div class="form-group smmatinput">
+                <label for="">End Delivery date</label>
+                <input type="date" formControlName="del_end_date" class="form-control form-control-sm">
+              </div>
+            </div>
+          </ng-container>
+        </div>
+        <div class="row">
+          <div class="col-md-3">
+            <label for="">Division</label>
+            <app-multiautocomplete isSingle="true" [options]="divisionList" (selectionchanged)="filterWarehouse()"
+              [control]="sideFiltersForm.controls['division']" text="name" id="id" placeholder="Select Division">
+            </app-multiautocomplete>
+          </div>
+          <div class="col-md-3">
+            <label for="">Warehouse</label>
+            <app-multiautocomplete isSingle="false" [options]="warehouseList"
+              [control]="sideFiltersForm.controls['warehouse_id']" text="name" id="id" param1="code" param2="name"
+              objectName="code-root" placeholder="Select Warehouse">
+            </app-multiautocomplete>
+          </div>
+        
+          <div class="col-md-3">
+            <label for="">Service Channel</label>
+            <app-multiautocomplete isSingle="false" [options]="channelList"
+                [control]="sideFiltersForm.controls['channel_id']" text="name" id="id"
+                param1="id" param2="name" objectName="code-root" placeholder="Select Service Channel">
+            </app-multiautocomplete>
+        </div>
+
+          <div class="col-md-3">
+            <label for="">Customer</label>
+            <app-multiautocomplete isSingle="true" [options]="customerList"
+              [control]="sideFiltersForm.controls['customer_id']" text="customer_name" id="id">
+            </app-multiautocomplete>
+          </div>
+          <div class="col-md-3">
+            <label for="">Item</label>
+            <!-- <app-multiautocomplete isSingle="false" [options]="itemList"
+              [control]="sideFiltersForm.controls['item_ids']" text="item_name" id="id" objectName="items-root"
+              param1="item_code" param2="item_name" placeholder="Select Item">
+            </app-multiautocomplete> -->
+            <angular2-multiselect [data]="itemList" [formControl]="sideFiltersForm.controls['item_ids']"
+              [settings]="settings" (onSelect)="onItemSelect($event)" (onDeSelect)="OnItemDeSelect($event)"
+              (onSelectAll)="onSelectAll($event)" (onDeSelectAll)="onDeSelectAll($event)">
+              <c-search>
+                <ng-template>
+                  <input type="text" (input)="onSearch($event)" placeholder="Search Items"
+                    style="border: none;width: 100%; height: 100%;outline: none;" />
+                </ng-template>
+              </c-search>
+              <c-item>
+                <ng-template let-item="item">
+                  <label style="color: #333;width: 150px;">{{item.itemName}}</label>
+                </ng-template>
+              </c-item>
+            </angular2-multiselect>
+          </div>
+
+          <div class="col-md-12 " style="margin:25px">
+            <div class="form-group smmatinput">
+              <button type="button" class="btn btn-sm btn-p" (click)="showOrder(0,'')">Submit</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </form>
+  </div>
+  <div class="separator"></div>
+
+</section>
+<div class="table-container">
+  <div class="form-group smmatinput" style="float: right;margin: 10px;">
+    <button type="button" class="btn btn-sm btn-p" (click)="showOrder(1,'CSV')">Export CSV</button>
+  </div>
+  <div class="table-responsive">
+    <mat-table *ngIf="dataSource" [dataSource]="dataSource" class="mat-elevation-z8 table-hover table-scroll">
+      <ng-container *ngFor="let column of columns; let i = index" [matColumnDef]="column?.field">
+        <mat-header-cell *matHeaderCellDef>
+          {{ column.field }}
+        </mat-header-cell>
+        <mat-cell *matCellDef="let row">
+          <ng-container *ngIf="column?.value=='order_number'">
+            <a href="javascript:void(0)" (click)="navigatePage(row)"
+              *ngIf="row?.status=='Created' || row?.status=='Updated'">{{ row[column?.value] }}</a>
+            <span *ngIf="row?.status!='Created' && row?.status!='Updated'">{{ row[column?.value] }}</span>
+          </ng-container>
+          <ng-container *ngIf="column?.value!='order_number'">
+            {{ row[column?.value] }}
+          </ng-container>
+        </mat-cell>
+      </ng-container>
+      <mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></mat-header-row>
+      <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
+    </mat-table>
+  </div>
+  <mat-paginator pageSize="50" [pageSizeOptions]="[5,10,15,25,50,100]"></mat-paginator>
+</div>

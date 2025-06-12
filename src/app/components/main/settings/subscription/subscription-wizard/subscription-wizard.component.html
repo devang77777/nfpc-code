@@ -1,0 +1,297 @@
+<section class="mainsection">
+    <div class="heading-row">
+        <p><i aria-hidden="true" class="os-icon os-icon-layers mr-2"></i> Subscription</p>
+    </div>
+
+    <form [formGroup]="BillingFromGroup" class="needs-validation" (ngSubmit)="savePayment()">
+
+        <div class="scrolly p-md-5 p-0 row justify-content-center">
+            <div class="col-xl-12 col-lg-12 col-md-12 text-center">
+                <mat-tab-group class="bg-light mb-3 border" [(selectedIndex)]="selectedIndex" mat-stretch-tabs>
+                    <mat-tab label="Choose Plan">
+                        <div class="form-holder">
+                            <div id="generic_price_table">
+                                <section>
+                                    <div class="container">
+                                        <div class="row mb-2">
+                                            <div class="col-md-12 radio-toolbar">
+                                                <input class="checkbox-su mr-1" value="yearly" name="frequency"
+                                                    id="frequency-y" type="radio" formControlName="frequency"
+                                                    (change)="changeFrequency()">
+                                                <label class="pr-3 btn btn-white" for="frequency-y">Yearly</label>
+                                                <input class="checkbox-su mr-1 pl-2" value="monthly" id="frequency-m"
+                                                    type="radio" formControlName="frequency" name="frequency"
+                                                    (change)="changeFrequency()">
+                                                <label class="pr-3 btn btn-white" for="frequency-m">Monthly</label>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div *ngFor="let plan of Plans; let i = index;" class="col-md-4 mb-4">
+                                                <div class="generic_content clearfix"
+                                                    [ngClass]="{active: selectedPlanId == plan.id}">
+                                                    <div class="generic_head_price clearfix">
+                                                        <div class="generic_head_content clearfix">
+                                                            <div class="head_bg"></div>
+                                                            <div class="head">
+                                                                <span>{{plan?.name}}</span>
+                                                            </div>
+                                                        </div>
+                                                        <div class="generic_price_tag clearfix">
+                                                            <span class="price"
+                                                                *ngIf="BillingFromGroup.controls['frequency'].value == 'yearly'">
+                                                                <span class="sign">₹</span>
+                                                                <span
+                                                                    class="currency">{{plan?.yearly_price.split('.')[0]}}</span>
+                                                                <span
+                                                                    class="cent">.{{plan?.yearly_price.split('.')[1]}}</span>
+                                                                <span class="month">/ Year</span>
+                                                            </span>
+                                                            <span class="price"
+                                                                *ngIf="BillingFromGroup.controls['frequency'].value == 'monthly'">
+                                                                <span class="sign">₹</span>
+                                                                <span
+                                                                    class="currency">{{plan?.monthly_price.split('.')[0]}}</span>
+                                                                <span
+                                                                    class="cent">.{{plan?.monthly_price.split('.')[1]}}</span>
+                                                                <span class="month">/ Month</span>
+                                                            </span>
+                                                        </div>
+                                                    </div>
+                                                    <div class="generic_price_btn clearfix">
+                                                        <a class="" href="javascript:;"
+                                                            (click)="selectPlan(plan)">UPGRADE</a>
+                                                    </div>
+                                                    <div class="generic_feature_list">
+                                                        <ul [ngClass]="{scrolly : viewMore == 0}" class="">
+                                                            <li
+                                                                *ngFor="let feature of plan.plan_feature; let fi = index;">
+                                                                <span>{{feature.feature_name}}</span>
+                                                            </li>
+                                                        </ul>
+                                                        <a href="javascript:;"
+                                                            (click)="viewMore = viewMore == 0 ? 1 : 0">{{viewMore == 0 ? 'View More' : 'View Less'}}</a>
+                                                    </div>
+
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </section>
+                            </div>
+                        </div>
+                    </mat-tab>
+                    <mat-tab label="Plan Details">
+                        <div class="form-holder">
+                            <div class="mt-4 mb-4 p-4" *ngIf="selectedPlanId !== 0">
+                                <div class="row">
+                                    <div class="col-md-4  text-left font-weight-bold">Payment Frequency</div>
+                                    <div class="col-md-4">
+                                        <input class="checkbox-su mr-1" value="yearly" name="frequency" id="frequency-y"
+                                            type="radio" formControlName="frequency" (change)="changeFrequency()">
+                                        <label class="pr-3" for="frequency-y">Yearly</label>
+                                        <input class="checkbox-su mr-1 pl-2" value="monthly" id="frequency-m"
+                                            type="radio" formControlName="frequency" name="frequency"
+                                            (change)="changeFrequency()">
+                                        <label for="frequency-m">Monthly</label>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-4 text-left font-weight-bold">Selected Plan</div>
+                                    <div class="col-md-4 font-weight-bold">{{selectedPlan?.name}}
+                                        ({{selectedPlan?.maximum_user}} User)
+                                    </div>
+                                    <div class="col-md-4 font-weight-bold">₹
+                                        {{BillingFromGroup.controls['totalPrice'].value}}</div>
+                                </div>
+                            </div>
+
+                            <div class="row mt-4 mb-4 mainSt" *ngIf="selectedPlanId !== 0">
+                                <div class="col-md-8 msgSt">Amount to be Paid
+                                    {{BillingFromGroup.controls['frequency'].value}}
+                                </div>
+                                <div class="col-md-4 amountSt">₹ {{BillingFromGroup.controls['totalPrice'].value}}</div>
+                            </div>
+                        </div>
+                    </mat-tab>
+                    <mat-tab label="Review Order">
+                        <div class="form-holder">
+                            <h2 class="text-left p-2">Order Summary</h2>
+                            <table class="table table-striped">
+                                <thead>
+                                    <tr>
+                                        <th>Item</th>
+                                        <th>Unit Price</th>
+                                        <th>Total</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>{{selectedPlan?.name}}</td>
+                                        <td>₹ {{BillingFromGroup.controls['totalPrice'].value}} /org /
+                                            {{BillingFromGroup.controls['frequency'].value}}
+                                        </td>
+                                        <td>₹ {{BillingFromGroup.controls['totalPrice'].value}}</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                            <div class="row mt-4 mb-4 mainSt" *ngIf="selectedPlanId !== 0">
+                                <div class="col-md-8 msgSt">Amount to be Paid
+                                    {{BillingFromGroup.controls['frequency'].value}}
+                                </div>
+                                <div class="col-md-4 amountSt">₹ {{BillingFromGroup.controls['totalPrice'].value}}</div>
+                            </div>
+                        </div>
+                    </mat-tab>
+                    <mat-tab label="Billing Address & Payment">
+                        <div class="form-holder p-120">
+                            <h2 class="text-left p-2">Billing Details</h2>
+                            <div class="row mb-4 mt-4">
+                                <div class="col-md-5">
+                                    <input class="form-control form-control-sm" type="text"
+                                        formControlName="companyName" placeholder="Company Name">
+                                    <app-validation-message [control]="BillingFromGroup.controls['companyName']">
+                                    </app-validation-message>
+                                </div>
+                                <div class="col-md-6 pr-4">
+                                    <input class="form-control form-control-sm" type="number" placeholder="Phone"
+                                        formControlName="mobile">
+                                    <app-validation-message [control]="BillingFromGroup.controls['mobile']">
+                                    </app-validation-message>
+                                </div>
+                            </div>
+                            <div class="row mb-4 mt-4">
+                                <div class="col-md-5">
+                                    <select name="country" class="form-control form-control-sm"
+                                        formControlName="country" placeholder="Country">
+                                        <option value="" disabled selected>Select your Country</option>
+                                        <option *ngFor="let country of countries" [value]="country.id">{{country.name}}
+                                        </option>
+                                    </select>
+                                    <app-validation-message [control]="BillingFromGroup.controls['country']">
+                                    </app-validation-message>
+                                </div>
+                                <div class="col-md-6 pr-4">
+                                    <input class="form-control form-control-sm" type="text" placeholder="Address"
+                                        formControlName="address">
+                                    <app-validation-message [control]="BillingFromGroup.controls['address']">
+                                    </app-validation-message>
+                                </div>
+                            </div>
+                            <div class="row mb-4 mt-4">
+                                <div class="col-md-5">
+                                    <input class="form-control form-control-sm" type="text" placeholder="City"
+                                        formControlName="city">
+                                    <app-validation-message [control]="BillingFromGroup.controls['city']">
+                                    </app-validation-message>
+                                </div>
+                                <div class="col-md-3 pr-4">
+                                    <input class="form-control form-control-sm" type="text" placeholder="State"
+                                        formControlName="state">
+                                    <app-validation-message [control]="BillingFromGroup.controls['state']">
+                                    </app-validation-message>
+                                </div>
+                                <div class="col-md-3 pr-4">
+                                    <input class="form-control form-control-sm" type="number" placeholder="Zip Code"
+                                        formControlName="zipCode">
+                                    <app-validation-message [control]="BillingFromGroup.controls['zipCode']">
+                                    </app-validation-message>
+                                </div>
+                            </div>
+                            <hr>
+                            <div class="row mb-4 mt-4">
+                                <div class="col-md-5">
+                                    <input class="form-control form-control-sm" type="number" placeholder="Card Number"
+                                        formControlName="cardNumber">
+                                    <app-validation-message [control]="BillingFromGroup.controls['cardNumber']">
+                                    </app-validation-message>
+                                </div>
+                                <div class="col-md-2 pr-4">
+                                    <select name="cardMonth" class="form-control form-control-sm"
+                                        formControlName="cardExpMonth" placeholder="Card Expaire Month">
+                                        <option value="" disabled selected>MM</option>
+                                        <option *ngFor="let month of months" [value]="month">{{month}}
+                                        </option>
+                                    </select>
+                                    <app-validation-message [control]="BillingFromGroup.controls['cardExpMonth']">
+                                    </app-validation-message>
+                                </div>
+                                <div class="col-md-2 pr-4">
+                                    <select name="cardYear" class="form-control form-control-sm"
+                                        formControlName="cardExpYear" placeholder="Card Expaire Year">
+                                        <option value="" disabled selected>YY</option>
+                                        <option *ngFor="let year of years" [value]="year">{{year}}
+                                        </option>
+                                    </select>
+                                    <app-validation-message [control]="BillingFromGroup.controls['cardExpYear']">
+                                    </app-validation-message>
+                                </div>
+                                <div class="col-md-2 pr-4">
+                                    <input class="form-control form-control-sm" type="number" placeholder="Cvv"
+                                        formControlName="cardCvv">
+                                    <app-validation-message [control]="BillingFromGroup.controls['cardCvv']">
+                                    </app-validation-message>
+                                </div>
+                            </div>
+                            <div class="row mb-4 mt-4">
+                                <div class="col-md-6">
+                                    <input class="checkbox-su mr-1" id="sameAddress" type="checkbox"
+                                        formControlName="sameAddress" (change)="useSameAddress()">
+                                    <label for="sameAddress">Use my billing address as my credit card address</label>
+                                </div>
+                            </div>
+                            <div *ngIf="BillingFromGroup.controls['sameAddress'].value == false">
+                                <div class="row mb-4 mt-4">
+                                    <div class="col-md-5">
+                                        <select name="country" class="form-control form-control-sm"
+                                            formControlName="cardCountry" placeholder="card Country">
+                                            <option value="" disabled selected>Select your Country</option>
+                                            <option *ngFor="let country of countries" [value]="country.id">
+                                                {{country.name}}
+                                            </option>
+                                        </select>
+                                        <app-validation-message [control]="BillingFromGroup.controls['cardCountry']">
+                                        </app-validation-message>
+                                    </div>
+                                    <div class="col-md-6 pr-4">
+                                        <input class="form-control form-control-sm" type="text" placeholder="Address"
+                                            formControlName="cardAddress">
+                                        <app-validation-message [control]="BillingFromGroup.controls['cardAddress']">
+                                        </app-validation-message>
+                                    </div>
+                                </div>
+                                <div class="row mb-4 mt-4">
+                                    <div class="col-md-5">
+                                        <input class="form-control form-control-sm" type="text" placeholder="City"
+                                            formControlName="cardCity">
+                                        <app-validation-message [control]="BillingFromGroup.controls['cardCity']">
+                                        </app-validation-message>
+                                    </div>
+                                    <div class="col-md-3 pr-4">
+                                        <input class="form-control form-control-sm" type="text" placeholder="State"
+                                            formControlName="cardState">
+                                        <app-validation-message [control]="BillingFromGroup.controls['cardState']">
+                                        </app-validation-message>
+                                    </div>
+                                    <div class="col-md-3 pr-4">
+                                        <input class="form-control form-control-sm" type="number" placeholder="Zip Code"
+                                            formControlName="cardZipCode">
+                                        <app-validation-message [control]="BillingFromGroup.controls['cardZipCode']">
+                                        </app-validation-message>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </mat-tab>
+                </mat-tab-group>
+                <button type="button" [disabled]="selectedIndex === 0" (click)="previous()"
+                    class="btn btn-secondary mr-2">Back</button>
+                <button type="button" *ngIf="selectedIndex !== 3" [disabled]="enableNext" (click)="next()"
+                    class="btn btn-primary">Next</button>
+                <button type="submit" *ngIf="selectedIndex === 3" [disabled]="!BillingFromGroup.valid"
+                    class="btn btn-primary">Make
+                    Payment</button>
+            </div>
+        </div>
+
+    </form>
+</section>

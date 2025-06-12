@@ -1,0 +1,65 @@
+<section>
+  <div class="">
+    <form class="form-box">
+      <div class="form-group">
+        <label for="jname">Name</label>
+        <input
+          type="text"
+          class="form-control"
+          [formControl]="nameFormControl"
+          id="jname"
+        />
+      </div>
+      <div class="form-group">
+        <div class="row">
+          <div class="col-sm-6">
+            <label for="sdate">Start Date</label>
+            <input
+              type="date"
+              class="form-control"
+              [formControl]="sdateFormControl"
+              id="sdate"
+            />
+          </div>
+          <div class="col-sm-6">
+            <label for="edate">End Date</label>
+            <input
+              type="date"
+              class="form-control"
+              [formControl]="edateFormControl"
+              id="edate"
+            />
+          </div>
+        </div>
+      </div>
+      <div class="form-group">
+        <div class="row">
+          <div class="col-sm-6">
+            <label for="">Order Type:</label>
+            <select class="form-control" [formControl]="orderTypeFormControl">
+              <option value="Any">Any</option>
+              <option value="All">All</option>
+            </select>
+          </div>
+          <div class="col-sm-6">
+            <label for="">Offer Type:</label>
+            <select class="form-control" [formControl]="offerTypeFormControl">
+              <option value="Any">Any</option>
+              <option value="All">All</option>
+            </select>
+          </div>
+        </div>
+      </div>
+      <label>Order Item: </label>
+      <app-promotion-form-order-item
+        [overviewFormGroup]="overviewFormGroup"
+        [orderItems]="editData?.p_d_p_promotion_items"
+      ></app-promotion-form-order-item>
+      <label for="">Offer Item: </label>
+      <app-promotion-form-offer-item
+        [overviewFormGroup]="overviewFormGroup"
+        [offerItems]="editData?.p_d_p_promotion_offer_items"
+      ></app-promotion-form-offer-item>
+    </form>
+  </div>
+</section>

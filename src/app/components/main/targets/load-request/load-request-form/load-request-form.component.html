@@ -1,0 +1,134 @@
+<!-- <section class="">
+    <div class="heading-row">
+  
+      <h2 class="d-inline "><i class="os-icon os-icon-shopping-cart mr-2"></i>{{ pageTitle }}</h2>
+  
+      <div class="d-inline float-right  pl-0">
+        <button mat-button class="btn btn-sm btn-white mr-2 dropdown-toggle" [matMenuTriggerFor]="menu2">More</button>
+        <mat-menu #menu2="matMenu" xPosition="before">
+          <button  mat-menu-item class="height-40">Convert to Delivery</button>
+          <button mat-menu-item class="height-40">Go to Orders</button>
+        </mat-menu>
+        <button mat-button class="btn btn-sm btn-secondary" (click)="goBackToOrdersList()"><i
+            class="fa fa-angle-left mr-1"></i><span class="back-btn"> Back</span></button>
+      </div>
+    </div>
+  
+    <div class="separator"></div>
+
+    <form [formGroup]="loadFormGroup" class="load-form custom-mat square">
+      <div class="card">
+        <div class="card-header overview">
+          <div class="row">
+            <div class="form-group col-4">
+              <div class="form-group">
+              <label>loadType</label>
+              <input type="text" formControlName="loadType" class="form-control" 
+              [ngClass]="{ 'is-invalid': submitted && f.loadType.errors }" />
+              <div *ngIf="submitted && f.loadType.errors" class="invalid-feedback">
+                  <div *ngIf="f.loadType.errors.required">load Typeis required</div>
+              </div>
+              </div>
+          </div>
+          </div>
+        </div>
+      </div>
+
+      <div [ngClass]="{ 'inactive-form': first_name.invalid }" class="card">
+        <div class="card-body overview">
+          <div class="row justify-content-between">
+            <div class="col-md-4">
+              <div class="form-group">
+              <label>SalesMan</label>
+              <input type="text" formControlName="first_name" class="form-control" 
+              [ngClass]="{ 'is-invalid': submitted && f.first_name.errors }" />
+              <div *ngIf="submitted && f.first_name.errors" class="invalid-feedback">
+                  <div *ngIf="f.first_name.errors.required">firstName required</div>
+              </div>
+            </div>
+ 
+            <div class="form-group">
+              <label>Load Number</label>
+              <input type="text" formControlName="load_number" class="form-control"  placeholder="LN00012"
+              [ngClass]="{ 'is-invalid': submitted && f.load_number.errors }" />
+              <div *ngIf="submitted && f.load_number.errors" class="invalid-feedback">
+                  <div *ngIf="f.load_number.errors.required">loadNumber required</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="col-md-4 ">
+            <div class="form-group">
+              <label>Load Type</label>
+              <input type="text" formControlName="load_type" class="form-control" placeholder="Load Type"
+              [ngClass]="{ 'is-invalid': submitted && f.load_type.errors }" />
+              <div *ngIf="submitted && f.load_type.errors" class="invalid-feedback">
+                  <div *ngIf="f.load_type.errors.required">loadtype required</div>
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label>Date</label>
+              <input type="date" formControlName="created_at" class="form-control"
+              [ngClass]="{ 'is-invalid': submitted && f.created_at.errors }" />
+              <div *ngIf="submitted && f.created_at.errors" class="invalid-feedback">
+                  <div *ngIf="f.created_at.errors.required">date required</div>
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label>Route</label>
+              <input type="text" formControlName="route_name" class="form-control" placeholder="Route Name"
+              [ngClass]="{ 'is-invalid': submitted && f.route_name.errors }" />
+              <div *ngIf="submitted && f.route_name.errors" class="invalid-feedback">
+                  <div *ngIf="f.route_name.errors.required">route_name required</div>
+              </div>
+            </div>            
+          </div>  
+          </div>
+        </div>
+      </div>
+    </form>
+
+
+
+     <div class="item-table-div">
+      <div class="table-responsive">
+        <table class="item-table cardtable table ">
+          <thead>
+            <tr>
+              <th class="head" *ngFor="let head of filteredTableHeaders">{{ head.label }}</th>
+              <th>Action</th>
+            </tr>
+          </thead>
+          <tbody class="form-body">
+            <tr formArrayName="items" class="item-row" *ngFor="let item of itemFormControls; let i = index;">
+              <ng-container [formGroupName]="i">
+                <td data-th="#" class="item-sequence">
+                  <span>{{ i + 1 }}</span>
+                  <input [ngClass]="getItemStatus(item) ? 'notAvaliable' : ''"
+                    (change)="itemDidSelected($event, payloadItems[i])" [disabled]="getItemStatus(item)"
+                    type="checkbox" name="item">
+                </td>
+                <td data-th="Item Name" class="stats-cell"><input type="text"
+                  class="form-control non-editable" [value]="item_name" disabled>
+              </td>
+              <td data-th="UOM"  class="stats-cell"><input type="text"
+                  class="form-control non-editable" [value]="item_uom"
+                  disabled></td>
+              <td data-th="Quantity" class="stats-cell"><input type="text" class="form-control non-editable"
+                  [value]="qty" disabled></td>
+               <td data-th="Action"> <button class="trash-btn"  ><i
+                    class="fa fa-close"></i></button></td>
+              </ng-container>
+            </tr>
+          </tbody>
+          </table>
+      </div>
+    </div>     
+
+  <div class="actions">
+      <button class="btn btn-primary" [disabled]="loadFormGroup">Save & Submit</button>
+  </div>
+  </section>
+ -->

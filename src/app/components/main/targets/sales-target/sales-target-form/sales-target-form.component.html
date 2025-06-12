@@ -1,0 +1,446 @@
+<section>
+  <div class="card-header pt-4">
+    <!-- <h2 class="d-inline"><i class="fa fa-bullseye mr-2"></i>{{ pageTitle }}</h2>
+    <div class="d-inline float-right">
+      <button mat-button class="btn btn-white btn-sm dropdown-toggle" [matMenuTriggerFor]="menu2">More</button>
+      <mat-menu #menu2="matMenu" xPosition="before">
+        <button mat-menu-item class="height-40" (click)="goToAllDataList()">Go to List</button>
+      </mat-menu>
+    </div> -->
+    <span class="h6 font-weight-bold text-secondary">{{formType}} Sales Target</span>
+    <a (click)="close()" class="closeicon settingclose"><i class="os-icon os-icon-x text-secondary float-right"
+        aria-hidden="true"></i></a>
+  </div>
+  <!-- <form [formGroup]="salesTargetFormGroup" class="order-form custom-mat square scrolly">
+
+    <div class="card-body active-form overview">
+
+      <div class="row justify-content-between">
+        <div class="col-md-4">
+          <div class="form-group">
+            <label for="">Months</label>
+            <mat-form-field id="targetEntity">
+              <mat-label>Select Month</mat-label>
+              <mat-select class="no-disabled-text" (selectionChange)="targetOnChanged($event)"
+                [formControl]="monthsFormControl">
+                <mat-option *ngFor="let type of months" [value]="type.id">{{ type.name }}</mat-option>
+              </mat-select>
+              <mat-error>
+                <app-mat-error [control]="monthsFormControl"></app-mat-error>
+              </mat-error>
+
+            </mat-form-field>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <div>
+      <div class="card-body overview">
+        <div class="row justify-content-between">
+          <div class="col-md-4">
+            <div class="form-group">
+              <label for="">Division</label>
+              <mat-form-field id="targetOwner">
+                <mat-label>Select a Division</mat-label>
+                <mat-select class="no-disabled-text" (selectionChange)="ownerChanged($event)"
+                  [formControl]="divisionFormControl">
+                  <mat-option *ngFor="let owner of owners" [value]="owner.id">{{ owner.name }}</mat-option>
+                </mat-select>
+                <mat-error>
+                  <app-mat-error [control]="divisionFormControl"></app-mat-error>
+                </mat-error>
+              </mat-form-field>
+            </div>
+            <div class="form-group">
+              <label for="">Route</label>
+              <mat-form-field id="targetOwner">
+                <mat-label>Select a Route</mat-label>
+                <mat-select class="no-disabled-text" (selectionChange)="ownerChanged($event)"
+                  [formControl]="routeFormControl">
+                  <mat-option *ngFor="let owner of owners" [value]="owner.id">{{ owner.name }}</mat-option>
+                </mat-select>
+                <mat-error>
+                  <app-mat-error [control]="routeFormControl"></app-mat-error>
+                </mat-error>
+              </mat-form-field>
+            </div>
+            <div class="form-group">
+              <label for="">Total Target Amount</label>
+              <input type="text" placeholder="Enter target name" class="form-control form-control-sm"
+                [formControl]="totalTargetAmountFormControl" id="nameControl">
+              <app-validation-message [control]="totalTargetAmountFormControl"></app-validation-message>
+            </div>
+          </div>
+          <div class="col-md-4">
+            <form class="changeMargin" [formGroup]="categoryFormGroup">
+              <div class="card-body">
+                <div class="">
+                  <div class="form-group">
+                    <label for="">Category</label>
+                    <mat-form-field id="targetOwner">
+                      <mat-label>Select a Category</mat-label>
+                      <mat-select class="no-disabled-text" (selectionChange)="ownerChanged($event)"
+                        [formControl]="categoryFormControl">
+                        <mat-option *ngFor="let owner of owners" [value]="owner.id">{{ owner.name }}</mat-option>
+                      </mat-select>
+                      <mat-error>
+                        <app-mat-error [control]="categoryFormControl"></app-mat-error>
+                      </mat-error>
+                    </mat-form-field>
+                  </div>
+                  <div class="form-group">
+                    <label for="">Quantity</label>
+                    <input type="number" placeholder="Enter Quantitye" class="form-control form-control-sm"
+                      [formControl]="quantityFormControl" id="nameControl">
+                    <app-validation-message [control]="quantityFormControl"></app-validation-message>
+                  </div>
+                  <div class="row item-add-btn">
+                    <button class="col-md-2" (click)="addCategory()"><i class="os-icon os-icon-plus"></i>Add</button>
+                  </div>
+                </div>
+              </div>
+            </form>
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+    <div class="items-table-box mt-5">
+      <div class="table-responsive">
+        <table mat-table class="mat-elevation-z8 table table-hover">
+          <ng-container matColumnDef="Category">
+            <th mat-header-cell *matHeaderCellDef> Category </th>
+            <td mat-cell *matCellDef="let element"> {{ element.item_code }} </td>
+          </ng-container>
+          <ng-container matColumnDef="Quantity">
+            <th mat-header-cell *matHeaderCellDef> Quantity </th>
+            <td mat-cell *matCellDef="let element"> {{ element.item_name }} </td>
+          </ng-container>
+          <ng-container matColumnDef="Action">
+            <th mat-header-cell *matHeaderCellDef> Action </th>
+            <td mat-cell *matCellDef="let element"> {{ element.store_price }} </td>
+          </ng-container>
+          <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+          <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+        </table>
+      </div>
+      <mat-paginator [hidden]="hidePaginator(itemSource.data.length)" pageSize="5" [pageSizeOptions]="[5,10]">
+      </mat-paginator>
+    </div>
+    <div class="actions">
+      <button class="btn  btn-light mr-2" (click)="close()">Cancel</button>
+      <button class="btn btn-primary " (click)="onSubmit()">Save & Submit</button>
+    </div>
+  </form> -->
+  <div class="form-box">
+    <form [formGroup]="salesTargetFormGroup">
+      <div class="card-body">
+        <div class="">
+          <!-- <div class="row mb-4">
+            <div class="col-md-4">Route Code</div>
+            <div class="col-md-8">
+              <mat-form-field id="targetOwner">
+                <mat-label>Select a Code</mat-label>
+                <mat-select class="no-disabled-text" (selectionChange)="ownerChanged($event)"
+                  [formControl]="CodeFormControl">
+                  <mat-option></mat-option>
+                </mat-select>
+                <mat-error>
+                  <app-mat-error [control]="CodeFormControl"></app-mat-error>
+                </mat-error>
+              </mat-form-field>
+            </div>
+          </div> -->
+          <div class="row mb-4">
+            <div class="col-md-4">Route</div>
+            <div class="col-md-8">
+              <mat-form-field id="targetOwner">
+                <mat-label>Select a route</mat-label>
+                <mat-select class="no-disabled-text" (selectionChange)="ownerChanged($event)"
+                  [formControl]="routeFormControl">
+                  <mat-option></mat-option>
+                </mat-select>
+                <mat-error>
+                  <app-mat-error [control]="routeFormControl"></app-mat-error>
+                </mat-error>
+              </mat-form-field>
+            </div>
+          </div>
+          <div class="row mb-4">
+            <div class="col-md-4">Division</div>
+            <div class="col-md-8">
+              <mat-form-field id="targetOwner">
+                <mat-label>Select a Division</mat-label>
+                <mat-select class="no-disabled-text" (selectionChange)="ownerChanged($event)"
+                  [formControl]="divisionFormControl">
+                  <mat-option></mat-option>
+                </mat-select>
+                <mat-error>
+                  <app-mat-error [control]="divisionFormControl"></app-mat-error>
+                </mat-error>
+              </mat-form-field>
+            </div>
+          </div>
+          <div class="row mb-4">
+            <div class="col-md-4">Total Target Amount</div>
+            <div class="col-md-8">
+              <input class="form-control form-control-sm" type="text" [formControl]="totalTargetAmountFormControl">
+            </div>
+          </div>
+          <div class="row mb-4">
+            <div class="col-md-4">Start Month</div>
+            <div class="col-md-8">
+              <input class="form-control form-control-sm" type="date" [formControl]="startDateFormControl">
+            </div>
+          </div>
+          <div class="row mb-4">
+            <div class="col-md-4">End Month</div>
+            <div class="col-md-8">
+              <input class="form-control form-control-sm" type="date" [formControl]="endDateFormControl">
+            </div>
+          </div>
+          <hr />
+        </div>
+      </div>
+    </form>
+    <!-- itemFormGroup group -->
+    <form *ngIf="!salesTargetFormGroup.invalid" class="changeMargin" [formGroup]="categoryFormGroup">
+      <div class="card-body">
+        <div class="">
+          <div class="form-group">
+            <div class="row mb-4">
+              <div class="col-md-4">Category</div>
+              <div class="col-md-8">
+                <mat-form-field id="targetOwner">
+                  <mat-label class="category">Select a Category</mat-label>
+                  <mat-select class="no-disabled-text " (selectionChange)="ownerChanged($event)"
+                    [formControl]="categoryFormControl">
+                    <mat-option *ngFor="let owner of owners" [value]="owner.id">{{ owner.name }}</mat-option>
+                  </mat-select>
+                  <mat-error>
+                    <app-mat-error [control]="categoryFormControl"></app-mat-error>
+                  </mat-error>
+                </mat-form-field>
+              </div>
+            </div>
+          </div>
+          <div class="form-group">
+            <!-- <label for="">Quantity</label>
+            <input type="number" placeholder="Enter Quantitye" class="form-control form-control-sm"
+              [formControl]="quantityFormControl" id="nameControl">
+            <app-validation-message [control]="quantityFormControl"></app-validation-message> -->
+            <div class="row mb-4">
+              <div class="col-md-4">Quantity</div>
+              <div class="col-md-8">
+                <input type="number" placeholder="Enter Quantitye" class="form-control form-control-sm"
+                  [formControl]="quantityFormControl" id="nameControl">
+              </div>
+              <app-validation-message [control]="quantityFormControl"></app-validation-message>
+            </div>
+          </div>
+          <div class="row item-add-btn">
+            <button class="col-md-2" (click)="addCategory()"><i class="os-icon os-icon-plus"></i>Add</button>
+          </div>
+        </div>
+      </div>
+    </form>
+  </div>
+  <div class="items-table-box">
+    <div class="table-responsive">
+      <table mat-table [dataSource]="itemSource" *ngIf="itemSource.data.length"
+        class="mat-elevation-z8 table table-hover">
+        <ng-container matColumnDef="itemCode">
+          <th mat-header-cell *matHeaderCellDef> Item Code </th>
+          <td mat-cell *matCellDef="let element"> {{ element.item_code }} </td>
+        </ng-container>
+        <ng-container matColumnDef="itemName">
+          <th mat-header-cell *matHeaderCellDef> Item Name </th>
+          <td mat-cell *matCellDef="let element"> {{ element.item_name }} </td>
+        </ng-container>
+        <ng-container matColumnDef="store_price">
+          <th mat-header-cell *matHeaderCellDef> Store Price </th>
+          <td mat-cell *matCellDef="let element"> {{ element.store_price }} </td>
+        </ng-container>
+        <!-- <ng-container matColumnDef="actions">
+          <th mat-header-cell *matHeaderCellDef> Actions </th>
+          <td mat-cell *matCellDef="let element; index as index">
+            <button (click)="editItemCode(index, element)"><i class="fa fa-edit"></i></button>
+            <button (click)="deleteItemCode(index)" class="trash-btn"><i class="fa fa-trash"></i></button>
+          </td>
+        </ng-container> -->
+        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+      </table>
+    </div>
+    <mat-paginator [hidden]="hidePaginator(itemSource.data.length)" pageSize="5" [pageSizeOptions]="[5,10]">
+    </mat-paginator>
+  </div>
+  <div class="card-footer">
+    <div class="d-inline float-right">
+      <button class="btn btn-sm btn-light mr-2" (click)="close()">Cancel</button>
+      <button class="btn btn-sm btn-p" (click)="onSubmit()">Save</button>
+    </div>
+  </div>
+</section>
+
+
+<!-- <div class="bottom-form">
+
+  <div class="item-container custom-mat custom-mat-no-border" *ngIf="applyLevelFormControl.value === 'item'">
+    <div class="item-table-div">
+      <table class="item-table">
+        <thead>
+          <tr *ngIf="targetControl === 'HEAD_VALUE'">
+            <ng-container *ngIf="isItemSelected">
+              <th class="head" *ngFor="let head of itemTableHeaders">{{ head.label }}</th>
+            </ng-container>
+            <th class="head" *ngFor="let head of headTableHeadersValue">{{ head.label }}</th>
+            <th>Action</th>
+          </tr>
+          <tr *ngIf="targetControl === 'HEAD_QTY'">
+            <ng-container *ngIf="isItemSelected">
+              <th class="head" *ngFor="let head of itemTableHeaders">{{ head.label }}</th>
+            </ng-container>
+            <th class="head" *ngFor="let head of headTableHeadersQty">{{ head.label }}</th>
+            <th>Action</th>
+          </tr>
+          <tr *ngIf="targetControl === 'HEAD_FIXED_VALUE'">
+            <ng-container *ngIf="isItemSelected">
+              <th class="head" *ngFor="let head of itemTableHeaders">{{ head.label }}</th>
+            </ng-container>
+            <th class="head" *ngFor="let head of headTableHeadersFixedValue">{{ head.label }}</th>
+
+            <th>Action</th>
+          </tr>
+          <tr *ngIf="targetControl === 'HEAD_FIXED_QTY'">
+            <ng-container *ngIf="isItemSelected">
+              <th class="head" *ngFor="let head of itemTableHeaders">{{ head.label }}</th>
+            </ng-container>
+            <th class="head" *ngFor="let head of headTableHeadersFixedQty">{{ head.label }}</th>
+            <th>Action</th>
+
+          </tr>
+        </thead>
+        <tbody class="form-body">
+          <tr formArrayName="items" class="item-row" *ngFor="let item of itemFormControls; let i = index;">
+            <ng-container [formGroup]="item">
+              <td class="item-name" *ngIf="isItemSelected">
+                <mat-form-field class="item-name-field">
+                  <input type="text" placeholder="Search an item" matInput formControlName="item"
+                    [matAutocomplete]="auto">
+                  <mat-autocomplete #auto="matAutocomplete"
+                    (optionSelected)="itemDidSearched($event.option.value, i)"
+                    [displayWith]="itemsControlDisplayValue">
+                    <mat-option *ngFor="let item of filteredItems" [value]="itemControlValue(item)">
+                      {{ item.item_name }} - {{item.item_code}} </mat-option>
+                  </mat-autocomplete>
+                </mat-form-field>
+              </td>
+              <td class="uom-td" *ngIf="isItemSelected">
+                <select class="custom-select" formControlName="item_uom_id">
+                  <option [value]="uom.id" *ngFor="let uom of uoms">{{ uom.name }}</option>
+                </select>
+              </td>
+              <td *ngIf="targetControl === 'HEAD_VALUE'"><input type="number" min="0"
+                  class="form-control form-control-sm" placeholder="start value" formControlName="from_value">
+              </td>
+              <td *ngIf="targetControl === 'HEAD_VALUE'"><input type="number" min="0"
+                  class="form-control form-control-sm" placeholder="end value" formControlName="to_value"></td>
+              <td *ngIf="targetControl === 'HEAD_QTY'"><input type="number" min="0"
+                  class="form-control form-control-sm" placeholder="start quantity" formControlName="from_qty">
+              </td>
+              <td *ngIf="targetControl === 'HEAD_QTY'"><input type="number" min="0"
+                  class="form-control form-control-sm" placeholder="end quantity" formControlName="to_qty"></td>
+              <td *ngIf="targetControl === 'HEAD_FIXED_VALUE'"><input type="number" min="0"
+                  class="form-control form-control-sm" placeholder="fixed value" formControlName="fixed_value">
+              </td>
+              <td *ngIf="targetControl === 'HEAD_FIXED_QTY'"><input type="number" min="0"
+                  class="form-control form-control-sm" placeholder="fixed quantity" formControlName="fixed_qty">
+              </td>
+              <td [ngClass]="{ 'percent': commissionTypeFormControl.value === 'percentage' }">
+                <input type="number" min="0" class="form-control form-control-sm" placeholder="commission"
+                  formControlName="commission">
+                <i *ngIf="commissionTypeFormControl.value === 'percentage'" class="fa fa-percent"></i>
+              </td>
+              <td>
+                <button [disabled]="itemFormControls.length <= 1" class="trash-btn" (click)="deleteItemRow(i)"><i
+                    class="fa fa-close"></i></button>
+              </td>
+            </ng-container>
+          </tr>
+        </tbody>
+      </table>
+
+      <button mat-button class="mat-inherit-line-height add-item-btn" (click)="addItem()">Add another
+        line</button>
+    </div>
+
+   
+  </div>
+
+  <div class="item-container custom-mat custom-mat-no-border" *ngIf="applyLevelFormControl.value === 'header'">
+
+    <div class="item-table-div">
+      <table class="item-table">
+        <thead>
+          <tr *ngIf="targetControl === 'HEAD_VALUE'">
+            <th class="head" *ngFor="let head of headTableHeadersValue">{{ head.label }}</th>
+            <th>Action</th>
+          </tr>
+          <tr *ngIf="targetControl === 'HEAD_QTY'">
+            <th class="head" *ngFor="let head of headTableHeadersQty">{{ head.label }}</th>
+            <th>Action</th>
+          </tr>
+          <tr *ngIf="targetControl === 'HEAD_FIXED_VALUE'">
+            <th class="head" *ngFor="let head of headTableHeadersFixedValue">{{ head.label }}</th>
+            <th>Action</th>
+          </tr>
+          <tr *ngIf="targetControl === 'HEAD_FIXED_QTY'">
+            <th class="head" *ngFor="let head of headTableHeadersFixedQty">{{ head.label }}</th>
+            <th>Action</th>
+          </tr>
+
+        </thead>
+        <tbody class="form-body">
+          <tr formArrayName="items" class="item-row" *ngFor="let item of headersFormControls; let i = index;">
+            <ng-container [formGroup]="item">
+              <td *ngIf="targetControl === 'HEAD_VALUE'"><input type="number" min="0"
+                  class="form-control form-control-sm" placeholder="start value" formControlName="from_value">
+              </td>
+              <td *ngIf="targetControl === 'HEAD_VALUE'"><input type="number" min="0"
+                  class="form-control form-control-sm" placeholder="end value" formControlName="to_value"></td>
+              <td *ngIf="targetControl === 'HEAD_QTY'"><input type="number" min="0"
+                  class="form-control form-control-sm" placeholder="start quantity" formControlName="from_qty">
+              </td>
+              <td *ngIf="targetControl === 'HEAD_QTY'"><input type="number" min="0"
+                  class="form-control form-control-sm" placeholder="end quantity" formControlName="to_qty"></td>
+              <td *ngIf="targetControl === 'HEAD_FIXED_VALUE'"><input type="number" min="0"
+                  class="form-control form-control-sm" placeholder="fixed value" formControlName="fixed_value">
+              </td>
+              <td *ngIf="targetControl === 'HEAD_FIXED_QTY'"><input type="number" min="0"
+                  class="form-control form-control-sm" placeholder="fixed quantity" formControlName="fixed_qty">
+              </td>
+              <td [ngClass]="{ 'percent': commissionTypeFormControl.value === 'percentage' }">
+                <input type="number" min="0" class="form-control form-control-sm" placeholder="commission"
+                  formControlName="commission">
+                <i *ngIf="commissionTypeFormControl.value === 'percentage'" class="fa fa-percent"></i>
+              </td>
+              <td>
+                <button [disabled]="headersFormControls.length <= 1" class="trash-btn"
+                  (click)="deleteHeadersRow(i)"><i class="fa fa-close"></i></button>
+              </td>
+            </ng-container>
+          </tr>
+        </tbody>
+      </table>
+      <button mat-button class="add-item-btn mat-inherit-line-height" (click)="addHeader()">Add another
+        line</button>
+    </div>
+
+    
+  </div>
+
+</div> -->

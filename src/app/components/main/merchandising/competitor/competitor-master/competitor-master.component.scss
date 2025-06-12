@@ -1,0 +1,44 @@
+button:focus {
+    outline: none;
+  }
+  
+  button.mat-menu-item {
+    height: 30px;
+    line-height: normal;
+  }
+  button:focus {
+    outline: none;
+  }
+  
+  button.mat-menu-item {
+    height: 30px;
+    line-height: normal;
+  }
+  .table-box {
+    float: left;
+    transition: width 0.4s;
+    width: 100%;
+  }
+  
+  .details-box {
+    float: left;
+    transition: width 0.4s, height 2s, visibility 0.4s;
+    width: 0;
+    height: calc(100vh - 68px);
+    visibility: hidden;
+  }
+  .collapsed {
+    transition:width 0.4s;
+    width: 25%;
+  }
+  .scrollxy {
+    overflow-y: scroll !important;
+  }
+  .expanded {
+    height: 950px;
+    transition: width 0.4s, visibility 0.4s;
+    width: 75%;
+    border-left: 2px solid lightgray;
+    visibility: visible;
+  }
+  

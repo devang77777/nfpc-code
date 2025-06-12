@@ -1,0 +1,209 @@
+<section>
+  <div class="heading-row">
+    <h2 class="d-md-inline">
+      <i class="fa fa-sticky-note-o mr-2"></i>Goods Receipt Note
+      <span class="order-number">#{{ grnData?.grn_number }}</span>
+    </h2>
+    <div class="d-md-inline float-md-right text-right">
+      <!-- <span>
+        <button mat-button class="btn btn-sm btn-white mr-2" [matMenuTriggerFor]="menu2">
+          More
+        </button>
+        <mat-menu #menu2="matMenu" xPosition="before">
+          <button mat-menu-item class="height-40" (click)="editOrder()" appPermission [permissions]="userPermissions"
+            [type]="'edit'">
+            Edit
+          </button>
+          <button mat-menu-item class="height-40" (click)="openDeleteBox()" appPermission
+            [permissions]="userPermissions" [type]="'delete'">
+            Delete
+          </button>
+        </mat-menu>
+      </span> -->
+      <button style="margin-left:-11px;" class="btn" type="button" (click)="getDocument('pdf')">
+        <mat-icon [inline]="true">picture_as_pdf</mat-icon>
+      </button>
+      <!-- <button style="margin-left:-11px;" [disabled]="!(grnData?.current_stage === 'Pending')"
+        [ngStyle]="{'background':isEdit?'lightgray':''}" class="btn" type="button" (click)="enableEdit()">
+        <mat-icon [inline]="true">edit</mat-icon>
+      </button> -->
+      <!-- [disabled]="!(grnData?.current_stage === 'Pending')" -->
+      <button style="margin-left:-11px;" [disabled]="!(grnData?.current_stage === 'Pending')"
+        [routerLink]="['/inventory/grn/edit', grnData?.uuid]" class="btn" type="button">
+        <!-- <mat-icon [inline]="true">edit</mat-icon> -->
+        <i class="os-icon os-icon-edit-32"></i>
+      </button>
+      <button class="btn" (click)="closeDetailView()">
+        <i class="os-icon os-icon-close"></i>
+      </button>
+    </div>
+  </div>
+  <div class="separator"></div>
+
+  <div class="approval-holder" *ngIf="hasApprovalPending">
+    <div class="approval-box">
+      <div class="approve-icon">
+        <i class="fa fa-check-square-o"></i>
+      </div>
+      <div class="approve-content">
+        <h2>Approve this order</h2>
+        <p>This order has been submitted for approval. Verify and approve the order.</p>
+      </div>
+      <div class="approve-actions">
+        <button mat-button class="approve" (click)="approve()">Approve</button>
+        <button mat-button class="reject" (click)="reject()">Reject</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="order-form custom-mat square scrolly">
+    <!-- <div class="card-body active-form overview">
+      <div class="d-flex overview-container">
+        <table class="form-col d-inline">
+          <tr class="spacer"></tr>
+        </table>
+      </div>
+    </div> -->
+    <div class="card-body overview">
+      <div class="row justify-content-between">
+        <div class="col-md-4">
+          <div class="form-group">
+            <label for="">Salesman</label>
+            <input type="text" class="form-control form-control-sm non-editable" [value]="
+            grnData?.salesman?.firstname +
+            ' ' +
+            grnData?.salesman?.lastname
+          " disabled />
+          </div>
+          <div class="form-group">
+            <label for="">Route</label>
+            <input type="text" class="form-control form-control-sm non-editable" [value]="
+            grnData?.route?.route_name +
+            ' - ' +
+            grnData?.route?.route_code
+          " disabled />
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div class="form-group">
+            <label for="">GRN Number </label>
+            <input type="text" class="form-control form-control-sm non-editable" [value]="grnData?.grn_number"
+              disabled />
+          </div>
+          <div class="form-group">
+            <label for="">GRN Date </label>
+            <input type="date" class="form-control form-control-sm non-editable" [value]="grnData?.grn_date" disabled />
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- <div class="card-body overview">
+      <div class="row justify-content-between">
+        <div class="col-md-4">
+          <div class="form-group">
+            <label for="">Source Warehouse </label>
+            <input type="text" class="form-control form-control-sm non-editable"
+              [value]="grnData?.source_warehouse?.code+' - '+grnData?.source_warehouse?.name" disabled />
+          </div>
+          <div class="form-group">
+            <label for="">Destination Warehouse </label>
+            <input type="text" class="form-control form-control-sm non-editable" [value]="grnData?.destination_warehouse?.code 
+              +' - '+ grnData?.destination_warehouse?.name" disabled />
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div class="form-group">
+            <label for="">GRN Number </label>
+            <input type="text" class="form-control form-control-sm non-editable" [value]="grnData?.grn_number"
+              disabled />
+          </div>
+          <div class="form-group">
+            <label for="">GRN Date </label>
+            <input type="date" class="form-control form-control-sm non-editable" [value]="grnData?.grn_date" disabled />
+          </div>
+        </div>
+      </div>
+    </div> -->
+    <div>
+      <div class="item-container custom-mat custom-mat-no-border">
+        <div class="table-responsive">
+          <table *ngIf="grnData" class="item-table cardtable">
+            <thead>
+              <tr>
+                <th class="head" *ngFor="let head of itemTableHeaders">
+                  {{ head.label }}
+                </th>
+              </tr>
+            </thead>
+            <tbody class="form-body" *ngIf="grnData">
+              <tr class="item-row" *ngFor="let item of grnData?.goodreceiptnotedetail; let i = index">
+                <td data-th="#">{{ i + 1 }}</td>
+                <td data-th="Item Code" class="item-code">
+                  <input type="text" class="form-control form-control-sm non-editable" [value]="item.item?.item_code"
+                    disabled />
+                </td>
+                <td data-th="Item Name" class="item-name">
+                  <input type="text" class="form-control form-control-sm non-editable" [value]="item.item?.item_name"
+                    disabled />
+                </td>
+                <td data-th="UOM" class="uom-td">
+                  <input type="text" class="form-control form-control-sm non-editable" [value]="item.item_uom?.name"
+                    disabled />
+                </td>
+                <td data-th="Quantity">
+                  <input type="number" max="item.original_item_qty" class="form-control non-editable"
+                    [disabled]="!isEdit" (input)="changeQty($event.target.value,i)" [value]="item.qty" />
+                </td>
+                <!-- [ngStyle]="{'border':item?.isQtyChange?'1px solid red':'none'}" -->
+                <td data-th="reason" style="width: 280px;">
+                  <!-- <angular2-multiselect [data]="itemList" [(ngModel)]="item.reason_id" [settings]="settings"
+                    (onSelect)="onItemSelect($event)" (onDeSelect)="OnItemDeSelect($event)"
+                    (onSelectAll)="onSelectAll($event)" (onDeSelectAll)="onDeSelectAll($event)">
+                  </angular2-multiselect> -->
+                  <span style="word-break: break-word; font-size: 11px;">{{item?.reason_type?.code}} -
+                    {{item?.reason_type?.name}}</span>
+                </td>
+
+                <!-- <td>
+                <input type="number" min="0" class="form-control non-editable" [value]="item.qty" disabled />
+              </td> -->
+                <td data-th="Return Reason">
+                  <input type="text" class="form-control non-editable" [value]="item.reason" disabled />
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+      <div class="row  mb-3" *ngIf="isEdit">
+        <div class="col-md-12 mt-4" style="display: flex; justify-content: flex-end;">
+          <button class="btn btn-sm btn-light mr-2" (click)="closeDetailView()">Cancel</button>
+          <button class="btn btn-sm btn-p" (click)="saveData()" [disabled]="!isDisableSave">Update</button>
+        </div>
+      </div>
+      <div class="footer-overview-container">
+        <div class="row">
+          <div class="form-group col-sm-5">
+            <label for="note">GRN Remark</label>
+            <textarea class="form-control form-control-sm" id="note" [value]="grnData?.grn_remark" disabled></textarea>
+          </div>
+          <!--          <div class="offset-2 col-sm-5">-->
+          <!--            <div class="overall-stats-table">-->
+          <!--              <div *ngFor="let stat of orderStats.slice(0, orderStats.length - 1)">-->
+          <!--                <span class="stat-label">{{ stat.label }}</span>-->
+          <!--                <span class="stat-value">{{ grnData[stat.key] | currency: currencyCode:"symbol": currencyDecimalFormat }}</span>-->
+          <!--              </div>-->
+          <!--              <div>-->
+          <!--                <span class="stat-label final-total">Total</span>-->
+          <!--                <span class="stat-value final-total">{{ grnData['grand_total'] | currency: currencyCode:"symbol": currencyDecimalFormat }}</span>-->
+          <!--              </div>-->
+          <!--            </div>-->
+          <!--          </div>-->
+        </div>
+
+      </div>
+
+    </div>
+  </div>
+  <div class="footer-block"></div>
+</section>

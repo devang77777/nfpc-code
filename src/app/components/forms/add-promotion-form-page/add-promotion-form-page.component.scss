@@ -1,0 +1,16 @@
+// .mat-checkbox .mat-checkbox-frame {
+//     transform: scale(2);
+// }
+
+// .mat-checkbox-checked .mat-checkbox-background {
+//     transform: scale(2);
+// }
+
+td {
+    width: 25%;
+    color: grey;
+}
+.card {
+    max-height: calc(100vh - 150px);
+    overflow-y: auto;
+}

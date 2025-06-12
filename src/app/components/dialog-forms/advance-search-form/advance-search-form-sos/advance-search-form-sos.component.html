@@ -1,0 +1,224 @@
+<mat-tab-group style="height: 250px !important;" [(selectedIndex)]="selectedIndex" (selectedTabChange)="selectedTabChange($event.index)" class="customertab" mat-align-tabs="start">
+    <mat-tab label="Share of Shelf">
+        <form [formGroup]="form" novalidate>
+
+            <div class="row pt-4">
+                <div class="col-md-6">
+                    <div class="form-group row">
+                        <label class="col-sm-3 col-form-label">Date Range</label>
+                        <div class="col-sm-9" >
+                            <div class="row">
+                                <div class="col">
+                                    <input type="date" formControlName="startdate" class="form-control form-control-sm" placeholder="Start Date">
+                                </div>
+                                <div class="col-1 p-0">
+                                    &nbsp; &nbsp;<span>_</span>&nbsp;&nbsp;
+                                </div>
+                                <div class="col">
+                                    <input type="date" formControlName="enddate" class="form-control form-control-sm" placeholder="End Date">
+                                </div>
+                            </div>
+                         
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group row">
+                        <label class="col-sm-3 col-form-label">Customer</label>
+                        <div class="col-sm-9">
+                            <mat-select multiple class="form-control form-control-sm" formControlName="customer">
+                                <mat-option *ngFor="let item of customer" [value]="item.id">
+                                  {{ item.firstname }} {{ item.lastname }}
+                                </mat-option>
+                              </mat-select>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group row">
+                        <label class="col-sm-3 col-form-label">Merchandiser</label>
+                        <div class="col-sm-9">
+                            <mat-select multiple class="form-control form-control-sm" formControlName="merchandiser">
+                                <mat-option *ngFor="let item of merchandisers" [value]="item.user?.id">
+                                  {{ item.user?.firstname }} {{ item.user?.lastname }}
+                                </mat-option>
+                              </mat-select>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group row">
+                        <label class="col-sm-3 col-form-label">Brand</label>
+                        <div class="col-sm-9">
+                            <mat-select multiple class="form-control form-control-sm" formControlName="brand">
+                                <mat-option *ngFor="let item of brands" [value]="item.id">
+                                  {{ item.brand_name }}
+                                </mat-option>
+                              </mat-select>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group row">
+                        <label class="col-sm-3 col-form-label">Category</label>
+                        <div class="col-sm-9">
+                            <mat-select multiple class="form-control form-control-sm" formControlName="category">
+                                <mat-option *ngFor="let item of categories" [value]="item.id">
+                                  {{ item.name }}
+                                </mat-option>
+                              </mat-select>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </mat-tab>
+    <mat-tab label="Share of Assortment">
+        <form [formGroup]="form" novalidate>
+
+            <div class="row pt-4">
+                <div class="col-md-6">
+                    <div class="form-group row">
+                        <label class="col-sm-3 col-form-label">Date Range</label>
+                        <div class="col-sm-9" >
+                            <div class="row">
+                                <div class="col">
+                                    <input type="date" formControlName="startdate" class="form-control form-control-sm" placeholder="Start Date">
+                                </div>
+                                <div class="col-1 p-0">
+                                    &nbsp; &nbsp;<span>_</span>&nbsp;&nbsp;
+                                </div>
+                                <div class="col">
+                                    <input type="date" formControlName="enddate" class="form-control form-control-sm" placeholder="End Date">
+                                </div>
+                            </div>
+                         
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group row">
+                        <label class="col-sm-3 col-form-label">Customer</label>
+                        <div class="col-sm-9">
+                            <mat-select multiple class="form-control form-control-sm" formControlName="customer">
+                                <mat-option *ngFor="let item of customer" [value]="item.id">
+                                  {{ item.firstname }} {{ item.lastname }}
+                                </mat-option>
+                              </mat-select>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group row">
+                        <label class="col-sm-3 col-form-label">Merchandiser</label>
+                        <div class="col-sm-9">
+                            <mat-select multiple class="form-control form-control-sm" formControlName="merchandiser">
+                                <mat-option *ngFor="let item of merchandisers" [value]="item.user?.id">
+                                  {{ item.user?.firstname }} {{ item.user?.lastname }}
+                                </mat-option>
+                              </mat-select>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group row">
+                        <label class="col-sm-3 col-form-label">Brand</label>
+                        <div class="col-sm-9">
+                            <mat-select multiple class="form-control form-control-sm" formControlName="brand">
+                                <mat-option *ngFor="let item of brands" [value]="item.id">
+                                  {{ item.brand_name }}
+                                </mat-option>
+                              </mat-select>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group row">
+                        <label class="col-sm-3 col-form-label">Category</label>
+                        <div class="col-sm-9">
+                            <mat-select multiple class="form-control form-control-sm" formControlName="category">
+                                <mat-option *ngFor="let item of categories" [value]="item.id">
+                                  {{ item.name }}
+                                </mat-option>
+                              </mat-select>
+                        </div>
+                    </div>
+                </div>                
+            </div>
+        </form>
+    </mat-tab>
+    <mat-tab label="Share of Display">
+        <form [formGroup]="form" novalidate>
+
+    <div class="row pt-4">
+        <div class="col-md-6">
+            <div class="form-group row">
+                <label class="col-sm-3 col-form-label">Date Range</label>
+                <div class="col-sm-9" >
+                    <div class="row">
+                        <div class="col">
+                            <input type="date" formControlName="startdate" class="form-control form-control-sm" placeholder="Start Date">
+                        </div>
+                        <div class="col-1 p-0">
+                            &nbsp; &nbsp;<span>_</span>&nbsp;&nbsp;
+                        </div>
+                        <div class="col">
+                            <input type="date" formControlName="enddate" class="form-control form-control-sm" placeholder="End Date">
+                        </div>
+                    </div>
+                 
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="form-group row">
+                <label class="col-sm-3 col-form-label">Customer</label>
+                <div class="col-sm-9">
+                    <mat-select multiple class="form-control form-control-sm" formControlName="customer">
+                        <mat-option *ngFor="let item of customer" [value]="item.id">
+                          {{ item.firstname }} {{ item.lastname }}
+                        </mat-option>
+                      </mat-select>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="form-group row">
+                <label class="col-sm-3 col-form-label">Merchandiser</label>
+                <div class="col-sm-9">
+                    <mat-select multiple class="form-control form-control-sm" formControlName="merchandiser">
+                        <mat-option *ngFor="let item of merchandisers" [value]="item.user?.id">
+                          {{ item.user?.firstname }} {{ item.user?.lastname }}
+                        </mat-option>
+                      </mat-select>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="form-group row">
+                <label class="col-sm-3 col-form-label">Brand</label>
+                <div class="col-sm-9">
+                    <mat-select multiple class="form-control form-control-sm" formControlName="brand">
+                        <mat-option *ngFor="let item of brands" [value]="item.id">
+                          {{ item.brand_name }}
+                        </mat-option>
+                      </mat-select>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="form-group row">
+                <label class="col-sm-3 col-form-label">Category</label>
+                <div class="col-sm-9">
+                    <mat-select multiple class="form-control form-control-sm" formControlName="category">
+                        <mat-option *ngFor="let item of categories" [value]="item.id">
+                          {{ item.name }}
+                        </mat-option>
+                      </mat-select>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>
+    </mat-tab>
+</mat-tab-group>

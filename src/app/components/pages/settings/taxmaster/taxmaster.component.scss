@@ -1,0 +1,80 @@
+section {
+  //padding-top: 16px;
+}
+
+button:focus {
+  outline: none;
+}
+
+.fa-plus {
+  padding-bottom: 2px;
+}
+
+button.mat-menu-item {
+  height: 30px;
+  line-height: normal;
+}
+
+.table-box {
+  float: left;
+  transition: width 0.4s;
+  width: 100%;
+}
+
+.heading-row {
+  padding: 20px 0;
+  float: left;
+  width: 100%;
+}
+
+.title {
+  float: left;
+  width: 70%;
+  margin: 0;
+  font-size: 24px;
+  padding-left: 20px;
+  position: relative;
+  top: 8px;
+}
+
+.actions {
+  float: right;
+  transition: right 0.4s;
+  width: 30%;
+
+  button {
+    float: right;
+    margin-right: 12px;
+  }
+
+  &.expanded-action {
+    transition: width 0.4s;
+    width: 100%;
+  }
+
+  .new {
+    background-color: #0db6a1;
+    color: white;
+  }
+}
+
+.details-box {
+  float: left;
+  transition: width 0.4s, height 2s, visibility 0.4s;
+  width: 0;
+  height: calc(100vh - 68px);
+  visibility: hidden;
+}
+
+.collapsed {
+  transition:width 0.4s;
+  width: 25%;
+}
+
+.expanded {
+  height: calc(100vh - 50px);
+  transition: width 0.4s, visibility 0.4s;
+  width: 75%;
+  border-left: 2px solid lightgray;
+  visibility: visible;
+}

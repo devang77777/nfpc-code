@@ -1,0 +1,173 @@
+<section *ngIf="routeData" [ngClass]="{ 'detail-visible': isDetailVisible }">
+  <div class="pl-3">
+    <div class="row">
+      <h2 class="page-title col-sm-6 font-weight-light">
+        {{ routeData.route_name }}
+      </h2>
+      <div class="actions col-sm-6">
+        <button (click)="openEditRoute()" appPermission [permissions]="userPermissions" [type]="'edit'" class="iconbtn">
+          <i class="os-icon os-icon-edit" aria-hidden="true"></i>
+        </button>
+        <div>
+          <button class="btn btn-sm btn-white" mat-button [matMenuTriggerFor]="menu2">
+            More
+          </button>
+          <mat-menu #menu2="matMenu">
+            <button mat-menu-item (click)="toggleStatus()">
+              Mark as {{ routeData.status === 0 ? "Active" : "Inactive" }}
+            </button>
+            <button mat-menu-item (click)="openDeleteBox()" appPermission [permissions]="userPermissions"
+              [type]="'delete'">
+              Delete
+            </button>
+          </mat-menu>
+        </div>
+        <button *ngIf="isDetailVisible" class="btn" (click)="closeDetailView()">
+          <i class="os-icon os-icon-close"></i>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <div class="pl-3">
+    <div class="row h-100">
+      <div class="col-12 border-left">
+        <mat-tab-group class="customertab" mat-align-tabs="start">
+          <mat-tab label="Overview">
+            <mat-list>
+              <mat-list-item>Route code: {{ routeData.route_code }}</mat-list-item>
+              <mat-list-item>Name: {{ routeData.route_name }}</mat-list-item>
+              <mat-list-item>Area Name:
+                {{
+                routeData.areas ? routeData.areas.area_name : " "
+                }}</mat-list-item>
+              <mat-list-item>Depot Name:
+                {{
+                routeData.depot ? routeData.depot.depot_name : "-"
+                }}</mat-list-item>
+              <mat-list-item>Vehicle Name:
+                {{
+                routeData.van ? routeData.van.description : "-"
+                }}
+                {{
+                routeData.van ? routeData.van.van_code : "-"
+                }}</mat-list-item>
+              <mat-list-item>Status:
+                {{
+                routeData.status === 0 ? "Inactive" : "Active"
+                }}</mat-list-item>
+              <ng-container *ngIf="routeData.custom_field_value_save.length > 0">
+                <mat-list-item><strong>Custom Fields</strong></mat-list-item>
+                <mat-list-item *ngFor="let item of routeData.custom_field_value_save">
+                  <span *ngIf="
+                      item.custom_field &&
+                        item.custom_field.field_type === 'check_box';
+                      else others
+                    ">{{ item.custom_field.field_label }} :
+                    {{ item.custom_field_value == "1" ? "Yes" : "No" }}</span>
+
+                  <ng-template #others>
+                    <span *ngIf="item.custom_field">{{ item.custom_field?.field_label }} :
+                      {{ item.custom_field_value }}</span>
+                  </ng-template>
+                </mat-list-item>
+              </ng-container>
+            </mat-list>
+            <div class="number-range">
+              <div class="row mt-3">
+                <div class="col">
+                  <p class="number-range-header">Number Range</p>
+                  <hr>
+                </div>
+              </div>
+              <div class="row mb-2">
+                <div class="col">
+                  <label for=""> Customer From:</label>
+                  {{routeData.salesman_number_range?.customer_from}}
+                </div>
+                <div class="col">
+                  <label for="">Customer To:</label>
+                  <strong>{{routeData.salesman_number_range?.customer_to}}</strong>
+                </div>
+              </div>
+              <!-- <small
+                          *ngIf="!isCustomerRange && (salesManRoleFormControl.value == 2 || salesManRoleFormControl.value == 3)"
+                          class="text-danger">Please fill both form and to range</small> -->
+              <div class="row mb-2  ">
+                <div class="col">
+                  <label for=""> Order From:</label>
+                  {{routeData.salesman_number_range?.order_from}}
+                </div>
+                <div class="col">
+                  <label for="">Order To:</label>
+                  {{routeData.salesman_number_range?.order_to}}
+
+                </div>
+              </div>
+              <!-- <small *ngIf="!isOrderRange && salesManRoleFormControl.value !== 4" class="text-danger">Please fill
+                          both form and to range</small> -->
+              <div class="row mb-2">
+                <div class=" col">
+                  <label for="">Invoice from:</label>
+                  {{routeData.salesman_number_range?.invoice_from}}
+
+                </div>
+                <div class="col">
+                  <label for="">Invoice To:</label>
+                  {{routeData.salesman_number_range?.invoice_to}}
+
+                </div>
+              </div>
+              <!-- <small *ngIf="!isInvoiceRange && salesManRoleFormControl.value !== 1" class="text-danger">Please fill
+                          both form and to range</small> -->
+              <div class="row mb-2">
+                <div class="col">
+                  <label for="">Collection From:</label>
+                  {{routeData.salesman_number_range?.collection_from}}
+
+                </div>
+                <div class="col">
+                  <label for="">Collection To:</label>
+                  {{routeData.salesman_number_range?.collection_to}}
+
+                </div>
+              </div>
+              <!-- <small *ngIf="!isCollectionRange" class="text-danger">Please fill both form and to range</small> -->
+              <div class="row mb-2">
+                <div class="col">
+                  <label for="">Return From:</label>
+                  {{routeData.salesman_number_range?.credit_note_from}}
+
+                </div>
+                <div class="col">
+                  <label for="">Return To:</label>
+                  {{routeData.salesman_number_range?.credit_note_to}}
+
+                </div>
+              </div>
+              <!-- <small *ngIf="!isReturnRange" class="text-danger">Please fill both form and to range</small> -->
+              <div class="row mb-2">
+                <div class="col">
+                  <label for="">Unload From:</label>
+                  {{routeData.salesman_number_range?.unload_from}}
+
+                </div>
+                <div class="col">
+                  <label for="">Unload to:</label>
+                  {{routeData.salesman_number_range?.unload_to}}
+
+                </div>
+              </div>
+              <!-- <small
+                          *ngIf="!isUnloadRange && (salesManRoleFormControl.value == 2 || salesManRoleFormControl.value == 3)"
+                          class="text-danger">Please fill both form and to range</small> -->
+            </div>
+          </mat-tab>
+          <!-- <mat-tab label="Number Range"> -->
+
+        </mat-tab-group>
+
+      </div>
+    </div>
+  </div>
+</section>

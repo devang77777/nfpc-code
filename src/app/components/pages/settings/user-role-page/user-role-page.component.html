@@ -1,0 +1,30 @@
+<mat-drawer-container class="formdrawer-container" hasBackdrop="false">
+    <mat-drawer id="formDrawer" mode="over" position="end" #formDrawer class="border">
+        <div style="min-width: 300px;">
+            <app-add-user-form (updateTableData)="updateTableData($event, 'user')" *ngIf="!roles"></app-add-user-form>
+            <app-add-role-form (updateTableData)="updateTableData($event, 'role')" *ngIf="roles"></app-add-role-form>
+        </div>
+    </mat-drawer>
+    <section>
+        <div class="table-box position-relative" [ngClass]="{ 'collapsed': isDetailVisible }">
+            <mat-tab-group (selectedTabChange)="tabChange($event)">
+                <mat-tab label="All Users">
+                    <div>
+                        <app-users-dt [newUserData]="newUserData" (itemClicked)="itemClicked($event)"></app-users-dt>
+                    </div>
+                </mat-tab>
+                <mat-tab label="Roles">
+                    <app-org-role-dt [newRoleData]="newRoleData"></app-org-role-dt>
+                </mat-tab>
+            </mat-tab-group>
+            <button *ngIf="!isDetailVisible && !roles" class="btn btn-p invite-btn" (click)="openAddUser()">Invite
+                User</button>
+            <button *ngIf="!isDetailVisible && roles" class="btn btn-p invite-btn" (click)="openAddRole()">New
+                Role</button>
+        </div>
+        <div class="details-box" [ngClass]="{ 'expanded': isDetailVisible }">
+            <app-user-detail  (detailsClosed)="closeClicked()" [isDetailVisible]="isDetailVisible" [user]="user">
+            </app-user-detail>
+        </div>
+    </section>
+</mat-drawer-container>

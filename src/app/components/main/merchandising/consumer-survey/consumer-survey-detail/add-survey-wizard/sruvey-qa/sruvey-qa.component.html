@@ -1,0 +1,89 @@
+<div class="card" style="width: 550px;">
+    <div class="card-header pt-4">
+        <span class="h6 font-weight-light">{{formType}} Survey Questions</span>
+        <a (click)="close()"><i class="fa fa-times fa-lg text-secondary float-right" aria-hidden="true"></i></a>
+    </div>
+    <form [formGroup]="surveyTextFormGroup" *ngIf="question_type == 'text' || question_type == 'textarea'"
+        (ngSubmit)="saveSurveyQAData(surveyTextFormGroup.value)">
+        <div class="form-box">
+            <div class="card-body">
+                <div class="">
+                    <div class="row mb-4">
+                        <div class="col-md-4">Question*</div>
+                        <div class="col-md-8">
+                            <textarea class="form-control form-control-sm" type="text"
+                                formControlName="question"></textarea>
+                            <app-validation-message [control]="surveyOptionsFormGroup.controls['question']">
+                            </app-validation-message>
+                        </div>
+                    </div>
+                    <div class="row mb-4" *ngIf="question_type == 'text'">
+                        <div class="col-md-4">Answer</div>
+                        <div class="col-md-8">
+                            <input class="form-control form-control-sm" type="text" formControlName="questionValue">
+                        </div>
+                    </div>
+                    <div class="row mb-4" *ngIf="question_type == 'textarea'">
+                        <div class="col-md-4">Answer</div>
+                        <div class="col-md-8">
+                            <textarea class="form-control form-control-sm" type="text"
+                                formControlName="questionValue"></textarea>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="card-footer">
+            <div class="d-inline float-right">
+                <button type="button" class="btn btn-sm btn-white mr-2" (click)="close()">Cancel</button>
+                <button type="submit" class="btn btn-sm btn-p">Save</button>
+            </div>
+        </div>
+    </form>
+    <form [formGroup]="surveyOptionsFormGroup"
+        *ngIf="question_type == 'select' || question_type == 'radio' || question_type == 'checkbox'"
+        (ngSubmit)="saveSurveyQAData(surveyOptionsFormGroup.value)">
+        <div class="form-box">
+            <div class="card-body">
+                <div class="">
+                    <div class="row mb-4">
+                        <div class="col-md-4">Question*</div>
+                        <div class="col-md-8">
+                            <textarea class="form-control form-control-sm" type="text"
+                                formControlName="question"></textarea>
+                            <app-validation-message [control]="surveyOptionsFormGroup.controls['question']">
+                            </app-validation-message>
+                        </div>
+                    </div>
+                    <div class="row mb-4">
+                        <div class="col-md-4">{{question_type | titlecase}} Options</div>
+                        <div class="col-md-8  item-add-btn">
+                            <button type="button" class="btn btn-p" (click)="addControl()"><i
+                                    class="os-icon os-icon-plus mr-2"></i>Add</button></div>
+                    </div>
+                    <div class="row mb-4" formArrayName="questionValue"
+                        *ngFor="let fields of surveyOptionsFormGroup.get('questionValue').controls; let i = index">
+                        <div class="col-md-4"></div>
+                        <div class="col-md-8" [formGroupName]="i">
+                            <input class="form-control form-control-sm option-inputs" type="text"
+                                formControlName="qValue">
+                            <button type="button" class="col-md-2 btn btn-danger btn-pad"
+                                (click)="removeControl(i)">-</button>
+                            <p class="value-error">
+                                <app-validation-message
+                                    [control]="surveyOptionsFormGroup.controls.questionValue.controls[i].controls['qValue']">
+                                </app-validation-message>
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="card-footer">
+            <div class="d-inline float-right">
+                <button type="button" class="btn btn-sm btn-white mr-2" (click)="close()">Cancel</button>
+                <button type="submit" class="btn btn-sm btn-p" [disabled]="!surveyOptionsFormGroup.valid">Save</button>
+            </div>
+        </div>
+    </form>
+</div>

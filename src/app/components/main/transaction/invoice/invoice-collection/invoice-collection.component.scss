@@ -1,0 +1,429 @@
+section {
+  display: block;
+}
+
+.separator {
+  height: 2px;
+  background-color: lightgrey;
+}
+
+.collection-scrolly {
+  overflow-y: scroll;
+  padding-bottom: 20px;
+  height: calc(110vh - 130px);
+}
+
+
+.erros {
+  width: 52px !important;
+
+  .fixpadding {
+    padding-bottom: 18px !important;
+  }
+}
+
+.mat-error {
+  font-size: 12px;
+}
+
+
+
+button:focus {
+  outline: none;
+}
+
+.order-form {
+  //height: calc(100vh - 124px);
+  overflow: scroll;
+}
+
+input {
+  &:disabled {
+    background-color: transparent;
+  }
+}
+
+.card-body {
+  padding-top: 0;
+  padding-bottom: 0;
+}
+
+mat-option {
+
+  &#typeBtn,
+  &#custBtn {
+    height: 52px;
+  }
+}
+
+.in-opt-btn {
+  button {
+    width: 100%;
+    background-color: #181925;
+    color: white;
+    border-radius: 4px;
+    height: 34px;
+    margin: auto;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    i {
+      margin-right: 8px;
+    }
+  }
+}
+
+.add-btn {
+  padding-left: 0;
+  position: relative;
+
+  button {
+    cursor: pointer;
+    background-color: #181925;
+    color: white;
+    border: none;
+    border-radius: 0.25rem;
+    position: absolute;
+    top: 40px;
+
+    &:focus {
+      outline: none;
+    }
+  }
+}
+
+mat-form-field {
+  display: block;
+}
+
+
+.overview-container {
+  padding: 0 28px;
+}
+
+.form-col {
+  width: 450px;
+
+  tr {
+    td {
+      &:first-of-type {
+        min-width: 120px;
+      }
+
+      &:last-of-type {
+        min-width: 320px;
+      }
+    }
+  }
+}
+
+.check-detail-box {
+  margin-top: 12px;
+
+  div {
+    padding-bottom: 20px;
+    border: 1px solid #ced4da;
+    border-radius: 8px;
+    justify-content: center;
+  }
+}
+
+table.check-form-col {
+  width: 300px;
+  margin-right: 24px;
+
+  tr {
+    td {
+      &:first-of-type {
+        min-width: 100px;
+      }
+
+      &:last-of-type {
+        min-width: 200px;
+      }
+    }
+  }
+}
+
+.spacer {
+  height: 12px;
+}
+
+input.form-control {
+  background-color: white;
+  border: 1px solid #ced4da;
+  padding-left: 8px;
+  font: 500 12px/24px Muli, sans-serif;
+  letter-spacing: normal;
+  height: 32px;
+}
+
+input.form-control:focus {
+  border-color: #ced4da;
+  background-color: white;
+  outline: 0;
+  box-shadow: 0 0 0;
+}
+
+//.loader-holder {
+//  max-width: 60px;
+//  height: 60px;
+//  background-color: #0db6a0;
+//  position: relative;
+//  margin: 15% auto 0;
+//  border-radius: 30px;
+//  border: 12px solid #0db6a0;
+//  border-right-color: #fafafa;
+//  animation: rotation 1s infinite ease-out;
+//}
+//
+//.loader-content {
+//  width: 50px;
+//  height: 50px;
+//  background-color: #fafafa;
+//  position: absolute;
+//  top: -7px;
+//  left: -7px;
+//  border-radius: 25px;
+//}
+//
+//@keyframes rotation {
+//  from {
+//    transform: rotate(0deg);
+//  }
+//  to {
+//    transform: rotate(359deg);
+//  }
+//}
+
+.setting-btn {
+  position: absolute;
+  right: -15px;
+  top: 5px;
+
+  button {
+    background-color: transparent;
+    border: 0;
+  }
+
+  i {
+    font-size: 16px;
+    color: #181824;
+  }
+}
+
+.filter-box {
+  width: 1000px;
+  margin: 16px auto;
+
+  .label {
+    text-align: right;
+    position: relative;
+    top: 4px;
+  }
+}
+
+.item-container {
+  padding: 0 24px;
+  margin: 20px auto 0;
+  position: relative;
+  justify-content: flex-start;
+  display: flex;
+  width: 1090px;
+  overflow: auto;
+
+  .table-check {
+    width: 20px;
+    margin: 0;
+
+    tr {
+      height: 31px;
+    }
+
+    .item-row {
+      height: 31px;
+
+      input {
+        position: relative;
+        top: 10px;
+      }
+    }
+  }
+
+  .invoice-table {
+    width: 980px;
+    margin: 0;
+    border: 1px solid #ced4da;
+    border-collapse: separate;
+    border-spacing: 0;
+
+    th,
+    td {
+      border-top: 1px solid #ced4da;
+      border-left: 1px solid #ced4da;
+
+      &:first-child {
+        border-left: none;
+        text-align: center;
+        width: 32px;
+      }
+    }
+
+    th {
+      padding: 4px 0;
+      border-top: none;
+      text-align: center;
+      min-width: 90px;
+
+      &:first-child {
+        min-width: 0;
+      }
+    }
+
+    td {
+      .form-control-sm {
+        font-size: 12px;
+        border: 0;
+        padding: 0 4px;
+        background-color: inherit;
+
+        &:focus {
+          box-shadow: none;
+          outline: 0;
+        }
+      }
+
+      &:focus-within {
+        outline: 1px auto #18182490;
+      }
+    }
+
+    .form-body {
+      .non-editable {
+        background-color: transparent;
+      }
+    }
+  }
+
+  input.paid-amount {
+    width: 100%;
+    pointer-events: none;
+
+    &.editable {
+      pointer-events: inherit;
+    }
+  }
+}
+
+.item-name {
+  min-width: 120px;
+}
+
+.uom-td {
+  min-width: 120px;
+}
+
+.item-row {
+  position: relative;
+}
+
+.trash-btn-div {
+  box-sizing: content-box;
+  position: absolute;
+  height: 24px;
+  width: 24px;
+  padding: 8px 12px;
+}
+
+.trash-btn {
+  background-color: transparent;
+  width: 24px;
+  height: 24px;
+  border-radius: 12px;
+  position: relative;
+  margin: 4px 0 0 6px;
+  color: #ff5656;
+  border: 1px solid #ff5656;
+
+  &:focus {
+    outline: none;
+  }
+
+  &:disabled {
+    cursor: not-allowed;
+    color: #9b9b9b;
+    border: 1px solid #9b9b9b;
+  }
+
+  i {
+    position: absolute;
+    font-size: 12px;
+    font-weight: lighter;
+    top: 5px;
+    left: 6.5px;
+  }
+}
+
+.add-item-btn {
+  background-color: #181824;
+  color: white;
+  margin: 8px 0;
+  border: none;
+  width: 80px;
+  height: 30px;
+  border-radius: 4px;
+
+  &:focus {
+    outline: none;
+  }
+
+  &:disabled {
+    cursor: not-allowed;
+  }
+}
+
+.overall-stats-table {
+  width: 280px;
+  padding: 12px;
+  margin: 0 28px 0 auto;
+  border: 1px solid #ced4da;
+  border-radius: 8px;
+
+  .stat-label {
+    padding: 0 12px;
+    width: 45%;
+    display: inline-block;
+    text-align: right;
+    color: #495057;
+    margin-right: 8px;
+  }
+
+  .stat-value {
+    font-weight: bolder;
+    color: black;
+  }
+}
+
+textarea {
+  height: 100px;
+}
+
+
+.customer-box {
+  width: 250px;
+  padding-left: 48px;
+  margin: 0 auto 0 1.25rem;
+}
+
+.disable-box {
+  opacity: .35;
+  pointer-events: none;
+}
+
+//input[type=date].ng-invalid,
+//[formControlName].ng-invalid {
+//  &:focus {
+//    outline: 1px auto red;
+//  }
+//}

@@ -1,0 +1,23 @@
+.imageCard{
+    .iconsbar{
+        display: none;
+        position: absolute;
+        bottom: 60px;
+        left: 0;
+        width: 100%;
+        justify-content: space-evenly;
+
+        a{
+            background-color: #333333;
+            padding: 10px;
+            border-radius: 50%;
+            font-size: 25px;
+            color: white;
+        }
+    }
+    &:hover{
+        .iconsbar{
+            display: flex;
+        }
+    }
+}

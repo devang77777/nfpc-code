@@ -1,0 +1,177 @@
+<section *ngIf="ShelfDisplay && view == 1">
+  <div class="pl-3">
+    <div class="row">
+      <h2 class="page-title col-sm-6 font-weight-light">{{ShelfDisplay.name}}</h2>
+      <div class="actions col-sm-6">
+        <div>
+          <button class="btn btn-sm btn-p mr-2" (click)="addSurvey(2, 'add')">Add Survey</button>
+          <button class="btn btn-sm btn-white mr-2" mat-button [matMenuTriggerFor]="menu2">More</button>
+          <mat-menu #menu2="matMenu">
+            <button mat-menu-item (click)="openEditshelfdisplay()" appPermission [permissions]="userPermissions"
+              [type]="'edit'">Edit</button>
+            <button mat-menu-item (click)="openDeleteBox()" appPermission [permissions]="userPermissions"
+              [type]="'delete'">Delete</button>
+          </mat-menu>
+        </div>
+        <button *ngIf="isDetailVisible" class="btn" (click)="closeDetailView()"><i
+            class="os-icon os-icon-close"></i></button>
+      </div>
+    </div>
+  </div>
+
+  <div class="pl-3 area-data scrolly">
+    <div class="row h-100">
+      <div class="col-12">
+        <mat-tab-group class="customertab" [(selectedIndex)]="selectedTab" mat-align-tabs="start"
+          (selectedTabChange)="selectedTabChange($event.index)">
+          <mat-tab label="Overview">
+            <div class="row">
+              <div class="col-xl-5 col-lg-5 col-md-8">
+                <ul class="smhlist mt-2">
+                  <li>
+                    <span> Date: </span>
+                    <strong> {{ShelfDisplay.created_at | date :"d MMM y h:mm a"}}</strong>
+                  </li>
+                  <li>
+                    <span> Name: </span>
+                    <strong>{{ShelfDisplay.name}} </strong>
+                  </li>
+                  <li>
+                    <span> Valid From:</span>
+                    <strong>{{ShelfDisplay.start_date}} </strong>
+                  </li>
+                  <li>
+                    <span> Valid To: </span>
+                    <strong> {{ShelfDisplay.end_date}}</strong>
+                  </li>
+                  <li>
+                    <span> Height: </span>
+                    <strong>{{ShelfDisplay.height}} </strong>
+                  </li>
+                  <li>
+                    <span> Width:</span>
+                    <strong>{{ShelfDisplay.width}} </strong>
+                  </li>
+                  <li>
+                    <span> Depth: </span>
+                    <strong>{{ShelfDisplay.depth}} </strong>
+                  </li>
+                </ul>
+              </div>
+            </div>
+
+            <ng-container *ngIf="ShelfDisplay !== null">
+              <hr>
+              <div class="col-sm-12 data-block">
+                <h2>Customers</h2>
+                <div class="row" *ngIf="ShelfDisplay.distribution_customer.length > 0">
+                  <div class="col-sm-4  " *ngFor="let a_s_c of ShelfDisplay.distribution_customer">
+                    <div class="item-card" *ngIf="a_s_c.customer !== null">
+                      <h4 style="margin-left: 27px;"> {{a_s_c.customer?.customer_info ?
+                        a_s_c.customer?.customer_info?.customer_code :'N/A' }}</h4>
+                      <h4><i class="os-icon os-icon-user mr-2"></i> {{ a_s_c.customer?.firstname }}
+                        {{ a_s_c.customer?.lastname }}</h4>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </ng-container>
+          </mat-tab>
+          <mat-tab label="Model Stock">
+            <br />
+            <app-modelstock [customers]="ShelfDisplay.distribution_customer" [distribution_id]="ShelfDisplay.id">
+            </app-modelstock>
+          </mat-tab>
+          <mat-tab label="View Stock Post">
+            <br />
+            <app-modelstock-list [stockData]="stockData" [distribution_id]="ShelfDisplay.id"></app-modelstock-list>
+          </mat-tab>
+          <mat-tab label="Distribution Image Post">
+            <br />
+            <app-image-list [imageData]="imageData" [distribution_id]="ShelfDisplay.id"></app-image-list>
+          </mat-tab>
+          <mat-tab label="Damaged">
+            <br />
+            <app-demage-list [damageData]="damageData" [distribution_id]="ShelfDisplay.id"></app-demage-list>
+          </mat-tab>
+          <mat-tab label="Expriry">
+            <br />
+            <app-expiry-list [expiryData]="expiryData" [distribution_id]="ShelfDisplay.id"></app-expiry-list>
+          </mat-tab>
+          <mat-tab label="Survey">
+            <br />
+            <app-survey-list (surveyHandler)="surveyHandler($event)" [surveyData]="surveyData"
+              [distribution_id]="ShelfDisplay.id"></app-survey-list>
+          </mat-tab>
+          <mat-tab label="Share of Shelf">
+            <br />
+            <app-share-of-shelf [sosData]="sosData" [distribution_id]="ShelfDisplay.id"></app-share-of-shelf>
+          </mat-tab>
+        </mat-tab-group>
+      </div>
+    </div>
+  </div>
+</section>
+<section *ngIf="view == 2">
+  <div class="pl-3">
+    <div class="row">
+      <h2 class="page-title col-sm-6 font-weight-light">{{editSurveyData?.name || 'Add survey'}}</h2>
+      <div class="actions col-sm-6">
+        <div class="pr_10">
+          <button class="btn btn-sm btn-p mr-2" (click)="addSurvey(1)">Cancel</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="pl-3 area-data scrolly">
+    <app-add-survey-wizard [editSurveyData]="editSurveyData" (closeSurveyWizard)="addSurvey()"
+      [distribution_id]="ShelfDisplay.id">
+    </app-add-survey-wizard>
+  </div>
+</section>
+<section *ngIf="selectedSurvey && view == 3">
+  <div class="pl-3">
+    <div class="row">
+      <h2 class="page-title col-sm-6 font-weight-light">{{selectedSurvey.name}}</h2>
+      <div class="actions col-sm-6">
+        <div class="pr_10">
+          <button class="btn btn-sm btn-p mr-2" (click)="addSurvey(1)">Cancel</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="pl-3 area-data scrolly">
+    <app-survey-post-list (surveyHandler)="surveyHandler($event)" [surveyPostData]="surveyPostData"
+      [survey_id]="selectedSurvey.id"></app-survey-post-list>
+  </div>
+</section>
+<section *ngIf="selectedSurvey && view == 4">
+  <div class="pl-3">
+    <div class="row">
+      <h2 class="page-title col-sm-6 font-weight-light">{{selectedSurvey.name}}</h2>
+      <div class="actions col-sm-6">
+        <div class="pr_10">
+          <button class="btn btn-sm btn-p mr-2" (click)="addSurvey(1)">Cancel</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="pl-3 area-data scrolly">
+    <app-survey-preview [surveyQAs]="surveyQAs"></app-survey-preview>
+  </div>
+</section>
+<section *ngIf="selectedSurvey && view == 5">
+  <div class="pl-3">
+    <div class="row">
+      <h2 class="page-title col-sm-6 font-weight-light">{{selectedSurvey.name}}</h2>
+      <div class="actions col-sm-6">
+        <div class="pr_10">
+          <button class="btn btn-sm btn-p mr-2" (click)="addSurvey(3)">Cancel</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="pl-3 area-data scrolly">
+    <app-survey-qa-preview [surveyQAs]="surveyQAs"></app-survey-qa-preview>
+  </div>
+</section>

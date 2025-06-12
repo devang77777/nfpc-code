@@ -1,0 +1,285 @@
+.statementCls {
+  padding: 25px;
+
+  .statementCls1 {
+   
+    .dropDiv {
+      display: flex;
+      .dropdown {
+        button {
+          display: block;
+          width: 100%;
+          height: 32px;
+          padding: 5px 8px;
+          font-size: 14px;
+          line-height: 1.42857;
+          color: #495057;
+          background-color: #fff;
+          background-clip: padding-box;
+          border: 1px solid #ced4da;
+          border-radius: 2px;
+          transition: border-color 0.15s ease-in-out,
+            box-shadow 0.15s ease-in-out;
+          &::after {
+            margin-left: 40px;
+          }
+          &:focus {
+            box-shadow: none;
+          }
+          span {
+            color: #777 !important;
+          }
+        }
+        .marNot {
+          &::after {
+            margin-left: auto;
+          }
+        }
+      }
+    }
+    .firstTest1 {
+      justify-content: flex-end;
+      .iconCl {
+        border: 1px solid #ddd;
+        font-size: 14px;
+        width: 34px;
+        height: 34px;
+        line-height: 34px;
+        text-align: center;
+        border-radius: 4px;
+        color: #212529;
+        background-color: #f5f5f5;
+        margin-right: 12px;
+      }
+      .sendBtn {
+        color: #fff;
+        background-color: #1abc9c;
+        border-color: #1abc9c;
+        padding: 8px 14px;
+        border-radius: 4px;
+        border: 0px;
+        &:focus {
+          outline: 0px;
+        }
+      }
+    }
+  }
+  .custmPara {
+    margin-top: 50px;
+    margin-bottom: 20px;
+    padding: 5px 11px;
+    h4 {
+      font-size: 18px;
+      font-weight: 300;
+      margin-bottom: 10px;
+    }
+    h5 {
+      font-size: 14px;
+      font-weight: 300;
+    }
+  }
+
+  // tbale
+ 
+  .pcs-template {
+    padding: 20px 10px;
+    position: relative;
+    &:hover > .cusButton{
+      display: block;
+        }
+    .cusButton{
+      position: absolute;
+      right: -20px;
+      top: -20px;
+    display: none;
+      .sendBtn{
+        color: #fff;
+        background-color: #1abc9c;
+        border-color: #1abc9c;
+        padding:8px 14px;
+        border-radius: 2px;
+        font-size: 12px;
+        border: 0px;
+        &:focus {
+          outline: 0px;
+        }
+      }
+    }
+    table {
+  
+      tbody {
+        tr {
+          td {
+            span {
+              white-space: pre-wrap !important;
+            }
+            hr {
+              margin: 0px;
+              border-top: 1px solid black;
+              width: 22%;
+
+              margin-left: 78%;
+            }
+          }
+        }
+        .tabStat {
+          td {
+            padding-top: 30px;
+            font-size: 22px;
+            font-weight: bold;
+          }
+        }
+        .toClass{
+          td{
+            span{
+              white-space: pre-wrap;
+            }
+            padding-top:20px ;
+          
+          }
+          // account summary
+        .accSum{
+width: 35%;
+table{
+  width: 100%;
+  thead{
+    tr{
+      th{
+        background: #dcdcdc;
+    padding: 4px 6px;
+      }
+    }
+  }
+  tbody{
+tr{
+  td{
+    padding-top: 3px;
+    padding-bottom: 3px;
+  }
+}
+.balBor{
+  border-top: 1px solid black;
+  margin-top: 20px;
+  td{
+    margin-top: 4px;
+  }
+}
+  }
+}
+        }
+        }
+      }
+    }
+
+
+.footTab{
+  table{
+    thead{
+      tr{
+        .box-padding {
+          padding: 8px 4px;
+      }
+      }
+    }
+    tbody{
+      tr{
+        .box-padding {
+          padding: 8px 4px;
+      }
+      }
+      
+    }
+  }
+}
+.balanceDue{
+  width: 100%;
+  border-top: 1px solid #dcdcdc;
+  tbody{
+    tr{
+      td{
+        width: 50%;
+        table{
+
+          width:100%;
+          tbody{
+            tr{
+              td{
+                width: 50%;
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
+    
+  }
+}
+.list-group-item {
+  padding: 0.35rem 0.75rem;
+}
+.tophead{
+  text-align: right;
+  margin-bottom: 20px;
+}
+.montypefont{
+  font-family: SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+}
+@media (max-width: 991px) {
+  .statementCls .statementCls1 .dropDiv .dropdown button {
+    margin: 0 0 10px;
+}
+  .statementCls{
+    padding: 15px;
+    .card-body{
+      padding: 10px;
+    }
+}
+}
+@media (max-width: 575px) {
+  .statementCls {
+    padding: 10px;
+    .pcs-template{
+      padding: 10px;
+    }
+    .statementCls1{
+      display: block;
+      .custmPara{
+        
+    margin-top: 10px;
+    margin-bottom: 10px;
+    padding: 0px 0px;
+
+      }
+      .firstTest1{
+        display: block;
+        .sendBtn{
+          display: block;
+          width: 100%;
+          border-radius: 0;
+          padding: 6px;
+          max-width: 130px;
+        }
+        .iconCl{
+          border: 1px solid #d2e0f1;
+          font-size: 14px;
+          width: 35px;
+          height: 35px;
+          text-align: center;
+          padding-top: 0;
+          border-radius: 0;
+          color: #35373c;
+          background-color: #f1f5fa;
+          margin: 0 10px 0 0;
+          line-height: 35px;
+          display: inline-block;
+        }
+      }
+      .dropDiv {
+       
+        margin: 0 0 10px;
+    }
+    }
+  }
+}

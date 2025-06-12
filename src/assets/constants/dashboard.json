@@ -1,0 +1,386 @@
+[
+  {
+      "title":"Coverage",
+      "trends":[{"date":1606121850690,"value":16},{"date":1606121851690,"value":5},{"date":1606121852690,"value":9},{"date":1606121853690,"value":73},{"date":1606121854690,"value":81},{"date":1606121855690,"value":11},{"date":1606121856690,"value":20},{"date":1606121857690,"value":16},{"date":1606121858690,"value":12},{"date":1606121859690,"value":20},{"date":1606121860690,"value":22},{"date":1606121861690,"value":17},{"date":1606121862690,"value":13},{"date":1606121863690,"value":17},{"date":1606121864690,"value":16},{"date":1606121865690,"value":15},{"date":1606121866690,"value":14},{"date":1606121867690,"value":19},{"date":1606121868690,"value":21},{"date":1606121869690,"value":11},{"date":1606121870690,"value":11},{"date":1606121871690,"value":20},{"date":1606121872690,"value":19},{"date":1606121873690,"value":29},{"date":1606121874690,"value":25},{"date":1606121875690,"value":28},{"date":1606121876690,"value":33},{"date":1606121877690,"value":36},{"date":1606121878690,"value":40},{"date":1606121879690,"value":49},{"date":1606121880690,"value":51}],
+      "comparison": [
+          {
+            "name": "Monica",
+            "steps": 45688
+          },
+          {
+            "name": "Joey",
+            "steps": 35781
+          },
+          {
+            "name": "Ross",
+            "steps": 25464
+          },
+          {
+            "name": "Adam",
+            "steps": 12464
+          },
+          {
+            "name": "Ali",
+            "steps": 23464
+          }
+        ],
+      "contribution":[
+          {
+            "country": "USA",
+            "visits": 23725
+          },
+          {
+            "country": "China",
+            "visits": 1882
+          },
+          {
+            "country": "Japan",
+            "visits": 1809
+          },
+          {
+            "country": "Germany",
+            "visits": 1322
+          },
+          {
+            "country": "UK",
+            "visits": 1122
+          }
+        ]
+  },
+  {
+      "title":"Execution",
+      "trends":[{"date":1606121850690,"value":16},{"date":1606121851690,"value":16},{"date":1606121852690,"value":19},{"date":1606121853690,"value":13},{"date":1606121854690,"value":18},{"date":1606121855690,"value":14},{"date":1606121856690,"value":2},{"date":1606121857690,"value":16},{"date":1606121858690,"value":12},{"date":1606121859690,"value":20},{"date":1606121860690,"value":22},{"date":1606121861690,"value":17},{"date":1606121862690,"value":13},{"date":1606121863690,"value":17},{"date":1606121864690,"value":16},{"date":1606121865690,"value":15},{"date":1606121866690,"value":14},{"date":1606121867690,"value":19},{"date":1606121868690,"value":21},{"date":1606121869690,"value":11},{"date":1606121870690,"value":11},{"date":1606121871690,"value":20},{"date":1606121872690,"value":19},{"date":1606121873690,"value":29},{"date":1606121874690,"value":25},{"date":1606121875690,"value":28},{"date":1606121876690,"value":33},{"date":1606121877690,"value":36},{"date":1606121878690,"value":40},{"date":1606121879690,"value":49},{"date":1606121880690,"value":51}],
+      "comparison": [
+          {
+            "name": "Mon",
+            "steps": 15688
+          },
+          {
+            "name": "Jey",
+            "steps":25781
+          },
+          {
+            "name": "woss",
+            "steps": 225464
+          },
+          {
+            "name": "Aam",
+            "steps": 42464
+          },
+          {
+            "name": "Alen",
+            "steps": 63464
+          }
+        ],
+      "contribution":[
+          {
+            "country": "Honduras",
+            "visits": 43725
+          },
+          {
+            "country": "Tuvalu",
+            "visits": 6882
+          },
+          {
+            "country": "Iceland",
+            "visits": 1809
+          },
+          {
+            "country": "Hanover",
+            "visits": 3322
+          },
+          {
+            "country": "Togo",
+            "visits": 2122
+          }
+        ]
+  },
+  {
+      "title":"Active Outlets",
+      "trends":[{"date":1606121850791,"value":17},{"date":1606121851792,"value":18},{"date":1606121852793,"value":10},{"date":1606121853799,"value":19},{"date":1606121854690,"value":14},{"date":1606121855690,"value":16},{"date":1606121856690,"value":20},{"date":1606121857690,"value":16},{"date":1606121858690,"value":10},{"date":1606121859690,"value":17},{"date":1606121860690,"value":22},{"date":1606121861690,"value":17},{"date":1606121862690,"value":13},{"date":1606121863690,"value":7},{"date":1606121864690,"value":19},{"date":1606121865690,"value":15},{"date":1606121866690,"value":14},{"date":1606121867690,"value":19},{"date":1606121868690,"value":11},{"date":1606121869690,"value":21},{"date":1606121870690,"value":11},{"date":1606121871690,"value":20},{"date":1606121872690,"value":19},{"date":1606121873690,"value":39},{"date":1606121874690,"value":35},{"date":1606121875690,"value":28},{"date":1606121876690,"value":33},{"date":1606121877690,"value":36},{"date":1606121878690,"value":50},{"date":1606121879690,"value":59},{"date":1606121880690,"value":51}],
+      "comparison": [
+          {
+            "name": "Monal",
+            "steps": 45699
+          },
+          {
+            "name": "Joe",
+            "steps": 35881
+          },
+          {
+            "name": "Rossy",
+            "steps": 24564
+          },
+          {
+            "name": "Rojer",
+            "steps": 42164
+          },
+          {
+            "name": "Ahmad",
+            "steps": 22264
+          }
+        ],
+      "contribution":[
+          {
+            "country": "Canada",
+            "visits": 23235
+          },
+          {
+            "country": "UAE",
+            "visits": 1992
+          },
+          {
+            "country": "Honkong",
+            "visits": 1409
+          },
+          {
+            "country": "Austria",
+            "visits": 1922
+          },
+          {
+            "country": "Algeria",
+            "visits": 1122
+          }
+        ]
+  },
+  {
+      "title":"Visits Per Day",
+      "trends":[{"date":1606121850690,"value":22},{"date":1606121851690,"value":24},{"date":1606121852690,"value":26},{"date":1606121853690,"value":33},{"date":1606121854690,"value":10},{"date":1606121855690,"value":18},{"date":1606121856690,"value":20},{"date":1606121857690,"value":13},{"date":1606121858690,"value":14},{"date":1606121859690,"value":24},{"date":1606121860690,"value":21},{"date":1606121861690,"value":17},{"date":1606121862690,"value":13},{"date":1606121863690,"value":19},{"date":1606121864690,"value":18},{"date":1606121865690,"value":17},{"date":1606121866690,"value":14},{"date":1606121867690,"value":19},{"date":1606121868690,"value":23},{"date":1606121869690,"value":14},{"date":1606121870690,"value":13},{"date":1606121871690,"value":20},{"date":1606121872690,"value":19},{"date":1606121873690,"value":31},{"date":1606121874690,"value":29},{"date":1606121875690,"value":30},{"date":1606121876690,"value":33},{"date":1606121877690,"value":36},{"date":1606121878690,"value":42},{"date":1606121879690,"value":59},{"date":1606121880690,"value":62}],
+      "comparison": [
+          {
+            "name": "Json",
+            "steps": 45388
+          },
+          {
+            "name": "Scarlt",
+            "steps": 35081
+          },
+          {
+            "name": "Rox",
+            "steps": 25464
+          },
+          {
+            "name": "Adam",
+            "steps": 32464
+          },
+          {
+            "name": "Ali",
+            "steps": 13464
+          }
+        ],
+      "contribution":[
+          {
+            "country": "Mauritius",
+            "visits": 23125
+          },
+          {
+            "country": "Armenia",
+            "visits": 1552
+          },
+          {
+            "country": "Mexico",
+            "visits": 1209
+          },
+          {
+            "country": "Bahrain",
+            "visits": 1390
+          },
+          {
+            "country": "Bangladesh",
+            "visits": 1122
+          }
+        ]
+  },
+  {
+      "title":"Strike Rate",
+      "trends":[{"date":1606121850690,"value":22},{"date":1606121851690,"value":32},{"date":1606121852690,"value":29},{"date":1606121853690,"value":33},{"date":1606121854690,"value":38},{"date":1606121855690,"value":16},{"date":1606121856690,"value":20},{"date":1606121857690,"value":36},{"date":1606121858690,"value":44},{"date":1606121859690,"value":59},{"date":1606121860690,"value":62},{"date":1606121861690,"value":67},{"date":1606121862690,"value":73},{"date":1606121863690,"value":77},{"date":1606121864690,"value":66},{"date":1606121865690,"value":15},{"date":1606121866690,"value":19},{"date":1606121867690,"value":87},{"date":1606121868690,"value":81},{"date":1606121869690,"value":81},{"date":1606121870690,"value":11},{"date":1606121871690,"value":20},{"date":1606121872690,"value":91},{"date":1606121873690,"value":99},{"date":1606121874690,"value":95},{"date":1606121875690,"value":23},{"date":1606121876690,"value":33},{"date":1606121877690,"value":96},{"date":1606121878690,"value":97},{"date":1606121879690,"value":93},{"date":1606121880690,"value":95}],
+      "comparison": [
+          {
+            "name": "Wyat",
+            "steps": 15688
+          },
+          {
+            "name": "Cart",
+            "steps": 25781
+          },
+          {
+            "name": "Juli",
+            "steps": 35464
+          },
+          {
+            "name": "Gray",
+            "steps": 42464
+          },
+          {
+            "name": "Lily",
+            "steps": 53464
+          }
+        ],
+      "contribution":[
+          {
+            "country": "Belgium",
+            "visits": 53725
+          },
+          {
+            "country": "Nauru",
+            "visits": 6882
+          },
+          {
+            "country": "Nepal",
+            "visits": 7809
+          },
+          {
+            "country": "New Zealand",
+            "visits": 8322
+          },
+          {
+            "country": "Norway",
+            "visits": 9122
+          }
+        ]
+  },
+  {
+      "title":"Visit Frequency",
+      "trends":[{"date":1606121850690,"value":6},{"date":1606121851690,"value":6},{"date":1606121852690,"value":10},{"date":1606121853690,"value":12},{"date":1606121854690,"value":14},{"date":1606121855690,"value":16},{"date":1606121856690,"value":18},{"date":1606121857690,"value":20},{"date":1606121858690,"value":22},{"date":1606121859690,"value":16},{"date":1606121860690,"value":22},{"date":1606121861690,"value":17},{"date":1606121862690,"value":13},{"date":1606121863690,"value":17},{"date":1606121864690,"value":16},{"date":1606121865690,"value":15},{"date":1606121866690,"value":14},{"date":1606121867690,"value":19},{"date":1606121868690,"value":21},{"date":1606121869690,"value":17},{"date":1606121870690,"value":12},{"date":1606121871690,"value":22},{"date":1606121872690,"value":19},{"date":1606121873690,"value":39},{"date":1606121874690,"value":15},{"date":1606121875690,"value":18},{"date":1606121876690,"value":13},{"date":1606121877690,"value":16},{"date":1606121878690,"value":20},{"date":1606121879690,"value":39},{"date":1606121880690,"value":41}],
+      "comparison": [
+          {
+            "name": "Elli",
+            "steps": 55688
+          },
+          {
+            "name": "Jax",
+            "steps": 45781
+          },
+          {
+            "name": "Will",
+            "steps": 15464
+          },
+          {
+            "name": "Lucy",
+            "steps": 32464
+          },
+          {
+            "name": "Aude",
+            "steps": 43464
+          }
+        ],
+      "contribution":[
+          {
+            "country": "Colombia",
+            "visits": 13725
+          },
+          {
+            "country": "Comoros",
+            "visits": 2882
+          },
+          {
+            "country": "Paraguay",
+            "visits": 3809
+          },
+          {
+            "country": "Poland",
+            "visits": 4322
+          },
+          {
+            "country": "Croatia",
+            "visits": 5122
+          }
+        ]
+  },
+  {
+      "title":"Time Spent",
+      "trends":[{"date":1606121850690,"value":16},{"date":1606121851690,"value":16},{"date":1606121852690,"value":9},{"date":1606121853690,"value":3},{"date":1606121854690,"value":8},{"date":1606121855690,"value":16},{"date":1606121856690,"value":20},{"date":1606121857690,"value":16},{"date":1606121858690,"value":12},{"date":1606121859690,"value":20},{"date":1606121860690,"value":22},{"date":1606121861690,"value":17},{"date":1606121862690,"value":13},{"date":1606121863690,"value":17},{"date":1606121864690,"value":16},{"date":1606121865690,"value":15},{"date":1606121866690,"value":14},{"date":1606121867690,"value":19},{"date":1606121868690,"value":21},{"date":1606121869690,"value":11},{"date":1606121870690,"value":11},{"date":1606121871690,"value":20},{"date":1606121872690,"value":19},{"date":1606121873690,"value":29},{"date":1606121874690,"value":25},{"date":1606121875690,"value":28},{"date":1606121876690,"value":33},{"date":1606121877690,"value":36},{"date":1606121878690,"value":40},{"date":1606121879690,"value":49},{"date":1606121880690,"value":51}],
+      "comparison": [
+          {
+            "name": "Park",
+            "steps": 45688
+          },
+          {
+            "name": "Madel",
+            "steps": 35781
+          },
+          {
+            "name": "Austin",
+            "steps": 25464
+          },
+          {
+            "name": "Pier",
+            "steps": 12464
+          },
+          {
+            "name": "Coop",
+            "steps": 23464
+          }
+        ],
+      "contribution":[
+          {
+            "country": "Estonia",
+            "visits": 23725
+          },
+          {
+            "country": "Serbia",
+            "visits": 1882
+          },
+          {
+            "country": "Singapore",
+            "visits": 1809
+          },
+          {
+            "country": "Somalia",
+            "visits": 1322
+          },
+          {
+            "country": "Senegal",
+            "visits": 1122
+          }
+        ]
+  },
+  {
+      "title":"Route Compliance",
+      "trends":[{"date":1606121850690,"value":16},{"date":1606121851690,"value":16},{"date":1606121852690,"value":9},{"date":1606121853690,"value":3},{"date":1606121854690,"value":8},{"date":1606121855690,"value":16},{"date":1606121856690,"value":20},{"date":1606121857690,"value":16},{"date":1606121858690,"value":12},{"date":1606121859690,"value":20},{"date":1606121860690,"value":22},{"date":1606121861690,"value":17},{"date":1606121862690,"value":13},{"date":1606121863690,"value":17},{"date":1606121864690,"value":16},{"date":1606121865690,"value":15},{"date":1606121866690,"value":14},{"date":1606121867690,"value":19},{"date":1606121868690,"value":21},{"date":1606121869690,"value":11},{"date":1606121870690,"value":11},{"date":1606121871690,"value":20},{"date":1606121872690,"value":19},{"date":1606121873690,"value":29},{"date":1606121874690,"value":25},{"date":1606121875690,"value":28},{"date":1606121876690,"value":33},{"date":1606121877690,"value":36},{"date":1606121878690,"value":40},{"date":1606121879690,"value":49},{"date":1606121880690,"value":51}],
+      "comparison": [
+          {
+            "name": "Jame",
+            "steps": 45688
+          },
+          {
+            "name": "Mil",
+            "steps": 35781
+          },
+          {
+            "name": "East",
+            "steps": 25464
+          },
+          {
+            "name": "Christ",
+            "steps": 12464
+          },
+          {
+            "name": "Hud",
+            "steps": 23464
+          }
+        ],
+      "contribution":[
+          {
+            "country": "Sweden",
+            "visits": 23725
+          },
+          {
+            "country": "Switzerland",
+            "visits": 1882
+          },
+          {
+            "country": "Syria",
+            "visits": 1809
+          },
+          {
+            "country": "Turkey",
+            "visits": 1322
+          },
+          {
+            "country": "Hungary",
+            "visits": 1122
+          }
+        ]
+  }
+]

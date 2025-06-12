@@ -1,0 +1,40 @@
+.hover-option{
+    visibility: hidden;
+}
+.mat-row{
+    cursor: default;
+    &:hover{
+        .hover-option{
+            visibility: visible;
+            a{
+                cursor: pointer;
+            }
+        }
+    }
+}
+.mat-column-currency_name{
+    a{
+        color: #2485e8;
+        &:hover{
+            color: #2a74be;
+            cursor: pointer;
+        }
+    }
+}
+::ng-deep .mat-paginator {
+    .mat-paginator-container {
+        // justify-content: center;
+    }
+
+    // override material paginator page switch
+    .mat-paginator-range-label {
+        order: 2;
+    }
+
+    .mat-paginator-navigation-previous {
+        order: 1;
+    }
+    .mat-paginator-navigation-next {
+        order: 3;
+    }
+}

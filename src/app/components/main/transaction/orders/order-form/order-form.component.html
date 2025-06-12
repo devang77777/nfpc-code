@@ -1,0 +1,419 @@
+<section class="">
+  <div class="heading-row">
+
+    <h2 class="d-inline "><i class="os-icon os-icon-shopping-cart mr-2"></i>{{ pageTitle }}</h2>
+
+    <div class="d-inline float-right  pl-0">
+      <!-- <button mat-button class="btn btn-sm btn-white mr-2 dropdown-toggle" [matMenuTriggerFor]="menu2">More</button>
+      <mat-menu #menu2="matMenu" xPosition="before">
+        <button *ngIf="showConvertToDelivery" mat-menu-item class="height-40"
+          (click)="postFinalOrder('orderDelivery')">Convert
+          to Delivery</button>
+        <button mat-menu-item class="height-40" (click)="goToOrder()">Go to Orders</button>
+      </mat-menu> -->
+      <button mat-button class="btn btn-sm btn-secondary" (click)="goBackToOrdersList()"><i
+          class="fa fa-angle-left mr-1"></i><span class="back-btn"> Back</span></button>
+    </div>
+  </div>
+
+  <div class="separator"></div>
+  <form [formGroup]="orderFormGroup" class="order-form custom-mat square">
+    <!-- <div class="card">
+      <div class="card-header overview">
+        <div class="row">
+          <div class="col-md-4">
+            <label for="">Order Type</label>
+            <div class="form-group smmatinput">
+              <mat-form-field>
+                <mat-label>Select Order Type</mat-label>
+                <mat-select class="no-disabled-text " id="typeFormField" (ngModelChange)="orderTypeChanged($event)"
+                  required [(ngModel)]="selectedOrderTypeId" [ngModelOptions]="{ standalone: true }"
+                  [disabled]="isDeliveryForm">
+                  <mat-option *ngFor="let order of orderTypes" [value]="order.id">{{ order.name }}</mat-option>
+                  <hr class="orderHr">
+                  <mat-option id="typeBtn" class="in-opt-btn"><button (click)="addOrderType()"><i
+                        class="os-icon os-icon-plus"></i> Add Type</button></mat-option>
+                </mat-select>
+                <mat-error *ngIf="orderTypeFormControl.hasError('required')">Please select a type</mat-error>
+              </mat-form-field>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div> -->
+
+
+    <!-- <div [ngClass]="{ 'inactive-form': orderTypeFormControl.invalid }" class="card"> -->
+    <div class="card">
+      <div class="card-body">
+        <div class="row justify-content-between">
+          <div class="col-md-4">
+            <div *ngIf="!isDepotOrder" class="form-group smmatinput">
+              <label for="">Customer</label>
+              <div *ngIf="isDeliveryForm"><input type="text" class="form-control form-control-sm non-editable"
+                  [value]="orderData.customer.customer_name" disabled></div>
+              <div *ngIf="!isDeliveryForm">
+                <mat-form-field class="example-full-width" id="customerFormField">
+                  <input type="text" placeholder="Search Customer" matInput [matAutocomplete]="auto"
+                    [formControl]="customerFormControl" (keyup)="keyUp.next($event)">
+                  <mat-autocomplete appOptionScroll (optionsScroll)="onScroll()"
+                    (optionSelected)="getCustomerLobList($event.option.value)" #auto="matAutocomplete"
+                    (opened)="checkFormValidation('order')" [displayWith]="customerControlDisplayValue" required>
+                    <mat-option *ngFor="let customer of filterCustomer" [value]="customer">
+                      {{ customer.customer_code }} - {{ customer.name }} </mat-option>
+                    <hr class="customerHr">
+
+                    <!-- <mat-option *ngIf="isLoading">
+                      <div class="select-placeholder-container">
+                        <mat-spinner class="spinner" diameter="20"></mat-spinner>
+                      </div>
+                    </mat-option> -->
+
+                  </mat-autocomplete>
+                  <mat-error *ngIf="customerFormControl.hasError('required')">Please select a customer</mat-error>
+                </mat-form-field>
+                <div class="row mt-3">
+                  <div *ngIf="is_lob" class="col">
+                    <div class="form-group row m-0 p-0">
+                      <label> Customer Lob</label>
+                      <div class="col-11 p-0">
+                        <input type="text" class="form-control form-control-sm" [value]="orderData?.lob.name"
+                          (focus)="openLOB()" *ngIf="!showLob && isEditForm">
+                        <app-multiautocomplete isSingle="true"
+                          [ngStyle]="{'display':showLob || !isEditForm?'block':'none' }" [options]="customerLobList"
+                          [control]="customerLobFormControl" text="name" id="lob_id" placeholder="Select Lob"
+                          objectName="lob" param1="name" param2="">
+                        </app-multiautocomplete>
+                        <!-- <mat-error *ngIf="customerLobFormControl.hasError('required')">Please select a Customer Lob
+                        </mat-error> -->
+                      </div>
+                      <!-- <div class="col-1 p-2 mt-2">
+                              <a (click)="openItemLob()" class="ml-2 settingIcon"><i
+                                  class="os-icon os-icon-ui-46" aria-hidden="true"></i></a>
+                          </div> -->
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="form-group smmatinput" *ngIf="isCustomerlobShow">
+              <label for="">Warehouse</label>
+              <div>
+                <input type="text" class="form-control form-control-sm"
+                  [value]="getStorageLocationName(orderData?.storageocation)" *ngIf="!showWareHs && isEditForm"
+                  (focus)="openWarehouse()">
+                <!-- <input type="text" class="form-control form-control-sm"
+                  [value]="warehouseMappingDetails?warehouseMappingDetails:'Select Options'"
+                  *ngIf="!showWareHs && !isEditForm" (focus)="openWarehouse()"> -->
+                <app-multiautocomplete isSingle="true" [ngStyle]="{'display':showWareHs || !isEditForm?'block':'none' }"
+                  [options]="storageLocationList" [control]="warehouseFormControl" text="name" id="id"
+                  placeholder="Select Warehouse" objectName="customer-root-ddl" [param1]="'code'" [param2]="'name'">
+                </app-multiautocomplete>
+              </div>
+            </div>
+            <div *ngIf="isDepotOrder" class="form-group smmatinput">
+              <label for="">Depot</label>
+              <div>
+                <mat-form-field id="depotFormField">
+                  <mat-label>Select Depot</mat-label>
+                  <mat-select class="no-disabled-text" (blur)="checkFormValidation('order')" required
+                    (ngModelChange)="depotChanged($event)" [formControl]="depotFormControl"
+                    [(ngModel)]="selectedDepotId" [disabled]="isDeliveryForm">
+                    <mat-option *ngFor="let depot of depots" [value]="depot.id">{{ depot.depot_name }}</mat-option>
+                  </mat-select>
+                  <mat-error *ngIf="depotFormControl.hasError('required')">Please select a depot</mat-error>
+                </mat-form-field>
+              </div>
+            </div>
+
+            <!-- <div class="form-group smmatinput">
+              <label for="">{{domain == 'nfpc' || domain == 'merchandising' ? 'Merchandiser' : 'Salesman'}}</label>
+              <div> -->
+            <!-- <mat-form-field id="salesmanFormField">
+                  <mat-label>Select {{domain == 'nfpc' || domain == 'merchandising' ? 'Merchandiser' : 'Salesman'}}
+                  </mat-label>
+                  <mat-select class="no-disabled-text" (blur)="checkFormValidation('order')"
+                    [formControl]="salesmanFormControl">
+                    <mat-option *ngFor="let sman of salesmen" [value]="sman.user.id">
+                      {{ sman.user ? sman.user.firstname + ' ' + sman.user.lastname : '' }} - {{ sman.salesman_code }}
+                    </mat-option>
+                  </mat-select>
+                  <mat-error *ngIf="salesmanFormControl.hasError('required')">Please select a salesman</mat-error>
+                </mat-form-field> -->
+            <!-- <app-multiautocomplete isSingle="true" [options]="salesmen" [control]="salesmanFormControl" text="user"
+                  id="user_id" placeholder="Select Salesman" objectName="user" param1="firstname" param2="lastname">
+                </app-multiautocomplete>
+              </div>
+            </div> -->
+            <div class="form-group smmatinput">
+              <label for="">Customer LPO</label>
+              <div>
+                <input type="text" [ngStyle]="{'border':lpoExist?'solid 1px red':''}" id="customeLPO"
+                  class="form-control form-control-sm" [formControl]="customerLPOFormControl" [readonly]="isEditForm"
+                  (blur)="checkLPOExist($event.target.value)" maxlength="25" />
+              </div>
+              <p *ngIf="lpoExist" style="color: red;">Customer LPO already attached with the cusotmer</p>
+            </div>
+
+          </div>
+        
+
+
+          <div class="col-md-4 ">
+            <div class="form-group">
+              <label for="">Order Number</label>
+              <div class="position-relative">
+                <input type="text" class="form-control form-control-sm" [(ngModel)]="orderNumber"
+                  [ngModelOptions]="{standalone: true}" (change)="setOrderNumber($event.target.value)" maxlength="10"
+                  [disabled]="(isEditForm || this.isDeliveryForm || nextCommingNumberofOrderCode != '')" />
+                <span class="setting-btn float-right"><button (click)="openNumberSettings()"><i
+                      class="os-icon os-icon-settings"></i></button></span>
+              </div>
+
+
+
+            </div>
+            <div class="form-group">
+              <label for="">Delivery Date</label>
+              <input [min]="todayDate" type="date" class="form-control form-control-sm" required
+                [formControl]="deliveryDateFormControl" id="deliveryDate">
+            </div>
+            <!-- <div class="form-group smmatinput">
+              <label for="">Payment Terms</label>
+              <mat-form-field>
+                <mat-label>Select Payment Term</mat-label>
+                <mat-select class="no-disabled-text" required id="termFormField"
+                  (ngModelChange)="payTermChanged($event)" [(ngModel)]="selectedPaymentTermId"
+                  [ngModelOptions]="{ standalone: true }" [disabled]="isDeliveryForm">
+                  <mat-option *ngFor="let term of terms" [value]="term.id">{{ term.name }}</mat-option>
+                </mat-select>
+                <mat-error *ngIf="paymentTermFormControl.hasError('required')">Please select a payment term</mat-error>
+              </mat-form-field>
+            </div>
+            <div class="form-group">
+              <label for="">Due Date</label>
+              <input type="date" [min]="dueDateSet" [formControl]="dueDateFormControl" required
+                class="form-control form-control-sm" id="dueDate">
+            </div> -->
+          </div>
+
+
+
+        </div>
+      </div>
+
+      <div class="bottom-form">
+        <div class="item-container custom-mat-no-border "
+          [ngClass]="{ 'inactive-form': isDepotOrder ? depotFormControl.invalid : customerFormControl.invalid }">
+
+          <button class="btn btn-sm filter-btn" [matMenuTriggerFor]="menu" style="height: 30px;"><i
+              class="fa fa-filter"></i></button>
+          <mat-menu #menu="matMenu">
+            <div class="card-body p-2" style="min-width: 200px;">
+              <ul style="list-style:none; padding-left: 7px; margin-bottom: 0;">
+                <li *ngFor="let header of itemTableHeaders|slice:6:14">
+                  <input type="checkbox" style="margin: 2px" [(ngModel)]="header.show"
+                    (click)="$event.stopPropagation()" [ngModelOptions]="{ standalone: true }">
+                  {{ header.label }}
+                </li>
+              </ul>
+              <div class="float-right mb-2">
+                <button mat-button class="btn mat-inherit-line-height filter-cancel-btn">Cancel</button>
+              </div>
+            </div>
+          </mat-menu>
+          <div class="item-table-div">
+            <div class="table-responsive" #widgetsContent>
+              <table class="item-table cardtable table ">
+                <thead>
+                  <tr>
+                    <th class="head" *ngFor="let head of filteredTableHeaders">
+                      <span *ngIf="head.show">{{ head.label }}</span>
+                    </th>
+
+                    <th>Action</th>
+                  </tr>
+                </thead>
+                <tbody class="form-body">
+                  <tr formArrayName="items" class="item-row" *ngFor="let item of itemFormControls; let i = index;">
+                    <ng-container [formGroupName]="i">
+                      <td data-th="#" id="1" class="item-sequence" *ngIf="isEditForm">
+                        <span>{{ i + 1 }} </span>
+                        <input [ngClass]="getItemStatus(item) ? 'notAvaliable' : ''"
+                          (change)="itemDidSelected($event, payloadItems[i])" [disabled]="getItemStatus(item)"
+                          type="checkbox" name="item">
+                      </td>
+                      <td class="item-sequence" *ngIf="!isEditForm">
+                        <span>{{ i + 1 }} </span>
+                        <input (change)="itemDidSelected($event, payloadItems[i])" type="checkbox" name="item">
+                      </td>
+
+                      <td data-th="Item Code" *ngIf="isDeliveryForm"><input type="text"
+                          class="form-control form-control-sm non-editable item-name"
+                          [value]="payloadItems[i].item.name" disabled></td>
+
+                      <td data-th="Item Code" class="item-name" *ngIf="itemTableHeaders[1]?.show">
+                        <mat-form-field class="item-name-field item-code">
+                          <input type="text" required placeholder="Search an item" matInput formControlName="item"
+                            [matAutocomplete]="auto" [readonly]="item?.value?.is_deleted===1"
+                            (keyup)="fiterItems($event.target.value)">
+                          <mat-autocomplete [panelWidth]="300" appOptionScroll #auto="matAutocomplete"
+                            (opened)="checkFormValidation('order')"
+                            (optionSelected)="itemDidSearched($event.option.value, i)"
+                            [displayWith]="itemsControlDisplayValue">
+                            <mat-option class="mat-option" *ngFor="let item of filteredItems"
+                              [value]="itemControlValue(item)">
+                              {{item.item.item_code}} - {{ item.item.item_name }} </mat-option>
+                            <!-- <hr class="customerHr">
+                            <mat-option *ngIf="isLoading">
+                              <div class="select-placeholder-container">
+                                <mat-spinner class="spinner" diameter="20"></mat-spinner>
+                              </div>
+                            </mat-option> -->
+                            <!-- <mat-option id="custBtn" class="in-opt-btn"><button (click)="redirectToItem()"><i
+                                  class="os-icon os-icon-plus"></i> Add Item</button></mat-option> -->
+                          </mat-autocomplete>
+                        </mat-form-field>
+                      </td>
+
+                      <td data-th="Item Name" class="item-name" *ngIf="itemTableHeaders[2]?.show">
+                        <!-- <input type="text" class="form-control form-control-sm non-editable item-name"
+                          formControlName="item_name" disabled> -->
+                        <span
+                          class="form-control form-control-sm non-editable item-name">{{payloadItems[i].item.name}}</span>
+                      </td>
+                      <!-- <td class="uom-td" *ngIf="isDeliveryForm"><input type="text" class="form-control form-control-sm non-editable" [value]="getUomValue(payloadItems[i])" disabled></td> -->
+
+                      <td data-th="UOM" class="item-code" *ngIf="itemTableHeaders[3]?.show">
+                        <select class="custom-select" (change)="changeUOMItem(item,i)"
+                          [attr.disabled]="item?.value?.is_free || item?.value?.is_deleted===1||null" required
+                          formControlName="item_uom_id">
+                          <option [value]="uom?.id" *ngFor="let uom of item?.value?.item_uom_list">{{ uom?.name }}
+                          </option>
+                        </select>
+                      </td>
+                      <!-- (click)="changeUOM(payloadItems[i],i)"
+                          (change)="selectUOM(payloadItems[i],i)" -->
+
+                      <td data-th="Quantity" class="stats-cell item-code"
+                        *ngIf="!isEditForm && itemTableHeaders[4]?.show">
+                        <input type="number" min="0" class="form-control" placeholder="Quantity"
+                          [readonly]="item?.value?.is_free" formControlName="item_qty">
+                      </td>
+                      <td data-th="Quantity" class="stats-cell item-code"
+                        *ngIf="isEditForm && itemTableHeaders[4]?.show" [class.non-editable]="item?.value?.is_deleted">
+                        <span *ngIf="item?.value?.is_deleted===1" [class.reason_valid]="item?.value?.is_deleted">
+                          {{item?.value?.item_qty}}
+                        </span>
+                        <input type="number" min="0" class="form-control" placeholder="Quantity"
+                          (input)="changeQty(item?.value?.item_qty,item?.value?.original_item_qty,i)"
+                          *ngIf="item?.value?.is_deleted===0" formControlName="item_qty">
+                      </td>
+
+                      <td class="item-name" *ngIf="isEditForm && itemTableHeaders[5]?.show"
+                        [class.invalid_reason]="reasonHighlight(item,i)">
+                        <!-- <input type="text" *ngIf="!showReasons && isEditForm" (focus)="openReasons(i,item)"
+                          class="form-control non-editable" [value]="payloadItems[i]?.reason?.name"> -->
+                        <!-- <select class="custom-select" formControlName="reason_id" required (change)="onChange()">
+
+                          <option value=""><input type="text"></option>
+                          <option *ngFor="let rl of reasonsList" [value]="rl.id">{{rl.name}}</option>
+                        </select> -->
+                        <!-- <app-multiautocomplete isSingle="true" [options]="reasonsList"
+                          [control]="item.controls['reason_id']" text="name" id="id" placeholder="Select Reason"
+                          (selectionchanged)="onChange($event)" [param1]="'name'">
+                        </app-multiautocomplete> -->
+                        <mat-form-field class="item-name-field item-code">
+                          <input type="text" placeholder="Search an reason" matInput formControlName="reason_id"
+                            (input)="fiterReason($event.target.value)" [matAutocomplete]="auto">
+                          <mat-autocomplete appOptionScroll [panelWidth]="300" #auto="matAutocomplete"
+                            [displayWith]="reasonControlDisplayValue"
+                            (optionSelected)="onSelectionChange($event,payloadItems[i])">
+                            <mat-option class="mat-option" *ngFor="let reason of reasonsList "
+                              [value]="reasonValue(reason)">
+                              {{reason?.code}} - {{reason.name}} </mat-option>
+
+                          </mat-autocomplete>
+                        </mat-form-field>
+                      </td>
+                      <td data-th="Price" *ngIf="itemTableHeaders[6]?.show" class="stats-cell item-code"><input
+                          type="text" class="form-control non-editable"
+                          [value]="numberFormat(payloadItems[i]?.item_price)" disabled></td>
+                      <td data-th="Excise" *ngIf="itemTableHeaders[7]?.show" class="stats-cell item-code"><input
+                          type="text" class="form-control non-editable"
+                          [value]="numberFormat(payloadItems[i]?.item_excise)" disabled></td>
+                      <td data-th="Discount" *ngIf="itemTableHeaders[8]?.show" class="stats-cell item-code"><input
+                          type="text" class="form-control non-editable"
+                          [value]="numberFormat(payloadItems[i]?.item_discount_amount)" disabled>
+                      </td>
+                      <td data-th="Vat" class="stats-cell item-code" *ngIf="itemTableHeaders[9]?.show"><input
+                          type="text" class="form-control non-editable"
+                          [value]="numberFormat(payloadItems[i]?.item_vat)" disabled>
+                      </td>
+                      <td data-th="Net" class="stats-cell item-code" *ngIf="itemTableHeaders[10]?.show"><input
+                          type="text" class="form-control non-editable"
+                          [value]="numberFormat(payloadItems[i]?.item_net)" disabled>
+                      </td>
+
+                      <td data-th="Total" class="stats-cell item-code" *ngIf="itemTableHeaders[11]?.show"><input
+                          type="text" class="form-control non-editable"
+                          [value]="numberFormat(payloadItems[i]?.item_grand_total)" disabled></td>
+                      <td data-th="weight" class="stats-cell item-code" *ngIf="itemTableHeaders[12]?.show">
+                        <input type="string" class="form-control" placeholder="0.00" formControlName="item_weight"
+                          disabled>
+                      </td>
+                      <td data-th="ohq" class="stats-cell item-code" *ngIf="itemTableHeaders[13]?.show">
+                        <input type="string" class="form-control" placeholder="0.00" [value]="getOHQValue(item?.value)"
+                          disabled>
+                      </td>
+                      <td data-th="Action" class="item-code"> <button class="trash-btn"
+                          [ngClass]="{'highlight': focusTdIndex === i}" [disabled]="payloadItems[i]?.is_deleted==1"
+                          (click)="openDeleteBox(i)" (focus)="addHighlight(i)" (focusout)="removeHighlight(-1)"><i
+                            class="fa fa-trash"></i></button>
+                      </td>
+                    </ng-container>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+            <button mat-button class="mat-inherit-line-height add-item-btn" [disabled]="isDeliveryForm"
+              (click)="addItem()">
+              Add Item
+            </button>
+            <button mat-button class="mat-inherit-line-height add-item-btn" style="margin-left: 5px;"
+              (click)="openBulkItemSelectionPopup()">
+              Add Bulk Item
+            </button>
+          </div>
+
+        </div>
+        <div class=" footer-overview-container">
+          <div class="row justify-content-between">
+            <div class="form-group col-sm-5">
+              <label for="note">Customer Note</label>
+              <textarea class="form-control form-control-sm" [formControl]="noteFormControl" id="note"></textarea>
+            </div>
+            <div class=" col-sm-4">
+              <div class="overall-stats-table">
+                <div *ngFor="let stat of objectValues(orderFinalStats)">
+                  <span class="stat-label">{{ stat.label }}</span>
+                  <!-- <span
+                    class="stat-value">{{ number_format(stat.value) | currency: currencyCode:"symbol" }}</span> -->
+                  <span class="stat-value">{{ numberFormatWithSymbol(stat.value) }}</span>
+                </div>
+                <div>
+                  <span class="stat-label final-total">{{ orderFinalStats?.grand_total.label }}</span>
+                  <span class="stat-value final-total">{{ numberFormatWithSymbol(orderFinalStats?.grand_total.value)
+                    }}</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </form>
+  <div class="actions">
+    <button class="btn btn-primary" [disabled]="isUom" (click)="postFinalOrder('order')">Save</button>
+  </div>
+</section>

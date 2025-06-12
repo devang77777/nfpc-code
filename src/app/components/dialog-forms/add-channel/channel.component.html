@@ -1,0 +1,119 @@
+<section>
+  <div class="card-header">
+    <span class="h6">Manage Channel</span>
+    <button class="dialog-close-btn" mat-dialog-close>
+      <i class="fa fa-times fa-lg" aria-hidden="true"></i>
+    </button>
+  </div>
+  <div class="form-container" *ngIf="showForm">
+    <form [formGroup]="channelForm">
+      <div class="">
+        <div class="row mb-2">
+          <div class="col-md-4">Channel Name</div>
+          <div class="col-md-8">
+            <input
+              [ngClass]="{
+                'invalid-input':
+                  channelFormControl.invalid &&
+                  (channelFormControl.dirty || channelFormControl.touched)
+              }"
+              class="form-control form-control-sm"
+              type="text"
+              [formControl]="channelFormControl"
+            />
+            <div
+              *ngIf="
+                channelFormControl.invalid &&
+                (channelFormControl.dirty || channelFormControl.touched)
+              "
+              class="text-danger"
+            >
+              <div><small>Channel name is required.</small></div>
+            </div>
+          </div>
+        </div>
+        <div class="row mb-2">
+          <div class="col-md-4">Parent Channel</div>
+          <div class="col-md-8">
+            <app-tree-dropdown
+              class="channel-dropdown"
+              [isManageable]="false"
+              [dataSource]="channelData"
+              [dataService]="channelProvider()"
+              (whenItemSelected)="channelSelected($event)"
+              [selectFormControl]="parentFormControl"
+              [placeHolder]="'Search a parent channel'"
+              ngDefaultControl
+            >
+            </app-tree-dropdown>
+          </div>
+        </div>
+      </div>
+
+      <div class="save-btn">
+        <button
+          mat-button
+          class="mat-inherit-line-height btn-green"
+          (click)="saveChannelData()"
+        >
+          Save
+        </button>
+        <button
+          mat-button
+          class="mat-inherit-line-height"
+          (click)="showForm = false"
+        >
+          Cancel
+        </button>
+      </div>
+    </form>
+  </div>
+
+  <div class="categories-title">
+    <h4>
+      Channels
+      <span class="add-new-label"
+        ><button
+          *ngIf="channelData.length > 0"
+          [type]="'create'"
+          (click)="addNewChannel()"
+        >
+          <i class="fa fa-plus-circle"></i>Add New Channel
+        </button></span
+      >
+    </h4>
+  </div>
+  <div class="empty-list text-center mt-4" *ngIf="isLoaded">
+    <p class="text-muted" *ngIf="channelData.length == 0">
+      No Channel available
+    </p>
+    <button
+      [type]="'create'"
+      mat-button
+      class="add-new-btn"
+      *ngIf="channelData.length == 0 && !showForm"
+      (click)="addNewChannel()"
+    >
+      Add New Channel
+    </button>
+  </div>
+  <div class="channel-holder scrolly">
+    <app-tree-container
+      (applyData)="applyChannel($event)"
+      (editData)="editChannel($event)"
+      (deleteData)="deleteChannel($event)"
+      [treeData]="channelData"
+    >
+    </app-tree-container>
+  </div>
+
+  <div class="cancel-btn">
+    <button
+      mat-button
+      class="mat-inherit-line-height height-40"
+      mat-dialog-close
+    >
+      Cancel
+    </button>
+  </div>
+</section>

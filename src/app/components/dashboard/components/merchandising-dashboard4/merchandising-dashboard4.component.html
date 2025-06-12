@@ -1,0 +1,462 @@
+<mat-sidenav-container [hidden]="openDetailType == 'chart' ? true : false" hasBackdrop="false">
+    <mat-sidenav style="width: 100%;" fullscreen opened mode="over" [opened]="isOpened" position="end">
+        <div>
+            <app-merchandising-detail-dashboard-4 [selected]="selected" [merchandiserList]="merchandiserList"
+                [supervisorList]="supervisorList" [regionList]="regionList" [nsmList]="nsmList" [asmList]="asmList"
+                [filtersList]="filtersList" [channelList]="channelList" [detailsTable]="detailsTable"
+                [mDashboardData]="dashboardData" [opened]="isOpened" [formFilter]="filterForm.value"
+                (close)="isOpened=false">
+            </app-merchandising-detail-dashboard-4>
+        </div>
+    </mat-sidenav>
+    <div style="    height: 100%;
+    overflow: scroll;">
+        <header>
+            <div class="container mt-3">
+                <div class="row">
+                    <div class="col-md-12">
+                        <form [formGroup]="filterForm" (ngSubmit)="applyFilter()">
+                            <div class="form-group row">
+                                <div class="col-sm-12">
+                                    <div class="row">
+                                        <div class="col">
+                                            <input type="date" formControlName="startdate"
+                                                class="form-control form-control-sm" placeholder="Start Date">
+                                        </div>
+                                        <div class="">
+                                            <span>_</span>
+                                        </div>
+                                        <div class="col">
+                                            <input type="date" formControlName="enddate"
+                                                class="form-control form-control-sm" placeholder="End Date">
+                                        </div>
+                                        <div class="col">
+                                            <mat-select formControlName="type"
+                                                (selectionChange)="changeFilterType($event.value)"
+                                                class="form-control form-control-sm" placeholder="Filter Type">
+                                                <mat-option *ngFor="let item of filtersList" [value]="item">{{item}}
+                                                </mat-option>
+                                            </mat-select>
+                                        </div>
+                                        <div class="col" *ngIf="filterForm.controls['type'].value == 'Channel'">
+                                            <app-multiautocomplete isSingle="false"
+                                                [control]="filterForm.controls['channel']" [options]="channelList"
+                                                text="name" id="id" placeholder="Search channel">
+                                            </app-multiautocomplete>
+                                        </div>
+                                        <div class="col" *ngIf="filterForm.controls['type'].value == 'Region'">
+                                            <app-multiautocomplete isSingle="false" [options]="regionList"
+                                                [control]="filterForm.controls['region']" text="region_name" id="id"
+                                                placeholder="Search region">
+                                            </app-multiautocomplete>
+                                        </div>
+                                        <div class="col" *ngIf="filterForm.controls['type'].value == 'Merchandiser'">
+                                            <app-multiautocomplete isSingle="false" [options]="merchandiserList"
+                                                [control]="filterForm.controls['salesman']" text="" id="user_id"
+                                                objectName="user" param1="firstname" param2="lastname"
+                                                placeholder="Search merchandiser">
+                                            </app-multiautocomplete>
+                                        </div>
+                                        <div class="col" *ngIf="filterForm.controls['type'].value == 'Supervisor'">
+                                            <app-multiautocomplete isSingle="false" [options]="supervisorList"
+                                                [control]="filterForm.controls['supervisor']" text="salesman_supervisor"
+                                                id="id" objectName="user-root" param1="firstname" param2="lastname"
+                                                placeholder="Search supervisor">
+                                            </app-multiautocomplete>
+                                        </div>
+                                        <div class="col" *ngIf="filterForm.controls['type'].value == 'NSM'">
+                                            <app-multiautocomplete isSingle="false" [options]="nsmList"
+                                                [control]="filterForm.controls['nsm']" text="name" id="id"
+                                                objectName="user-root" param1="firstname" param2="lastname"
+                                                placeholder="Search NSM">
+                                            </app-multiautocomplete>
+                                        </div>
+                                        <div class="col" *ngIf="filterForm.controls['type'].value == 'ASM'">
+                                            <app-multiautocomplete isSingle="false" [options]="asmList"
+                                                [control]="filterForm.controls['asm']" text="name" id="id"
+                                                objectName="user-root" param1="firstname" param2="lastname"
+                                                placeholder="Search ASM">
+                                            </app-multiautocomplete>
+                                        </div>
+                                        <div class="">
+                                            <button type="submit" class="btn btn-sm btn-info mr-1">
+                                                <i class="fa fa-arrow-right" style="height: 27px;font-size: 26px;"></i>
+                                            </button>
+                                        </div>
+                                        <!-- <div class="">
+                                        <button type="submit" class="btn btn-sm btn-secondary mr-1">Filter</button>
+                                    </div> -->
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                    <!-- <div class="col-md-5 d-flex justify-content-end">
+                    <div>
+                        <button class="btn btn-sm btn-secondary mr-1">Filters</button>
+                        <button class="btn  btn-sm btn-secondary  mr-1"> Clear</button>
+                        <button class="btn  btn-sm btn-secondary  mr-1">Current Selections</button>
+                    </div> &nbsp;
+                    <div> <input type="text" style="height: 30px;" placeholder="Search" class="form-control"></div>
+                </div> -->
+                </div>
+                <div class="row mt-3">
+                    <div class="col-md-12 d-flex align-items-end">
+                        <h2><strong>Merchandising</strong></h2>
+                        &nbsp; <h4>Reach-{{selected}}</h4>
+                        &nbsp;
+                        <div class="d-flex " style=" margin-left: 5px; width: 100%;">
+                            <div class="row" style="width: 100%;">
+                                <ng-container *ngIf="filterControl.value==='outofstock' || filterControl.value==='sos'">
+                                    <div class="col-md-3">
+                                        <label for="">Select Brand</label>
+                                        <app-multiautocomplete isSingle="false" [control]="filterForm.controls['brand']"
+                                            [options]="brandList" text="brand_name" id="id" placeholder="Select Brand">
+                                        </app-multiautocomplete>
+                                        &nbsp;&nbsp;
+                                    </div>
+                                    <div class="col-md-3 ">
+                                        <label for="">Select Category</label>
+                                        <app-tree-dropdown class="tree-dropdown" [dataSource]="categoryList"
+                                            [dataService]="categoryProvider()"
+                                            (whenItemSelected)="categorySelected($event)"
+                                            [selectFormControl]="filterForm.controls['category']"
+                                            [placeHolder]="'Select category'" ngDefaultControl>
+                                        </app-tree-dropdown>
+                                        &nbsp;&nbsp;
+                                    </div>
+                                    <div class="col-md-3" *ngIf="filterControl.value!=='sos'">
+                                        <label for="">Select Item</label>
+                                        <app-multiautocomplete isSingle="false" [control]="filterForm.controls['item']"
+                                            [options]="itemList" text="item_name" id="id" placeholder="Select Item">
+                                        </app-multiautocomplete>
+                                    </div>
+                                </ng-container>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-12 text-right">
+                        <strong>Last Reload Date: 12/12/2020</strong>
+                    </div>
+                </div>
+            </div>
+        </header>
+        <hr>
+        <div class="container mb-5">
+            <div class="row">
+                <div class=" col-md-12 d-flex flex-wrap ">
+                    <div class="box d-flex flex-column  " [ngClass]="{'shadow-lg rounded': selected=='coverage'}">
+                        <div class="d-flex header-bottom">
+                            <div class="flex12 d-flex justify-content-center"><strong
+                                    class="text-warning">Coverage</strong>
+                            </div>
+                            <!-- <strong class="flex1">
+                                <a (click)="openDetail('coverage')">
+                                    <mat-icon>fullscreen</mat-icon>
+                                </a>
+                            </strong> -->
+                        </div>
+                        <div class="d-flex" (click)="getChartsData('coverage')">
+                            <div class="d-flex justify-content-center align-items-center basis"><img height="100"
+                                    src="assets/dashboard-images/contract.png" alt=""></div>
+                            <div class="d-flex align-items-center flex-column basis">
+                                <h1 class="text-danger">{{dashboardData?.coverage?.percentage || '0%'}}</h1>
+                                <p>Weekly planned & unplanned visits-based on set outlets visit frequency
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="box d-flex flex-column" [ngClass]="{'shadow-lg rounded': selected=='activeOutlets'}">
+
+                        <div class="d-flex header-bottom">
+                            <div class="flex12 d-flex justify-content-center"><strong class="text-warning">Active
+                                    Outlets</strong>
+                            </div>
+                            <!-- <strong class="flex1">
+                                <a (click)="openDetail('activeOutlets')">
+                                    <mat-icon>fullscreen</mat-icon>
+                                </a>
+                            </strong> -->
+                        </div>
+                        <div class="d-flex" (click)="getChartsData('activeOutlets')">
+                            <div class="d-flex justify-content-center align-items-center basis"><img height="100"
+                                    src="assets/dashboard-images/outlet.png" alt=""></div>
+                            <div class="d-flex align-items-center flex-column basis">
+                                <h1 class="text-success">{{dashboardData?.activeOutlets?.percentage || '0%'}}</h1>
+                                <p>Where atleast one invoice was made from a visit this month</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="box d-flex flex-column" [ngClass]="{'shadow-lg rounded': selected=='routeCompliance'}">
+
+                        <div class="d-flex header-bottom">
+                            <div class="flex12 d-flex justify-content-center"><strong class="text-warning">Journey Plan
+                                    Compliance</strong>
+                            </div>
+                            <strong class="flex1">
+                                <a (click)="openDetail('routeCompliance')">
+                                    <mat-icon>fullscreen</mat-icon>
+                                </a>
+                            </strong>
+                        </div>
+                        <div class="d-flex" (click)="getChartsData('routeCompliance')">
+                            <div class="d-flex justify-content-center align-items-center basis"><img height="100"
+                                    src="assets/dashboard-images/Route Complaince.png" alt=""></div>
+                            <div class="d-flex align-items-center flex-column basis">
+                                <h1 class="text-warning">{{dashboardData?.routeCompliance?.percentage || '0%'}}</h1>
+                                <p>Compliance to route plan</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="box d-flex flex-column" [ngClass]="{'shadow-lg rounded': selected=='visitFrequency'}">
+
+                        <div class="d-flex header-bottom">
+                            <div class="flex12 d-flex justify-content-center"><strong class="text-warning">Visit
+                                    Frequency</strong>
+                            </div>
+                            <!-- <strong class="flex1">
+                                <a (click)="openDetail('visitFrequency')">
+                                    <mat-icon>fullscreen</mat-icon>
+                                </a>
+                            </strong> -->
+                        </div>
+                        <div class="d-flex" (click)="getChartsData('visitFrequency')">
+                            <div class="d-flex justify-content-center align-items-center basis"><img height="100"
+                                    src="assets/dashboard-images/frequency.png" alt=""></div>
+                            <div class="d-flex align-items-center flex-column basis">
+                                <h1 class="text-success">{{dashboardData?.visitFrequency?.percentage || '0.0'}}</h1>
+                                <p>Visit frequencey per outlet</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="box d-flex flex-column" [ngClass]="{'shadow-lg rounded': selected=='sos'}">
+
+                        <div class="d-flex header-bottom">
+                            <div class="flex12 d-flex justify-content-center"><strong class="text-warning">Share Of
+                                    Shelf</strong>
+                            </div>
+                        </div>
+                        <div class="d-flex" (click)="getChartsData('sos')">
+                            <div class="d-flex justify-content-center align-items-center basis"><img height="100"
+                                    src="assets/dashboard-images/Time Spent.png" alt=""></div>
+                            <div class="d-flex align-items-center flex-column basis">
+                                <h1 class="text-success">{{dashboardData?.sos?.percentage || '0.0'}}</h1>
+                                <p>Share Of Shelf</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="box d-flex flex-column" [ngClass]="{'shadow-lg rounded': selected=='msl'}">
+
+                        <div class="d-flex header-bottom">
+                            <div class="flex12 d-flex justify-content-center"><strong class="text-warning">MSL
+                                    Compliance</strong>
+                            </div>
+                            <!-- <strong class="flex1">
+                                <a (click)="openDetail('msl')">
+                                    <mat-icon>fullscreen</mat-icon>
+                                </a>
+                            </strong> -->
+                        </div>
+                        <!-- <div class="d-flex" (click)="getChartsData('outofstock')"> -->
+                        <div class="d-flex" (click)="getChartsData('msl')">
+                            <div class="d-flex justify-content-center align-items-center basis"><img height="100"
+                                    src="assets/dashboard-images/strike.png" alt=""></div>
+                            <div class="d-flex align-items-center flex-column basis">
+                                <!-- <h1 class="text-warning">{{dashboardData?.outofstock?.percentage || '0%'}}</h1> -->
+                                <h1 class="text-warning">{{getMslPercentage(dashboardData?.msl?.percentage)}}</h1>
+                                <p>MSL Compliance</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <hr>
+            <!-- <div class="row">
+                <div class=" col-md-12 d-flex flex-wrap ">
+                    <div class="box-chart d-flex flex-column">
+                        <div class="d-flex header-bottom">
+                            <div class="flex12 d-flex justify-content-center"><strong class="text-warning">Trends by {{
+                                    filterForm.controls['type'].value }}</strong>
+                            </div>
+                            <strong class="flex1">
+                                <a (click)="openChartDetail('line')">
+                                    <mat-icon>fullscreen</mat-icon>
+                                </a>
+                            </strong>
+                        </div>
+                        <div class="d-flex">
+                            <div id="chartdiv11444" style="width: 100%; height: 200px; position: relative; "></div>
+                        </div>
+                    </div>
+                    <div class="box-chart d-flex flex-column">
+                        <div class="d-flex header-bottom">
+                            <div class="flex12 d-flex justify-content-center"><strong class="text-warning">Comparison by
+                                    {{ filterForm.controls['type'].value }}</strong>
+                            </div>
+                            <strong class="flex1">
+                                <a (click)="openChartDetail('bar')">
+                                    <mat-icon>fullscreen</mat-icon>
+                                </a>
+                            </strong>
+                        </div>
+                        <div class="d-flex">
+                            <div id="chartdiv22444" style="width: 100%; height: 200px; position: relative; "></div>
+                        </div>
+                    </div>
+                    <div class="box-chart d-flex flex-column">
+                        <div class="d-flex header-bottom">
+                            <div class="flex12 d-flex justify-content-center"><strong class="text-warning">Contribution
+                                    by {{ filterForm.controls['type'].value }}</strong>
+                            </div>
+                            <strong class="flex1">
+                                <a (click)="openChartDetail('pie')">
+                                    <mat-icon>fullscreen</mat-icon>
+                                </a>
+                            </strong>
+                        </div>
+                        <div class="d-flex">
+                            <div id="chartdiv33444" style="width: 100%; height: 200px; position: relative; "></div>
+                        </div>
+                    </div>
+                    <div class="box-chart d-flex flex-column" style="    max-height: 218px;
+                    overflow: scroll;">
+                        <div class="d-flex justify-content-center header-bottom ">
+                            <strong class="text-warning" *ngIf="selected == 'routeCompliance'" >Jp Compliance Accuracy</strong>
+                            <strong class="text-warning" *ngIf="selected != 'routeCompliance'" >Details by {{ filterForm.controls['type'].value }}</strong>
+                        </div>
+                        <div class="d-flex">
+                            <table class="table table-responsive">
+                                <thead *ngIf="selected !== 'routeCompliance' && selected !== 'activeOutlets' && selected !== 'coverage' && selected !== 'visitFrequency' && selected !== 'sos' && selected !== 'outofstock' && selected !== 'msl'">
+                                    <tr>
+                                        <th class="th-custom"><strong>{{ filterForm.controls['type'].value }}</strong>
+                                        </th>
+                                        <th class="th-custom"><strong>Visits</strong></th>
+                                        <th class="th-custom"><strong>Total Outlets</strong></th>
+                                        <th class="th-custom"><strong>Execution</strong></th>
+                                    </tr>
+                                </thead>
+                                <thead *ngIf="selected == 'routeCompliance'">
+                                    <tr>
+                                        <th class="th-custom"><strong>{{ filterForm.controls['type'].value }}</strong>
+                                        </th>
+                                        <th class="th-custom"><strong>Planned Visits</strong></th>
+                                        <th class="th-custom"><strong>Planned Outlets</strong></th>
+                                        <th class="th-custom"><strong>JP%</strong></th>
+                                    </tr>
+                                </thead>
+                                <thead *ngIf="selected == 'activeOutlets'">
+                                    <tr>
+                                        <th class="th-custom"><strong>{{ filterForm.controls['type'].value }}</strong>
+                                        </th>
+                                        <th class="th-custom"><strong>Actual Outlets</strong></th>
+                                        <th class="th-custom"><strong>Total Outlets</strong></th>
+                                        <th class="th-custom"><strong>Active Outlets</strong></th>
+                                    </tr>
+                                </thead>
+                                <thead *ngIf="selected == 'coverage'">
+                                    <tr>
+                                        <th class="th-custom"><strong>{{ filterForm.controls['type'].value }}</strong>
+                                        </th>
+                                        <th class="th-custom"><strong>Visits</strong></th>
+                                        <th class="th-custom"><strong>Total Outlets</strong></th>
+                                        <th class="th-custom"><strong>Coverage</strong></th>
+                                    </tr>
+                                </thead>
+                                <thead *ngIf="selected == 'visitFrequency'">
+                                    <tr>
+                                        <th class="th-custom"><strong>{{ filterForm.controls['type'].value }}</strong>
+                                        </th>
+                                        <th class="th-custom"><strong>Visits</strong></th>
+                                        <th class="th-custom"><strong>Total Outlets</strong></th>
+                                        <th class="th-custom"><strong>Avg. Visit</strong></th>
+                                    </tr>
+                                </thead>
+                                <thead *ngIf="selected == 'sos'">
+                                    <tr>
+                                        <th class="th-custom"><strong>{{ filterForm.controls['type'].value }}</strong>
+                                        </th>
+                                        <th class="th-custom"><strong>Actual</strong></th>
+                                        <th class="th-custom"><strong>Planned</strong></th>
+                                        <th class="th-custom"><strong>Percentage</strong></th>
+                                    </tr>
+                                </thead>
+                                <thead *ngIf="selected == 'outofstock'">
+                                    <tr>
+                                        <th class="th-custom"><strong>{{ filterForm.controls['type'].value }}</strong>
+                                        </th>
+                                        <th class="th-custom"><strong>Actual</strong></th>
+                                        <th class="th-custom"><strong>Planned</strong></th>
+                                        <th class="th-custom"><strong>Out Of Stock</strong></th>
+                                    </tr>
+                                </thead>
+                                <thead *ngIf="selected == 'msl'">
+                                    <tr>
+                                        <th class="th-custom"><strong>{{ filterForm.controls['type'].value }}</strong>
+                                        </th>
+                                        <th class="th-custom"><strong>Out Of Stock</strong></th>
+                                        <th class="th-custom"><strong>MSL Items</strong></th>
+                                        <th class="th-custom"><strong>MSL Compliance</strong></th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr *ngFor="let row of detailsTable; let i = index;" class=" tr-brown ">
+                                        <td>{{row.RES}}</td>
+                                        <td>{{row.VISITS || row.VISIT}}</td>
+                                        <td>{{row['TOTAL_OUTLETS']}}</td>
+                                        <td>{{row.EXECUTION}}</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                </div>
+            </div> -->
+            <div class="row">
+                <div class="col-md-12 d-flex flex-wrap ">
+                    <div class="box d-flex flex-column p-0">
+                        <div class="d-flex header-bottom">
+                            <div class="flex12 d-flex justify-content-center"><strong class="text-warning">Top
+                                    Performance</strong>
+                            </div>
+                        </div>
+                        <div class="d-flex">
+                            <div class="d-flex justify-content-center align-items-center basis"><img height="100"
+                                    src="assets/dashboard-images/contract.png" alt=""></div>
+                            <div class="d-flex align-items-center flex-column basis">
+                                <h1 class="d-flex justify-content-center align-items-center text-danger pt-1">
+                                    {{dashboardData?.highPerformance[0]?.name
+                                    || 'NA'}}</h1>
+                                <p class="pr-4 pt-1">{{dashboardData?.highPerformance[0]?.total || '0'}}%</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4"></div>
+                    <div class="box d-flex flex-column p-0"
+                        *ngIf="dashboardData?.highPerformance[0]?.total!=dashboardData?.lowPerformance[0]?.total">
+                        <div class="d-flex header-bottom">
+                            <div class="flex12 d-flex justify-content-center"><strong class="text-warning">Lower
+                                    Performance</strong>
+                            </div>
+                        </div>
+                        <div class="d-flex">
+                            <div class="d-flex justify-content-center align-items-center basis"><img height="100"
+                                    src="assets/dashboard-images/contract.png" alt=""></div>
+                            <div class="d-flex align-items-center flex-column basis">
+                                <h1 class="d-flex justify-content-center align-items-center text-danger pt-1">
+                                    {{dashboardData?.lowPerformance[0]?.name
+                                    || 'NA'}}</h1>
+                                <p class="pr-4 pt-1">{{dashboardData?.lowPerformance[0]?.total || '0'}}%</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</mat-sidenav-container>
+<div [hidden]="openDetailType == 'chart' ? false : true">
+    <app-dashboard-chart-detail (close)="closeChartDetail()" [openDetailType]="openDetailType" [selected]="selected"
+        [selectedData]="selectedData" [selectedChart]="selectedChart" [labelBy]="filterForm.controls['type'].value">
+    </app-dashboard-chart-detail>
+</div>

@@ -1,0 +1,129 @@
+<section>
+  <div class="heading-row">
+    <h2 class="d-inline"><i class="fa fa-truck fa-flip-horizontal mr-2"></i>{{ pageTitle }}</h2>
+    <div class="d-inline float-right">
+      <button class="btn btn-white btn-sm border" [matMenuTriggerFor]="menu2">More</button>
+      <mat-menu #menu2="matMenu" xPosition="before">
+        <button mat-menu-item (click)="goToGRNS()">Go Back</button>
+      </mat-menu>
+    </div>
+  </div>
+  <div class="separator"></div>
+  <form [formGroup]="vanFormGroup" class="order-form custom-mat square scrolly">
+
+    <div class="card-body active-form overview">
+      <div class="d-flex overview-container">
+        <table class="form-col d-inline">
+          <tr class="spacer"></tr>
+        </table>
+      </div>
+    </div>
+
+    <div>
+      <div class="card-body overview">
+        <div class="row justify-content-between">
+          <div class="col-md-4">
+            <div class="form-group">
+              <label for="">Source Van</label>
+              <mat-form-field id="sourceFormField">
+                <mat-label>Select source van</mat-label>
+                <mat-select class="no-disabled-text" (blur)="checkFormValidation()" required
+                  [formControl]="sourceFormControl">
+                  <mat-option *ngFor="let warehouse of selectedSourceVanId" [value]="warehouse.id">
+                    {{ warehouse.route_name }}</mat-option>
+                </mat-select>
+                <mat-error *ngIf="sourceFormControl.hasError('required')">Please select a van</mat-error>
+              </mat-form-field>
+            </div>
+            <div class="form-group">
+              <label for="">Destination Van</label>
+              <mat-form-field id="destFormField">
+                <mat-label>Select destination van</mat-label>
+                <mat-select class="no-disabled-text" (blur)="checkFormValidation()" required
+                  [formControl]="destinationFormControl">
+                  <mat-option *ngFor="let warehouse of selectedDestVanId" [value]="warehouse.id">
+                    {{ warehouse.route_name }}</mat-option>
+                </mat-select>
+                <mat-error *ngIf="destinationFormControl.hasError('required')">Please select a van</mat-error>
+              </mat-form-field>
+            </div>
+          </div>
+          <div class="col-md-4">
+            <div class="form-group ">
+              <label for="">Code</label>
+              <div class="position-relative">
+                <input type="text" class="form-control form-control-sm" (keypress)="restrictLength($event)"
+                  [formControl]="codeFormControl" id="code">
+                <span class="setting-btn"><button (click)="openNumberSettings()" [hidden]="isEditForm"><i
+                      class="os-icon os-icon-ui-46"></i></button></span>
+              </div>
+            </div>
+            <div class="form-group">
+              <label for="">Date</label>
+              <input [min]="todaydate" type="date" class="form-control form-control-sm" required
+                [formControl]="dateFormControl" id="vanDate">
+            </div>
+          </div>
+        </div>
+
+
+      </div>
+
+      <div class="bottom-form">
+        <div class="item-container custom-mat custom-mat-no-border">
+          <div class="item-table-div">
+            <table class="item-table">
+              <thead>
+                <tr>
+                  <th class="head" *ngFor="let head of itemTableHeaders">{{ head.label }}</th>
+                </tr>
+              </thead>
+              <tbody class="form-body">
+                <tr formArrayName="items" class="item-row" *ngFor="let item of itemFormControls; let i = index;">
+                  <ng-container [formGroupName]="i">
+                    <td>{{ i + 1 }}</td>
+                    <td class="item-name">
+                      <mat-form-field class="item-name-field">
+                        <input type="text" required placeholder="Search an item" matInput formControlName="item"
+                          [matAutocomplete]="auto">
+                        <mat-autocomplete #auto="matAutocomplete" (opened)="checkFormValidation()"
+                          (optionSelected)="itemDidSearched($event.option.value, i)"
+                          [displayWith]="itemsControlDisplayValue">
+                          <mat-option *ngFor="let item of filteredItems" [value]="itemControlValue(item)">
+                            {{ item.item_name }}</mat-option>
+                        </mat-autocomplete>
+                      </mat-form-field>
+                    </td>
+                    <td class="uom-td">
+                      <select class="custom-select" required formControlName="item_uom_id">
+                        <option [value]="uom.id" *ngFor="let uom of uoms">{{ uom.name }}</option>
+                      </select>
+                    </td>
+                    <td class="stats-cell"><input type="number" min="0" class="form-control form-control-sm"
+                        placeholder="Quantity" formControlName="quantity"></td>
+                  </ng-container>
+                </tr>
+              </tbody>
+            </table>
+            <button class="add-item-btn" (click)="addItem()">Add Item</button>
+          </div>
+          <table class="table-check">
+            <thead>
+              <tr>
+                <th class="head"></th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr class="item-row" *ngFor="let item of itemFormControls; let i = index;">
+                <button [disabled]="" class="trash-btn" (click)="deleteItemRow(i)"><i class="fa fa-close"></i></button>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </form>
+  <div class="actions">
+    <button class="mat-inherit-line-height" mat-button (click)="postFinalOrder('order')">Save & Submit</button>
+  </div>
+</section>

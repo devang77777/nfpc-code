@@ -1,0 +1,65 @@
+<section *ngIf="campaign">
+  <div class="pl-3">
+    <div class="row">
+      <h2 class="page-title col-sm-6 font-weight-light">
+        {{ campaign.campaign_id }}
+      </h2>
+      <div class="actions col-sm-6">
+        <div>
+          <button class="btn btn-sm btn-white mr-2 dropdown-toggle" mat-button [matMenuTriggerFor]="menu2">More</button>
+          <mat-menu #menu2="matMenu">
+            <button mat-menu-item appPermission [permissions]="userPermissions" [type]="'edit'">Edit</button>
+            <button mat-menu-item appPermission [permissions]="userPermissions" [type]="'delete'">Delete</button>
+          </mat-menu>
+        </div>
+        <button *ngIf="isDetailVisible" class="btn" (click)="closeDetailView()">
+          <i class="os-icon os-icon-close"></i>
+        </button>
+      </div>
+    </div>
+  </div>
+  <div class="pl-3 area-data">
+    <div class="row h-100">
+      <div class="col-12">
+        <mat-tab-group class="customertab" mat-align-tabs="start">
+          <mat-tab label="Overview">
+            <mat-list>
+              <mat-list-item>
+                Date:
+                {{
+                  campaign.created_at | date: "d MMM y h:mm a"
+                }}</mat-list-item>
+              <mat-list-item>
+                Merchandiser: {{ campaign.salesman?.firstname }}
+                {{ campaign.salesman?.lastname }}</mat-list-item>
+              <mat-list-item>
+                Campaign Id: {{ campaign.campaign_id }}</mat-list-item>
+              <mat-list-item>
+                Customer: {{ campaign.customer?.firstname }}
+                {{ campaign.customer?.lastname }}</mat-list-item>
+              <mat-list-item> Feedback: {{ campaign.feedback }}</mat-list-item>
+            </mat-list>
+            <ng-container *ngIf="campaign !== null">
+              <hr />
+              <div class="col-sm-12 data-block">
+                <div class="row" *ngIf="campaign.campaign_picture_image.length > 0">
+                  <div class="col-sm-3" *ngFor="let image of campaign.campaign_picture_image; let i=index;">
+                    <mat-card class="item-card imageCard" *ngIf="image.image_string !== null">
+                      <img height="150" class="img-fluid" src="{{ image.image_string }}" alt="Campaign Image" />
+                      <div class="iconsbar">
+                        <a href="javascript:;" (click)="downloadFile(image.image_string)"><i
+                            class="fa fa-download"></i></a>
+                        <a href="{{image.image_string}}" target="_blank"><i class="fa fa-external-link"></i></a>
+                        <a href="javascript:;" (click)="open(i)"><i class="fa fa-eye"></i></a>
+                      </div>
+                    </mat-card>
+                  </div>
+                </div>
+              </div>
+            </ng-container>
+          </mat-tab>
+        </mat-tab-group>
+      </div>
+    </div>
+  </div>
+</section>

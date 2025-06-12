@@ -1,0 +1,126 @@
+<section [ngClass]="{ 'detail-visible': isDetailVisible }">
+  <div class="pl-3" *ngIf="portfolioManagement">
+    <div class="row">
+      <h2 class="page-title col-sm-7 font-weight-light">
+        {{ portfolioManagement.firstname }} {{ portfolioManagement.lastname }}
+      </h2>
+      <div class="actions col-sm-5">
+        <button (click)="openEditPortfolioGroupItem()" class="iconbtn" appPermission [permissions]="userPermissions"
+          [type]="'edit'">
+          <i class="os-icon os-icon-edit" aria-hidden="true"></i>
+        </button>
+        <div>
+          <button class="btn btn-sm btn-white dropdown-toggle" mat-button [matMenuTriggerFor]="menu2">
+            More
+          </button>
+          <mat-menu #menu2="matMenu">
+            <button mat-menu-item (click)="openDeleteBox()" appPermission [permissions]="userPermissions"
+              [type]="'delete'">
+              Delete
+            </button>
+          </mat-menu>
+        </div>
+        <button *ngIf="isDetailVisible" class="btn" (click)="closeDetailView()">
+          <i class="os-icon os-icon-close"></i>
+        </button>
+      </div>
+    </div>
+  </div>
+  <div class="pl-3">
+    <div class="row h-100">
+      <div class="col-12 border-left">
+        <mat-tab-group class="customertab" mat-align-tabs="start">
+          <mat-tab label="Overview">
+            <mat-list *ngIf="portfolioManagement">
+              <mat-list-item>Code: {{ portfolioManagement.code }}</mat-list-item>
+              <mat-list-item>Name: {{ portfolioManagement.name }}</mat-list-item>
+              <mat-list-item>Valid From: {{ portfolioManagement.start_date }}</mat-list-item>
+              <mat-list-item>Valid To: {{ portfolioManagement.end_date }}</mat-list-item>
+              <mat-list-item>Channels:
+                <span *ngFor="let channel of portfolioManagement.portfolio_management_channel">
+                  &nbsp;{{channel?.channel?.name}},</span>
+              </mat-list-item>
+            </mat-list>
+            <mat-tab-group class="customertab" mat-align-tabs="start">
+              <mat-tab label="Customer">
+                <ng-container>
+                  <hr />
+
+                  <div class="items-table-box">
+                    <table mat-table [dataSource]="customerSource" [hidden]="!itemSource.data.length"
+                      class="mat-elevation-z8">
+                      <ng-container matColumnDef="customerCode">
+                        <th mat-header-cell *matHeaderCellDef>Customer Code</th>
+                        <td mat-cell *matCellDef="let element">
+                          {{ element.customer_code }}
+                        </td>
+                      </ng-container>
+                      <ng-container matColumnDef="customerName">
+                        <th mat-header-cell *matHeaderCellDef>Customer Name</th>
+                        <td mat-cell *matCellDef="let element">
+                          {{ element.customer_name }}
+                        </td>
+                      </ng-container>
+
+                      <tr mat-header-row *matHeaderRowDef="displayedCustomerColumns; sticky: true"></tr>
+                      <tr mat-row *matRowDef="let row; columns: displayedCustomerColumns"></tr>
+                    </table>
+                    <mat-paginator #cusomterMatPaginator [hidden]="hidePaginator(itemSource.data.length)" pageSize="5"
+                      [pageSizeOptions]="[5, 10]"></mat-paginator>
+                  </div>
+
+
+                </ng-container>
+              </mat-tab>
+              <mat-tab label="Item">
+                <ng-container>
+                  <hr />
+
+                  <div class="items-table-box">
+                    <table mat-table [dataSource]="itemSource" class="mat-elevation-z8">
+                      <ng-container matColumnDef="itemCode">
+                        <th mat-header-cell *matHeaderCellDef>Item Code</th>
+                        <td mat-cell *matCellDef="let element">
+                          {{ element.item_code }}
+                        </td>
+                      </ng-container>
+                      <ng-container matColumnDef="itemName">
+                        <th mat-header-cell *matHeaderCellDef>Item Name</th>
+                        <td mat-cell *matCellDef="let element">
+                          {{ element.item_name }}
+                        </td>
+                      </ng-container>
+                      <ng-container matColumnDef="store_price">
+                        <th mat-header-cell *matHeaderCellDef>Store Price</th>
+                        <td mat-cell *matCellDef="let element">
+                          {{ element.store_price }}
+                        </td>
+                      </ng-container>
+                      <ng-container matColumnDef="vendorItemCode">
+                        <th mat-header-cell *matHeaderCellDef> Customer Item Code </th>
+                        <td mat-cell *matCellDef="let element"> {{ element.vendor_item_code }} </td>
+                      </ng-container>
+                      <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></tr>
+                      <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+                    </table>
+                    <mat-paginator #itemMatPaginator [hidden]="hidePaginator(itemSource.data.length)" pageSize="5"
+                      [pageSizeOptions]="[5, 10]"></mat-paginator>
+                  </div>
+
+                </ng-container>
+              </mat-tab>
+            </mat-tab-group>
+          </mat-tab>
+          <mat-tab label="Sales">
+            <mat-list>
+              <mat-list-item>Sales 1</mat-list-item>
+              <mat-list-item>Sales 2</mat-list-item>
+              <mat-list-item>Sales 3</mat-list-item>
+              <mat-list-item>Sales 4</mat-list-item>
+            </mat-list>
+          </mat-tab>
+        </mat-tab-group>
+      </div>
+    </div>
+  </div>
+</section>

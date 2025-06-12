@@ -1,0 +1,191 @@
+button:focus {
+  outline: none;
+}
+
+// .fa-plus {
+//     padding-bottom: 2px;
+// }
+button.mat-menu-item {
+  height: 30px;
+  line-height: normal;
+}
+
+// .container{
+//     height: calc(100vh - 50px);
+// }
+.header-row {
+  float: left;
+  width: 100%;
+  position: relative;
+}
+
+.cp-pic {
+  width: 35px;
+  height: 35px;
+  border: 1px solid #ddd;
+  border-radius: 50%;
+  float: left;
+}
+
+button:active {
+  outline: none;
+}
+
+// Approval Request
+.approval-holder {
+  padding: 12px calc(1.25rem + 48px);
+}
+
+.approval-box {
+  display: flex;
+  padding: 12px;
+  border: 1px solid #f1f1f1;
+  border-radius: 8px;
+  -webkit-box-shadow: 0 0 37px rgba(8, 21, 66, 0.05);
+  box-shadow: 0 0 37px rgba(8, 21, 66, 0.05);
+  background-color: white;
+}
+
+.approve-icon {
+  width: 64px;
+  background-color: #f1f5fa;
+  margin-right: 10px;
+  border-radius: 8px;
+  display: block;
+  height: 64px;
+  line-height: 64px;
+  text-align: center;
+  padding: 0;
+  display: inline-block;
+  color: #19ad90;
+
+  i {
+    font-size: 28px;
+    margin: 28% auto;
+    display: block;
+    width: 26px;
+  }
+}
+
+.approve-content {
+  width: 100%;
+
+  h2,
+  p {
+    margin: 0;
+  }
+}
+
+.approve-actions {
+  display: flex;
+  width: 250px;
+  justify-content: space-evenly;
+  align-items: center;
+}
+
+@media (max-width: 575px) {
+  .approval-holder {
+    padding: 5px;
+
+    .approval-box {
+      display: block;
+
+      .approve-icon {
+        width: 42px;
+        border-radius: 4px;
+        height: 42px;
+        line-height: 42px;
+      }
+    }
+
+    .approve-content {
+      margin-bottom: 10px;
+    }
+
+    .approve-actions {
+      display: block;
+      width: 100%;
+    }
+  }
+
+  .smhlist li {
+    padding: 6px;
+  }
+}
+
+// Approval Request
+.approval-holder {
+  padding: 12px calc(1.25rem + 48px);
+  background: linear-gradient(180deg, white, #f3f3f3);
+}
+
+.approval-box {
+  display: flex;
+  padding: 12px;
+  border: 1px solid lightgray;
+  border-radius: 8px;
+  box-shadow: 2px 2px 4px #ced4da;
+  background-color: white;
+}
+
+.approve-icon {
+  width: 64px;
+  background-color: #eee;
+  margin-right: 10px;
+  border-radius: 8px;
+
+  i {
+    font-size: 28px;
+    margin: 28% auto;
+    display: block;
+    width: 26px;
+  }
+}
+
+.approve-content {
+  width: 100%;
+
+  h2,
+  p {
+    margin: 0;
+  }
+}
+
+.approve-actions {
+  display: flex;
+  width: 250px;
+  justify-content: space-evenly;
+  align-items: center;
+
+  .approve {
+    background-color: #0bb698;
+    color: white;
+  }
+
+  .reject {
+    background: none;
+    color: #485156;
+    border: 1px solid #ced4da;
+    border-radius: 0.25rem;
+  }
+}
+
+// dt {
+//   text-align: right;
+// }
+
+th {
+  font-family: Muli, sans-serif;
+  font-size: 400 14px/18px Muli, sans-serif;
+}
+
+td {
+  text-align: right;
+  padding-left: -10px;
+  line-height: 1.4;
+  padding-top: -12px;
+}
+
+// .table th .table td {
+//   padding: -10px 0px; /* Apply cell padding */
+// }

@@ -1,0 +1,54 @@
+image: node:12.10.0
+options:
+  size: 2x
+definitions:
+  services:
+    docker:
+      memory: 7128
+pipelines:
+  branches:
+
+    master:
+      - step:
+          name: Installation
+          caches:
+            - node
+          script:
+            - npm install
+          artifacts:
+            - node_modules/** # Save modules for next steps
+      - step:
+          name: Deploy
+          script:
+            - npm run build-prod
+            - echo "$(ls -la)"
+            - echo "$(ls -la dist)"
+            - apt-get update
+            - apt-get install ncftp 
+            - ncftpput -v -u "$FTP_USERNAME" -p "$FTP_PASSWORD" -R $FTP_HOST  $FTP_ROOT_DEST $FTP_SOURCE
+            - ncftpput -v -u "$FTP_USERNAME" -p "$FTP_PASSWORD" -R $FTP_HOST  $FTP_MERCHANDISING_DEST $FTP_SOURCE
+            - ncftpput -v -u "$FTP_USERNAME" -p "$FTP_PASSWORD" -R $FTP_HOST  $FTP_VANSALE_DEST $FTP_SOURCE
+            - ncftpput -v -u "$FTP_USERNAME" -p "$FTP_PASSWORD" -R $FTP_HOST  $FTP_ROOT_DEST $FTP_SERVER_SOURCE
+          
+            - echo Finished uploading
+    nfpc_latest:
+      - step:
+          name: Installation
+          caches:
+            - node
+          script:
+            - npm install
+          artifacts:
+            - node_modules/** # Save modules for next steps
+      - step:
+          name: Deploy
+          script:
+            - npm run build-prod
+            - echo "$(ls -la)"
+            - echo "$(ls -la dist)"
+            - apt-get update
+            - apt-get install ncftp 
+            - ncftpput -v -u "$FTP_USERNAME" -p "$FTP_PASSWORD" -R $FTP_HOST  $FTP_NFPC_DEST $FTP_SOURCE
+            - ncftpput -v -u "$FTP_USERNAME" -p "$FTP_PASSWORD" -R $FTP_HOST  $FTP_ROOT_DEST $FTP_SERVER_SOURCE
+          
+            - echo Finished uploading

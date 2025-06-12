@@ -1,0 +1,67 @@
+<mat-card>
+    <mat-card-title>
+        <h4>Add Custom field</h4>
+    </mat-card-title>
+    <mat-card-content>
+        <form [formGroup]="addCustomFieldFromGroup">
+        <div class="form-group">
+            <label for="usr">Label Name:</label>
+            <input type="text" class="form-control form-control-sm" id="usr" formControlName="labelName">
+        </div>
+        <div class="form-group">
+            <label for="sel1">Data Type</label>
+            <select class="form-control form-control-sm" id="sel1" formControlName="dataType">
+                <option value="textBox">Text Box</option>
+                <option value="checkBox">Check Box</option>
+                <option value="dropdown">Dropdown</option>
+                <option value="multiSelect">Multi Select</option>
+                <option value="date">Date</option>
+            </select>
+        </div>
+        
+            <div class="form-group" *ngIf="dataType==='textBox'">
+                <label for="usr">Default Value:</label>
+                <input type="text" class="form-control form-control-sm" formControlName="textboxDefaultValue">
+            </div>
+            <div class="form-group" *ngIf="dataType==='checkBox'">
+                <label for="usr">Default Value:</label>
+                <div class="checkbox">
+                    <label><input type="checkbox" formControlName="checkboxDefaultValue"> Ticked by default</label>
+                </div>
+            </div>
+            <div class="options-box" *ngIf="dataType==='dropdown'||dataType ==='multiSelect'">
+                <div class="p-2" style="height: 170px; overflow-y: scroll;">
+                    <div class="container">
+                        <div class="row" formArrayName="dropdownOptions"
+                            *ngFor="let option of ddOptionControls; let i = index">
+                            <div class="col-10 form-group" [formGroupName]="i">
+                                <input type="text" class="form-control form-control-sm" formControlName="option">
+                            </div>
+                            <div class="col-2">
+                                <button class="btn btn-icon btn-sm" (click)="removeOption(i)"><i class="fa fa-trash-o text-danger"
+                                        aria-hidden="true"></i></button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div>
+                    <hr class="m-0">
+                    <button class="btn btn-link btn-sm" (click)="addOption()">Add option</button>
+                </div>
+            </div>
+            <div class="form-group" *ngIf="dataType==='date'">
+                <label for="usr">Default Value:</label>
+                <input type="date" class="form-control form-control-sm" formControlName="dateDefaultValue">
+            </div>
+        </form>
+        <!-- <pre>
+            {{data.name}}{{dataType}}
+            {{addCustomFieldFromGroup.value | json}}
+        </pre> -->
+    </mat-card-content>
+
+    <mat-card-footer class="p-2">
+            <button class="btn btn-sm btn-light mr-2" mat-dialog-close>Cancel</button>
+            <button class="btn btn-p" (click)="addCustomField()">Add</button>        
+    </mat-card-footer>
+</mat-card>

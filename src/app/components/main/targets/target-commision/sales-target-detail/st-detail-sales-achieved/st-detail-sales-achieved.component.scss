@@ -1,0 +1,96 @@
+section {
+  display: block;
+}
+
+.separator {
+  height: 2px;
+  background-color: lightgrey;
+}
+
+button:focus {
+  outline: none;
+}
+
+.header-selection {
+  background-color: #f3f3f3;
+  padding: 12px 0;
+}
+
+.item-select {
+  border-bottom: 1px solid #f3f3f3;
+  padding: 12px 0;
+}
+
+.col-sm-2 {
+  display: flex;
+  align-items: center;
+}
+
+.stats-block {
+  padding: 12px 0;
+}
+
+table {
+  border: 1px solid #ced4da;
+  border-collapse: separate;
+  border-spacing: 0;
+
+  tr {
+    height: 40px;
+  }
+
+  th,
+  td {
+    border-top: 1px solid #ced4da;
+    border-left: 1px solid #ced4da;
+    padding-left: 8px;
+
+    &:first-child {
+      border-left: none;
+    }
+  }
+
+  th {
+    padding: 4px;
+    border-top: none;
+    text-align: left;
+    min-width: 90px;
+    background-color: #f3f3f3;
+  }
+}
+
+.calendar-view {
+  margin-bottom: 20px;
+
+  .title {
+    padding: 8px 0;
+    margin-bottom: 8px;
+    border-bottom: 1px solid #ced4da;
+  }
+}
+
+.tile-holder {
+  margin: auto;
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+}
+
+.tiles {
+  width: calc((100% / 8) - 14px);
+  background-color: white;
+  border: 1px solid #ced4da;
+  margin-right: 2px;
+  margin-bottom: 2px;
+  text-align: center;
+
+  &:hover {
+    background-color: #f3f3f3;
+  }
+
+  h2 {
+    font-size: 32px;
+    margin: 0;
+    padding: 8px 0;
+  }
+}

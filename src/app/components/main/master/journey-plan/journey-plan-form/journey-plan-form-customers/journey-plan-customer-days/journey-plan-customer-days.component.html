@@ -1,0 +1,26 @@
+<mat-horizontal-stepper class="custom1" [linear]="false" #stepper>
+  <mat-step *ngFor="let day of dayConfigs; index as index">
+    <ng-template matStepLabel>{{ day.label }}</ng-template>
+    <app-journey-plan-customer-table
+      *ngIf="isWeekly"
+      (setAllDays)="applyToAllDays($event)"
+      (setAllweeks)="applyToAllWeekDays($event)"
+      [isWeekly]="isWeekly"
+      [journeyPlanFormGroup]="journeyPlanFormGroup"
+      [dayConfig]="day"
+      [weekNumber]="weekNumber"
+      [tableFormControl]="weeklyTableControl"
+      [customers]="customers" [getCustomersByObj]="getCustomersByObj">
+    </app-journey-plan-customer-table>
+    <app-journey-plan-customer-table
+      *ngIf="!isWeekly"
+      (setAllDays)="applyToAllDays($event)"
+      (setAllweeks)="applyToAllWeekDays($event)"
+      [isWeekly]="isWeekly"
+      [journeyPlanFormGroup]="journeyPlanFormGroup"
+      [dayConfig]="day"
+      [tableFormControl]="dailyTableControl"
+      [customers]="customers" [getCustomersByObj]="getCustomersByObj">
+    </app-journey-plan-customer-table>
+  </mat-step>
+</mat-horizontal-stepper>

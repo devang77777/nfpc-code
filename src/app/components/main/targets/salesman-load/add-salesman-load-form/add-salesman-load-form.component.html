@@ -1,0 +1,73 @@
+<div class="card">
+    <div class="heading-row">
+        <p>{{title}}</p>
+    </div>
+    <div class="card-body overview scrolly">
+        <form [formGroup]="salesmanLoadFormGroup">
+            <div class="row justify-content-between">
+                <div class="col-md-4">
+                    <div class="form-group">
+                        <label for="">Load Type:</label>
+                        <mat-select class="form-control form-control-sm" [formControl]="loadTypeFormControl">
+                            <mat-option value="1">Delivery Load</mat-option>
+                            <mat-option value="2">Van Load</mat-option>
+                        </mat-select>
+                    </div>
+                    <div class="form-group">
+                        <label for="">Route:</label>
+                        <div>
+                            <app-multiautocomplete isSingle="true" [options]="routes" [control]="routeControl"
+                                (selectionchanged)="onRouteChange()" text="route_name" id="id"
+                                placeholder="Select Route" objectName="root" param1="route_name">
+                            </app-multiautocomplete>
+                            <!-- <mat-option class="text-center" (click)="addRoute()"><small>Add New
+                                    Route</small></mat-option> -->
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="form-group ">
+                        <label for="">Salesman Load Number:</label>
+                        <div class="position-relative">
+                            <input type="text" [formControl]="loadNumberFormControl" (keypress)="restrictLength($event)"
+                                class="form-control form-control-sm">
+                            <span class="setting-btn" *ngIf="!isEdit">
+                                <button (click)="openNumberSettings()"><i class="os-icon os-icon-settings"></i></button>
+                            </span>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="">Load Date:</label>
+                        <input type="date" [formControl]="loadDateFormControl" class="form-control form-control-sm">
+                    </div>
+                    <div class="form-group">
+                        <label for="">Salesman:</label>
+                        <app-multiautocomplete isSingle="true" [options]="filteredSalesman"
+                            [control]="salesmanFormControl" text="route_name" id="user_id" placeholder="Select Salesman"
+                            objectName="salesman-root">
+                        </app-multiautocomplete>
+                        <!-- <mat-select [formControl]="salesmanFormControl" class="form-control form-control-sm">
+                            <mat-option *ngFor="let salesman of filteredSalesman" [value]="salesman.user_id">
+                                {{salesman.user?.firstname}} {{salesman.user?.lastname}} - {{ salesman.salesman_code }}
+                            </mat-option>
+                        </mat-select> -->
+                        <!-- <mat-select *ngIf="editData" [formControl]="salesmanFormControl" class="form-control form-control-sm">
+                            <mat-option *ngFor="let salesman of salesmen" [value]="salesman.id">
+                                {{salesman.user?.firstname}} {{salesman.user?.lastname}}</mat-option>
+                        </mat-select> -->
+                    </div>
+                </div>
+            </div>
+
+        </form>
+        <br>
+
+        <app-add-salesman-load-form-item-table [salesmanLoadFormGroup]="salesmanLoadFormGroup" [editData]="editData">
+        </app-add-salesman-load-form-item-table>
+        <!-- <pre>{{salesmanLoadFormGroup.value | json}}</pre> -->
+    </div>
+    <div class="card-footer text-right">
+        <button class="btn btn-sm btn-light mr-2" (click)="close()">Cancel</button>
+        <button class="btn btn-sm btn-p" (click)="submitSalesmanLoad()">Save</button>
+    </div>
+</div>

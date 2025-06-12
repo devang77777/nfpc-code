@@ -1,0 +1,64 @@
+.mat-tree-node {
+    position: relative;
+    min-height: 20px;
+    height: 30px;
+    border-bottom: 1px solid rgb(238, 238, 238);
+    .tree-menu{
+        visibility: hidden;
+        a{
+          cursor: pointer;
+          &:hover{
+            color: #07C;
+          }
+        }
+    }
+    &:hover{
+        background-color: whitesmoke;
+        .tree-menu{
+            visibility: visible;
+        }
+    }
+  }
+  .mat-tree{
+    border: 1px solid whitesmoke;
+    border-radius: 10px;
+    min-height: 50px;
+    margin-top: 10px;
+    // max-width: 500px;
+  }
+  .tree-container{
+    position: relative;
+    padding: 20px;
+  }
+  .form-container{
+    // max-width: 500px;
+    position: relative;
+    padding: 20px;
+    padding-bottom: 40px;
+  }
+  .card-header{
+    position: relative;
+    .dialog-close-btn{
+      position: absolute;
+      right: 20px;
+      top: 10px;
+    }
+  }
+  .add-new-btn{
+    position: absolute;
+    right: 20px;
+    top: 0px;
+    font-weight: 500;
+    cursor: pointer;
+    &:hover{
+      color: #07C;
+    }
+  }
+  .mat-tree-text{
+    cursor: pointer;
+  }
+  // .save-btn{
+  //   position: absolute;
+  //   bottom: 10px;
+  //   right: 10px;
+  // }

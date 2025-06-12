@@ -1,0 +1,45 @@
+.table{
+    width: 95%;
+}
+.items-table-box {
+    overflow-y: scroll !important;
+    min-width: 45%;
+    mat-paginator,
+    .mat-table {
+      max-width: 100%;
+    }
+  }
+
+  .table thead, .table thead tr, .mat-header-row{
+    background-color: black !important;
+    th{
+      background: black;
+      color: #fff;
+    }
+  }
+
+  .colorGreen {
+      color: #19ad90;
+  }
+  .colorRed {
+    color: #dc3545;
+}
+
+::ng-deep .mat-paginator {
+    // override material paginator page switch
+    .mat-paginator-range-label {
+        order: 2;
+    }
+    .mat-paginator-navigation-previous {
+        order: 1;
+    }
+    .mat-paginator-navigation-next {
+        order: 3;
+    }
+  }
+  @media (max-width: 575px) {
+    .table {
+      min-width: 600px;
+    }
+  
+  }

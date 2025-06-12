@@ -1,0 +1,127 @@
+<div class="card">
+  <div class="card-header">
+    <h4 class="p-0 m-0">Search</h4>
+  </div>
+  <div class="card-body" *ngIf="data === '/masters/salesman'">
+    <app-advance-search-form-salesman-load [routes]="masterData?.route" [roles]="masterData?.salesman_role"
+      [types]="masterData?.salesman_type" #activeComponent>
+    </app-advance-search-form-salesman-load>
+  </div>
+  <div class="card-body" *ngIf="data === '/masters/merchandiser'">
+    <app-advance-search-form-salesman-load [routes]="masterData?.route" [roles]="masterData?.salesman_role"
+      [types]="masterData?.salesman_type" #activeComponent>
+    </app-advance-search-form-salesman-load>
+  </div>
+  <div class="card-body" *ngIf="data === '/masters/customer'">
+    <app-advance-search-form-customer [routes]="masterData?.route" [organizations]="masterData?.sales_organisation"
+      [channels]="masterData?.channel" [regions]="masterData?.region" #activeComponent>
+    </app-advance-search-form-customer>
+  </div>
+  <div class="card-body" *ngIf="data === '/masters/item'">
+    <app-advance-search-form-item #activeComponent></app-advance-search-form-item>
+  </div>
+  <div class="card-body" *ngIf="data === '/masters/journey-plan'">
+    <app-advance-search-form-journey-plan [salesman]="masterData?.salesmans" [routes]="masterData?.route"
+      #activeComponent></app-advance-search-form-journey-plan>
+  </div>
+  <div class="card-body" *ngIf="data === '/transaction/order'">
+    <app-advance-search-form-order [items]="masterData?.items" [orderCreatedUser]="masterData?.order_created_user"
+      [storageLocation]="masterData?.storage_location" #activeComponent></app-advance-search-form-order>
+  </div>
+  <div class="card-body" *ngIf="data === '/transaction/invoice'">
+    <app-advance-search-form-invoice #activeComponent [salesman]="masterData?.salesmans"
+      [storageLocation]="masterData?.storage_location">
+    </app-advance-search-form-invoice>
+  </div>
+  <div class="card-body" *ngIf="data === '/transaction/delivery'">
+    <app-advance-search-form-delivery #activeComponent [salesman]="masterData?.salesmans"
+      [storageLocation]="masterData?.storage_location">
+    </app-advance-search-form-delivery>
+  </div>
+  <div class="card-body" *ngIf="data === '/transaction/collection'">
+    <app-advance-search-form-collections #activeComponent></app-advance-search-form-collections>
+  </div>
+  <div class="card-body" *ngIf="data === '/transaction/credit-note'">
+    <app-advance-search-form-creditnote [salesman]="masterData?.salesmans" #activeComponent>
+    </app-advance-search-form-creditnote>
+  </div>
+  <div class="card-body" *ngIf="data === '/transaction/debit-note'">
+    <app-advance-search-form-debitnote [salesman]="masterData?.salesmans" #activeComponent>
+    </app-advance-search-form-debitnote>
+  </div>
+  <div class="card-body" *ngIf="data === '/estimate'">
+    <app-advance-search-form-estimates #activeComponent></app-advance-search-form-estimates>
+  </div>
+  <div class="card-body" *ngIf="data === '/expense'">
+    <app-advance-search-form-expense #activeComponent></app-advance-search-form-expense>
+  </div>
+  <div class="card-body" *ngIf="data === '/masters/vendor'">
+    <app-advance-search-form-vendors #activeComponent></app-advance-search-form-vendors>
+  </div>
+  <div class="card-body" *ngIf="data === '/inventory/purchase-order'">
+    <app-advance-search-form-purchase-order #activeComponent></app-advance-search-form-purchase-order>
+  </div>
+  <div class="card-body" *ngIf="data === '/merchandising/stockinstore'">
+    <app-advance-search-form-stockinstore [customer]="masterData?.customers" #activeComponent>
+    </app-advance-search-form-stockinstore>
+  </div>
+  <div class="card-body" *ngIf="data === '/merchandising/complaint-feedback'">
+    <app-advance-search-form-complaint [salesman]="masterData?.salesmans" #activeComponent>
+    </app-advance-search-form-complaint>
+  </div>
+  <div class="card-body" *ngIf="data === '/merchandising/competitors'">
+    <app-advance-search-form-competitor [salesman]="masterData?.salesmans" #activeComponent>
+    </app-advance-search-form-competitor>
+  </div>
+  <div class="card-body" *ngIf="data === '/merchandising/campaigns'">
+    <app-advance-search-form-campaign [salesman]="masterData?.salesmans" #activeComponent>
+    </app-advance-search-form-campaign>
+  </div>
+  <div class="card-body" *ngIf="data === '/merchandising/planograms'">
+    <app-advance-search-form-planogram [customer]="masterData?.customers" #activeComponent>
+    </app-advance-search-form-planogram>
+  </div>
+  <div class="card-body" *ngIf="data === '/merchandising/shelf-display'">
+    <app-advance-search-form-shelf-display [customer]="masterData?.customers" #activeComponent>
+    </app-advance-search-form-shelf-display>
+  </div>
+  <div class="card-body" *ngIf="data === '/merchandising/price-check'">
+    <app-advance-search-form-price-check [customer]="masterData?.customers" [merchandisers]="masterData?.merchandiser"
+      [brands]="masterData?.brand_list" #activeComponent>
+    </app-advance-search-form-price-check>
+  </div>
+  <div class="card-body" *ngIf="data === '/merchandising/sos'">
+    <app-advance-search-form-sos [customer]="masterData?.customers" [brands]="masterData?.brand_list"
+      [categories]="masterData?.item_major_category_list" [merchandisers]="masterData?.merchandiser" #activeComponent>
+    </app-advance-search-form-sos>
+  </div>
+  <div class="card-body" *ngIf="data === '/merchandising/asset-tracking'">
+    <app-advance-search-form-asset-track [customer]="masterData?.customers" #activeComponent>
+    </app-advance-search-form-asset-track>
+  </div>
+  <div class="card-body" *ngIf="data === '/merchandising/consumer-survey'">
+    <app-advance-search-form-consumer [customer]="masterData?.customers" #activeComponent>
+    </app-advance-search-form-consumer>
+  </div>
+  <div class="card-body" *ngIf="data === '/merchandising/sensory-survey'">
+    <app-advance-search-form-sensory #activeComponent>
+    </app-advance-search-form-sensory>
+  </div>
+  <div class="card-body" *ngIf="data === '/merchandising/promotional'">
+    <app-advance-search-form-promotional [items]="masterData?.promotional_item" #activeComponent>
+    </app-advance-search-form-promotional>
+  </div>
+  <div class="card-body" *ngIf="data === '/merchandising/market-promotion'">
+    <app-advance-search-form-market-promotion [customer]="masterData?.customers"
+      [merchandisers]="masterData?.merchandiser" #activeComponent>
+    </app-advance-search-form-market-promotion>
+  </div>
+  <div class="card-footer">
+    <div class="d-inline float-right">
+      <button class="btn btn-sm btn-white mr-2" (click)="search(true)" mat-dialog-close>
+        Reset
+      </button>
+      <button class="btn btn-sm btn-p" (click)="search(false)">Search</button>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,39 @@
+<mat-drawer-container class="formdrawer-container" hasBackdrop="false">
+  <section class="scrollxy">
+    <div class="table-box mobiletb customerbox" [ngClass]="{ collapsed: isDetailVisible }">
+      <div class="heading-row">
+        <p class="h4 font-weight-light d-inline" *ngIf="!isDetailVisible">
+          Campaign Information
+        </p>
+        <div class="d-inline float-right">
+          <button type="button" class="btn btn-sm btn-p mr-2" appPermission [permissions]="userPermissions"
+            [type]="'create'"><i class="os-icon os-icon-plus mr-2" aria-hidden="true"></i>New</button>
+            <button *ngIf="checkedRows.length > 0" class="btn btn-sm btn-white dropdown-toggle ml-2" mat-button
+              [matMenuTriggerFor]="menu2">
+              Bulk Actions
+            </button>
+            <mat-menu #menu2="matMenu">
+              <button mat-menu-item (click)="bulkAction('active')">Mark as Active</button>
+              <button mat-menu-item (click)="bulkAction('inactive')" >Mark as Inactive</button>
+              <!-- <button mat-menu-item (click)="bulkAction('delete')" appPermission [permissions]="userPermissions" [type]="'delete'">
+                Delete
+              </button> -->
+            </mat-menu>
+          <!-- impot /Export  -->
+          <button class="btn btn-sm btn-white ml-2 dropdown-toggle" [matMenuTriggerFor]="menu3">
+            <i class="fa fa-bars" aria-hidden="true"></i>
+          </button>
+          <mat-menu #menu3="matMenu">
+            <button mat-menu-item (click)="openImpotCampaign()">Import Campaign</button>
+            <button mat-menu-item type="button" (click)="openExportCampaign()">Export Campaign</button>
+          </mat-menu>
+        </div>
+      </div>
+      <app-campaign-dt (selectedRows)="selectedRows($event)" (itemClicked)="itemClicked($event)" [newCompaignData]="newCompaignData"></app-campaign-dt>
+    </div>
+    <div class="details-box" [ngClass]="{ expanded: isDetailVisible }">
+      <app-campaign-details (detailsClosed)="closeClicked()" [isDetailVisible]="isDetailVisible" [campaign]="campaign">
+      </app-campaign-details>
+    </div>
+  </section>
+</mat-drawer-container>

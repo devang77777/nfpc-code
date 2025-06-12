@@ -1,0 +1,20 @@
+<div class="container-fluid">
+    <div class="row  " style="background-color:#effff2;">
+        <div class="col-md-11" style="padding: 5px 40px;">
+            <h3 class="text-success bold" style="font-style: italic;"><strong>Search Criteria</strong></h3>
+            <div style="padding: 1px 20px;">
+                <ul style="list-style-type: circle;">
+                    <li *ngFor="let item of data">{{item.param}} is <strong>{{item.value}}</strong></li>
+                </ul>
+            </div>
+            <br>
+            <a style="color: #7373d9;" (click)="changCriterial()">
+                <strong style="display: flex; align-items: center; cursor: pointer;"><span>Change Criteria</span>
+                    <mat-icon>trending_flat</mat-icon>
+                </strong></a>
+        </div>
+        <div class="col-md-1 text-right" style="cursor: pointer;">
+            <mat-icon (click)="onClose()">close</mat-icon>
+        </div>
+    </div>
+</div>

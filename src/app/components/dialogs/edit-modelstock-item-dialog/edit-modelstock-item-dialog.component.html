@@ -1,0 +1,64 @@
+<section class="makeScrollable">
+    <div class="card-header">
+      <span class="h6" style="font-size: 20px;"><b>Edit Item</b></span>
+      <button class="dialog-close-btn" (click)="close()" mat-dialog-close>
+        <i class="fa fa-times fa-lg" aria-hidden="true"></i>
+      </button>
+    </div>
+    <div class="channel-holder">
+      <div class=" data-body">
+            <form [formGroup]="itemFormGroup" novalidate>
+                <div class="row m-0">
+                    <div class="col-md-6">
+                        <div class="form-group row">
+                        <label class="col-sm-3 col-form-label">Item Code</label>
+                        <label class="col-sm-9 col-form-label">{{itemData.item?.item_code}}</label>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group row">
+                        <label class="col-sm-3 col-form-label">Item</label>
+                        <label class="col-sm-9 col-form-label">{{itemData.item?.item_name}}</label>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="form-group row">
+                        <label class="col-sm-4 col-form-label">Item Uom</label>
+                        <div class="col-sm-8">
+                            <mat-select class="form-control form-control-sm w-80" formControlName="item_uom_id">
+                                <mat-option *ngFor="let uom of itemUomLists" [value]="uom.id">{{uom.name}}</mat-option>
+                            </mat-select>
+                        </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="form-group row">
+                        <label class="col-sm-3 col-form-label">Capacity</label>
+                        <div class="col-sm-9">
+                            <input class="form-control form-control-sm w-80" type="number" formControlName="capacity">
+                        </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="form-group row">
+                        <label class="col-sm-5 col-form-label">Total Facing</label>
+                        <div class="col-sm-7">
+                            <input class="form-control form-control-sm w-80" type="number" formControlName="total_number_of_facing">
+                        </div>
+                        </div>
+                    </div>
+                </div>
+                <hr>
+                <div class="cancel-btn">
+                    <button mat-button class="mat-inherit-line-height height-40" (click)="close()" mat-dialog-close>
+                        Cancel
+                    </button>
+                    <button class="btn btn-sm btn-p btn-primary mr-2" (click)="saveItem()">
+                        Save
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</section>
+            

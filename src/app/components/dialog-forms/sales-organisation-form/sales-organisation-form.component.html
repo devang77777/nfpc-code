@@ -1,0 +1,81 @@
+<section>
+  <div class="card-header">
+    <span class="h6">Manage Sales Organisation</span>
+    <button class="dialog-close-btn" mat-dialog-close>
+      <i class="fa fa-times fa-lg" aria-hidden="true"></i>
+    </button>
+  </div>
+  <div class="form-container" *ngIf="showForm">
+    <form [formGroup]="salesOrganisationForm">
+      <div class="container">
+        <div class="row mb-2">
+          <div class="col-4">Sales Organisation Name</div>
+          <div class="col-8">
+            <input [ngClass]="{
+                'invalid-input':
+                  salesOrganisationFormControl.invalid &&
+                  (salesOrganisationFormControl.dirty ||
+                    salesOrganisationFormControl.touched)
+              }" class="form-control form-control-sm" type="text" [formControl]="salesOrganisationFormControl" />
+            <div *ngIf="
+                salesOrganisationFormControl.invalid &&
+                (salesOrganisationFormControl.dirty ||
+                  salesOrganisationFormControl.touched)
+              " class="text-danger">
+              <div><small>Sales Organisation name is required.</small></div>
+            </div>
+          </div>
+        </div>
+        <div class="row mb-2">
+          <div class="col-4">Parent SalesOrganisation</div>
+          <div class="col-8">
+            <app-tree-dropdown class="salesOrganisation-dropdown" [isManageable]="false"
+              [dataSource]="salesOrganisationData" [dataService]="salesOrganisationProvider()"
+              (whenItemSelected)="salesOrganisationSelected($event)" [selectFormControl]="parentFormControl"
+              [placeHolder]="'Search a parent Sales Organisation'" ngDefaultControl>
+            </app-tree-dropdown>
+          </div>
+        </div>
+      </div>
+
+      <div class="save-btn">
+        <button mat-button class="mat-inherit-line-height btn-green" (click)="saveSalesOrganisationData()">
+          Save
+        </button>
+        <button mat-button class="mat-inherit-line-height" (click)="showForm = false">
+          Cancel
+        </button>
+      </div>
+    </form>
+  </div>
+
+  <div class="categories-title">
+    <h4>
+      Sales Organisation
+      <span class="add-new-label"><button (click)="addNewSalesOrganisation()" *ngIf="salesOrganisationData.length > 0"
+          [type]="'create'">
+          <i class="fa fa-plus-circle"></i>Add New Sales Organisation
+        </button></span>
+    </h4>
+  </div>
+  <div class="empty-list text-center mt-4" *ngIf="isLoaded">
+    <p class="text-muted" *ngIf="salesOrganisationData.length == 0">
+      No Sales Organisation available
+    </p>
+    <button  [type]="'create'" mat-button class="add-new-btn"
+      *ngIf="salesOrganisationData.length == 0 && !showForm" (click)="addNewSalesOrganisation()">
+      Add New Sales Organisation
+    </button>
+  </div>
+  <div class="sales-org-holder">
+    <app-tree-container (applyData)="applySalesOrganisation($event)" (editData)="editSalesOrganisation($event)"
+      (deleteData)="deleteSalesOrganisation($event)" [treeData]="salesOrganisationData">
+    </app-tree-container>
+  </div>
+
+  <div class="cancel-btn">
+    <button mat-button class="mat-inherit-line-height height-40" mat-dialog-close>
+      Cancel
+    </button>
+  </div>
+</section>

@@ -1,0 +1,49 @@
+<div class="card">
+  <div class="card-header pt-4">
+    <span class="h6 font-weight-bold">Export Asset Tracking</span>
+    <a [mat-dialog-close]="true" class="closeicon settingclose"><i class="os-icon os-icon-x"></i></a>
+  </div>
+  <div class="card-body">
+    <p>Asset traking can export data from Invoice in CSV or XLS format.</p>
+    <mat-divider></mat-divider>
+
+    <form [formGroup]="exportForm">
+      <div>
+        <section class="full-w">
+          <mat-radio-group formControlName="type" name="type" [(ngModel)]="export.type">
+            <mat-radio-button class="example-margin full-w" value="all">All Asset Tracking</mat-radio-button>
+            <mat-radio-button class="example-margin full-w" value="1">Specific Asset Tracking</mat-radio-button>
+          </mat-radio-group>
+        </section>
+
+        <div class="half-w row" *ngIf="export.type === '1'">
+          <div class="col-8">
+            <label class="full-w">From </label>
+            <input type="date" formControlName="startDate" name="startDate" class="form-control form-control-sm"
+              placeholder="Choose From Date" [(ngModel)]="export.startDate">
+          </div>
+          <div class="col-8">
+            <label class="full-w">To </label>
+            <input type="date" formControlName="endDate" [min]="export.startDate" name="endDate"
+              class="form-control form-control-sm" placeholder="Choose To Date" [(ngModel)]="export.endDate"></div>
+        </div>
+
+        <section class="full-w">
+          <label>Export As : </label>
+          <mat-radio-group formControlName="fileType" name="fileType" [(ngModel)]="export.fileType">
+            <mat-radio-button class="example-margin full-w" value="csv">CSV (Comma Separated Value)</mat-radio-button>
+            <mat-radio-button class="example-margin full-w" value="xlsx">XLS (Microsoft Excel Compatible)
+            </mat-radio-button>
+          </mat-radio-group>
+        </section>
+      </div>
+    </form>
+  </div>
+  <div class="card-footer">
+    <div class="d-inline float-right">
+      <button class="btn btn-sm btn-p" [mat-dialog-close]="true" (click)="exportAssert()">
+        Export
+      </button>
+      <button class="btn btn-sm btn-white mr-2" mat-dialog-close>Cancel</button>
+    </div>
+  </div>

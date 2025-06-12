@@ -1,0 +1,318 @@
+<section>
+    <div class="heading-row clearfix">
+        <h2 class="d-md-inline">
+            <i class="fa fa-credit-card mr-2"></i>Credit Note
+            <span class="order-number">#{{ creditNoteData?.credit_note_number }}</span>
+        </h2>
+        <div class="d-inline float-right">
+            <div class="btn-group btnrow mr-2">
+                <button class="btn" type="button" [autoClose]="'outside'" triggers="manual" #email="ngbPopover"
+                    placement="bottom" (click)="email.open();" [ngbPopover]="emailPopContent"
+                    [popoverTitle]="emailPopTitle">
+                    <i class="os-icon os-icon-mail"></i>
+                </button>
+                <button *ngIf="showOrderEditAndDelete" class="btn" type="button" disabled
+                    [routerLink]="['/transaction/credit-note/edit', creditNoteData?.uuid]">
+                    <i class="os-icon os-icon-edit-32"></i>
+                </button>
+                <button class="btn" type="button" (click)="getDocument('pdf')">
+                    <mat-icon [inline]="true">picture_as_pdf</mat-icon>
+                </button>
+                <button class="btn" type="button" printSectionId="print-section" printTitle="Statement" [printStyle]="{
+          h1: { color: 'red' },
+          h2: { border: 'solid 1px' }
+        }" [useExistingCss]="true" ngxPrint>
+                    <i class="os-icon os-icon-printer"></i>
+                </button>
+                <button class="btn" type="button">
+                    <i class="os-icon os-icon-mail"></i>
+                </button>
+                <button class="btn" type="button" disabled>
+                    <mat-icon [inline]="true">attach_file</mat-icon>
+                </button>
+                <button (click)="onToggleHistory()" class="btn" type="button">
+                    <mat-icon [inline]="true">textsms</mat-icon>
+                </button>
+                <button class="btn" type="button" (click)="openImages()">
+                    <mat-icon [inline]="true">collections</mat-icon>
+                </button>
+            </div>
+            <span>
+
+                <button [disabled]="creditNoteData?.approval_status=='Completed'"
+                    *ngIf="(currentRole=='SC' || currentRole=='org-admin') && creditNoteData?.current_stage =='Approved'"
+                    class="btn btn-sm btn-white mr-2 dropdown-toggle" [matMenuTriggerFor]="menu2">
+                    More
+                </button>
+                <mat-menu #menu2="matMenu" xPosition="before">
+                    <!-- <button mat-menu-item class="height-40">Clone</button>
+          <button mat-menu-item class="height-40">Void</button>
+          <button *ngIf="showOrderEditAndDelete" mat-menu-item class="height-40" appPermission
+            [permissions]="userPermissions" [type]="'delete'" (click)="openDeleteBox()">
+            Delete
+          </button>
+          <button *ngIf="showOrderStatusOptions" mat-menu-item class="height-40" (click)="openApplyToInvoiceModal()">
+            Apply to Invoice
+          </button> -->
+                    <button mat-menu-item type="button" (click)="allocatedGRV()">Allocated GRV</button>
+
+                </mat-menu>
+            </span>
+            <button class="btn" (click)="closeDetailView()">
+                <i class="os-icon os-icon-close"></i>
+            </button>
+        </div>
+    </div>
+    <div class="separator"></div>
+    <div class="approval-holder" *ngIf="hasApprovalPending">
+        <div class="approval-box">
+            <div class="approve-icon">
+                <i class="fa fa-check-square-o"></i>
+            </div>
+            <div class="approve-content">
+                <h2>Approve this Credit Note</h2>
+                <p>
+                    This Credit Note has been submitted for approval. Verify and approve the credit note.
+                </p>
+            </div>
+            <div class="approve-actions">
+                <button mat-button class="approve" (click)="approve()">Approve</button>
+                <button mat-button class="reject" (click)="openPopUp()">Reject</button>
+            </div>
+        </div>
+    </div>
+    <form class="order-form custom-mat square scrolly">
+        <div class="card-header active-form overview">
+            <div class="row">
+                <div class="col-md-4">
+                    <div class="form-group" *ngIf="!isDepotOrder">
+                        <label for="">Customer</label>
+                        <input type="text" class="form-control form-control-sm non-editable" [value]="
+                creditNoteData?.customer
+                ? creditNoteData?.customer?.customerinfo?.customer_code +' '+ creditNoteData?.customer.firstname +
+                    '' +
+                    creditNoteData?.customer.lastname
+                  : ''
+              " disabled />
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="card-body overview">
+            <div class="row justify-content-between">
+                <div class="col-md-4">
+                    <div class="form-group" *ngIf="!isDepotOrder">
+                        <label for="">Customer Lob</label>
+                        <input type="text" class="form-control form-control-sm non-editable" [value]="
+            creditNoteData?.lob?.name || ''" disabled />
+                    </div>
+                    <div class="form-group" *ngIf="creditNoteData?.storageocation?.code">
+                        <label for="">Warehouse</label>
+                        <input type="text" class="form-control form-control-sm non-editable" [value]="
+                        creditNoteData?.storageocation?.code +'-'+ creditNoteData?.storageocation?.name || ''"
+                            disabled />
+                    </div>
+                    <!-- <div class="form-group">
+                        <label for="">Credit Note Type</label>
+                        <input type="text" class="form-control form-control-sm non-editable" [value]="
+            creditNoteData?.creditNoteType || ''" disabled />
+                    </div> -->
+                    <div class="form-group" *ngIf="creditNoteData?.invoice?.invoice_number">
+                        <label for="">Invoice</label>
+                        <input type="text" class="form-control form-control-sm non-editable"
+                            [value]="creditNoteData?.invoice?.invoice_number" disabled />
+                    </div>
+                    <div class="form-group">
+                        <label for="">Customer GRV No</label>
+                        <input type="text" class="form-control form-control-sm non-editable"
+                            [value]="creditNoteData?.customer_reference_number" disabled />
+                    </div>
+                    <!-- <div class="form-group">
+                        <label for="">Reason</label>
+                        <input type="text" class="form-control form-control-sm non-editable"
+                            [value]="creditNoteData?.reason" disabled />
+                    </div> -->
+                    <!-- <div class="form-group">
+                        <label>Salesman</label>
+                        <input type="text" class="form-control form-control-sm non-editable" [value]="
+            creditNoteData?.salesman
+                  ? creditNoteData?.salesman?.firstname +
+                    ' ' +
+                    creditNoteData?.salesman?.lastname
+                  : ''
+              " disabled />
+                </div>-->
+                </div>
+                <div class="col-md-4">
+                    <div class="form-group">
+                        <label for="">Credit Note Number</label>
+                        <input type="text" class="form-control form-control-sm non-editable"
+                            [value]="creditNoteData?.credit_note_number" disabled />
+                    </div>
+                    <div class="form-group">
+                        <label for="">Credit Note Date</label>
+                        <input type="date" class="form-control form-control-sm non-editable"
+                            [value]="creditNoteData?.credit_note_date" disabled />
+                    </div>
+                    <div class="form-group">
+                        <label for="">Customer GRV Amount</label>
+                        <input type="text" class="form-control form-control-sm non-editable"
+                            [value]="creditNoteData?.customer_amount" disabled />
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div>
+            <div class="item-container custom-mat custom-mat-no-border">
+                <table class="item-table cardtable">
+                    <thead>
+                        <tr>
+                            <th class="head" *ngFor="let head of itemTableHeaders">
+                                {{ head.label }}
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody class="form-body">
+                        <tr class="item-row" *ngFor="
+                let item of creditNoteData?.credit_note_details;
+                let i = index
+              ">
+                            <td data-th="#">{{ i + 1 }}</td>
+                            <td data-th="ITEM NAME	" style="width: 150px;" class="item-name">
+                                <!-- <input type="text" class="form-control form-control-sm non-editable" [value]="item?.item?.item_name"
+                  disabled /> -->
+                                <span style="word-break: break-word; font-size: 11px;">{{item?.item?.item_code}}</span>
+                            </td>
+                            <td data-th="Item Name" class="item-name" style="width: 150px;">
+                                <!-- <input type="text" class="form-control form-control-sm non-editable" [value]="item.item.item_name"
+                  disabled /> -->
+                                <span style="word-break: break-word; font-size: 11px;">{{item?.item?.item_name}}</span>
+                            </td>
+
+                            <td data-th="UOM" class="uom-td">
+                                <input type="text" class="form-control form-control-sm non-editable"
+                                    [value]="getUomValue(item.item_uom_id)" disabled />
+                            </td>
+
+                            <td data-th="QUANTITY">
+                                <input type="number" min="0" class="form-control non-editable" [value]="item.item_qty"
+                                    disabled />
+                            </td>
+                            <td data-th="REASON" class="uom-td">
+                                <input type="text" class="form-control form-control-sm non-editable"
+                                    [value]="item.reason" disabled />
+                            </td>
+                            <!-- <td data-th="Invoice Number" class="uom-td">
+                <input type="text" class="form-control form-control-sm non-editable" [value]="item?.invoice_number"
+                  disabled />
+              </td>
+              <td data-th="Invoice Amount" class="uom-td">
+                <input type="text" class="form-control form-control-sm non-editable"
+                  [value]="numberFormat(item?.invoice_total)" disabled />
+              </td> -->
+
+
+
+                            <td data-th="Expiry Date">
+                                <input type="date" min="0" class="form-control non-editable"
+                                    [value]="item.item_expiry_date" disabled />
+                            </td>
+
+                            <td data-th="PRICE">
+                                <input type="text" class="form-control non-editable"
+                                    [value]="numberFormat(item.item_price)" disabled />
+                            </td>
+                            <td data-th="EXCISE">
+                                <input type="text" class="form-control non-editable"
+                                    [value]="numberFormat(item.item_excise)" disabled />
+                            </td>
+                            <td data-th="DISCOUNT">
+                                <input type="text" class="form-control non-editable"
+                                    [value]="numberFormat(item.item_discount_amount)" disabled />
+                            </td>
+                            <td data-th="NET">
+                                <input type="text" class="form-control non-editable"
+                                    [value]="numberFormat(item.item_net)" disabled />
+                            </td>
+                            <td data-th="VAT">
+                                <input type="text" class="form-control non-editable"
+                                    [value]="numberFormat(item.item_vat)" disabled />
+                            </td>
+                            <td data-th="TOTAL">
+                                <input type="text" class="form-control non-editable"
+                                    [value]="numberFormat(item.item_grand_total)" disabled />
+                            </td>
+                            <td data-th="Driver Name">
+                                <input type="text" class="form-control non-editable"
+                                    [value]="item?.template_driver_name" disabled />
+                            </td>
+                            <!-- <td data-th="Vehicle No">
+                <input type="text" class="form-control non-editable" [value]="item?.template_vechicle" disabled />
+              </td> -->
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="footer-overview-container">
+                <div class="row justify-content-end">
+                    <div class="col-sm-4">
+                        <div class="overall-stats-table">
+                            <div *ngFor="let stat of orderStats.slice(0, orderStats.length - 1)">
+                                <span class="stat-label">{{ stat.label }}</span>
+                                <span class="stat-value">{{
+                                    creditNoteData && numberFormatWithSymbol(creditNoteData[stat.key])
+
+                                    }}</span>
+                            </div>
+                            <div>
+                                <span class="stat-label final-total">Total</span>
+                                <span class="stat-value final-total">{{
+                                    numberFormatWithSymbol(creditNoteData?.grand_total)
+                                    }}</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+    <!-- <div class="footer-block"></div> -->
+</section>
+
+<ng-template #emailPopTitle>
+    <span>Sent Credit Note {{creditNoteData.credit_note_number}}</span>
+</ng-template>
+<ng-template #emailPopContent>
+    <app-send-email [data]="emailData" (close)="email.close()"></app-send-email>
+</ng-template>
+
+<div class="card border" id="print-section">
+    <div class="card-body" [innerHTML]="creditNoteTemplate"></div>
+</div>
+
+<div *ngIf="isReasonPopup" style="display:flex;width:100%;position:fixed;left:0;top:0;background: #0007;height:100vh; justify-content: center;align-items: center;">
+  <div style="background:white; width:300px;height:200px;position:relative; padding: 10px;">
+   <div class="row mb-3">
+     <div class="col">
+       <label  for="">Reason<i class="text-red">*</i>:</label>
+
+       <div class="siconhol">
+         <mat-select [(ngModel)]="reasonType" class="form-control form-control-sm"
+         placeholder="Reason Type">
+            <mat-option value="Wrong customer GRV Ref No"> Wrong customer GRV Ref No</mat-option>
+            <mat-option value="Wrong GRV amount">Wrong GRV amount</mat-option>
+
+         </mat-select>
+
+       </div>
+     </div>
+   </div>
+
+   <div style="position:absolute;bottom:0;display:flex;gap:10px;justify-content: flex-end;width:100%;padding:10px;">
+     <button style="border:0; padding:5px;background: #005689; color:white;" (click)="reject()">Save</button>
+     <button style="border:0; padding:5px;background: white; color:#005689;"(click)="closePopUp()">Cancel</button>
+
+   </div>
+  </div>
+</div>

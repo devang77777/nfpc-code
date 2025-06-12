@@ -1,0 +1,12 @@
+<mat-drawer-container class="formdrawer-container" hasBackdrop="false">
+    <section class="">
+      <div class="table-box mobiletb" [ngClass]="{ 'collapsed': isDetailVisible }">
+        <div class="heading-row">
+          <p class="h4 font-weight-light d-md-inline" *ngIf="!isDetailVisible">Market Promotion</p>
+        </div>
+        <app-market-promo-dt (selectedRows)="selectedRows($event)" (itemClicked)="itemClicked($event)"
+          [newMarketPromoData]="newMarketPromoData">
+        </app-market-promo-dt>
+      </div>
+    </section>
+  </mat-drawer-container>

@@ -1,0 +1,41 @@
+<mat-drawer-container class="formdrawer-container" hasBackdrop="false">
+  <mat-drawer id="formDrawer" mode="over" position="end" #formDrawer class="border">
+    <div style="min-width: 360px;">
+      <app-add-route-group-form (updateTableData)="updateTableData($event)"></app-add-route-group-form>
+    </div>
+  </mat-drawer>
+  <section>
+    <div class="table-box customerbox" [ngClass]="{ collapsed: isDetailVisible }">
+      <div class="heading-row clearfix">
+        <p class="h4 font-weight-light d-inline" *ngIf="!isDetailVisible">
+          Route Item Group
+        </p>
+        <div class="d-inline float-right">
+          <button type="button" class="btn btn-sm btn-p mr-2" (click)="openAddRouteItemGroup()" appPermission
+            [permissions]="userPermissions" [type]="'create'">
+            <i class="os-icon os-icon-plus mr-2" aria-hidden="true"></i>New
+          </button>
+          <button class="btn btn-sm border dropdown-toggle ml-2" mat-button [matMenuTriggerFor]="menu2">
+            Bulk Actions
+          </button>
+        </div>
+
+        <mat-menu #menu2="matMenu">
+          <button mat-menu-item>Mark as Active</button>
+          <button mat-menu-item>Mark as Inactive</button>
+          <button mat-menu-item appPermission [permissions]="userPermissions" [type]="'delete'">
+            Delete
+          </button>
+        </mat-menu>
+      </div>
+      <app-route-groupdt (itemClicked)="itemClicked($event)" [newRouteItemGroupData]="newRouteItemGroupData">
+      </app-route-groupdt>
+    </div>
+    <ng-container *ngIf="isDetailVisible && routeItemGroup">
+      <div class="details-box" [ngClass]="{ expanded: isDetailVisible }">
+        <app-route-group-detail (updateTableData)="updateTableData($event)" (detailsClosed)="closeClicked()"
+          [isDetailVisible]="isDetailVisible" [routeItemGroup]="routeItemGroup"></app-route-group-detail>
+      </div>
+    </ng-container>
+  </section>
+</mat-drawer-container>

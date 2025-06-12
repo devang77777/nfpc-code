@@ -1,0 +1,88 @@
+<section *ngIf="user">
+    <div class="pl-3">
+        <div class="row">
+            <h2 class="page-title col-sm-10 font-weight-light">{{user.firstname || user?.user?.firstname}} {{user.lastname || user?.user?.lastname}}</h2>
+            <div class="actions col-sm-2">
+                <button (click)="openEditUser()" class="iconbtn "><i class="os-icon os-icon-edit    "  aria-hidden="true"></i></button>
+                <!-- <div>
+                    <button class="btn btn-sm border" mat-button [matMenuTriggerFor]="menu2">More</button>
+                    <mat-menu #menu2="matMenu">
+                        <button mat-menu-item (click)="toggleStatus()">Mark as
+                            {{ item.item_status === 0 ? 'Active' : 'Inactive' }}</button>
+                        <button mat-menu-item (click)="openDeleteBox()">Delete</button>
+                    </mat-menu>
+                </div> -->
+                <!-- <div>
+                    <button class="btn btn-sm btn-white dropdown-toggle" mat-button [matMenuTriggerFor]="menu2">
+                      More
+                    </button>
+                    <mat-menu #menu2="matMenu">
+                      <button mat-menu-item (click)="toggleStatus()">
+                        Mark as {{ user?.user_status === 0 ? "Active" : "Inactive" }}
+                      </button>
+                    </mat-menu>
+                  </div> -->
+                  <div>
+                    <button class="btn btn-sm btn-white dropdown-toggle" mat-button [matMenuTriggerFor]="menu2">More</button>
+                    <mat-menu #menu2="matMenu">
+                      <button mat-menu-item (click)="toggleStatus()">Mark as
+                        {{ user?.status === 0 ? 'Active' : 'Inactive' }}</button>
+                    </mat-menu>
+                  </div>
+                  
+                <button *ngIf="isDetailVisible" class="btn" (click)="closeDetailView()"><i
+                        class="os-icon os-icon-close"></i></button>
+            </div>
+        </div>
+    </div>
+    <div class="pl-3 item-data">
+        <div class="row h-100">
+            <div class="col-12 border-left ">
+                <mat-tab-group mat-align-tabs="start" [(selectedIndex)]="selectedTab"
+                (selectedTabChange)="selectedTabChange($event.index)">
+                    <mat-tab label="General">
+                        <div class="details-container">
+                            <table style="width: 50%;" class="table table-hover">
+                                <!-- <tr>
+                                    <td class="table-title">Id</td>
+                                    <td class="table-value">{{user.id}}</td>
+                                </tr> -->
+                                <tr>
+                                    <td class="table-title">Role</td>
+                                    <td class="table-value">{{user?.role?.name || user?.user?.role?.name}}</td>
+                                </tr>
+                                <tr>
+                                    <td class="table-title">email</td>
+                                    <td class="table-value">{{user?.email || user?.user?.email}}</td>
+                                </tr>
+                                <tr>
+                                    <td class="table-title">Mobile</td>
+                                    <td class="table-value">{{user?.mobile || user?.user?.mobile}}</td>
+                                </tr>
+                                
+                                <tr>
+                                    <td class="table-title">Status</td>
+                                    <!-- <td>{{user.user_status === 0 ? 'Active' : 'In Active'}}</td> -->
+                                    <td *ngIf="user.status === 1;else elseBlock" class="table-value"> Active</td>
+                                    <ng-template #elseBlock>
+                                        <td class="table-value">In active</td>
+                                    </ng-template>
+                                </tr>
+                            </table>
+
+                        </div>
+                    </mat-tab>
+                    <mat-tab label="Activity">
+
+
+
+
+                    </mat-tab>
+                    <mat-tab label="Login Info">
+                        <app-login-info [loginData]="loginData"  [user_id]="user?.id" ></app-login-info>
+                      </mat-tab>
+                </mat-tab-group>
+            </div>
+        </div>
+    </div>
+</section>

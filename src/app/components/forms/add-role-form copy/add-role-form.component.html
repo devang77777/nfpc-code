@@ -1,0 +1,84 @@
+<form  [formGroup]="roleFormGroup" (ngSubmit)="createRole()" >
+<div class="role-form">
+    <div class="card">
+        <div class="card-header form-header pt-4">
+            <span class="h6 font-weight-bold text-secondary">{{formType}} Role</span>
+            <a (click)="close()" class="closeicon settingclose"><i class="os-icon os-icon-x float-right" aria-hidden="true"></i></a>
+        </div>
+       
+        <div class="card-body form-body">
+            
+                <div class="">
+                    <div class="row mb-4">
+                        <div class="col-md-4 ">Role Name*</div>
+                        <div class="col-md-8">
+                            <input formControlName="name"
+                                class="form-control form-control-sm" type="text">
+                        </div>
+                    </div>
+                    <div class="row mb-4">
+                        <div class="col-md-4 ">Description*</div>
+                        <div class="col-md-8">
+                            <textarea
+                            formControlName="description"
+                                class="form-control form-control-sm"  rows="3"></textarea>
+                        </div>
+                    </div>
+                </div>
+        
+            <div class="card border mb-2">
+                <div class="card-header">
+                    <h4 class="m-0"></h4>
+                </div>
+                <div class="card-body p-0">
+                  <div class="table-responsive">
+                    <table class="table table-hover table-bordered">
+                        <thead>
+                            <tr>
+                                <td style="width: 130px;"></td>
+                                <td>Full Access</td>
+                                <td>View</td>
+                                <td>Create</td>
+                                <td>Edit</td>
+                                <td>Delete</td>
+                            </tr>
+                        </thead>
+                        <tbody class="mb-2" >
+                            <ng-container formArrayName="modules" >
+
+                                <tr  *ngFor="let module of modulesFormArray.controls; let i = index" [formGroupName]="i"  >
+                                    <td>{{module.get('name').value.name}}</td>
+                                    <td >
+                                        <mat-checkbox [hidden]="checkAllowedPermission(module.get('name').value.name)"  (change)="onFullAccess($event, i)" formControlName="all" ></mat-checkbox>
+                                    </td>
+                                    <td >
+                                        <mat-checkbox  formControlName="list" ></mat-checkbox>
+                                    </td>
+                                    <td>
+                                        <mat-checkbox [hidden]="checkAllowedPermission(module.get('name').value.name)" formControlName="add" ></mat-checkbox>
+                                    </td>
+                                    <td >
+                                        <mat-checkbox [hidden]="checkAllowedPermission(module.get('name').value.name)" formControlName="edit" ></mat-checkbox>
+                                    </td>
+                                    <td >
+                                        <mat-checkbox [hidden]="checkAllowedPermission(module.get('name').value.name)" formControlName="delete" ></mat-checkbox>
+                                    </td>
+                                </tr>
+                            </ng-container>
+                        </tbody>
+                    </table>
+                  </div>
+                </div>
+            </div>
+           
+        </div>
+   
+        <div class="card-footer form-footer">
+            <div class="d-inline float-right">
+                <button class="btn btn-sm btn-light mr-2" (click)="close()">Cancel</button>
+                <button class="btn btn-sm btn-p" [disabled]="roleFormGroup.invalid" >Save</button>
+            </div>
+        </div>
+    </div>
+</div>
+</form>

@@ -1,0 +1,36 @@
+<div class="content-wrapper" style="margin-top:0px; height: 100%;">
+    <div class="text-center">
+        <img src="assets/images/logo.png" alt="" srcset="" width="150px" class="mt-4">
+    </div>
+    <div class="row flex-grow">
+        <div class="col-lg-4 mx-auto">
+            <div *ngIf="invalid" class="alert alert-danger" role="alert">
+                {{message}}
+            </div>
+            <div class="card" class="mb-5 rounded" style="border-radius: 5px;">
+                <div class="auth-form-light text-left">
+                    <!-- <div class="brand-logo">
+                        <img src="" alt="" srcset="">
+                    </div> -->
+                    <p class="h3 font-weight-light text-center">Set Password</p>
+                    <br>
+                    <form [formGroup]="setPasswordFormGroup" class="needs-validation" (ngSubmit)="onSubmit()">
+                        <input type="password" class="form-control form-rounded" formControlName="password"
+                            placeholder="Password" />
+                        <br>
+                        <input type="password" class="form-control form-rounded" formControlName="password_confirmation"
+                            placeholder=" Confirm Password" />
+                        <br>
+                        <div class="text-center">
+                            <button class="btn btn-info btn-lg btn-login" type="submit">Confirm</button>
+                        </div>
+
+                    </form>
+                    <!-- <pre>{{setPasswordFormGroup.value | json}}</pre>
+                    email: {{email}}
+                    uuid: {{uuid}} -->
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,12 @@
+button:active {
+  outline: none;
+}
+
+button.mat-menu-item {
+  height: 30px;
+  line-height: normal;
+
+  &:focus {
+    outline: none;
+  }
+}

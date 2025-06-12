@@ -1,0 +1,65 @@
+<section class="makeScrollable">
+  <div class="card-header">
+    <span class="h6" style="font-size: 20px;"><b>Add SalesPerson</b></span>
+    <button class="dialog-close-btn" (click)="close()">
+      <i class="fa fa-times fa-lg" aria-hidden="true"></i>
+    </button>
+  </div>
+  <div class="form-container"*ngIf="showForm">
+    <form [formGroup]="bankFormGroup">
+      <div class="container" style="height: 160px;">
+        <div class="row">
+          <div class="col">
+            <label for="Name">Name</label>
+            <input class="form-control form-control-sm" type="text" [formControl]="NameFormControl"/>
+          </div>
+          <div class="col">
+            <label for="Email">Email</label>
+            <input class="form-control form-control-sm" type="text" [formControl]="emailFormControl" />
+          </div>
+        </div>
+      </div>
+      <div class="save-btn">
+        <button mat-button class="mat-inherit-line-height btn-green" (click)="saveStock()" >
+          Save
+        </button>
+        <button mat-button class="mat-inherit-line-height"(click)="cancelForm()" >
+          Cancel
+        </button>
+      </div>
+    </form>
+  </div>
+  <div class="categories-title">
+    <h4>
+      SalesPerson
+      <span class="add-new-label">
+        <button (click)="addNewStock()" >
+          <i class="fa fa-plus-circle"></i>Add New Salesperson
+        </button>
+      </span>
+    </h4>
+  </div>
+  <div class="channel-holder">
+    <div class="container mt-4 head-container">
+      <div class="row head-row">
+        <div class="col-sm-2" *ngFor="let head of tableHeads">
+          {{ head }}
+        </div>
+      </div>
+    </div>
+    <div class="container data-body">
+      <div class="row data-row" *ngFor="let user of stockData">
+        <div class="col-sm-2">{{ user.name }}</div>
+        <div class="col-sm-2">{{ user.email }}</div>
+      </div>
+    </div>
+    <div [ngClass]="{ hidden: getPaginatorValue(dataSource.data.length) }">
+      <mat-paginator pageSize="3" [pageSizeOptions]="[3, 6, 9]"></mat-paginator>
+    </div>
+  </div>
+  <div class="cancel-btn">
+    <button mat-button class="mat-inherit-line-height height-40"  (click)="close()">
+      Cancel
+    </button>
+  </div>
+</section>

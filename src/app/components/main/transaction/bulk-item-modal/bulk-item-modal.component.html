@@ -1,0 +1,90 @@
+<div class="card" [ngClass]="{ 'inactive-form': isItemLoaded }">
+    <div class="card-header pt-4">
+        <span class="h6 font-weight-bold">Bulk Item Selection</span>
+        <a [mat-dialog-close]="true" class="closeicon settingclose"><i class="os-icon os-icon-x"></i></a>
+    </div>
+    <div class="card-body">
+        <div style="display: flex;">
+
+            <div class="mat-item-select-panel" style="width: 50%;">
+                <div style="width: 100% !important;">
+                    <input type="text" placeholder="Search Items" class="form-control" [(ngModel)]="searchItem"
+                        (keyup)="keyUpItem.next($event)">
+                </div>
+                <div class="item-menu-option" *ngFor="let item of items; let i = index;" (click)="onSelectItem(item,i)">
+                    <div class="item-name-menu-option">
+                        {{item.item.item_code}}
+                        <p>{{ item.item.item_name }}</p>
+                    </div>
+                    <div class="item-stock-menu-option"></div>
+                    <div class="item-svg-tick">
+
+                        <div [hidden]="!item?.selected" class="tick-filled"><svg id="Layer_1" data-name="Layer 1"
+                                xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" class="icon icon-xlg">
+                                <path
+                                    d="M256.36.21C115 .21.36 114.83.36 256.21s114.62 256 256 256 256-114.61 256-256-114.61-256-256-256zm134.32 225.48L254.37 362a22.5 22.5 0 01-31.82 0l-70.79-70.79a22.5 22.5 0 1131.82-31.82l54.88 54.88 120.4-120.4a22.5 22.5 0 0131.82 31.82z"
+                                    transform="translate(-.36 -.21)"></path>
+                                <path
+                                    d="M358.86 193.87l-120.4 120.4-54.88-54.88a22.5 22.5 0 10-31.82 31.82L222.55 362a22.5 22.5 0 0031.82 0l136.31-136.31a22.5 22.5 0 00-31.82-31.82z"
+                                    transform="translate(-.36 -.21)" fill="#fff"></path>
+                            </svg></div>
+                    </div>
+                </div>
+                <div class="col-sm-12 text-center">
+                    <span style="cursor:pointer" *ngIf="isLoading">
+                        <mat-spinner *ngIf="isLoading" class="spinner" diameter="20"></mat-spinner>
+                    </span>
+                </div>
+            </div>
+            <div class="mat-item-select-panel" style="width: 50%;">
+                <table mat-table [dataSource]="dataSource" class="">
+                    <!-- Position Column -->
+                    <ng-container matColumnDef="item_code">
+                        <th class="item-code-width" mat-header-cell *matHeaderCellDef>Item Code</th>
+                        <td mat-cell *matCellDef="let element">{{element.item_code}}</td>
+                    </ng-container>
+
+                    <!-- Name Column -->
+                    <ng-container matColumnDef="item_name">
+                        <th mat-header-cell *matHeaderCellDef>Item Name</th>
+                        <td mat-cell *matCellDef="let element" style="max-width: 0px;">{{element.item_name}}</td>
+                    </ng-container>
+
+                    <!-- Weight Column -->
+                    <ng-container matColumnDef="item_uom">
+                        <th class="item-uom-width" mat-header-cell *matHeaderCellDef>Item Uom</th>
+
+                        <td mat-cell *matCellDef="let element"><select class="custom-select"
+                                (change)="changeUom(element,$event.target.value)" [(ngModel)]="element.defaultUOM">
+                                <option [value]="uom?.id" *ngFor="let uom of element?.item_uom_list">{{ uom?.name }}
+                                </option>
+                            </select></td>
+                    </ng-container>
+
+                    <!-- Symbol Column -->
+                    <ng-container matColumnDef="Quantity">
+                        <th mat-header-cell *matHeaderCellDef>Qty</th>
+                        <td mat-cell *matCellDef="let element" style="max-width: 80px;"> <input
+                                class="form-control form-control-sm"
+                                (change)="changeQuantity(element,$event.target.value)" type="number">
+                        </td>
+                    </ng-container>
+                    <ng-container matColumnDef="Action">
+                        <th mat-header-cell *matHeaderCellDef>Action</th>
+                        <td mat-cell *matCellDef="let element">
+                            <button class="trash-btn" (click)="deleteItemRow(element)"><i
+                                    class="fa fa-close"></i></button>
+                        </td>
+                    </ng-container>
+                    <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></tr>
+                    <tr mat-row (click)="clickedRows?.add(row)" *matRowDef="let row; columns: displayedColumns;"></tr>
+                </table>
+            </div>
+        </div>
+
+    </div>
+    <div class="card-footer" style="text-align: right;">
+        <button class="btn btn-primary" (click)="saveItems()">Save</button>
+        <button [mat-dialog-close]="true" class="btn btn-white" style="margin-left: 2px;">Cancel</button>
+    </div>
+</div>

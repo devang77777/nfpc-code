@@ -1,0 +1,24 @@
+mat-header-row {
+  background-color: #181824;
+  border-radius: 8px;
+  min-height: 40px;
+
+  .mat-header-cell {
+    color: white;
+  }
+}
+
+mat-row {
+  min-height: 40px;
+}
+
+.table thead,
+.table thead tr,
+.mat-header-row {
+  background-color: black !important;
+
+  th {
+    background: black;
+    color: #fff;
+  }
+}

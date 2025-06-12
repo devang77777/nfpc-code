@@ -1,0 +1,32 @@
+a {
+  cursor: pointer;
+}
+
+.card-footer {
+  position: fixed;
+  width: 550px;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.03);
+}
+
+.form-box {
+  max-height: calc(100vh - 170px);
+  overflow-y: scroll;
+}
+.settingIcon
+{
+  position: absolute;
+  top: 4px;
+  right: 0;
+    i{
+      font-size: 20px;
+    }
+}
+@media (max-width: 575px) {
+  .card,.card-footer {
+    width: 320px !important;
+  }
+  .container{
+    padding:0;
+  }
+}

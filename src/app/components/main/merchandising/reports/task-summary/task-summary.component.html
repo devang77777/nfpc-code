@@ -1,0 +1,79 @@
+<div class="pl-3  items-table-box">
+    <div class="table-responsive">
+        <table mat-table [dataSource]="itemSource" class="mat-elevation-z8 table table-hover">
+            <ng-container matColumnDef="created_at">
+                <th mat-header-cell *matHeaderCellDef>
+                    <app-column-filter title="Date" (changeSelected)="onColumnFilterOpen($event)"
+                        [selected]="selectedColumnFilter" controlName="date" (close)="onColumnFilter($event)">
+                        <input class="form-control form-control-sm" [formControl]="filterForm.get('date')" placeholder="Enter Date" type="date">
+                    </app-column-filter>
+                </th>
+                <td mat-cell *matCellDef="let element"> {{ element.createdAt | date :"d MMM y h:mm a"}} </td>
+            </ng-container>
+            <ng-container matColumnDef="merchandiser_name">
+                <th mat-header-cell *matHeaderCellDef>
+                    <app-column-filter title="merchandiser name" (changeSelected)="onColumnFilterOpen($event)"
+                        [selected]="selectedColumnFilter" controlName="salesman_name" (close)="onColumnFilter($event)">
+                        <input class="form-control form-control-sm" [formControl]="filterForm.get('salesman_name')" placeholder="Enter merchandiser name" type="text">
+                    </app-column-filter>
+                </th>
+                <td mat-cell *matCellDef="let element"> {{ element.merchandiserName }} </td>
+            </ng-container>
+            <ng-container matColumnDef="task_title">
+                <th mat-header-cell *matHeaderCellDef>
+                    <app-column-filter title="Task title" (changeSelected)="onColumnFilterOpen($event)"
+                        [selected]="selectedColumnFilter" controlName="task_title" (close)="onColumnFilter($event)">
+                        <input class="form-control form-control-sm" [formControl]="filterForm.get('task_title')" placeholder="Enter Task title" type="text">
+                    </app-column-filter>
+                </th>
+                <td mat-cell *matCellDef="let element"> {{ element.taskTitle }} </td>
+            </ng-container>
+            <ng-container matColumnDef="task_started">
+                <th mat-header-cell *matHeaderCellDef>Task started
+                    <!-- <app-column-filter title="Task started" (changeSelected)="onColumnFilterOpen($event)"
+                        [selected]="selectedColumnFilter" (close)="onColumnFilter($event)">
+                        <input class="form-control form-control-sm" placeholder="Enter Task started" type="date">
+                    </app-column-filter> -->
+                </th>
+                <td mat-cell *matCellDef="let element"> {{ element.startTime }} </td>
+            </ng-container>
+            <ng-container matColumnDef="task_ended">
+                <th mat-header-cell *matHeaderCellDef>Task Ended
+                    <!-- <app-column-filter title="Task Ended" (changeSelected)="onColumnFilterOpen($event)"
+                        [selected]="selectedColumnFilter" (close)="onColumnFilter($event)">
+                        <input class="form-control form-control-sm" placeholder="Enter Task Ended" type="date">
+                    </app-column-filter> -->
+                </th>
+                <td mat-cell *matCellDef="let element"> {{ element.endTime }} </td>
+            </ng-container>
+            <ng-container matColumnDef="task_is_unplanned">
+                <th mat-header-cell *matHeaderCellDef>
+                    Task Is Unplanned
+                    <!-- <app-column-filter title="Task Is Unplanned" (changeSelected)="onColumnFilterOpen($event)"
+                        [selected]="selectedColumnFilter" (close)="onColumnFilter($event)">
+                        <mat-select class="form-control form-control-sm">
+                            <mat-option value="1">Yes</mat-option>
+                            <mat-option value="0">No</mat-option>
+                        </mat-select>
+                    </app-column-filter> -->
+                </th>
+                <td mat-cell *matCellDef="let element"> {{ element.unplanned == '1' ? 'Yes' : 'No' }} </td>
+            </ng-container>
+            <ng-container matColumnDef="task_completed">
+                <th mat-header-cell *matHeaderCellDef>Task Completed
+                    <!-- <app-column-filter title="Task Completed" (changeSelected)="onColumnFilterOpen($event)"
+                        [selected]="selectedColumnFilter" (close)="onColumnFilter($event)">
+                        <mat-select class="form-control form-control-sm">
+                            <mat-option value="1">Yes</mat-option>
+                            <mat-option value="0">No</mat-option>
+                        </mat-select>
+                    </app-column-filter> -->
+                </th>
+                <td mat-cell *matCellDef="let element"> {{ element.taskCompleted }} </td>
+            </ng-container>
+            <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+            <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+        </table>
+    </div>
+    <!-- <mat-paginator pageSize="50" [pageSizeOptions]="[5,10,15,25,50,100]"></mat-paginator> -->
+</div>

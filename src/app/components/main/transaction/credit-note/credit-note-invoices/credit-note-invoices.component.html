@@ -1,0 +1,69 @@
+<div id="ember612" class="modal-header ember-view">
+  <h2 class="modal-title">Apply to invoice</h2>
+  <button class="close no-outline" (click)="dialog.close()" type="button">
+    &times;
+  </button>
+</div>
+<form [formGroup]="invoiceForm" (ngSubmit)="submit()">
+  <div class="modal-body scrolly">
+    <div class="">
+      <div class="row justify-content-end">
+        <div class="col-sm-5 text-right">
+            <span class="stat-label final-total">Balance:</span>
+            <span class="stat-value final-total">{{ numberFormatWithSymbol(creditNoteData.grand_total)}} </span>
+        </div>
+      </div>
+      <div class="table-responsive">
+        <table class="table table-hover">
+          <tr>
+            <th>Invoice Number</th>
+            <th>Invoice Date</th>
+            <th>Invoice Amount</th>
+            <th>Invoice Balance</th>
+            <th>Amount to Credit</th>
+          </tr>
+          <tr
+            formArrayName="invoices"
+            *ngFor="let item of invoicesFormArray.controls; let i = index"
+          >
+            <td>{{ invoices[i].invoice_number }}</td>
+            <td>{{ invoices[i].invoice_date }}</td>
+            <td>{{ numberFormatWithSymbol(invoices[i].grand_total) }}</td>
+            <td>{{ numberFormatWithSymbol(invoices[i].pending_amount) }}</td>
+            <td><input  (input)="onChange()" type="text" [formControlName]="i" /></td>
+          </tr>
+        </table>
+      </div>
+    
+        <div class=" footer-overview-container">
+          <div class="row justify-content-end">
+            <div class=" col-sm-5">
+              <div class="overall-stats-table">
+                <div>
+                  <span class="stat-label final-total">Amount to Credit:</span>
+                  <span class="stat-value final-total">{{numberFormatWithSymbol(amountToCredit) }}</span>
+                </div>
+                <div>
+                  <span class="stat-label final-total">Remaining Credit:</span>
+                  <span class="stat-value final-total">{{numberFormatWithSymbol(remainingCredit) }} </span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      
+    </div>
+  </div>
+  <div class="modal-footer" style="justify-content: flex-end;">
+    <button type="button" class="btn btn-secondary" (click)="dialog.close()">Cancel</button>
+    &nbsp;
+    <button
+      [disabled]="invoiceForm.invalid"
+      class="btn btn-primary ember-view"
+      type="submit"
+    >
+      Submit
+    </button>
+  </div>
+</form>
+

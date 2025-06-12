@@ -1,0 +1,97 @@
+<div class="card">
+    <div class="card-header pt-4">
+        <span class="h6 font-weight-light">{{isEdit ? 'Edit' : 'Add'}} Location Storage</span>
+        <a (click)="close()" style="cursor: pointer;"><i class="fa fa-times fa-lg text-secondary float-right" aria-hidden="true"></i></a>
+    </div>
+    <form [formGroup]="storageFormGroup" (ngSubmit)="saveStorageData()">
+        <div class="form-box">
+            <div class="card-body">
+                <div class="">
+                    <div class="row mb-4">
+                        <div class="col-md-4"> Code*</div>
+                        <div class="col-md-7">
+                            <input class="form-control form-control-sm mr-0" (keypress)="restrictLength($event)"
+                                style="width: 90%;" type="text" formControlName="storageCode">
+                            <app-validation-message [control]="storageFormGroup.controls['storageCode']">
+                            </app-validation-message>
+                            
+                        </div>
+                        <div class="col-md-1">
+                            <a [hidden]="isEdit" (click)="openSetting()" class="ml-2 settingIcon"><i
+                                    class="os-icon os-icon-settings" aria-hidden="true"></i></a>
+                            
+                        </div>
+                    </div>
+                    <div class="row mb-4">
+                        <div class="col-md-4">Name*</div>
+                        <div class="col-md-8">
+                            <input class="form-control form-control-sm" type="text" formControlName="name">
+                            <app-validation-message [control]="storageFormGroup.controls['name']">
+                            </app-validation-message>
+                        </div>
+                    </div>
+                    <div class="row mb-4">
+                        <div class="col-md-4">Type*</div>
+                        <div class="col-md-8">
+                            <div class="row">
+                                <div class="col-sm-6">
+                                    <app-radio-button
+                                    (checked)="typeChanged()"
+                                    [config]="{ label: 'Route', value: '0', name: 'type', control: storageFormGroup.get('type') }">
+                                    </app-radio-button>
+                                </div>
+                                <div class="col-sm-6">
+                                    <app-radio-button
+                                        (checked)="typeChanged()"
+                                        [config]="{ label: 'Warehouse', value: '1', name: 'type', control: storageFormGroup.get('type') }">
+                                    </app-radio-button>
+                                </div>
+                            </div>
+                            <app-validation-message [control]="storageFormGroup.controls['type']">
+                            </app-validation-message>
+                        </div>
+                    </div>
+                    <div class="row mb-4" *ngIf="storageFormGroup.get('type').value == '0'">
+                        <div class="col-md-4 ">Route*</div>
+                        <div class="col-md-8">
+                            <mat-select formControlName="route" class="form-control form-control-sm">
+                                <mat-option *ngFor="let item of selectedRoute" [value]="item.id">
+                                    {{ item.route_name }}
+                                </mat-option>
+                            </mat-select>
+                            <app-validation-message [control]="storageFormGroup.controls['route']">
+                            </app-validation-message>
+                        </div>
+                    </div>
+                    <div class="row mb-4">
+                        <div class="col-md-4">Location Type*</div>
+                        <div class="col-md-8">
+                            <div class="row">
+                                <div class="col-sm-6">
+                                    <app-radio-button
+                                    (checked)="locationTypeChanged()"
+                                    [config]="{ label: 'Finished', value: '1', name: 'location_type', control: storageFormGroup.get('locationType') }">
+                                    </app-radio-button>
+                                </div>
+                                <div class="col-sm-6">
+                                    <app-radio-button
+                                        (checked)="locationTypeChanged()"
+                                        [config]="{ label: 'Bad', value: '2', name: 'location_type', control: storageFormGroup.get('locationType') }">
+                                    </app-radio-button>
+                                </div>
+                            </div>
+                            <app-validation-message [control]="storageFormGroup.controls['locationType']">
+                            </app-validation-message>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="card-footer">
+            <div class="d-inline float-right">
+                <button type="button" class="btn btn-sm btn-light mr-2" (click)="close()">Cancel</button>
+                <button type="submit" class="btn btn-sm btn-p">Save</button>
+            </div>
+        </div>
+    </form>
+</div>

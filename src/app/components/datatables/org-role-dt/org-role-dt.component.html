@@ -1,0 +1,27 @@
+<div class="table-responsive">
+  <table class="table table-hover"mat-table [dataSource]="dataSource">
+  <ng-container matColumnDef="role_name">
+    <th mat-header-cell *matHeaderCellDef> Role Name </th>
+    <td mat-cell *matCellDef="let element"> {{element.name}} </td>
+  </ng-container>
+  <ng-container matColumnDef="desc">
+    <th mat-header-cell *matHeaderCellDef> Description</th>
+    <td mat-cell *matCellDef="let element"> {{element.description}} </td>
+  </ng-container>
+  <ng-container matColumnDef="actions">
+    <th mat-header-cell *matHeaderCellDef> Actions </th>
+    <td mat-cell *matCellDef="let element">
+      <button [hidden]="element.name == 'org-admin' && user_id != '1'" (click)="openEditRole(element)"><i class="fa fa-pencil" aria-hidden="true"></i></button>
+      <button (click)="openCloneRole(element)"><i class="fa fa-clone" aria-hidden="true"></i></button>
+      <button [hidden]="element.name == 'org-admin' && user_id != '1'" (click)="openDeleteBox(element)"><i class="fa fa-trash-o" aria-hidden="true"></i></button>
+    </td>
+  </ng-container>
+
+
+  <tr mat-header-row *matHeaderRowDef="getDisplayedColumns()"></tr>
+  <tr mat-row *matRowDef="let row; columns: getDisplayedColumns();"></tr>
+</table>
+</div>
+<div [ngClass]="{'hidden':dataSource.data.length < 10}">
+  <mat-paginator pageSize=10 [pageSizeOptions]="[10, 25, 50]"></mat-paginator>
+</div>

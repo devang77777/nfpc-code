@@ -1,0 +1,110 @@
+<div class="card" style="width: 550px;">
+  <div class="card-header pt-4">
+    <span class="h6 font-weight-light">{{ formType }} Outlet Product Code</span>
+    <a (click)="close()"><i class="fa fa-times fa-lg text-secondary float-right" aria-hidden="true"></i></a>
+  </div>
+  <div class="form-box">
+    <form [formGroup]="outletProdFormGroup">
+      <div class="card-body">
+        <div class="">
+          <div class="row mb-4">
+            <div class="col-md-3">Code</div>
+            <div class="col-md-9">
+              <input (keypress)="restrictLength($event)" [formControl]="opCodeFormControl"
+                class="form-control form-control-sm" style="width: 95%;" type="text" />
+              <a [hidden]="formType == 'Edit'" (click)="open()" class="ml-2 settingIcon"><i
+                  class="os-icon os-icon-ui-46" aria-hidden="true"></i></a>
+            </div>
+          </div>
+          <div class="row mb-4">
+            <div class="col-md-3">Name</div>
+            <div class="col-md-9">
+              <input [formControl]="opNameFormControl" class="form-control form-control-sm" type="text" />
+            </div>
+          </div>
+          <div class="row mb-4">
+            <div class="col-md-3 selection-label"><span>Customers</span></div>
+            <mat-form-field class="col-md-9">
+              <mat-label>Select Customers</mat-label>
+              <mat-select [formControl]="customersFormControl" multiple>
+                <mat-option *ngFor="let cust of customers" [value]="cust.user_id">{{ cust.user?.firstname }}
+                  {{ cust.user?.lastname }}</mat-option>
+              </mat-select>
+            </mat-form-field>
+          </div>
+        </div>
+      </div>
+    </form>
+    <hr />
+    <!-- <form *ngIf="!outletProdFormGroup.invalid" [formGroup]="itemFormGroup"></form> -->
+    <form [formGroup]="itemFormGroup">
+      <div class="card-body">
+        <div class="">
+          <div class="row mb-4">
+            <div class="col-md-3">Item Code</div>
+            <div class="col-md-9">
+              <select [formControl]="itemCodeFormControl" class="form-control form-control-sm">
+                <option *ngFor="let item of items" [value]="item.id">{{ item.item_code }}/{{ item.item_name }}</option>
+              </select>
+            </div>
+          </div>
+          <div class="row mb-4">
+            <div class="col-md-3">Outlet Item Code</div>
+            <div class="col-md-9">
+              <input [formControl]="outletItemCodeFormControl" class="form-control form-control-sm" type="text" />
+            </div>
+          </div>
+          <div class="text-right">
+            <button class="btn btn-p" (click)="addItemCode()">
+              <i class="os-icon os-icon-plus mr-2"></i>Add
+            </button>
+          </div>
+        </div>
+      </div>
+    </form>
+    <div class="items-table-box">
+      <table mat-table [dataSource]="itemSource" *ngIf="itemSource.data.length" class="mat-elevation-z8">
+        <ng-container matColumnDef="itemCode">
+          <th mat-header-cell *matHeaderCellDef>Item Name</th>
+          <td mat-cell *matCellDef="let element">{{getItemName( element.item_id) }}</td>
+        </ng-container>
+        <ng-container matColumnDef="outletItemCode">
+          <th mat-header-cell *matHeaderCellDef>Outlet Product Code</th>
+          <td mat-cell *matCellDef="let element">
+            {{ element.outlet_product_code }}
+          </td>
+        </ng-container>
+        <ng-container matColumnDef="actions">
+          <th mat-header-cell *matHeaderCellDef>Actions</th>
+          <td mat-cell *matCellDef="let element; index as index">
+            <button (click)="editItemCode(index, element)">
+              <i class="fa fa-edit"></i>
+            </button>
+            <button (click)="deleteItemCode(index)" class="trash-btn">
+              <i class="fa fa-trash"></i>
+            </button>
+          </td>
+        </ng-container>
+        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+      </table>
+      <mat-paginator [hidden]="itemSource.data.length < 6" pageSize="5" [pageSizeOptions]="[3, 5]"></mat-paginator>
+      <div class="p-4 float-right">
+        <small *ngIf="itemInvalid && itemSource.data.length < 1" class="text-danger">*Please add atleast one
+          item</small>
+      </div>
+    </div>
+  </div>
+
+  <div class="card-footer">
+    <div class="d-inline float-right">
+      <button class="btn btn-sm btn-light mr-2" (click)="close()">
+        Cancel
+      </button>
+      <button class="btn btn-sm btn-p" (click)="saveOutletProductCode()">
+        Save
+      </button>
+    </div>
+  </div>
+</div>
+<!-- <pre>{{outletProdFormGroup.value | json}}</pre> -->

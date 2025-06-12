@@ -1,0 +1,143 @@
+
+<div class="column content-column">
+	<h3>New Workflow Rule</h3>
+	<div class="linebelow"></div>
+	<div>
+		<form [formGroup]="firstFormGroup" class="zb-txn-form">
+			<div>
+				<h4>1. Name your workflow</h4>
+				<p class="form-text">Give a Name and Description for your workflow</p><br>
+				<div>
+					<div class="row form-group">
+						<label class="col-form-label col-lg-3 required">Workflow Rule Name</label>
+						<div class="col-lg-3">
+							<input  [formControl]="workFlowNameFormControl" class="form-control ember-text-field ember-view" type="text">
+						</div>
+					</div>
+					<div class="row form-group">
+						<label class="col-form-label col-lg-3 required">Module</label>
+						<div class="col-lg-3">
+							<div id="ember242" class="ember-view">
+								<mat-select class="form-control form-control-sm" [formControl]="moduleNameFormControl">
+									<mat-option *ngFor="let pokemon of preferenceGroups" [value]="pokemon.id">
+										{{pokemon.name}}
+									</mat-option>
+								</mat-select>
+							</div>
+						</div>
+					</div>
+					<div class="row form-group">
+						<label class="col-form-label col-lg-3">Description</label>
+						<div class="col-lg-5">
+							<textarea [formControl]="descriptionFormControl" class="form-control ember-text-area ember-view"></textarea>
+						</div>
+					</div>
+				</div>
+			</div>
+			<hr *ngIf="true">
+			<div class="mt-3 mb-3 btn-toolbar" *ngIf="false">
+				<button class="btn btn-primary ember-view mr-2"
+					[ngClass]="!firstFormGroup.valid ? 'btn-disable' : ''"
+					[disabled]="!firstFormGroup.valid"
+					type="button" (click)="open()">Next</button>
+				<button class="btn btn-secondary" type="button" (click)="cancel()">Cancel</button>
+			</div>
+		</form>
+	</div>
+</div>
+
+<div *ngIf="true" class="column content-column">
+	<h4>2. Choose when to Trigger</h4>
+	<p class="form-text">Specify when to execute the workflow.</p><br>
+	<div>
+		<div class="row form-group">
+       		<label class="col-form-label col-lg-3 required"> Workflow type </label>
+			<div class="col-lg-3">
+				<div id="ember307" class="ember-view">
+					<div class="ac-box ">
+						<span class="ac-selected form-control" tabindex="0">
+              				{{ whenInvoiceIsFormControl.value }}
+						</span>
+          			</div>
+				</div>
+			</div>
+    	</div>
+		<form [formGroup]="secondFormGroup" class="form-group">
+			<div class="row">
+				<legend class="col-form-label col-lg-3 required"> when {{ model }} is </legend>
+				<div class="col-lg-9">
+					<mat-radio-group
+						class="example-radio-group"
+						[formControl]="whenInvoiceIsFormControl">
+							<mat-radio-button
+								class="example-radio-button"
+								*ngFor="let item of options"
+								[value]="item.name"
+								[checked]="item.isSelected"
+							>
+								{{item.name}}
+							</mat-radio-button>
+					</mat-radio-group>
+				</div>
+      		</div>
+			<hr *ngIf="!false">
+      		<div class="mt-7 btn-toolbar"*ngIf="!true">
+				<button class="btn btn-primary ember-view mr-2"
+					[ngClass]="!secondFormGroup.valid ? 'btn-disable' : ''"
+					type="button">
+					Next</button>
+				<button class="btn btn-secondary" type="button" (click)="cancel()">Cancel</button>
+			</div>
+		</form>
+	</div>
+</div>
+
+<div *ngIf="true" class="column content-column">
+	<h4>3. Configure multi-level approval with specific approvers</h4>
+	<div class="form-group">
+		<form [formGroup]="addPaymentTermsForm">
+			<div formArrayName="paymentTerms">
+				<div class="row mb-2">
+					<div class="col">
+						<label class="nodecor" for="">Role*</label>
+					</div>
+					<div class="col">
+						<label id="hello" class="nodecor" for="">User*</label>
+					</div>
+					<div class="col">
+						<label class="nodecor" for=""></label>
+					</div>
+				</div>
+				<div class="row mb-2"
+					*ngFor="let item of f.paymentTerms['controls']; let i = index" [formGroupName]="i">
+					<div class="col">
+						<mat-select formControlName="role" class="form-control form-control-sm">
+							<mat-option *ngFor="let food of rolelist" [value]="food.id">
+								{{food.name}}
+							</mat-option>
+						</mat-select>
+					</div>
+					<div class="col">
+						<mat-select formControlName="users" class="form-control form-control-sm">
+							<mat-option *ngFor="let food of uselist" [value]="food.id">
+								{{food.firstname}} {{food.lastname}}
+							</mat-option>
+						</mat-select>
+					</div>
+				</div>
+				<!-- <div class="row mb-2">
+					<button (click)="addnewrow()" class="btn btn-link nodecor">+ Add New</button>
+				</div> -->
+			</div>
+		</form>
+		<div class="mt-7 btn-toolbar" *ngIf="false">
+			<button class="btn btn-primary ember-view mr-2"
+				[ngClass]="!f.paymentTerms['controls'].length ? 'btn-disable' : ''"
+				[disabled]="!f.paymentTerms['controls'].length "
+				type="button"
+			>Save
+			</button>
+			<button class="btn btn-secondary" type="button" (click)="cancel()">Cancel</button>
+		</div>
+	</div>
+</div>

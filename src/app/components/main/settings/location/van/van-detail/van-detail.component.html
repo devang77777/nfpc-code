@@ -1,0 +1,141 @@
+<section *ngIf="vanData" [ngClass]="{ 'detail-visible': isDetailVisible }">
+  <div class="pl-3">
+    <div class="row">
+      <h2 class="page-title col-sm-10 font-weight-light">
+        {{ vanData.description }}
+      </h2>
+      <div class="actions col-sm-2">
+        <button (click)="openEditVan()" appPermission [permissions]="userPermissions" [type]="'edit'" class="iconbtn">
+          <i class="os-icon os-icon-edit" aria-hidden="true"></i>
+        </button>
+        <div>
+          <button class="btn btn-sm btn-white" mat-button [matMenuTriggerFor]="menu2">
+            More
+          </button>
+          <mat-menu #menu2="matMenu">
+            <button mat-menu-item (click)="toggleStatus()">
+              Mark as {{ vanData.van_status === 0 ? "Active" : "Inactive" }}
+            </button>
+            <button mat-menu-item (click)="openDeleteBox()" appPermission [permissions]="userPermissions"
+              [type]="'delete'">
+              Delete
+            </button>
+          </mat-menu>
+        </div>
+        <button *ngIf="isDetailVisible" class="btn" (click)="closeDetailView()">
+          <i class="os-icon os-icon-close"></i>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <div class="pl-3">
+    <div class="row h-100">
+      <div class="col-12 border-left">
+        <mat-tab-group class="customertab" mat-align-tabs="start" (selectedTabChange)="onTabChanged($event);">
+          <mat-tab label="Overview">
+            <mat-list>
+              <mat-list-item>Van code: {{ vanData.van_code }}</mat-list-item>
+              <mat-list-item>Van code: {{ vanData.van_code }}</mat-list-item>
+              <mat-list-item>Van description: {{ vanData.description }}</mat-list-item>
+              <mat-list-item>Plate number: {{ vanData.plate_number }}</mat-list-item>
+              <mat-list-item>Capacity: {{ vanData.capacity }}</mat-list-item>
+              <mat-list-item>Fuel Reading: {{ vanData.reading?vanData.reading:0 }}</mat-list-item>
+              <mat-list-item>Status:
+                {{
+                vanData.van_status === 0 ? "Inactive" : "Active"
+                }}</mat-list-item>
+              <ng-container *ngIf="vanData.custom_field_value_save.length > 0">
+                <mat-list-item><strong>Custom Fields</strong></mat-list-item>
+                <mat-list-item *ngFor="let item of vanData.custom_field_value_save">
+                  <span *ngIf="
+                      item.custom_field &&
+                        item.custom_field.field_type === 'check_box';
+                      else others
+                    ">{{ item.custom_field.field_label }} :
+                    {{ item.custom_field_value == "1" ? "Yes" : "No" }}</span>
+
+                  <ng-template #others>
+                    <span *ngIf="item.custom_field">{{ item.custom_field?.field_label }} :
+                      {{ item.custom_field_value }}</span>
+                  </ng-template>
+                </mat-list-item>
+              </ng-container>
+            </mat-list>
+          </mat-tab>
+          <mat-tab label="Odometer">
+            <mat-list>
+              <div class="item-container custom-mat custom-mat-no-border">
+                <div class="table-responsive">
+                  <table class="cardtable item-table">
+                    <thead>
+                      <tr>
+                        <th class="head">
+                          #
+                        </th>
+                        <th class="head">
+                          Date
+                        </th>
+                        <th class="head">
+                          Start Odometer
+                        </th>
+                        <th class="head">
+                          End Odometer
+                        </th>
+                        <th class="head">
+                          Driver Code
+                        </th>
+                        <th class="head">
+                          Driver Name
+                        </th>
+                        <th class="head">
+                          Trip Number
+                        </th>
+                        <th class="head">
+                          Helper
+                        </th>
+                        <th class="head">
+                          Diesel
+                        </th>
+                        <th class="head">
+                          Kilometer
+                        </th>
+                        <th class="head">
+                          Action
+                        </th>
+                      </tr>
+                    </thead>
+                    <tbody class="form-body">
+                      <tr *ngFor="let omd of odometerDetails;let i=index">
+                        <td data-th="#">{{ i + 1 }}</td>
+                        <td data-th="#">{{omd.date}}</td>
+                        <td data-th="#">{{omd.start_fuel?omd.start_fuel:0}}</td>
+                        <td data-th="#">{{omd.end_fuel?omd.end_fuel:0}}</td>
+                        <td data-th="#">{{omd?.salesman_info?.salesman_code? omd?.salesman_info?.salesman_code:"-"}}</td>
+
+
+                        <td data-th="#">{{omd?.salesman_info?.user?.firstname? omd?.salesman_info?.user?.firstname + " " + omd?.salesman_info?.user?.lastname :"-"}}</td>
+                        <td data-th="#">{{omd?.trip?.trip_number? omd?.trip?.trip_number : "-" }}</td>
+                        <td data-th="#">{{omd?.salesman_vehicles?.helper_info? omd?.salesman_vehicles?.helper_info.salesman_code : "-" }}</td>
+
+                        <td data-th="#">{{omd.diesel?omd.diesel:0}}</td>
+                        <td data-th="#">{{getCalculation(omd.end_fuel,omd.start_fuel)}}</td>
+                        <td data-th="#"><button class="iconbtn" type="button" (click)="openOdometerVanEdit(omd)"><i
+                              class="os-icon os-icon-edit"></i></button></td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </mat-list>
+
+            <!-- <mat-list-item>Sales 1</mat-list-item>
+              <mat-list-item>Sales 2</mat-list-item>
+              <mat-list-item>Sales 3</mat-list-item>
+              <mat-list-item>Sales 4</mat-list-item> -->
+          </mat-tab>
+        </mat-tab-group>
+      </div>
+    </div>
+  </div>
+</section>

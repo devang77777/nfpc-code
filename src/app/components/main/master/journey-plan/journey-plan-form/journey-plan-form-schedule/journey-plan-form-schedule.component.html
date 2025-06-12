@@ -1,0 +1,117 @@
+<section class="text-left">
+  <div class="row align-items-center justify-content-center">
+    <div class="col-md-12">
+      <form class="form-box">
+        <div class="form-group">
+          <label>Select Journey Plan Base</label>
+        </div>
+        <div class="form-group">
+          <div class="row">
+            <div class="col-sm-6">
+              <app-radio-button
+                [config]="{ label: 'Day Wise', value: 'day', name: 'plan_type', control: baseFormControl }">
+              </app-radio-button>
+            </div>
+            <div class="col-sm-6">
+              <app-radio-button
+                [config]="{ label: 'Week Wise', value: 'week', name: 'plan_type', control: baseFormControl }">
+              </app-radio-button>
+            </div>
+          </div>
+        </div>
+        <div class="form-group">
+          <label>Select weeks of a month</label>
+        </div>
+        <div class="form-group" [formGroup]="wkFormGroup">
+          <div class="row">
+            <div class="col-sm-4 check-box-div" *ngFor="let week of weeksControlData">
+              <div class="form-check-label">{{ week.label }}</div>
+              <app-checkbox [config]="{ id: week.value, control: wkFormGroup.controls[week.value] }"
+                (checked)="updateWeekCheckbox()"></app-checkbox>
+            </div>
+          </div>
+        </div>
+        <div class="form-group">
+          <label>Select first day of a week</label>
+        </div>
+        <div class="form-group">
+          <div class="row">
+            <div class="col-sm-4 radio-box-div" *ngFor="let day of daysControlData">
+              <app-radio-button
+                [config]="{ value: day.value, label: day.label, control: startDayFormControl, name: 'day' }">
+              </app-radio-button>
+            </div>
+          </div>
+        </div>
+        <div class="form-group">
+          <label>Enforce Flag</label>
+        </div>
+        <div class="form-group">
+          <div class="row">
+            <div class="col-sm-6">
+              <app-radio-button
+                [config]="{ label: 'Yes', value: '1', name: 'is_enforce', control: isEnforceFormControl }">
+              </app-radio-button>
+            </div>
+            <div class="col-sm-6">
+              <app-radio-button
+                [config]="{ label: 'No', value: '0', name: 'is_enforce', control: isEnforceFormControl }">
+              </app-radio-button>
+            </div>
+          </div>
+        </div>
+        <div class="form-group" *ngIf="domain !== 'merchandising' && domain !== 'devmobiato.nfpc.net'">
+          <label>Select Journey Type</label>
+        </div>
+        <div class="form-group" *ngIf="domain !== 'merchandising' && domain !== 'devmobiato.nfpc.net'">
+          <div class="row">
+            <div class="col-sm-6">
+              <app-radio-button
+                [config]="{ label: 'Route', value: 'route', name: 'journey_type', control: journeyTypeFormControl }"
+                (checked)="changeJourneyType()">
+              </app-radio-button>
+            </div>
+            <div class="col-sm-6">
+              <app-radio-button
+                [config]="{ label: 'Merchandiser', value: 'merchandiser', name: 'journey_type', control: journeyTypeFormControl }"
+                (checked)="changeJourneyType()">
+              </app-radio-button>
+            </div>
+          </div>
+        </div>
+        <div class="form-group route-selection" *ngIf="journeyTypeFormControl.value  == 'route'">
+          <label>Select Routes*</label>
+          <mat-form-field>
+            <mat-label>Select Routes</mat-label>
+            <mat-select (ngModelChange)="routeIdChanged($event)" [(ngModel)]="routeId"
+              [ngModelOptions]="{ standalone: true }">
+              <mat-option *ngFor="let route of routes" [value]="route.id">{{ route.route_name }}</mat-option>
+            </mat-select>
+          </mat-form-field>
+          <app-validation-message [control]="routesFormControl">
+          </app-validation-message>
+        </div>
+        <div class="form-group route-selection" *ngIf="journeyTypeFormControl.value  == 'merchandiser'">
+          <label>Select Merchandiser*</label>
+          <!-- <mat-form-field> -->
+            <!-- <mat-label>Select Merchandiser</mat-label>
+            <mat-select (ngModelChange)="merchandiserIdChanged($event)" [(ngModel)]="merchandiserId"
+              [ngModelOptions]="{ standalone: true }">
+
+              <mat-option *ngFor="let item of merchandiserList" [value]="item.user_id">{{ item.user?.firstname }}
+                {{ item.user?.lastname }}</mat-option>
+            </mat-select> -->
+            <app-multiautocomplete isSingle="true" [options]="merchandiserList"
+                (selectionchanged)="merchandiserIdChanged()"
+                [control]="merchandiserIdFormControl" text="" id="user_id"
+                objectName="user" param1="firstname" param2="lastname"
+                placeholder="Search merchandiser">
+            </app-multiautocomplete>
+          <!-- </mat-form-field> -->
+          <app-validation-message [control]="merchandiserFormControl">
+          </app-validation-message>
+        </div>
+      </form>
+    </div>
+  </div>
+</section>

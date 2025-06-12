@@ -1,0 +1,66 @@
+<div class="items-table-box">
+  <div class="table-responsive">
+    <table mat-table [dataSource]="itemSource" *ngIf="itemSource.data.length"
+      class="mat-elevation-z8 table table-hover">
+      <ng-container matColumnDef="item_code">
+        <th mat-header-cell *matHeaderCellDef>
+          <app-column-filter title="Item Code" (changeSelected)="onColumnFilterOpen($event)"
+            [selected]="selectedColumnFilter" (close)="onColumnFilter($event)">
+            <input class="form-control form-control-sm" placeholder="Enter Item Code" type="text">
+          </app-column-filter>
+        </th>
+        <td mat-cell *matCellDef="let element"> {{ element.item?.item_code }} </td>
+      </ng-container>
+      <ng-container matColumnDef="item">
+        <th mat-header-cell *matHeaderCellDef>
+          <app-column-filter title="Item Name" (changeSelected)="onColumnFilterOpen($event)"
+            [selected]="selectedColumnFilter" (close)="onColumnFilter($event)">
+            <input class="form-control form-control-sm" placeholder="Enter Item Name" type="text">
+          </app-column-filter>
+        </th>
+        <td mat-cell *matCellDef="let element"> {{ element.item?.item_name }} </td>
+      </ng-container>
+      <ng-container matColumnDef="item_uom">
+        <th mat-header-cell *matHeaderCellDef>
+          <app-column-filter title="UOM" (changeSelected)="onColumnFilterOpen($event)" [selected]="selectedColumnFilter"
+            (close)="onColumnFilter($event)">
+            <input class="form-control form-control-sm" placeholder="Enter UOM" type="text">
+          </app-column-filter>
+        </th>
+        <td mat-cell *matCellDef="let element"> {{ element.item_uom?.name }} </td>
+      </ng-container>
+      <ng-container matColumnDef="capacity">
+        <th mat-header-cell *matHeaderCellDef>
+          <app-column-filter title="capacity" (changeSelected)="onColumnFilterOpen($event)"
+            [selected]="selectedColumnFilter" (close)="onColumnFilter($event)">
+            <input class="form-control form-control-sm" placeholder="Enter capacity" type="text">
+          </app-column-filter>
+        </th>
+        <td mat-cell *matCellDef="let element"> {{ element.capacity }} </td>
+      </ng-container>
+      <ng-container matColumnDef="total_number_of_facing">
+        <th mat-header-cell *matHeaderCellDef>
+          <app-column-filter title=" Total No Of Facing" (changeSelected)="onColumnFilterOpen($event)"
+            [selected]="selectedColumnFilter" (close)="onColumnFilter($event)">
+            <input class="form-control form-control-sm" placeholder="Enter  Total No Of Facing" type="text">
+          </app-column-filter>
+        </th>
+        <td mat-cell *matCellDef="let element"> {{ element.total_number_of_facing }} </td>
+      </ng-container>
+      <ng-container matColumnDef="actions">
+        <th mat-header-cell *matHeaderCellDef>
+          Actions
+        </th>
+        <td mat-cell *matCellDef="let element; let i = index;">
+          <span (click)="editStockItem(element)" class="ml-1 mr-1 pointer"><i class="fa fa-edit"></i></span>
+          <span (click)="deleteStockItem(element, i)" class="ml-1 mr-1 pointer"><i
+                  class="fa fa-trash"></i></span>
+      </td>
+      </ng-container>
+      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+      <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+    </table>
+  </div>
+  <mat-paginator [hidden]="hidePaginator(itemSource.data.length)" pageSize="5" [pageSizeOptions]="[5,10]">
+  </mat-paginator>
+</div>

@@ -1,0 +1,106 @@
+.item-form{
+    width: 550px;
+}
+a {
+    cursor: pointer;
+}
+.card{
+    position: relative;
+
+}
+.card-body{
+    height: calc(100vh - 170px);
+    overflow-y: scroll;
+}
+
+.card-footer {
+  position: fixed;
+  width: 100%;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.03);
+  left: 0;
+}
+.form-control-sm {
+  height: calc(1.2em + 0.5rem + 2px);
+  border-radius: 0.1rem;
+}
+label{
+  font-weight: normal;
+}
+
+a {
+  cursor: pointer;
+}
+
+button:active {
+  outline: none !important;
+}
+
+.example-full-width {
+  width: 100%;
+}
+.selection-label {
+  position: relative;
+
+  span {
+    position: absolute;
+    top: 10px;
+  }
+}
+
+.item-add-btn {
+  button {
+    font-size: 14px;
+    background-color: #1abc9c;
+    color: white;
+
+    i {
+      margin-right: 6px;
+    }
+  }
+}
+
+.items-table-box {
+  mat-paginator,
+  .mat-table {
+    max-width: 75%;
+    margin: auto;
+  }
+
+  button {
+    background-color: transparent;
+    border: none;
+    font-size: 14px;
+
+    &:active {
+      outline: none;
+    }
+  }
+}
+.mat-tab-group.mat-primary {
+  width: 460px !important;
+}
+
+.settingIcon
+{
+  position: absolute;
+  top: 1px;
+  right: 0;
+    i{
+      font-size: 20px;
+    }
+}
+.menu-li {
+  padding: 8px;
+  &:focus{
+    outline: none;
+  }
+}
+.channel-dropdown, .salesorg-dropdown {
+  height: 31px;
+}
+@media (max-width: 575px) {
+  .item-form{
+    width: 320px;
+}
+}

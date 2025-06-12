@@ -1,0 +1,128 @@
+<div style="padding:30px 50px; overflow: scroll;
+height: 100%;">
+    <div class="row mt-4">
+        <div class="col-md-12 d-flex justify-content-end">
+            <div><button class="btn btn-primary">Filter</button></div>&nbsp;
+            <div><button class="btn btn-primary">Clear</button></div>&nbsp;
+            <div><button class="btn btn-primary">Current Selectors</button></div>&nbsp;&nbsp;
+            <div>
+                <input type="text" class="form-control" placeholder="Search">
+            </div>
+        </div>
+    </div>
+    <hr>
+    <div class="row mt-3">
+        <div class="col-md-6 d-flex align-items-end">
+            <h2><strong>Merchandising</strong></h2>
+            &nbsp; <h4>SELF SERVICE</h4>
+        </div>
+        <div class="col-md-6 text-right">
+            <strong>Last Reload Date: 12/12/2020</strong>
+        </div>
+    </div>
+    <hr>
+    <div class="row">
+        <div class="col-md-2">
+            <div class="year border">
+                <div class="text-warning lft-title">Dimension</div>
+                <div class="d-flex flex-column" style="padding-left: 8px;">
+                    <div *ngFor="let item of dimensions" class="date-control">
+                        <input type="checkbox"> &nbsp;&nbsp;{{item}}
+                    </div>
+
+                </div>
+            </div>
+            <br>
+            <div class="year border">
+                <div class="text-warning lft-title">Time</div>
+                <div class="d-flex flex-column" style="padding-left: 8px;">
+                    <div *ngFor="let item of time" class="date-control">
+                        <input type="checkbox"> &nbsp;&nbsp;{{item}}
+                    </div>
+
+                </div>
+            </div>
+            <br>
+            <div class="year border">
+                <div class="text-warning lft-title">Metrics</div>
+                <div class="d-flex flex-column" style="padding-left: 8px;">
+                    <div *ngFor="let item of metrics" class="date-control">
+                        <input type="checkbox"> &nbsp;&nbsp;{{item}}
+                    </div>
+
+                </div>
+            </div>
+            <div class="year border">
+                <div class="text-warning lft-title">Bookmars</div>
+                <div class="d-flex flex-column" style="padding-left: 8px;">
+                    <div class="date-control">
+                        <select style="width: 100%;" name="" id=""></select>
+                    </div>
+                    <div class="d-flex mt-3 justify-content-center" style="cursor: pointer;">
+                        <mat-icon>add</mat-icon> <span class="mt-1">Add New</span>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+        <div class="col-md-10">
+            <div class="d-flex text-warning">
+                <h2> Detailed Report</h2>
+            </div>
+            <div>
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th scope="col">Category</th>
+                            <th scope="col">Month Name</th>
+                            <th scope="col">Coverage</th>
+                            <th scope="col">Execution</th>
+                            <th scope="col">Active Outlets</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let item of [1,2,3]">
+                            <td scope="row" class="d-flex justify-content-center align-items-center border"
+                                style="height: 100;    border-top: none;">
+                                <div>Biscuits</div>
+                            </td>
+                            <td>
+                                <div class="d-flex flex-column inner">
+                                    <div>Jan-14</div>
+                                    <div>Jan-14</div>
+                                    <div>Jan-14</div>
+                                    <div>Jan-14</div>
+                                </div>
+                            </td>
+                            <td>
+                                <div class="d-flex flex-column inner">
+                                    <div>12.00%</div>
+                                    <div>12.00%</div>
+                                    <div>12.00%</div>
+                                    <div>12.00%</div>
+                                </div>
+                            </td>
+                            <td>
+                                <div class="d-flex flex-column inner">
+                                    <div>12%</div>
+                                    <div>12%</div>
+                                    <div>12%</div>
+                                    <div>12%</div>
+                                </div>
+                            </td>
+                            <td>
+                                <div class="d-flex flex-column inner">
+                                    <div>12%</div>
+                                    <div>12%</div>
+                                    <div>12%</div>
+                                    <div>12%</div>
+                                </div>
+                            </td>
+                        </tr>
+
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>

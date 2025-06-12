@@ -1,0 +1,146 @@
+<section *ngIf="pricing">
+  <div class="pl-3">
+    <div class="row">
+      <h2 class="page-title col-sm-10 font-weight-light">{{ pricing.name }}</h2>
+      <div class="actions col-sm-2">
+        <button (click)="openEditPricing()" class="iconbtn" appPermission [permissions]="userPermissions"
+          [type]="'edit'">
+          <i class="os-icon os-icon-edit" aria-hidden="true"></i>
+        </button>
+        <div>
+          <button class="btn btn-sm btn-white" mat-button [matMenuTriggerFor]="menu2">
+            More
+          </button>
+          <mat-menu #menu2="matMenu">
+            <!-- <button mat-menu-item (click)="toggleStatus()">Mark as
+                {{ area.area_status === 0 ? 'Active' : 'Inactive' }}</button> -->
+            <button mat-menu-item (click)="openDeleteBox()" appPermission [permissions]="userPermissions"
+              [type]="'delete'">
+              Delete
+            </button>
+          </mat-menu>
+        </div>
+        <button *ngIf="isDetailVisible" class="btn" (click)="closeDetailView()">
+          <i class="os-icon os-icon-close"></i>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <div class="pl-3 area-data">
+    <div class="mb-4" *ngIf="isPending">
+      <div class="approval-holder">
+        <div class="approval-box">
+          <div class="approve-icon">
+            <i class="fa fa-check-square-o"></i>
+          </div>
+          <div class="approve-content">
+            <h2>Approve this Pricing</h2>
+            <p>This Pricing has been submitted for approval. Verify and approve the Load Request.</p>
+          </div>
+          <div class="approve-actions">
+            <button mat-button class="approve" (click)="openConfirmBox('approve')">Approve</button>
+            <button mat-button class="reject" (click)="openConfirmBox('reject')">Reject</button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="row h-100">
+      <div class="col-12 ">
+        <mat-tab-group class="customertab" mat-align-tabs="start">
+          <mat-tab label="Overview">
+            <div class="row">
+              <div class="col-xl-5 col-lg-6 col-md-8">
+                <ul class="smhlist mt-2">
+                  <li>
+                    <span>Start Date</span>
+                    <strong>{{ pricing.start_date }}</strong>
+                  </li>
+                  <li>
+                    <span>End Date</span>
+                    <strong>{{ pricing.end_date }}</strong>
+                  </li>
+                  <li>
+                    <span>Key Selection</span>
+                    <strong>{{ pricing.combination_key_value }}</strong>
+                  </li>
+                </ul>
+              </div>
+            </div>
+          </mat-tab>
+          <mat-tab label="Key Value">
+            <div class="details-container pt-2">
+              <mat-accordion>
+                <div *ngFor="let key of keyCombos" class="mb-1">
+                  <mat-expansion-panel class="mat-elevation-z0" [disabled]="key.data.length == 1"
+                    (opened)="customPagging.startNumber=0;customPagging.endNumber=5;customPagging.pageNumber=5;">
+                    <mat-expansion-panel-header>
+                      <mat-panel-title>
+                        {{ key.title }}
+                      </mat-panel-title>
+                      <mat-panel-description>
+                        <span *ngIf="key.data.length > 1; else elseBlock">
+                          {{ key.data[0]?.name }} &
+                          {{ key.data.length - 1 }} more..</span>
+                        <ng-template #elseBlock>
+                          {{ key.data[0]?.name }}
+                        </ng-template>
+                      </mat-panel-description>
+                    </mat-expansion-panel-header>
+                    <div class="lists">
+                      <table class="text-right mat-table">
+                        <tr class="mat-row"
+                          *ngFor="let key of key.data| slice:customPagging.startNumber:customPagging.endNumber">
+                          <td class="mat-cell">{{ key?.name }}</td>
+                        </tr>
+                      </table>
+                      <app-custom-pagging [hidden]=" key.data && key.data.length <=5" #customPagging
+                        [length]="key.data.length || 0">
+                      </app-custom-pagging>
+
+                    </div>
+                  </mat-expansion-panel>
+                </div>
+                <div class="mb-1">
+                  <mat-expansion-panel class="mat-elevation-z0" [disabled]="pricing.p_d_p_items.length == 1"
+                    (opened)="customPagging1.startNumber=0;customPagging1.endNumber=5;customPagging1.pageNumber=5;">
+                    <mat-expansion-panel-header>
+                      <mat-panel-title>
+                        Item
+                      </mat-panel-title>
+                      <mat-panel-description>
+                        <span *ngIf="pricing.p_d_p_items.length > 1; else elseBlock">
+                          {{ pricing.p_d_p_items[0]?.name }} &
+                          {{ pricing.p_d_p_items?.length - 1 }} more..</span>
+                        <ng-template #elseBlock>
+                          {{ pricing.p_d_p_items[0]?.name }}
+                        </ng-template>
+                      </mat-panel-description>
+                    </mat-expansion-panel-header>
+                    <div class="lists">
+                      <table class="text-right mat-table">
+                        <tr class="mat-row"
+                          *ngFor="let key of pricing.p_d_p_items| slice:customPagging1.startNumber:customPagging1.endNumber">
+                          <td class="mat-cell">{{ key?.name }}</td>
+                        </tr>
+                      </table>
+
+                      <app-custom-pagging [hidden]="pricing.p_d_p_items && pricing.p_d_p_items.length <= 5"
+                        #customPagging1 [length]="pricing.p_d_p_items.length || 0"></app-custom-pagging>
+
+                    </div>
+                  </mat-expansion-panel>
+                </div>
+              </mat-accordion>
+            </div>
+          </mat-tab>
+          <mat-tab label="Pricing">
+            <br />
+            <app-pricing-detail-dt [pricing]="pricing?.p_d_p_items"></app-pricing-detail-dt>
+          </mat-tab>
+        </mat-tab-group>
+      </div>
+    </div>
+  </div>
+  <!-- <pre>{{ pricing.p_d_p_items  | json }}</pre> -->
+</section>

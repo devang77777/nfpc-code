@@ -1,0 +1,105 @@
+<section *ngIf="salesmanLoad">
+  <div class="pl-3">
+    <div class="row">
+      <h2 class="page-title col-sm-6 font-weight-light">{{salesmanLoad.load_number}}</h2>
+      <div class="actions col-sm-6">
+        <div class="d-md-inline">
+          <div class="btn-group btnrow mr-2">
+            <button style="margin-left:-11px;" class="btn" type="button" (click)="getDocument()">
+              <mat-icon [inline]="true">picture_as_pdf</mat-icon>
+            </button>
+          </div>
+        </div>
+
+        <!-- <button (click)="openEditSalesmanLoad()" appPermission [permissions]="userPermissions" [type]="'edit'"
+          class="iconbtn"><i class="os-icon os-icon-edit" aria-hidden="true"></i></button> -->
+        <!-- <div>
+          <button class="btn btn-sm  btn-white dropdown-toggle" mat-button [matMenuTriggerFor]="menu2">More</button>
+          <mat-menu #menu2="matMenu"> -->
+        <!-- <button mat-menu-item (click)="toggleStatus()">Mark as {{ country.country_status === 0 ? 'Active' : 'Inactive' }}</button> -->
+        <!-- <button mat-menu-item (click)="openDeleteBox()" appPermission [permissions]="userPermissions"
+              [type]="'delete'">Delete</button>
+          </mat-menu>
+        </div> -->
+        <button *ngIf="isDetailVisible" class="btn" (click)="closeDetailView()"><i
+            class="os-icon os-icon-close"></i></button>
+      </div>
+    </div>
+  </div>
+
+  <div class="pl-3 region-data">
+    <div class="row h-100">
+      <div class="col-12 border-left">
+        <mat-tab-group class="customertab" mat-align-tabs="start">
+          <mat-tab label="Overview">
+            <div class="row">
+              <div class="col-xl-4 col-lg-5 col-md-8">
+                <ul class="smhlist mt-2">
+                  <li>
+                    <span>Date</span>
+                    <strong>{{salesmanLoad.load_date}}</strong>
+                  </li>
+                  <li>
+                    <span>Depot</span>
+                    <strong>{{salesmanLoad.depot?.depot_name}}</strong>
+                  </li>
+                  <li>
+                    <span>Route</span>
+                    <strong>{{salesmanLoad.route?.route_name}} - {{salesmanLoad.route?.route_code}}</strong>
+                  </li>
+                  <li>
+                    <span>Load Type</span>
+                    <strong>{{salesmanLoad.load_type == 1?'Delivery Load':'Van Load'}}</strong>
+                  </li>
+                  <li>
+                    <span>Salesman</span>
+                    <strong>{{salesmanLoad.salesman_infos?.user.firstname}}
+                      {{salesmanLoad.salesman_infos?.user.lastname}}</strong>
+                  </li>
+                </ul>
+              </div>
+            </div>
+            <div class="details-container">
+              <div class="item-container custom-mat custom-mat-no-border">
+                <div class="table-responsive">
+                  <table>
+                    <thead>
+                      <tr>
+                        <th class="head" *ngFor="let head of itemTableHeaders">{{ head }}</th>
+                      </tr>
+                    </thead>
+                    <tbody class="form-body">
+                      <tr class="item-row" *ngFor="let item of salesmanLoad?.salesman_load_details; let i = index;">
+                        <ng-container>
+                          <td>{{i+1}}</td>
+                          <td>
+                            {{item.item?.item_code}}
+                          </td>
+                          <td>
+                            {{item.item?.item_name}}
+                          </td>
+                          <td>
+                            {{item.item_u_o_m?.name}}
+                          </td>
+                          <td>
+                            {{item.load_qty}}
+                          </td>
+                          <td>
+                            {{item?.requested_qty}}
+                          </td>
+                        </ng-container>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+          </mat-tab>
+        </mat-tab-group>
+      </div>
+    </div>
+  </div>
+
+
+
+</section>

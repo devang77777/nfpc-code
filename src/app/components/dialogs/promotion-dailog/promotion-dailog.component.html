@@ -1,0 +1,60 @@
+<div id="ember612" class="modal-header ember-view">
+  <h2 class="modal-title">Offered Items</h2>
+  <button class="close no-outline" (click)="close()" type="button">
+    &times;
+  </button>
+</div>
+<form [formGroup]="offerForm" (ngSubmit)="onSubmit()">
+  <div class="modal-body">
+    <div class="item-table-div">
+      <div class="table-responsive">
+        <table class="item-table">
+          <thead>
+            <tr>
+              <th class="head">Select</th>
+              <th class="head">Item</th>
+              <th class="head">Item Code</th>
+              <th class="head">UOM</th>
+              <th class="head">Quantity</th>
+            </tr>
+          </thead>
+          <tbody class="form-body">
+            <tr
+              class="item-row"
+              *ngFor="
+                let item of offerForm.get('items')['controls'];
+                let i = index
+              "
+            >
+              <ng-container>
+                <td class="item-sequence">
+                  <input type="checkbox" [formControl]="item" />
+                </td>
+                <td data-th="Item Name" class="item-name">
+                  {{ offerItems[i].item.item_name }}
+                </td>
+                <td data-th="Item Code" class="item-name">
+                  {{ offerItems[i].item.item_code }}
+                </td>
+
+                <td data-th="UOM" class="uom-td">
+                  {{ offerItems[i].item_uom?.name }}
+                </td>
+                <td data-th="Offered Quantity" class="qty-td">
+                  {{ offerItems[i].offered_qty }}
+                </td>
+              </ng-container>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+  <div class="modal-footer">
+    <div style="display: 'flex'; justify-content: flex-end; width: 100%;">
+      <button type="button" class="btn btn-secondary" (click)="close()">Cancel</button>&nbsp;
+      &nbsp;
+      <button type="submit" class="btn btn-secondary">Submit</button>
+    </div>
+  </div>
+</form>

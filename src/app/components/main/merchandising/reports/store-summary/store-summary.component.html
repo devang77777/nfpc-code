@@ -1,0 +1,39 @@
+<div class="pl-3 items-table-box">
+  <div class="table-responsive">
+    <table mat-table [dataSource]="itemSource" class="mat-elevation-z8 table table-hover" multiTemplateDataRows>
+      <ng-container matColumnDef="name">
+        <th style="width: 80%;" mat-header-cell *matHeaderCellDef>Name
+          <!-- <app-column-filter title="Name" (changeSelected)="onColumnFilterOpen($event)"
+            [selected]="selectedColumnFilter" (close)="onColumnFilter($event)">
+            <input class="form-control form-control-sm" placeholder="Enter Name" type="text">
+          </app-column-filter> -->
+
+        </th>
+        <td mat-cell *matCellDef="let element" class="font-weight-bold"> {{ element.name }}</td>
+      </ng-container>
+      <ng-container matColumnDef="action">
+        <th style="width: 20%;" mat-header-cell *matHeaderCellDef>
+          <button class="btn btn-white btn-sm mr-2" (click)="toggle()">Expand/Collapse</button>
+        </th>
+        <td mat-cell *matCellDef="let element" class="font-weight-bold"></td>
+      </ng-container>
+      <ng-container matColumnDef="expandedDetail">
+        <td mat-cell *matCellDef="let element" [attr.colspan]="displayedColumns.length">
+          <div class="element-detail w-100"
+            [@detailExpand]="element == expandedElement || allrowsExpended == true ? 'expanded' : 'collapsed'">
+            <div *ngIf='element' class="w-100">
+              <app-subtable [reportName]="element.name" [displayedColumns]="element.cols"
+                [displayLabels]="element.labels" [displayData]="element.data"></app-subtable>
+            </div>
+            <br />
+          </div>
+        </td>
+      </ng-container>
+      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+      <tr mat-row *matRowDef="let row; columns: displayedColumns; let i = index" (click)="expandList(row)"
+        class="element-row" [class.expanded-row]="row === expandedElement || allrowsExpended === true ? true : false">
+      </tr>
+      <tr mat-row *matRowDef="let row;let i = index; columns: ['expandedDetail']" class="detail-row"></tr>
+    </table>
+  </div>
+</div>

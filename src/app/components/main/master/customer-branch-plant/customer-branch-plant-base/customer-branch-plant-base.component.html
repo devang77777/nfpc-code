@@ -1,0 +1,30 @@
+<mat-drawer-container class="formdrawer-container" hasBackdrop="false">
+
+    <section>
+        <div class="table-box">
+            <div class="heading-row clearfix">
+                <h2 class="d-inline">Customer Branch Plant</h2>
+                <div class="d-inline float-right">
+
+
+                    <!-- impot /Export  -->
+                    <button class="btn btn-sm btn-white ml-2 dropdown-toggle" [matMenuTriggerFor]="menu3">
+                        <i class="fa fa-bars" aria-hidden="true"></i>
+                    </button>
+                    <mat-menu #menu3="matMenu">
+                        <button mat-menu-item type="button" (click)="openImport()">Import</button>
+                        <button mat-menu-item type="button" (click)="openExport()">Export</button>
+
+                    </mat-menu>
+                </div>
+            </div>
+            <app-customer-branch-plant-dt>
+            </app-customer-branch-plant-dt>
+        </div>
+        <!-- <div class="details-box" [ngClass]="{ expanded: isDetailVisible }">
+        <app-route-detail (updateTableData)="updateTableData($event)" (detailsClosed)="closeClicked()"
+          [isDetailVisible]="isDetailVisible" [routeData]="routeData">
+        </app-route-detail>
+      </div> -->
+    </section>
+</mat-drawer-container>

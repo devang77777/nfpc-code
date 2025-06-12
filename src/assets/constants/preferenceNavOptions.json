@@ -1,0 +1,11 @@
+[
+  
+  {
+    "label": "Work Flow Approval",
+    "routeTo": "settings/preference/work-flow"
+  },
+  {
+    "label": "Theme",
+    "routeTo": "settings/preference/theme"
+  }
+]

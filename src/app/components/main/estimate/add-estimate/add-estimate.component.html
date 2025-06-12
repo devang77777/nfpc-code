@@ -1,0 +1,190 @@
+<section>
+  <div class="heading-row">
+    <h2 class="d-inline"><i class="fa fa-calculator mr-2"></i>{{ pageTitle }}</h2>
+    <div class="d-inline float-right">
+      <button mat-button class="btn btn-sm btn-white mr-2" [matMenuTriggerFor]="menu2">More</button>
+      <mat-menu #menu2="matMenu" xPosition="before">
+        <button mat-menu-item class="height-40" (click)="goToOrder()">Go to Estimate</button>
+      </mat-menu>
+      <button mat-button class="btn btn-sm btn-white" (click)="goBackToOrdersList()"><i
+          class="fa fa-chevron-left"></i><span class="back-btn"> Back</span></button>
+    </div>
+  </div>
+  <div class="separator"></div>
+  <div class="scrolly">
+    <form [formGroup]="orderFormGroup" class="order-form custom-mat square">
+
+      <div class="card-body active-form overview">
+        <div class="row justify-content-between">
+          <div class="col-md-4">
+            <div class="form-group">
+              <label for="">Customer</label>
+              <mat-form-field>
+                <mat-label>Select Customer</mat-label>
+                <mat-select class="no-disabled-text" id="typeFormField" (ngModelChange)="orderTypeChanged($event)"
+                  required [formControl]="customerFormcontrol">
+                  <mat-option *ngFor="let order of customers" [value]="order.id">{{ order.user?.firstname }} - {{
+                    order.customer_code }}</mat-option>
+                  <hr class="orderHr">
+                  <mat-option id="typeBtn" class="in-opt-btn"><button (click)="addOrderType()"><i
+                        class="os-icon os-icon-plus"></i> Add Customer</button></mat-option>
+                </mat-select>
+                <mat-error *ngIf="customerFormcontrol.hasError('required')">Please select a Customer</mat-error>
+              </mat-form-field>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div [ngClass]="{ 'inactive-form': customerFormcontrol.invalid }">
+        <div class="card-body overview">
+          <div class="row justify-content-between">
+            <div class="col-md-4">
+              <div class="form-group">
+                <label for="">Estimate Date</label>
+                <input type="date" class="form-control form-control-sm" required [formControl]="orderDateFormControl"
+                  id="deliveryDate">
+              </div>
+              <div class="form-group">
+                <label for="">Expairy Date </label>
+                <input type="date" [formControl]="deliveryDateFormControl" required class="form-control form-control-sm"
+                  id="dueDate">
+              </div>
+              <div class="form-group">
+                <label for="">SalesPerson </label>
+                <mat-form-field>
+                  <mat-label>Select salesPerson</mat-label>
+                  <mat-select class="no-disabled-text" id="typeFormField" (ngModelChange)="orderTypeChanged($event)"
+                    required [formControl]="salesPersonFormControl">
+                    <mat-option *ngFor="let order of salesman" [value]="order.id">{{ order.name }}</mat-option>
+                    <hr class="orderHr">
+                    <mat-option id="typeBtn" class="in-opt-btn"><button (click)="addsalesperson()"><i
+                          class="os-icon os-icon-plus"></i> Add SalesPerson</button></mat-option>
+                  </mat-select>
+                  <mat-error *ngIf="salesPersonFormControl.hasError('required')">Please select a SalesPerson</mat-error>
+                </mat-form-field>
+              </div>
+            </div>
+            <div class="col-md-4">
+              <div class="form-group">
+                <label for="">Estimate Code</label>
+                <div class="position-relative">
+                  <input type="text" class="form-control form-control-sm" (keypress)="restrictLength($event)"
+                    [formControl]="poNumberFormControl">
+                  <span class="setting-btn"><button (click)="openNumberSettings()"><i
+                        class="os-icon os-icon-ui-46"></i></button></span>
+                </div>
+              </div>
+              <div class="form-group">
+                <label for="">Reference</label>
+                <input type="text" class="form-control form-control-sm" required [formControl]="referenceFormControl"
+                  id="deliveryDate">
+              </div>
+              <div class="form-group">
+                <label for="">Subject</label>
+                <input type="text" [formControl]="subjectFormControl" required class="form-control form-control-sm"
+                  id="dueDate">
+              </div>
+
+            </div>
+          </div>
+
+        </div>
+
+        <div class="bottom-form">
+          <div class="item-container custom-mat custom-mat-no-border"
+            [ngClass]="{ 'inactive-form': customerFormcontrol.invalid }">
+            <table class="table-check">
+              <thead>
+                <tr>
+                  <th class="head"></th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr class="item-row" *ngFor="let item of payloadItems; let i = index;">
+                  <input class="item-checkbox" (change)="itemDidSelected($event, item)" type="checkbox" name="item">
+                </tr>
+              </tbody>
+            </table>
+
+            <div class="item-table-div">
+              <table class="item-table">
+                <thead>
+                  <tr>
+                    <th class="head" *ngFor="let head of itemTableHeaders">{{ head.label }}</th>
+                  </tr>
+                </thead>
+                <tbody class="form-body">
+                  <tr formArrayName="items" class="item-row" *ngFor="let item of itemFormControls; let i = index;">
+                    <ng-container [formGroupName]="i">
+                      <td>{{ i + 1 }}</td>
+                      <td class="item-name" *ngIf="isDeliveryForm"><input type="text"
+                          class="form-control form-control-sm non-editable" [value]="payloadItems[i].item.name"
+                          disabled>
+                      </td>
+                      <td class="item-name" *ngIf="!isDeliveryForm">
+                        <mat-form-field class="item-name-field">
+                          <input type="text" required placeholder="Search an item" matInput formControlName="item"
+                            [matAutocomplete]="auto">
+                          <mat-autocomplete #auto="matAutocomplete" (opened)="checkFormValidation()"
+                            (optionSelected)="itemDidSearched($event.option.value, i)"
+                            [displayWith]="itemsControlDisplayValue">
+                            <mat-option *ngFor="let item of filteredItems" [value]="itemControlValue(item)">
+                              {{ item.item_name }}</mat-option>
+                          </mat-autocomplete>
+                        </mat-form-field>
+                      </td>
+                      <td class="uom-td" *ngIf="isDeliveryForm"><input type="text"
+                          class="form-control form-control-sm non-editable" [value]="getUomValue(payloadItems[i])"
+                          disabled></td>
+                      <td class="uom-td" *ngIf="!isDeliveryForm">
+                        <select class="custom-select" required formControlName="item_uom_id">
+                          <option [value]="uom.id" *ngFor="let uom of uoms">{{ uom.name }}</option>
+                        </select>
+                      </td>
+                      <td class="stats-cell"><input type="number" min="0" class="form-control" placeholder="Quantity"
+                          formControlName="item_qty"></td>
+                      <td class="stats-cell"><input type="number" class="form-control non-editable"
+                          [value]="numberFormat(payloadItems[i].item_price)" disabled></td>
+                      <td class="stats-cell"><input type="text" class="form-control non-editable"
+                          [value]="numberFormat(payloadItems[i].item_discount_amount)" disabled></td>
+                      <td class="stats-cell"><input type="text" class="form-control non-editable"
+                          [value]="numberFormat(payloadItems[i].item_vat)" disabled></td>
+                      <td class="stats-cell"><input type="text" class="form-control non-editable"
+                          [value]="numberFormat(payloadItems[i].item_net)" disabled></td>
+                      <td class="stats-cell"><input type="text" class="form-control non-editable"
+                          [value]="numberFormat(payloadItems[i].item_excise)" disabled></td>
+                      <td class="stats-cell"><input type="text" class="form-control non-editable"
+                          [value]="numberFormat(payloadItems[i].item_grand_total)" disabled></td>
+                    </ng-container>
+                  </tr>
+                </tbody>
+              </table>
+              <button class="add-item-btn" (click)="addItem()">
+                <!--            <i class="os-icon os-icon-plus"></i>-->
+                Add Item
+              </button>
+            </div>
+            <div class="offset-md-2 col-sm-5">
+              <div class="overall-stats-table">
+                <div *ngFor="let stat of objectValues(orderFinalStats)">
+                  <span class="stat-label">{{ stat.label }}</span>
+                  <span class="stat-value">{{ numberFormatWithSymbol(stat.value) }}</span>
+                </div>
+                <div>
+                  <span class="stat-label final-total">{{ orderFinalStats.grand_total.label }}</span>
+                  <span class="stat-value final-total">{{ numberFormatWithSymbol(orderFinalStats.grand_total.value)
+                    }}</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </form>
+  </div>
+  <div class="actions">
+    <button class="mat-inherit-line-height" [disabled]="isDeliveryForm" mat-button
+      (click)="postFinalOrder('order')">Save & Submit</button>
+  </div>
+</section>

@@ -1,0 +1,209 @@
+<mat-horizontal-stepper [linear]="true" #stepper>
+    <!-- <mat-step [stepControl]="firstFormGroup"> -->
+    <mat-step>
+        <div class="card w-75 p-4 m-auto border shadow-sm">
+
+            <ng-template matStepLabel>Select key combination</ng-template>
+            <!-- <mat-form-field>
+                    <mat-label>Name</mat-label>
+                    <input matInput placeholder="Last name, First name" formControlName="firstCtrl" required>
+                </mat-form-field> -->
+            <div class="form-group">
+                <label>Select Key</label>
+                <select class="form-control form-control-sm">
+                    <option>1</option>
+                    <option>2</option>
+                </select>
+            </div>
+            <p class="text-muted m-auto">To create new key combination click on “+” Button.</p>
+            <div class="d-flex justify-content-center">
+
+                <button mat-mini-fab color="primary" (click)="showOptions=true;">
+                    <i class="fa fa-plus text-white mb-1" aria-hidden="true"></i>
+                </button>
+            </div>
+            <div *ngIf="showOptions">
+                <h4 class="m-0">Select Location</h4>
+                <table>
+                    <tr>
+                        <td>
+                            <mat-checkbox [(ngModel)]="l1">Country</mat-checkbox>
+                        </td>
+                        <td>
+                            <mat-checkbox [(ngModel)]="l2">Region</mat-checkbox>
+                        </td>
+                        <td>
+                            <mat-checkbox [(ngModel)]="l3">Area</mat-checkbox>
+                        </td>
+                        <td>
+                            <mat-checkbox [(ngModel)]="l4">Sub Area</mat-checkbox>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <mat-checkbox [(ngModel)]="l5">Route</mat-checkbox>
+                        </td>
+                    </tr>
+                </table>
+                <hr>
+                <h4 class="m-0">Select Customer</h4>
+                <table>
+                    <tr>
+                        <td>
+                            <mat-checkbox [(ngModel)]="c1">Sales Organisation</mat-checkbox>
+                        </td>
+                        <td>
+                            <mat-checkbox [(ngModel)]="c2">Channel</mat-checkbox>
+                        </td>
+                        <td>
+                            <mat-checkbox [(ngModel)]="c3">Sub Channel</mat-checkbox>
+                        </td>
+                        <td>
+                            <mat-checkbox [(ngModel)]="c4">Customer Category</mat-checkbox>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <mat-checkbox [(ngModel)]="c5">Customer</mat-checkbox>
+                        </td>
+
+                    </tr>
+                </table>
+                <hr>
+                <h4 class="m-0">Select Item</h4>
+                <table>
+                    <tr>
+                        <td>
+                            <mat-checkbox [(ngModel)]="i1">Major Category</mat-checkbox>
+                        </td>
+                        <td>
+                            <mat-checkbox [(ngModel)]="i2">Sub Category</mat-checkbox>
+                        </td>
+                        <td>
+                            <mat-checkbox [(ngModel)]="i3">Item Group</mat-checkbox>
+                        </td>
+                        <td></td>
+                    </tr>
+                </table>
+                <hr>
+                <nav aria-label="breadcrumb">
+                    <ol class="breadcrumb bg-white">
+                        <li class="mr-2">Key: </li>
+                        <li *ngIf="l1" class="breadcrumb-item">Country</li>
+                        <li *ngIf="l2" class="breadcrumb-item">Region</li>
+                        <li *ngIf="l3" class="breadcrumb-item">Area</li>
+                        <li *ngIf="l4" class="breadcrumb-item">Sub Area</li>
+                        <li *ngIf="l5" class="breadcrumb-item">Route</li>
+                        <li *ngIf="c1" class="breadcrumb-item">Sales Organisation</li>
+                        <li *ngIf="c2" class="breadcrumb-item">Channel</li>
+                        <li *ngIf="c3" class="breadcrumb-item">Sub Channel</li>
+                        <li *ngIf="c4" class="breadcrumb-item">Customer Category</li>
+                        <li *ngIf="c5" class="breadcrumb-item">Customer</li>
+                        <li *ngIf="i1" class="breadcrumb-item">Major Category</li>
+                        <li *ngIf="i2" class="breadcrumb-item">Sub Category</li>
+                        <li *ngIf="i3" class="breadcrumb-item">Item Group</li>
+                    </ol>
+                </nav>
+            </div>
+
+            <div>
+                <button mat-button matStepperNext class="float-right">Next</button>
+            </div>
+
+        </div>
+
+    </mat-step>
+    <mat-step [stepControl]="secondFormGroup">
+        <form [formGroup]="secondFormGroup">
+            <ng-template matStepLabel>Key Value</ng-template>
+            <mat-form-field>
+                <mat-label>Address</mat-label>
+                <input matInput formControlName="secondCtrl" placeholder="Ex. 1 Main St, New York, NY" required>
+            </mat-form-field>
+            <div>
+                <button mat-button matStepperPrevious>Back</button>
+                <button mat-button matStepperNext>Next</button>
+            </div>
+        </form>
+    </mat-step>
+    <mat-step>
+        <ng-template matStepLabel>Promotion</ng-template>
+        <p>You are now done.</p>
+        <div>
+            <button mat-button matStepperPrevious>Back</button>
+            <button mat-button (click)="stepper.reset()">Reset</button>
+        </div>
+    </mat-step>
+</mat-horizontal-stepper>
+<!-- <div class="d-flex justify-content-center p-4">
+    <div class="card border w-75">
+        <div class="card-header">Add Promotion</div>
+        <div class="card-body">
+            <div class="row mb-2">
+                <div class="col">
+                    <label for="">Name:</label>
+                    <input type="text" class="form-control form-control-sm" placeholder="">
+                </div>
+            </div>
+            <div class="row mb-2">
+                <div class="col">
+                    <mat-form-field class="w-100">
+                        <mat-label>Start Date</mat-label>
+                        <input matInput [matDatepicker]="picker">
+                        <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+                        <mat-datepicker #picker></mat-datepicker>
+                    </mat-form-field>
+                </div>
+                <div class="col">
+                    <mat-form-field class="w-100">
+                        <mat-label>End Date</mat-label>
+                        <input matInput [matDatepicker]="picker2">
+                        <mat-datepicker-toggle matSuffix [for]="picker2"></mat-datepicker-toggle>
+                        <mat-datepicker #picker2></mat-datepicker>
+                    </mat-form-field>
+                </div>
+            </div>
+            <div class="row mb-2">
+                <div class="col">
+                    <label for="">Offer Type:</label>
+                    <select class="form-control form-control-sm">
+                        <option value="">Any</option>
+                        <option value="">All</option>
+                    </select>
+                </div>
+                <div class="col">
+                    <label for="">Order Type:</label>
+                    <select class="form-control form-control-sm" [(ngModel)]="orderType" (change)="onTypeChange()">
+                        <option value="route">Route</option>
+                        <option value="customer">Customer</option>
+                    </select>
+                </div>
+            </div>
+            
+            <div class="row mb-2">
+                <div class="col">
+                    <div *ngIf="orderType">
+                        <label for="">Route:</label>
+                        <select class="form-control form-control-sm">
+                            <option *ngFor="let route of routes">{{route.name}}</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="col">
+                    <div *ngIf="orderType=='customer'">
+                        <label for="">Customer:</label>
+                        <select class="form-control form-control-sm">
+                            <option *ngFor="let customer of customers">{{customer.user.firstname}}
+                                {{customer.user.lastname}}</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+            
+           
+        </div>
+        <div class="card-footer">
+            <button class="btn btn-p">Save</button>
+        </div>
+    </div>
+</div> -->

@@ -1,0 +1,60 @@
+<mat-drawer-container class="formdrawer-container" hasBackdrop="false">
+  <mat-drawer
+    id="formDrawer"
+    mode="over"
+    position="end"
+    #formDrawer
+    class="border"
+  >
+    <div style="min-width: 320px;">
+      <app-add-item-uoms-form (updateTableData)="updateTableData($event)"></app-add-item-uoms-form>
+    </div>
+  </mat-drawer>
+  <section>
+    <div class="table-box" [ngClass]="{ collapsed: isDetailVisible }">
+      <div class="heading-row clearfix">
+        <h2 class="d-inline" [hidden]="isDetailVisible">Item UOM</h2>
+        <div
+          class="d-inline float-right"
+          [ngClass]="{ 'expanded-action': isDetailVisible }"
+        >
+          <button
+            class="btn btn-sm btn-p"
+            mat-button
+            (click)="openItemUoms()"
+            appPermission
+            [permissions]="userPermissions"
+            [type]="'create'"
+          >
+            <i class="fa fa-plus mr-2" aria-hidden="true"></i>New
+          </button>
+          <button *ngIf="checkedRows.length > 0" class="btn btn-sm btn-white dropdown-toggle ml-2" mat-button
+            [matMenuTriggerFor]="menu2">
+            Bulk Actions
+          </button>
+          <mat-menu #menu2="matMenu">
+            <button mat-menu-item (click)="bulkAction('active')">Mark as Active</button>
+            <button mat-menu-item (click)="bulkAction('inactive')" >Mark as Inactive</button>
+            <!-- <button mat-menu-item (click)="bulkAction('delete')" appPermission [permissions]="userPermissions" [type]="'delete'">
+              Delete
+            </button> -->
+          </mat-menu>
+        </div>
+      </div>
+      <app-itemgUoms-dt
+      [newIUomData] = "newIUomData"
+        (itemClicked)="itemClicked($event)"
+        (selectedRows)="selectedRows($event)"
+      ></app-itemgUoms-dt>
+    </div>
+    <div class="details-box" [ngClass]="{ expanded: isDetailVisible }">
+      <app-itemUoms-detail
+      (updateTableData)="updateTableData($event)"
+        (detailsClosed)="closeClicked()"
+        [isDetailVisible]="isDetailVisible"
+        [itemUoms]="itemUomsData"
+      >
+      </app-itemUoms-detail>
+    </div>
+  </section>
+</mat-drawer-container>

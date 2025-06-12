@@ -1,0 +1,542 @@
+<section>
+    <div class="heading-row">
+        <h2 class="d-md-inline">
+            <i class="os-icon os-icon-truck"></i> Delivery
+            <span class="order-number">#{{ deliveryData?.delivery_number }}</span>
+        </h2>
+        <div class="d-md-inline float-md-right text-right">
+
+            <div class="btn-group btnrow mr-2">
+                <button class="btn" type="button" [autoClose]="'outside'" triggers="manual" #email="ngbPopover"
+                    placement="bottom" (click)="email.open();" [ngbPopover]="emailPopContent"
+                    [popoverTitle]="emailPopTitle">
+                    <i class="os-icon os-icon-mail"></i>
+                </button>
+                <button class="btn" type="button"
+                    [disabled]="currentRole=='SC' || (deliveryData?.approval_status=='Completed' || deliveryData?.approval_status=='Shipment')"
+                    [routerLink]="['/transaction/delivery/edit', deliveryData?.uuid]">
+                    <i class="os-icon os-icon-edit-32"></i>
+                </button>
+                <!-- [disabled]="isPickingDeliveryData.length==deliveryData?.delivery_details.length" -->
+
+                <button class="btn" type="button" (click)="getDocument('pdf')">
+                    <mat-icon [inline]="true">picture_as_pdf</mat-icon>
+                </button>
+                <button class="btn" type="button" printSectionId="print-section" printTitle="Statement" [printStyle]="{
+          h1: { color: 'red' },
+          h2: { border: 'solid 1px' }
+        }" [useExistingCss]="true" ngxPrint>
+                    <i class="os-icon os-icon-printer"></i>
+                </button>
+
+                <!-- <button class="btn" type="button">
+          <mat-icon [inline]="true">attach_file</mat-icon>
+        </button> -->
+                <button (click)="onToggleHistory()" class="btn" type="button">
+                    <mat-icon [inline]="true">textsms</mat-icon>
+                </button>
+                <button (click)="formDrawer.open()"
+                    *ngIf="deliveryData?.is_truck_allocated==1 && (currentRole=='SC' || currentRole=='Warehouse' || currentRole === 'org-admin')"
+                    class="btn" type="button">
+                    <mat-icon [inline]="true">fire_truck</mat-icon>
+                </button>
+                <!--  *ngIf="currentRole=='SC' && (deliveryData?.approval_status=='Completed')" -->
+                <button (click)="formDrawer1.open()"
+                    *ngIf="deliveryData?.is_truck_allocated==1 && (currentRole=='SC' || currentRole === 'org-admin') && (deliveryData?.approval_status=='Completed' || deliveryData?.approval_status=='Cancel')"
+                    class="btn" type="button">
+                    <mat-icon [inline]="true">fact_check</mat-icon>
+                </button>
+            </div>
+
+            <span>
+                <button
+                    *ngIf="(deliveryData?.approval_status=='Truck Allocated') && (currentRole=='org-admin'|| currentRole=='Warehouse')"
+                    mat-button class="btn btn-sm btn-white mr-2 dropdown-toggle" [matMenuTriggerFor]="menu2">
+                    More
+                </button>
+                <mat-menu #menu2="matMenu" xPosition="before">
+                    <button *ngIf="showOrderStatusOptions" mat-menu-item class="height-40" (click)="confirmShipment()">
+                        Confirm Shipment
+                    </button>
+                </mat-menu>
+            </span>
+            <button class="btn" (click)="closeDetailView()">
+                <i class="os-icon os-icon-close"></i>
+            </button>
+        </div>
+    </div>
+    <div class="separator"></div>
+
+    <div class="approval-box" *ngIf="hasApprovalPending">
+        <div class="approve-icon">
+            <i class="fa fa-check-square-o"></i>
+        </div>
+        <div class="approve-content">
+            <h2>Approve this delivery</h2>
+            <p>
+                This delivery has been submitted for approval. Verify and approve the delivery.
+            </p>
+        </div>
+        <div class="approve-actions">
+            <button mat-button class="approve" (click)="approve()">Approve</button>
+            <button mat-button class="reject" (click)="reject()">Reject</button>
+        </div>
+    </div>
+
+    <form class="order-form custom-mat square scrolly">
+        <div class="card-header active-form overview">
+            <div class="row w-100">
+                <div class="col-md-4">
+                    <div class="form-group">
+                        <label>Delivery Type</label>
+                        <input type="text" class="form-control form-control-sm non-editable"
+                            [value]="deliveryData?.delivery_type?.name" disabled />
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="card-body overview">
+            <div class="row justify-content-between">
+                <div class="col-md-4">
+                    <div class="form-group" *ngIf="!isDepotOrder">
+                        <label>Customer</label>
+                        <input type="text" class="form-control form-control-sm non-editable" [value]="getCustomer()"
+                            disabled />
+                    </div>
+                    <div class="form-group" *ngIf="!isDepotOrder">
+                        <label>Customer Lob</label>
+                        <input type="text" class="form-control form-control-sm non-editable" [value]="getCustomerLob()"
+                            disabled />
+                    </div>
+                    <div class="form-group" *ngIf="deliveryData?.storageocation?.code">
+                        <label for="">Warehouse</label>
+                        <input type="text" class="form-control form-control-sm non-editable" [value]="
+            deliveryData?.storageocation?.code +'-'+ deliveryData?.storageocation?.name || ''" disabled />
+                    </div>
+                    <div class="form-group" *ngIf="isDepotOrder">
+                        <label>Depot</label>
+                        <input type="text" class="form-control form-control-sm non-editable"
+                            [value]="deliveryData?.depot?.depot_name" disabled />
+                    </div>
+                    <!-- <div class="form-group">
+            <label>Salesman</label>
+            <input type="text" class="form-control form-control-sm non-editable" [value]="
+                deliveryData?.salesman
+                  ? deliveryData?.salesman?.firstname +
+                    ' ' +
+                    deliveryData?.salesman?.lastname
+                  : ''
+              " disabled />
+          </div> -->
+                </div>
+                <div class="col-md-4">
+                    <div class="form-group">
+                        <label> Delivery Number</label>
+                        <input type="text" class="form-control form-control-sm non-editable"
+                            [value]="deliveryData?.delivery_number" disabled />
+                    </div>
+                    <div class="form-group">
+                        <label> Delivery Date</label>
+                        <input type="date" class="form-control form-control-sm non-editable"
+                            [value]="deliveryData?.delivery_date" disabled />
+                    </div>
+                    <div class="form-group">
+                        <label> Delivery Time</label>
+                        <input type="time" class="form-control form-control-sm non-editable"
+                            [value]="deliveryData?.delivery_time" disabled />
+                    </div>
+                    <!-- <div class="form-group">
+            <label> Payment Terms</label>
+            <input type="text" class="form-control form-control-sm non-editable"
+              [value]="deliveryData?.payment_term?.name" disabled />
+          </div>
+          <div class="form-group">
+            <label> Due Date</label>
+            <input type="date" class="form-control form-control-sm non-editable"
+              [value]="deliveryData?.delivery_due_date" disabled />
+          </div> -->
+                </div>
+            </div>
+        </div>
+        <div>
+            <div class="item-container custom-mat custom-mat-no-border" *ngIf="deliveryData?.delivery_details">
+                <div class="table-responsive">
+                    <table class="item-table cardtable">
+                        <thead>
+                            <tr>
+                                <ng-container *ngFor="let head of itemTableHeaders">
+                                    <th class="head" *ngIf="head.show && head.key!='check'">
+                                        {{ head.label }}
+                                    </th>
+                                </ng-container>
+                            </tr>
+                        </thead>
+                        <tbody class="form-body">
+                            <tr class="item-row" *ngFor="
+                  let item of deliveryData?.delivery_details;
+                  let i = index
+                " [ngClass]="item.is_picking == 1 ? 'disabled' : ''">
+                                <td class="item-seq" data-th="#">{{ i + 1 }}</td>
+                                <td class="item-name" style="width: 150px;" data-th="Item Code">
+                                    <!-- <input type="text" class="form-control form-control-sm non-editable" [value]="item.item?.item_name"
+                    disabled /> -->
+                                    <span
+                                        style="word-break: break-word; font-size: 11px;">{{item?.item?.item_code}}</span>
+                                </td>
+                                <td data-th="Item Name" class="item-name" style="width: 150px;">
+                                    <!-- <input type="text" class="form-control form-control-sm non-editable" [value]="item.item.item_name"
+                    disabled /> -->
+                                    <span
+                                        style="word-break: break-word; font-size: 11px;">{{item?.item?.item_name}}</span>
+                                </td>
+
+                                <td class="uom-td" data-th="UOM">
+                                    <input type="text" class="form-control form-control-sm non-editable"
+                                        [value]="item?.item_uom?.name" disabled />
+                                </td>
+
+                                <td data-th="Quantity">
+                                    <input type="number" min="0" class="form-control non-editable"
+                                        [value]="item.item_qty" disabled />
+                                </td>
+                                <td data-th="Reason">
+                                    <span style="word-break: break-word; font-size: 11px;">{{item?.reason?.name}}</span>
+                                </td>
+                                <td data-th="Price">
+                                    <input type="text" class="form-control non-editable"
+                                        [value]="numberFormat(item?.item_price)" disabled />
+                                </td>
+                                <td data-th="Excise">
+                                    <input type="text" class="form-control non-editable"
+                                        [value]="numberFormat(item?.item_excise)" disabled />
+                                </td>
+                                <td data-th="Discount">
+                                    <input type="text" class="form-control non-editable"
+                                        [value]="numberFormat(item?.item_discount_amount)" disabled />
+                                </td>
+                                <td data-th="Net">
+                                    <input type="text" class="form-control non-editable"
+                                        [value]="numberFormat(item?.item_net)" disabled />
+                                </td>
+                                <td data-th="Vat">
+                                    <input type="text" class="form-control non-editable"
+                                        [value]="numberFormat(item?.item_vat)" disabled />
+                                </td>
+                                <td data-th="Total">
+                                    <input type="text" class="form-control non-editable"
+                                        [value]="numberFormat(item?.item_grand_total)" disabled />
+                                </td>
+                                <!-- <td data-th="Driver Name">
+                  <input type="text" class="form-control non-editable" [value]="item?.template_driver_name" disabled />
+                </td>
+                <td data-th="Vehicle No">
+                  <input type="text" class="form-control non-editable" [value]="item?.template_vechicle" disabled />
+                </td> -->
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="footer-overview-container">
+                <div class="row justify-content-end">
+                    <div class="col-sm-4">
+                        <div class="overall-stats-table">
+                            <div *ngFor="let stat of orderStats.slice(0, orderStats.length - 1)">
+                                <span class="stat-label">{{ stat.label }}</span>
+                                <span class="stat-value">{{
+                                    deliveryData && numberFormatWithSymbol(deliveryData[stat.key])
+
+                                    }}</span>
+                            </div>
+                            <div>
+                                <span class="stat-label final-total">Total</span>
+                                <span class="stat-value final-total">{{
+                                    numberFormatWithSymbol(deliveryData?.grand_total)
+                                    }}</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+</section>
+
+<mat-drawer id="formDrawer" mode="over" position="end" #formDrawer class="border">
+    <div style="min-width: 400px;">
+        <section>
+            <div class="heading-row">
+                <h2 class="d-md-inline">
+                    <i class="os-icon os-icon-truck"></i> Delivery
+                    <span class="order-number">#{{ deliveryData?.delivery_number }}</span>
+                </h2>
+                <div class="d-md-inline float-md-right text-right">
+
+                    <button class="btn" (click)="formDrawer.close();callAPI()">
+                        <i class="os-icon os-icon-close"></i>
+                    </button>
+                </div>
+
+            </div>
+            <div class="separator"></div>
+
+            <div class="item-container custom-mat custom-mat-no-border">
+                <div class="table-responsive" style="overflow-y: scroll; height:400px;">
+                    <table class="item-table cardtable">
+                        <thead>
+                            <tr>
+                                <ng-container *ngFor="let head of itemDetailsTableHeaders">
+                                    <th class="head" *ngIf="head.show && head.key!='check' && head.key!='trip' &&  head.key != 'salesman_code'">
+                                        {{ head.label }}
+                                    </th>
+
+                                    <th class="head" *ngIf="head.show && head.key!='check' && head.key=='salesman_code'">
+                                      Driver Code <button class="edit-btn-delivery" type="button"
+                                          [disabled]="checkTempDeliveryStatus()"
+                                          [ngClass]="checkTempDeliveryStatus()?'disable-btn-edit':'enable-btn-edit'"
+                                          (click)="onClickDriverDialog()">
+                                          <i class="fa fa-pencil ml-1" aria-hidden="true"></i>
+                                      </button>
+                                    <th class="head" *ngIf="head.show && head.key!='check' && head.key=='trip'">
+                                        Trip <button class="edit-btn-delivery" type="button"
+                                            [disabled]="checkTempDeliveryStatus()"
+                                            [ngClass]="checkTempDeliveryStatus()?'disable-btn-edit':'enable-btn-edit'"
+                                            (click)="onClickTripDialog()">
+                                            <i class="fa fa-pencil ml-1" aria-hidden="true"></i>
+                                        </button>
+
+                                    </th>
+                                </ng-container>
+                            </tr>
+                        </thead>
+                        <tbody class="form-body">
+                            <tr class="item-row" *ngFor="let item of itemDetails;let i = index"
+                                [ngStyle]="{background:item.is_deleted==1?'yellow':''}">
+                                <td data-th="#">{{ i + 1 }}</td>
+                                <td data-th="Item Code">
+                                    <span
+                                        style="word-break: break-word; font-size: 11px;">{{item?.item?.item_code}}</span>
+                                </td>
+                                <td data-th="Item Name">
+                                    <span
+                                        style="word-break: break-word; font-size: 11px;">{{item?.item?.item_name}}</span>
+                                </td>
+                                <!-- <td data-th="UOM">
+                  <span style="word-break: break-word; font-size: 11px;">{{item?.item_uom?.name}}</span>
+                </td> -->
+                                <td data-th="Qty">
+                                    <input type="number" class="form-control form-control-sm" [value]="item?.qty"
+                                        [(ngModel)]="item.qty" placeholder="Qty"
+                                        [disabled]="item.is_deleted==1 || checkTempDeliveryStatus()">
+                                    <!-- <span style="word-break: break-word; font-size: 11px;">{{item?.qty}}</span> -->
+                                </td>
+                                <td data-th="salesman_code">
+                                    <input type="text" class="form-control form-control-sm"
+                                        [value]="item?.delivery_driver_info?.salesman_code"
+                                        [(ngModel)]="item.delivery_driver_info.salesman_code" placeholder="Code"
+                                        [disabled]="item.is_deleted==1 || checkTempDeliveryStatus()">
+
+                                    <!-- <span
+                    style="word-break: break-word; font-size: 11px;">{{item?.delivery_driver_info?.salesman_code}}</span> -->
+                                </td>
+                                <!-- <td data-th="van_code">
+                  <input type="text" class="form-control form-control-sm" [value]="item?.van?.van_code" [(ngModel)]="item.van.van_code" placeholder="Van Code" [disabled]="item.is_deleted==1 || checkTempDeliveryStatus()">
+
+                </td> -->
+                                <td data-th="trip" class="trip-colbox">
+
+
+                                    <!-- <span style="word-break: break-word; font-size: 11px;">{{item?.trip}}</span> -->
+                                    <input type="number" class="form-control form-control-sm" [value]="item?.trip"
+                                        [(ngModel)]="item.trip" placeholder="Trip"
+                                        [disabled]="item.is_deleted==1 || checkTempDeliveryStatus()">
+                                </td>
+                                <td data-th="delivery_sequence">
+                                    <!-- <span style="word-break: break-word; font-size: 11px;">{{item?.van?.van_code}}</span> -->
+                                    <input type="number" class="form-control form-control-sm"
+                                        [value]="item?.delivery_sequence" [(ngModel)]="item.delivery_sequence"
+                                        placeholder="Trip Sequance"
+                                        [disabled]="item.is_deleted==1 || checkTempDeliveryStatus()">
+
+                                </td>
+                                <td data-th="invoice" style="text-align: center;">
+                                    <input type="checkbox" [checked]="item.is_last_trip" [(ngModel)]="item.is_last_trip"
+                                        [disabled]="item.is_deleted==1 || checkTempDeliveryStatus()">
+                                </td>
+                                <td data-th="action" style="text-align: center;">
+                                    <button class="trash-btn" (click)="openItemDeleteBox(item,i)"
+                                        [disabled]="item.is_deleted==1 || checkTempDeliveryStatus()"><i
+                                            class="fa fa-trash"></i></button>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+
+                </div>
+
+            </div>
+            <div class="modal-footer">
+                <button mat-button class="btn btn-sm btn-p" [disabled]="checkTempDeliveryStatus()"
+                    (click)="submitTamp();formDrawer.close();">
+                    Submit
+                </button>&nbsp;
+                <button class="btn btn-sm btn-secondary" (click)="formDrawer.close()"
+                    [disabled]="checkTempDeliveryStatus()">Cancel</button>
+            </div>
+        </section>
+
+    </div>
+</mat-drawer>
+<mat-drawer id="formDrawer1" mode="over" position="end" #formDrawer1 class="border">
+    <div style="min-width: 400px;">
+        <section>
+            <div class="heading-row clearfix">
+                <h2 class="d-md-inline">
+                    <i class="os-icon os-icon-truck"></i> Delivery
+                    <span class="order-number">#{{ deliveryData?.delivery_number }}</span>
+                </h2>
+
+                <div class="d-md-inline float-md-right text-right">
+                  <button class="btn" style="margin-left:-11px;" type="button" (click)="openReasonBlock()" >
+                    <!-- <mat-icon [inline]="true">bulk</mat-icon> -->
+                    Change Reason
+                </button>
+                    <button class="btn" style="margin-left:-11px;" type="button" (click)="editDelivery()">
+                        <mat-icon [inline]="true">edit</mat-icon>
+                    </button>
+                    <button class="btn" (click)="formDrawer1.close();callAPI()">
+                        <i class="os-icon os-icon-close"></i>
+                    </button>
+                </div>
+
+            </div>
+            <div class="separator"></div>
+
+            <div class="item-container custom-mat custom-mat-no-border">
+                <div class="table-responsive" style="overflow-y: scroll; height:400px;">
+                    <table class="item-table cardtable">
+                        <thead>
+                            <tr>
+                                <ng-container *ngFor="let head of IitemTableHeadersDeliveryNote">
+                                    <th class="head" *ngIf="head.show && head.key!='check'">
+                                        {{ head.label }}
+                                    </th>
+                                </ng-container>
+                            </tr>
+                        </thead>
+                        <tbody class="form-body">
+                          <tr class="item-row" *ngFor="let item of deliveryNoteData;let i = index">
+                              <td data-th="#">{{ i + 1 }}</td>
+                              <td data-th="Item Code">
+                                  <span
+                                      style="word-break: break-word; font-size: 11px;">{{item?.item?.item_code}}</span>
+                              </td>
+                              <td data-th="Item Name">
+                                  <span
+                                      style="word-break: break-word; font-size: 11px;">{{item?.item?.item_name}}</span>
+                              </td>
+
+                              <td data-th="Qty">
+                                  <span style="word-break: break-word; font-size: 11px;">{{item.qty}}</span>
+                              </td>
+                              <td data-th="salesman_code">
+                                  <span
+                                      style="word-break: break-word; font-size: 11px;">{{item?.salesman_info?.salesman_code}}</span>
+                              </td>
+                              <td data-th="reason" style="width: 280px;">
+                                  <angular2-multiselect [data]="reasonsList" [(ngModel)]="item.reason"
+                                      [settings]="settings" (onSelect)="onItemSelect($event)"
+                                      (onDeSelect)="OnItemDeSelect($event)" (onSelectAll)="onSelectAll($event)"
+                                      (onDeSelectAll)="onDeSelectAll($event)">
+                                  </angular2-multiselect>
+
+                              </td>
+                              <!-- [ngStyle]="{'border':item?.isQtyChange?'1px solid red':'none'}" -->
+                              <!-- <td data-th="action" style="text-align: center;">
+                                  <button class="iconbtn" type="button" (click)="editDelivery(item)"
+                                      *ngIf="!isEdit"><i class="os-icon os-icon-edit"></i></button>
+                                  <button class="iconbtn" type="button" (click)="saveDeliveryNote()"
+                                      *ngIf="isEdit">Save</button>
+                                  <button class="iconbtn" type="button" (click)="isEdit=false;isDisableSave=true"
+                                      *ngIf="isEdit">Cancel</button>
+                              </td> -->
+                          </tr>
+                      </tbody>
+                    </table>
+
+                </div>
+
+            </div>
+            <div class="modal-footer" *ngIf="isEdit">
+                <button mat-button class="btn btn-sm btn-p" [disabled]="!isDisableSave"
+                    (click)="saveDeliveryNote();formDrawer1.close();">
+                    Submit
+                </button>&nbsp;
+                <button class="btn btn-sm btn-secondary" (click)="formDrawer1.close()">Cancel</button>
+            </div>
+        </section>
+        <div id="isShowInner" style="position:fixed; top:0;display:none; justify-content: center; align-items:center;width:100%;height:100%;left:0;background:#0005;">
+          <div class="card" style="width:300px;height:300px;">
+            <div class="card-header pt-4">
+                <span class="h6 font-weight-bold">Delivery Reason Change </span>
+                <div (click)="closeReasonAll()" class="closeicon settingclose"><i class="os-icon os-icon-x"></i></div>
+            </div>
+            <div class="card-body">
+                <!-- <form > -->
+                    <div>
+                        <div class="row"  style="width: 280px;">
+                            <!-- <div class="col-12 d-flex align-items-center">
+                                <label class="half-w  mb-0">Reason:</label> -->
+                                <angular2-multiselect style="width: 280px;"  [data]="reasonsList" [(ngModel)]="wholeReason"
+                                [settings]="settings2" >
+                            </angular2-multiselect>
+                            <!-- </div> -->
+                        </div>
+                    </div>
+                <!-- </form> -->
+            </div>
+            <div class="card-footer">
+                <div class="d-inline float-right">
+                    <button class="btn btn-sm btn-p" type="button" (click)="changeAllReason(); formDrawer1.close()" >
+                        Submit
+                    </button>
+                    <button class="btn btn-sm btn-white mr-2" (click)="closeReasonAll()">Cancel</button>
+                </div>
+            </div>
+        </div>
+        </div>
+
+    </div>
+</mat-drawer>
+<ng-template #emailPopTitle>
+    <span>Send Delivery {{deliveryData.delivery_number}}</span>
+</ng-template>
+<ng-template #emailPopContent>
+    <app-send-email [data]="emailData" (close)="email.close()"></app-send-email>
+</ng-template>
+<div class="card border" id="print-section">
+    <div class="card-body" [innerHTML]="deliveryTemplate"></div>
+</div>
+
+
+<div *ngIf="isShowData" style="width:100%;height:100%;background:#0006;position: fixed; display:flex;justify-content:center;align-items:center;top:0;left:0; z-index:1000;">
+  <div style="width:400px;height:300px;background:white;position:relative;">
+       <div style="border-bottom: 1px solid rgba(192, 192, 192, 0.443); padding:10px;">Driver Code</div>
+       <div>
+<div style="padding:10px;">
+        <angular2-multiselect style="width: 280px;"  [data]="salesmen" [(ngModel)]="selectedSalesmanData"
+                                [settings]="settings2" >
+                            </angular2-multiselect>
+                          </div>
+       </div>
+       <div style="border-top: 1px solid rgba(192, 192, 192, 0.443); padding:10px; position: absolute; bottom:0; display:flex; justify-content: flex-end;  width:100%;">
+      <button class="btn btn-sm btn-p"(click)="changeDriverCode()">Save</button>
+      <button  class="btn btn-sm btn-white mr-2" (click)="closeDriver()" >Cancel</button>
+
+      </div>
+
+  </div>
+
+
+</div>

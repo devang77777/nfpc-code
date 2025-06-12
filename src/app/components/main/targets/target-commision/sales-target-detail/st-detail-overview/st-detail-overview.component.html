@@ -1,0 +1,210 @@
+<section>
+  <div class="heading-row">
+    <h2>
+      <i class="fa fa-bullseye mr-2"></i>{{ salesTargetData.TargetName }}
+    </h2>
+    <!--    <div class="heading-action">-->
+    <!--      <button mat-button class="mat-inherit-line-height more-btn" [matMenuTriggerFor]="menu2">More</button>-->
+    <!--      <mat-menu #menu2="matMenu" xPosition="before">-->
+    <!--        <button mat-menu-item class="height-40" (click)="goToAllDataList()">Go to List</button>-->
+    <!--      </mat-menu>-->
+    <!--    </div>-->
+  </div>
+  <div class="separator"></div>
+  <div class="order-form custom-mat square">
+    <div class="card-body active-form overview">
+      <div class="row justify-content-between">
+        <div class="col-md-4">
+          <div class="form-group">
+            <label for="">Target Entity</label>
+            <input class="form-control form-control-sm non-editable" [value]="salesTargetData.TargetEntity" disabled />
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div>
+      <div class="card-body overview">
+        <div class="row justify-content-between">
+          <div class="col-md-4">
+            <div class="form-group">
+              <label for="">Target Name</label>
+              <input type="text" class="form-control form-control-sm non-editable" [value]="salesTargetData.TargetName"
+                disabled />
+            </div>
+            <div class="form-group">
+              <label for="">Start Date</label>
+              <input type="date" class="form-control form-control-sm non-editable" [value]="salesTargetData.StartDate"
+                disabled />
+            </div>
+            <div class="form-group">
+              <label for="">End Date</label>
+              <input type="date" class="form-control form-control-sm non-editable" [value]="salesTargetData.EndDate"
+                disabled />
+            </div>
+          </div>
+          <div class="col-md-4 pr-5">
+            <div class="form-group">
+              <label for="">Apply On</label>
+              <input type="text" class="form-control form-control-sm non-editable"
+                value="{{ salesTargetData.Applyon | titlecase }}" disabled />
+            </div>
+            <div class="form-group">
+              <label for="">Target Type</label>
+              <input type="text" class="form-control form-control-sm non-editable"
+                value="{{ salesTargetData.TargetType | titlecase }}" disabled />
+            </div>
+            <div class="form-group">
+              <label for="">Target Variance</label>
+              <input type="text" class="form-control form-control-sm non-editable"
+                value="{{ salesTargetData.TargetVariance | titlecase }}" disabled />
+            </div>
+            <div class="form-group">
+              <label for="">Commission Type</label>
+              <input type="text" class="form-control form-control-sm non-editable"
+                value="{{ salesTargetData.CommissionType | titlecase }}" disabled />
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+      <div class="bottom-form">
+        <!-- <div
+          class="item-container custom-mat custom-mat-no-border"
+          *ngIf="salesTargetData.Applyon == 'item'"
+        >
+          <div class="item-table-div">
+            <table class="item-table">
+              <thead>
+                <tr>
+                  <th class="head" *ngFor="let head of itemTableHeaders">
+                    {{ head.label }}
+                  </th>
+                </tr>
+              </thead>
+              <tbody class="form-body">
+                <tr
+                  class="item-row"
+                  *ngFor="
+                    let item of salesTargetData.sales_item_target_detail;
+                    let i = index
+                  "
+                >
+                  <td>{{ i + 1 }}</td>
+                  <td class="item-name">
+                    <input
+                      type="text"
+                      class="form-control form-control-sm non-editable"
+                      [value]="item.item.item_name"
+                      disabled
+                    />
+                  </td>
+                  <td class="uom-td">
+                    <input
+                      type="text"
+                      class="form-control form-control-sm non-editable"
+                      [value]="item.item_uom.name"
+                      disabled
+                    />
+                  </td>
+                  <td class="info-cell">
+                    <button (click)="openItemTargetModal(item, i)">
+                      <i class="fa fa-info-circle p-1"></i>
+                    </button>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div> -->
+
+        <div class="item-container custom-mat custom-mat-no-border">
+          <div class="item-table-div">
+            <table class="item-table">
+              <thead>
+                <tr *ngIf="targetControl === 'HEAD_VALUE'">
+                  <ng-container *ngIf="salesTargetData.Applyon=='item'">
+                    <th class="head" *ngFor="let head of itemTableHeaders">{{ head.label }}</th>
+                  </ng-container>
+                  <th class="head" *ngFor="let head of headTableHeadersValue">
+                    {{ head.label }}
+                  </th>
+                </tr>
+                <tr *ngIf="targetControl === 'HEAD_QTY'">
+                  <ng-container *ngIf="salesTargetData.Applyon=='item'">
+                    <th class="head" *ngFor="let head of itemTableHeaders">{{ head.label }}</th>
+                  </ng-container>
+                  <th class="head" *ngFor="let head of headTableHeadersQty">
+                    {{ head.label }}
+                  </th>
+                </tr>
+                <tr *ngIf="targetControl === 'HEAD_FIXED_VALUE'">
+                  <ng-container *ngIf="salesTargetData.Applyon=='item'">
+                    <th class="head" *ngFor="let head of itemTableHeaders">{{ head.label }}</th>
+                  </ng-container>
+                  <th class="head" *ngFor="let head of headTableHeadersFixedValue">
+                    {{ head.label }}
+                  </th>
+                </tr>
+                <tr *ngIf="targetControl === 'HEAD_FIXED_QTY'">
+                  <ng-container *ngIf="salesTargetData.Applyon=='item'">
+                    <th class="head" *ngFor="let head of itemTableHeaders">{{ head.label }}</th>
+                  </ng-container>
+
+                  <th class="head" *ngFor="let head of headTableHeadersFixedQty">
+                    {{ head.label }}
+                  </th>
+                </tr>
+              </thead>
+              <tbody class="form-body">
+                <tr class="item-row " *ngFor="
+                    let header of salesTargetData.sales_item_target_detail;
+                    let i = index
+                  ">
+                  <!-- <td>{{ i + 1 }}</td> -->
+                  <td *ngIf="header.ApplyOn=='1'">
+                    <span>{{header.item.item_name}}</span>
+                  </td>
+                  <td *ngIf="header.ApplyOn=='1'">
+                    <span>{{header.item_uom.name}}</span>
+                  </td>
+                  <td *ngIf="targetControl === 'HEAD_VALUE'">
+                    <span>{{header.sales_target_details[i].from_value}}</span>
+
+                  </td>
+                  <td *ngIf="targetControl === 'HEAD_VALUE'">
+                    <span>{{header.sales_target_details[i].to_value}}</span>
+                  </td>
+                  <td *ngIf="targetControl === 'HEAD_QTY'">
+                    <span>{{header.sales_target_details[i].from_qty}}</span>
+
+                  </td>
+                  <td *ngIf="targetControl === 'HEAD_QTY'">
+
+                    <span>{{header.sales_target_details[i].to_qty}}</span>
+                  </td>
+                  <td *ngIf="targetControl === 'HEAD_FIXED_VALUE'">
+                    <span>{{header.sales_target_details[i].fixed_value}}</span>
+
+                  </td>
+                  <td *ngIf="targetControl === 'HEAD_FIXED_QTY'">
+                    <span>{{header.sales_target_details[i].fixed_qty}}</span>
+
+                  </td>
+                  <td [ngClass]="{
+                      percent: salesTargetData.CommissionType == 'percentage'
+                    }">
+                    <span>{{header.sales_target_details[i].commission}}</span>
+
+                    <i *ngIf="salesTargetData.CommissionType == 'percentage'" class="fa fa-percent"></i>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

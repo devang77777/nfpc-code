@@ -1,0 +1,23 @@
+.form-box {
+  text-align: left;
+ background: #fff;
+ padding: 1.25rem;
+  }
+  
+  
+  #hasEnd:focus {
+    box-shadow: none;
+  }
+  
+  .check-box-div {
+    position: relative;
+  }
+  
+  input:disabled {
+    cursor: not-allowed;
+  }
+  
+  .mat-form-field {
+    display: block;
+  }
+  

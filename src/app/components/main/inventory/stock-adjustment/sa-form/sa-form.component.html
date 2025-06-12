@@ -1,0 +1,194 @@
+<section>
+  <div class="heading-row">
+    <h2 class="d-inline"><i class="os-icon os-icon-home  mr-2"></i>{{ pageTitle }}</h2>
+    <div class="d-inline float-right">
+      <button mat-button class="btn btn-sm btn-white dropdown-toggle" [matMenuTriggerFor]="menu2">More</button>
+      <mat-menu #menu2="matMenu" xPosition="before">
+        <button mat-menu-item class="height-40" (click)="goToStockAdjustmentList()">Go to List</button>
+      </mat-menu>
+    </div>
+  </div>
+  <div class="separator"></div>
+  <form [formGroup]="stockAdjustFormGroup" class="order-form custom-mat square scrolly">
+
+    <div class="card-body active-form overview">
+      <div class="row justify-content-between">
+        <div class="col-md-4">
+          <div class="form-group m-0">
+            <label for="">Adjustment Mode </label>
+            <ul class="list-inline">
+              <li class="list-inline-item">
+                <p class="radio">
+                  <app-radio-button [isMatStyle]="true"
+                    [config]="{ label: 'Quantity', value: 'quantity', name: 'mode', control: modeFormControl }">
+                  </app-radio-button>
+                </p>
+              </li>
+              <li class="list-inline-item">
+                <p class="radio">
+                  <app-radio-button [isMatStyle]="true"
+                    [config]="{ label: 'Value', value: 'value', name: 'mode', control: modeFormControl }">
+                  </app-radio-button>
+                </p>
+              </li>
+            </ul>
+
+
+          </div>
+        </div>
+      </div>
+
+
+    </div>
+
+    <div>
+      <div class="card-body overview">
+        <div class="row justify-content-between">
+          <div class="col-md-4">
+            <div class="form-group smmatinput">
+              <label for="">Account </label>
+              <mat-form-field id="accountFormField">
+                <mat-label>Select an account</mat-label>
+                <mat-select class="no-disabled-text" (blur)="checkFormValidation()" required
+                  (selectionChange)="accountChanged($event)" [formControl]="accountFormControl">
+                  <mat-option *ngFor="let account of account" [value]="account.id">{{ account.account_name }}
+                  </mat-option>
+                </mat-select>
+                <mat-error *ngIf="warehouseFormControl.hasError('required')">Please select an account</mat-error>
+              </mat-form-field>
+            </div>
+            <div class="form-group smmatinput">
+              <label for="">Warehouse </label>
+              <mat-form-field id="warehouseFormField">
+                <mat-label>Select source warehouse</mat-label>
+                <mat-select class="no-disabled-text" (blur)="checkFormValidation()" required
+                  (selectionChange)="warehouseChanged($event)" [formControl]="warehouseFormControl">
+                  <mat-option *ngFor="let warehouse of warehousedata" [value]="warehouse.id">{{ warehouse.name }}
+                  </mat-option>
+                </mat-select>
+                <mat-error *ngIf="warehouseFormControl.hasError('required')">Please select a warehouse</mat-error>
+              </mat-form-field>
+            </div>
+            <div class="form-group smmatinput">
+              <label for="">Reason </label>
+              <app-tree-dropdown style="height: 30px;" class="salesorg-dropdown" [dataSource]="reasondata"
+                [dataService]="salesOrganisationProvider()" [buttonLabel]="'Manage Reason'"
+                (manageClicked)="openChannel()" (whenItemSelected)="salesOrganisationSelected($event)"
+                [selectedItem]="selectedReasonData" [selectFormControl]="reasonFormControl"
+                [placeHolder]="'Search a Reason'" ngDefaultControl>
+              </app-tree-dropdown>
+            </div>
+          </div>
+          <div class="col-md-4">
+            <div class="form-group">
+              <label for="">Reference Number </label>
+              <div class="position-relative">
+                <input type="text" class="form-control form-control-sm" (keypress)="restrictLength($event)"
+                  [formControl]="referenceFormControl" id="grnNumber">
+                <span class="setting-btn" [hidden]="isEditForm"><button (click)="openNumberSettings()"><i
+                      class="os-icon os-icon-ui-46"></i></button></span>
+              </div>
+            </div>
+            <div class="form-group">
+              <label for="">Stock Adjustment Date </label>
+              <input type="date" class="form-control form-control-sm" required [formControl]="dateFormControl"
+                id="grnDate">
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+      <div class="bottom-form">
+        <div class="item-container custom-mat custom-mat-no-border"
+          [ngClass]="{ 'inactive-form': warehouseFormControl.invalid }">
+          <div class="item-table-div">
+            <table class="item-table">
+              <thead>
+                <tr *ngIf="modeOfAdjustment === 'quantity'">
+                  <th class="head" *ngFor="let head of qtyTableHeaders">{{ head.label }}</th>
+                  <th>Action</th>
+                </tr>
+                <tr *ngIf="modeOfAdjustment === 'value'">
+                  <th class="head" *ngFor="let head of valueTableHeaders">{{ head.label }}</th>
+                  <th>Action</th>
+                </tr>
+              </thead>
+              <tbody class="form-body">
+                <tr formArrayName="items" class="item-row" *ngFor="let item of itemFormControls; let i = index;">
+                  <ng-container [formGroupName]="i">
+                    <td>{{ i + 1 }}</td>
+                    <td class="item-name">
+                      <mat-form-field class="item-name-field">
+                        <input type="text" required placeholder="Search an item" matInput formControlName="item"
+                          [matAutocomplete]="auto">
+                        <mat-autocomplete #auto="matAutocomplete" (opened)="checkFormValidation()"
+                          (optionSelected)="itemDidSearched($event.option.value, i)"
+                          [displayWith]="itemsControlDisplayValue">
+                          <mat-option *ngFor="let item of filteredItems" [value]="itemControlValue(item)">
+                            {{ item.item_name }} - {{item.item_code}} </mat-option>
+                        </mat-autocomplete>
+                      </mat-form-field>
+                    </td>
+                    <td class="uom-td">
+                      <select class="custom-select" required formControlName="item_uom_id">
+                        <option [value]="uom.id" *ngFor="let uom of uoms">{{ uom.name }}</option>
+                      </select>
+                    </td>
+                    <ng-container *ngIf="modeOfAdjustment === 'quantity'">
+                      <td class="stats-cell no-fill"><input type="number" min="0" class="form-control form-control-sm"
+                          placeholder="available qty" formControlName="available_qty"></td>
+                      <td class="stats-cell"><input type="number" min="0" class="form-control form-control-sm"
+                          placeholder="new qty" formControlName="new_qty"></td>
+                      <td class="stats-cell no-fill"><input type="number" class="form-control form-control-sm"
+                          placeholder="adjusted qty" formControlName="adjusted_qty"></td>
+                      <td><button [disabled]="itemFormControls.length <= 1" class="trash-btn"
+                          (click)="deleteItemRow(i)"><i class="fa fa-close"></i></button></td>
+                    </ng-container>
+                    <ng-container *ngIf="modeOfAdjustment === 'value'">
+                      <td class="stats-cell no-fill"><input type="number" min="0" class="form-control form-control-sm"
+                          placeholder="available value" formControlName="available_value"></td>
+                      <td class="stats-cell"><input type="number" min="0" class="form-control form-control-sm"
+                          placeholder="new value" formControlName="new_value"></td>
+                      <td class="stats-cell no-fill"><input type="number" class="form-control form-control-sm"
+                          placeholder="adjusted value" formControlName="adjusted_value"></td>
+                      <td><button [disabled]="itemFormControls.length <= 1" class="trash-btn"
+                          (click)="deleteItemRow(i)"><i class="fa fa-close"></i></button></td>
+                    </ng-container>
+                  </ng-container>
+                </tr>
+              </tbody>
+            </table>
+            <button class="add-item-btn" mat-button (click)="addItem()">Add Item</button>
+          </div>
+          <!-- <table class="table-check">
+            <thead>
+              <tr>
+                <th class="head"></th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr class="item-row" *ngFor="let item of itemFormControls; let i = index;">
+                
+              </tr>
+            </tbody>
+          </table> -->
+        </div>
+        <div class="container footer-overview-container">
+          <div class="row">
+            <div class="form-group col-sm-5">
+              <label for="note">Description</label>
+              <textarea class="form-control form-control-sm" [formControl]="descriptionFormControl"
+                id="note"></textarea>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </form>
+  <div class="actions">
+    <button class="btn btn-primary" (click)="postFinalOrder('Draft')">Save as Draft</button>
+    <button class="btn btn-secondary" [disabled]="enableCTA" (click)="postFinalOrder('Adjustment')">Convert to
+      Adjustment</button>
+  </div>
+</section>

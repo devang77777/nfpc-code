@@ -1,0 +1,58 @@
+
+
+
+<button class="btn btn-sm border" mat-button  *ngIf="selections.selected.length > 0" [matMenuTriggerFor]="menu2">Bulky Action</button>
+<mat-menu #menu2="matMenu">
+  <button mat-menu-item>Change Status</button>
+  <button mat-menu-item>Delete</button>
+</mat-menu>
+<table mat-table [dataSource]="dataSource">
+  <ng-container matColumnDef="select">
+    <th mat-header-cell *matHeaderCellDef>
+      <a class="filter-btn" *ngIf="!isDetailVisible" [matMenuTriggerFor]="menu" style="height: 30px;">
+        <i class="fa fa-table" aria-hidden="true"></i>
+      </a>
+      <mat-menu #menu="matMenu">
+        <div class="card-body p-2" style="min-width: 200px;">
+          <ul style="list-style:none; padding-left: 7px;">
+            <li *ngFor="let column of filterColumns">
+              <input type="checkbox" [(ngModel)]="column.show" class="m-2" (click)="$event.stopPropagation()">
+              {{column.title}}
+            </li>
+          </ul>
+          <div class="float-right mb-2">
+            <button class="btn btn-p bg-secondary">Cancel</button>
+          </div>
+        </div>
+      </mat-menu>
+      <mat-checkbox
+        class="head-checkbox"
+        (change)="$event ? toggleSelection() : null"
+        [checked]="selections.hasValue() && isAllSelected()"
+        [indeterminate]="selections.hasValue() && !isAllSelected()"
+        [aria-label]="checkboxLabel()">
+      </mat-checkbox>
+    </th>
+    <td mat-cell *matCellDef="let row">
+      <mat-checkbox
+        class="row-checkbox"
+        (click)="$event.stopPropagation()"
+        (change)="$event ? selections.toggle(row) : null"
+        [checked]="selections.isSelected(row)"
+        [aria-label]="checkboxLabel(row)">
+      </mat-checkbox>
+    </td>
+  </ng-container>
+  <br/>
+  <ng-container matColumnDef="name">
+    <th mat-header-cell *matHeaderCellDef>  NAME </th>
+    <td mat-cell *matCellDef="let element"> {{ element.name }} </td>
+  </ng-container>
+  <ng-container matColumnDef="email">
+    <th mat-header-cell *matHeaderCellDef> EMAIL </th>
+    <td mat-cell *matCellDef="let element"> {{ element.email }} </td>
+  </ng-container>
+  <tr mat-header-row *matHeaderRowDef="getDisplayedColumns();"></tr>
+  <tr mat-row *matRowDef="let row; columns: getDisplayedColumns();" (click)="openDetailView(row)"></tr>
+</table>
+<mat-paginator [hidden]="!dataSource.data.length" pageSize="10" [pageSizeOptions]="[10, 25, 50, 100]"></mat-paginator>

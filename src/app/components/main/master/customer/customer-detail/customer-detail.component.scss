@@ -1,0 +1,22 @@
+button:focus {
+  outline: none;
+}
+button.mat-menu-item {
+  height: 30px;
+  line-height: normal;
+}
+.header-row {
+  float: left;
+  width: 100%;
+  position: relative;
+}
+button:active {
+  outline: none;
+}
+
+
+.scrollxy {
+  overflow-y: scroll !important;
+  background-color: white !important;
+}
+

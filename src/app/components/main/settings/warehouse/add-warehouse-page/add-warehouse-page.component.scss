@@ -1,0 +1,57 @@
+.settingIcon {
+  right: 0px;
+  position: absolute;
+  top: 6px;
+
+  i {
+    font-size: 20px;
+  }
+}
+
+.item-form {
+  width: 550px;
+  ;
+}
+
+.btn-disable {
+  background-color: #1abc9c99 !important;
+}
+
+.fixWidth {
+  width: 95% !important;
+}
+
+.form-control,
+.mat-select {
+  width: 96% !important;
+}
+
+.font-fix {
+  font-size: 11px !important;
+}
+
+.card-footer {
+  position: fixed;
+  width: 550px;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.03);
+  ;
+}
+
+.card {
+  position: relative;
+
+}
+
+.card-body {
+  height: calc(100vh - 170px);
+  overflow-y: scroll;
+}
+
+@media (max-width: 575px) {
+
+  .card,
+  .card-footer {
+    width: 330px;
+  }
+}

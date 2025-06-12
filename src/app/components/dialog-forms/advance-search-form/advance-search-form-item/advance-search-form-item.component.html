@@ -1,0 +1,90 @@
+<form [formGroup]="form" novalidate>
+
+    <div class="row">
+        <div class="col-md-6">
+            <div class="form-group row">
+                <label class="col-sm-3 col-form-label">Item Name</label>
+                <div class="col-sm-9">
+                    <input type="text" formControlName="item_name" class="form-control form-control-sm"
+                        placeholder="Item Name">
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="form-group row">
+                <label class="col-sm-3 col-form-label">Price</label>
+                <div class="col-sm-9">
+                    <input type="text" formControlName="price" class="form-control form-control-sm" placeholder="Price">
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="form-group row">
+                <label class="col-sm-3 col-form-label">ERP Code</label>
+                <div class="col-sm-9">
+                    <input type="text" formControlName="erp_code" class="form-control form-control-sm"
+                        placeholder="ERP Code">
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="form-group row">
+                <label class="col-sm-3 col-form-label">Item Code</label>
+                <div class="col-sm-9">
+                    <input type="text" formControlName="item_code" class="form-control form-control-sm"
+                        placeholder="Item Code">
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="form-group row">
+                <label class="col-sm-3" for="">Category:</label>
+                <div class="col-sm-9">
+                    <app-tree-dropdown class="tree-dropdown" [dataSource]="majorCategories"
+                        [dataService]="categoryProvider()" (whenItemSelected)="categorySelected($event)"
+                        [buttonLabel]="''" [selectFormControl]="form.get('item_major_category_id')"
+                        [placeHolder]="'Search a Category'" ngDefaultControl>
+                    </app-tree-dropdown>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="form-group row">
+                <label class="col-sm-3" for="">Brand:</label>
+                <div class="col-sm-9">
+                    <app-tree-dropdown class="tree-dropdown" [dataSource]="brands" [dataService]="brandProvider()"
+                        [buttonLabel]="''" (whenItemSelected)="brandSelected($event)"
+                        [selectFormControl]="form.get('brand_id')" [placeHolder]="'Search a Brand'" ngDefaultControl>
+                    </app-tree-dropdown>
+
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="form-group row">
+                <label class="col-sm-3" for="">Item Group:</label>
+                <div class="col-sm-9">
+                    <mat-select class="form-control form-control-sm" [formControl]="form.get('item_group_id')">
+                        <mat-option *ngFor="let itemGroup of itemGroups" [value]="itemGroup.id">
+                            {{itemGroup.name}}
+                        </mat-option>
+                    </mat-select>
+
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-6">
+            <div class="form-group row">
+                <label class="col-sm-3 col-form-label">Status</label>
+                <div class="col-sm-9">
+                    <mat-select class="form-control form-control-sm" formControlName="current_stage">
+                        <mat-option *ngFor="let item of statusList" [value]="item.id">
+                            {{ item.name }}
+                        </mat-option>
+                    </mat-select>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>

@@ -1,0 +1,70 @@
+[
+    {
+        "label": "Journey Plan Compliance",
+        "routeTo": "merchandising/reports/jp-compliance"
+    },
+    {
+        "label": "Competitor Product",
+        "routeTo": "merchandising/reports/competitor-product"
+    },
+    {
+        "label": "Order/Returns",
+        "routeTo": "merchandising/reports/order-returns"
+    },
+    {
+        "label": "Time Sheets",
+        "routeTo": "merchandising/reports/timesheets"
+    },
+    {
+        "label": "Photos",
+        "routeTo": "merchandising/reports/photos"
+    },
+    {
+        "label": "New Customer",
+        "routeTo": "merchandising/reports/new-customer"
+    },
+    {
+        "label": "Closed Visits",
+        "routeTo": "merchandising/reports/closed-visits"
+    },
+    {
+        "label": "Visit Summary",
+        "routeTo": "merchandising/reports/visit-summary"
+    },
+    {
+        "label": "Order Sumamry",
+        "routeTo": "merchandising/reports/order-sumamry"
+    },
+    {
+        "label": "Task Answers",
+        "routeTo": "merchandising/reports/task-answers"
+    },
+    {
+        "label": "Task Summary",
+        "routeTo": "merchandising/reports/task-summary"
+    },
+    {
+        "label": "SOS",
+        "routeTo": "merchandising/reports/sos"
+    },
+    {
+        "label": "Stock Availability",
+        "routeTo": "merchandising/reports/stock-availability"
+    },
+    {
+        "label": "Store Summary",
+        "routeTo": "merchandising/reports/store-summary"
+    },
+    {
+        "label": "Merchandiser Login Log",
+        "routeTo": "merchandising/reports/merchandiser-login-log"
+    },
+    {
+        "label": "Merchandiser Attendance",
+        "routeTo": "merchandising/reports/merchandiser-attendance"
+    },
+    {
+        "label": "User Login Log",
+        "routeTo": "merchandising/reports/user-login-log"
+    }
+  ]

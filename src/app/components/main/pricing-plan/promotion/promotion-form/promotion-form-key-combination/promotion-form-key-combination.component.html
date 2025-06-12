@@ -1,0 +1,82 @@
+<section>
+  <div class="bg-white">
+    <div class="form-box">
+      <div class="form-group">
+        <label>Select Key</label>
+        <select class="form-control" [formControl]="keyIndex" (change)="setSelection()">
+          <option *ngFor="let key of preDefinedKeys" [value]="key.combination_key">{{key.combination_key}}</option>
+          <!-- <option value="0">Country / Region / Channel / Customer</option>
+          <option value="1">Sales Organisation / Item</option> -->
+        </select>
+      </div>
+      <p class="text-muted text-center">To create new key combination click on “+” Button.</p>
+      <div class="d-flex justify-content-center">
+
+        <button mat-mini-fab color="primary" (click)="isVisible=true;">
+          <i class="fa fa-plus text-white mb-1" aria-hidden="true"></i>
+        </button>
+      </div>
+      <div *ngIf="isVisible" class="container">
+        <form>
+          <div class="form-group">
+            <label>Location</label>
+          </div>
+          <div class="form-group" [formGroup]="locationFormGroup">
+            <div class="row">
+              <div class="col-sm-4 check-box-div" *ngFor="let location of locationsControlData">
+                <div class="form-check-label">{{ location.label }}</div>
+                <app-checkbox [config]="{ id: location.value, control: locationFormGroup.controls[location.value] }"
+                  (checked)="updateCheckbox()"></app-checkbox>
+              </div>
+            </div>
+          </div>
+          <div class="form-group">
+            <label>Customer</label>
+          </div>
+          <div class="form-group" [formGroup]="customerFormGroup">
+            <div class="row">
+              <div class="col-sm-4 check-box-div" *ngFor="let customer of customersControlData">
+                <div class="form-check-label">{{ customer.label }}</div>
+                <app-checkbox [config]="{ id: customer.value, control: customerFormGroup.controls[customer.value] }"
+                  (checked)="updateCheckbox()"></app-checkbox>
+              </div>
+            </div>
+          </div>
+          <div class="form-group">
+            <label>Item</label>
+          </div>
+          <div class="form-group" [formGroup]="itemFormGroup">
+            <div class="row">
+              <div class="col-sm-4 check-box-div" *ngFor="let item of itemsControlData">
+                <div class="form-check-label">{{ item.label }}</div>
+                <app-checkbox [config]="{ id: item.value, control: itemFormGroup.controls[item.value] }"
+                  (checked)="updateCheckbox()"></app-checkbox>
+              </div>
+            </div>
+          </div>
+        </form>
+        <nav aria-label="breadcrumb">
+          <ol class="breadcrumb">
+            <li class="mr-2">Key: </li>
+            <li *ngIf="locationFormGroup.value.country" class="breadcrumb-item">Country</li>
+            <li *ngIf="locationFormGroup.value.region" class="breadcrumb-item">Region</li>
+            <li *ngIf="locationFormGroup.value.area" class="breadcrumb-item">Area</li>
+            <li *ngIf="locationFormGroup.value.subArea" class="breadcrumb-item">Sub Area</li>
+            <li *ngIf="locationFormGroup.value.route" class="breadcrumb-item">Route</li>
+            <li *ngIf="customerFormGroup.value.salesOrganisation" class="breadcrumb-item">Sales Organisation</li>
+            <li *ngIf="customerFormGroup.value.channel" class="breadcrumb-item">Channel</li>
+            <li *ngIf="customerFormGroup.value.subChannel" class="breadcrumb-item">Sub Channel</li>
+            <li *ngIf="customerFormGroup.value.customerCategory" class="breadcrumb-item">Customer Category</li>
+            <li *ngIf="customerFormGroup.value.customer" class="breadcrumb-item">Customer</li>
+            <li *ngIf="itemFormGroup.value.majorCategory" class="breadcrumb-item">Major Category</li>
+            <li *ngIf="itemFormGroup.value.subCategory" class="breadcrumb-item">Sub Category</li>
+            <li *ngIf="itemFormGroup.value.itemGroup" class="breadcrumb-item">Item Group</li>
+          </ol>
+        </nav>
+      </div>
+    </div>
+  </div>
+
+
+
+</section>

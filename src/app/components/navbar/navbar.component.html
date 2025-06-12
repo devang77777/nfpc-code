@@ -1,0 +1,40 @@
+<div class="position-relative nav-container">
+  <mat-toolbar class="custom-nav">
+    <div class="m-1 search-input">
+      <button class="search-btn dropdown-toggle" #clickMenuTrigger="matMenuTrigger" [matMenuTriggerFor]="menu">
+        <span class="material-icons"> search </span>
+      </button>
+      <mat-menu #menu="matMenu">
+        <div (click)="$event.stopPropagation()">
+          <button *ngFor="let menu of advanceSearchConfig;" [hidden]="featureCheck(menu.label)" mat-menu-item
+            (click)="check(menu.routeTo)">
+            <i class="os-icon os-icon-check mr-2" aria-hidden="true" [style.visibility]="
+                isChecked(menu.routeTo) ? 'visible' : 'hidden'
+              "></i>
+            {{menu.label}}
+          </button>
+          <button mat-menu-item class="text-center" (click)="openAdvanceSearch()">
+            Advance Search
+          </button>
+        </div>
+      </mat-menu>
+
+      <input placeholder="Search" style="border: none; width: 100%;" />
+    </div>
+    <div class="ml-auto">
+      <span *ngIf="is_trial == 1" class="trial-msg">You are currently in Free Plan.</span>
+      <a  (click)="openDrawer('profile')" class="orgname"><small><span>{{ org_name }}</span>
+          <i class="fa fa-angle-down" aria-hidden="true"></i></small></a>
+      <a (click)="openDrawer('settings')" class="mr-4"><i class="os-icon os-icon-ui-46"></i>
+      </a>
+      <a class="mr-4 notification" (click)="openDrawer('notifications')">
+
+        <i class="fa fa-bell"></i>
+        <span class="badge notification-badge" [hidden]="notificationCount==0">{{notificationCount}}</span>
+      </a>
+      <a routerLink="/guide" class="mr-4"><i class="os-icon os-icon-help-circle"></i>
+      </a>
+      <a (click)="openDrawer('profile')"><img [src]="avatarImage" alt="" class="img-rounded img-sm" /></a>
+    </div>
+  </mat-toolbar>
+</div>

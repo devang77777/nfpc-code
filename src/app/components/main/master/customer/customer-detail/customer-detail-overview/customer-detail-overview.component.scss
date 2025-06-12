@@ -1,0 +1,83 @@
+.approval-holder {
+    padding: 12px calc(1.25rem + 48px);
+    background: linear-gradient(180deg, white, #f3f3f3);
+  }
+  .approval-box {
+    display: flex;
+    padding: 12px;
+    border: 1px solid lightgray;
+    border-radius: 8px;
+    box-shadow: 2px 2px 4px #ced4da;
+    background-color: white;
+  }
+  .approve-icon {
+    width: 64px;
+    background-color: #eee;
+    margin-right: 10px;
+    border-radius: 8px;
+  
+    i {
+      font-size: 28px;
+      margin: 28% auto;
+      display: block;
+      width: 26px;
+    }
+  }
+  .approve-content {
+    width: 100%;
+  
+    h2,
+    p {
+      margin: 0;
+    }
+  }
+  .approve-actions {
+    display: flex;
+    width: 250px;
+    justify-content: space-evenly;
+    align-items: center;
+  
+    .approve {
+      background-color: #0bb698;
+      color: white;
+    }
+  
+    .reject {
+      background: none;
+      color: #485156;
+      border: 1px solid #ced4da;
+      border-radius: 0.25rem;
+    }
+  }
+  @media (max-width: 991px) {
+    .line-seperator{
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      .coll{
+        padding-left: 2px;
+        padding-right: 4px;
+      }
+    }
+   
+    .details .details-info{
+      padding: 10px 5px 0;
+
+      .group{
+        margin: 0;
+      }
+    }
+    .person{
+      .media{
+        display: block;
+        img{
+          float: none;
+        }
+      }
+    }
+  }
+  .scrollxy{
+    overflow-y: auto;
+    height: 550px;
+  }

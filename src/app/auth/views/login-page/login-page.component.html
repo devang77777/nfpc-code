@@ -1,0 +1,165 @@
+<mat-progress-bar *ngIf="submitting" mode="indeterminate"></mat-progress-bar>
+<!-- <div class="content-wrapper d-flex align-items-center justify-content-center" style="margin-top:0px; height: 100%;    background-color: #eef0f8 !important;">
+    
+    <div class="logincard">
+      
+        <div class="loginholder">
+            <div class="row">
+                <div class="col-md-6">
+                    <aside>
+                        <div class="logincontent">
+                            <img src="assets/images/logowhite.png" alt="" srcset="" width="150px" >
+                            <h2>Login</h2>
+                            <p>to access Mobiato Consulting</p>                        
+                        </div>
+                    </aside>
+                </div>
+                <div class="col-md-6">
+                    <div *ngIf="invalid" class="alert alert-danger" role="alert">
+                        {{message}}
+                    </div>
+               
+                        <div class="loginright">
+                            <h3>Welcome</h3>
+                            <p class="mb-4">Please Sign In to Continue</p>
+                            <form [formGroup]="loginForm" class="needs-validation" (ngSubmit)="onSubmit()">
+        
+                               <div class="form-group">
+                                <label for=""><i class="os-icon os-icon-mail-01"></i> Email</label>
+                                <input type="email" class="form-control " formControlName="email"
+                                placeholder="Email address" />
+                               </div>
+                                !-- <small class="text-danger" *ngIf="submitted && f.email.errors">Please enter valid email address</small> --
+                                <div class="form-group">
+                                    <label for=""><i class="os-icon os-icon-lock"></i>  Password</label>
+                                    <input type="password" class="form-control " formControlName="password"
+                                    placeholder="Password" />
+                                   </div>
+                                <div class="form-group">
+                                    <button class="btn btn-info btn-lg btn-login btn-block" type="submit">Login</button>
+                                 </div>
+                                
+                              
+                            </form>
+                      
+                            <div class="mt-2">
+                                <p class="text-muted ">Don't have an account? <a routerLink="/auth/signup">Sign
+                                        up</a>
+                                    </p>
+                                <p class="text-muted ">Forgot your password? <a
+                                        [routerLink]="['../reset-password']">Reset your
+                                        password.</a>
+                                    </p>
+                            </div>
+                        </div>
+                 
+                </div>
+            </div>
+               
+        </div>
+    </div>
+</div> -->
+
+<section id="invoice-login" *ngIf="!submitting" [hidden]="hidLoginForm">
+    <div class="scrolly-login container-fluid px-1 px-md-5 px-lg-1 px-xl-5 py-5 mx-auto">
+        <div class="card card0 border-0">
+            <div class="row d-flex">
+                <div class="col-lg-6">
+                    <div class="card1 pb-5">
+                        <div class="row px-3 justify-content-center mt-4 mb-5 border-line">
+                            <div class="invoice-login-crousel-outer">
+                                <div class="wrapper">
+                                    <owl-carousel-o [options]="customOptions">
+                                        <ng-container *ngFor="let slide of slider[domain]">
+                                            <ng-template class="slide" carouselSlide [id]="slide.id">
+                                                <img class="d-block w-100 img-wd" [src]="slide.image" [alt]="slide.id"
+                                                    [title]="slide.text">
+                                                <div class="{{slide.textClass}} mb-4"> {{slide.text}}</div>
+                                            </ng-template>
+                                        </ng-container>
+                                    </owl-carousel-o>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-6">
+                    <div class="card2 card border-0 px-4 py-5">
+                        <div class="row mb-4 px-3 invoive-text-center"><img src="/assets/img/inv-logo.png" alt="img"
+                                class="inv-logo" /></div>
+
+                        <div *ngIf="domain == 'invoice'" class="row mb-4 px-3 invoive-text-center">Mobiato Invoice
+                        </div>
+                        <div *ngIf="domain == 'merchandising' || domain == 'presales-prodmobiato.nfpc.net' || domain == 'prodmobiato.nfpc.net'"
+                            class="row mb-4 px-3 invoive-text-center">
+                            <div class="brand-name-pre"><img src="/assets/img/mar-logo.png"></div>
+                        </div>
+                        <div *ngIf="domain == 'presales'" class="row mb-4 px-3 invoive-text-center">
+                            <div class="brand-name-pre"><img src="/assets/img/pre-logo.png"></div>
+                        </div>
+
+                        <div *ngIf="invalid" class="alert alert-danger" role="alert">
+                            {{message}}
+                        </div>
+                        <div *ngIf="showEmailMsg" class="alert alert-Success" role="alert">
+                            {{message}}
+                        </div>
+                        <form *ngIf="!forgotView" [formGroup]="loginForm" class="needs-validation"
+                            (ngSubmit)="onSubmit()">
+                            <div class="row px-3"> <label class="mb-1">
+                                    <h6 class="mb-0 text-sm norma-font-inv">Users name or Email</h6>
+                                </label> <input class="mb-4" type="text" name="email" formControlName="email"
+                                    placeholder="Users name or Email">
+                            </div>
+                            <div class="row px-3"> <label class="mb-1">
+                                    <h6 class="mb-0 text-sm norma-font-inv">Password</h6>
+                                </label> <input type="password" name="password" formControlName="password"
+                                    placeholder="********"> </div>
+                            <div class="row px-3 mb-4">
+                                <div class="custom-control custom-checkbox custom-control-inline"> <input id="chk1"
+                                        type="checkbox" name="chk" class="custom-control-input">
+                                    <!-- <label for="chk1" class="custom-control-label text-sm">Remember me</label> -->
+                                </div> <a (click)="showForgotPassForm()" class="ml-auto mb-0 text-sm">Forgot
+                                    Password?</a>
+                            </div>
+                            <div class="row mb-3 px-3 button-bg-invoice">
+                                <button type="submit"
+                                    [ngClass]="{presalesz : domain == 'presales' ? true : false, march : domain == 'merchandising' || domain == 'presales-prodmobiato.nfpc.net' || domain == 'prodmobiato.nfpc.net' ? true : false}"
+                                    class="btn btn-blue text-center" [disabled]="loginForm.invalid">Login</button>
+                            </div>
+                        </form>
+                        <form *ngIf="forgotView" [formGroup]="forgotForm" class="needs-validation">
+                            <div class="row px-3"> <label class="mb-1">
+                                    <h6 class="mb-0 text-sm norma-font-inv">Email</h6>
+                                </label> <input class="mb-4" type="text" name="email" formControlName="email"
+                                    placeholder="Email">
+                            </div>
+                            <div class="row mb-3 px-3 button-bg-invoice">
+                                <button type="button" (click)="showForgotPassForm()"
+                                    [ngClass]="{presalesz : domain == 'presales' ? true : false, march : domain == 'merchandising' || domain == 'presales-prodmobiato.nfpc.net' || domain == 'prodmobiato.nfpc.net' ? true : false}"
+                                    class="btn btn-blue text-center mr-2">Cancel</button>
+                                <button type="button" (click)="onForgotSubmit()"
+                                    [ngClass]="{presalesz : domain == 'presales' ? true : false, march : domain == 'merchandising' || domain == 'presales-prodmobiato.nfpc.net' || domain == 'prodmobiato.nfpc.net' ? true : false}"
+                                    class="btn btn-blue text-center" [disabled]="forgotForm.invalid">Send</button>
+                            </div>
+                        </form>
+                        <div class="row px-3 mb-4">
+                            <div class="line"></div> <small class="or text-center">Or</small>
+                            <div class="line"></div>
+                        </div>
+                        <!-- <div class="row mb-4 px-3 invoive-text-center"> <a (click)="signInWithGoogle()"><small><img
+                                        src="/assets/img/inv-g.png" alt="img" class="goo" /> Sign In With Google
+                                </small></a></div> -->
+                        <div class="row mb-4 px-3 invoive-text-center"> <a (click)="signInWithAD()"><small><img
+                                        src="/assets/img/azure.png" alt="img" class="goo" /> Sign In with AD
+                                </small></a></div>
+                        <!-- <div class="row mb-4 px-3 invoive-text-center"> <small class="">Don't have an account? <a
+                                    routerLink="/auth/signup" class="blueee"> Create Account</a></small> </div> -->
+
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</section>

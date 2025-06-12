@@ -1,0 +1,23 @@
+<div class="container">
+  <table class="table table-bordered">
+    <thead>
+      <tr>
+        <th *ngFor="let head of displayedColumns" scope="col">{{head}} </th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let el of ELEMENT_DATA">
+      <td>{{el.categoryname}}</td>
+      <td>{{el.Scheduled}}</td>
+      <td>{{el.ScheduledSale}}</td>
+      <td>{{el.Visited}}</td>
+      <td>{{el.ScheduledNosale}}</td>
+      <td>{{el.UnscheduledNoSale}}</td>
+      <td>{{el.UnscannedCost}}</td>
+      <td>{{el.RoutetimeSendedInminute}}</td>
+      <td>{{el.cashSale}}</td>
+      <td>{{el.Creditsale}}</td>
+      </tr>
+    </tbody>
+  </table>
+</div>

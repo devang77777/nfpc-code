@@ -1,0 +1,42 @@
+<section class="">
+  <div class="table-box customerbox" [ngClass]="{ collapsed: isDetailVisible }">
+    <div class="heading-row clearfix">
+      <p class="d-inline" [hidden]="isDetailVisible" *ngIf="!isDetailVisible">
+        <i aria-hidden="true" class="os-icon os-icon-layers mr-2"></i> Journey
+        Plans
+      </p>
+      <div class="d-inline float-right" [ngClass]="{ 'expanded-action': isDetailVisible }">
+
+        <button appPermission [permissions]="userPermissions" [type]="'create'" class="btn btn-sm btn-p"
+          (click)="openAddJourneyPlan()">
+          <i class="os-icon os-icon-plus mr-2" aria-hidden="true"></i>New
+        </button>
+        <button *ngIf="checkedRows.length > 0" class="btn btn-sm btn-white dropdown-toggle ml-2" mat-button
+          [matMenuTriggerFor]="menu2">
+          Bulk Actions
+        </button>
+        <mat-menu #menu2="matMenu">
+          <button mat-menu-item (click)="bulkAction('active')">Mark as Active</button>
+          <button mat-menu-item (click)="bulkAction('inactive')" >Mark as Inactive</button>
+          <!-- <button mat-menu-item (click)="bulkAction('delete')" appPermission [permissions]="userPermissions" [type]="'delete'">
+            Delete
+          </button> -->
+        </mat-menu>
+        <!-- impot /Export  -->
+        <button class="btn btn-sm btn-white ml-2 dropdown-toggle" [matMenuTriggerFor]="menu3">
+          <i class="fa fa-bars" aria-hidden="true"></i>
+        </button>
+        <mat-menu #menu3="matMenu">
+          <button mat-menu-item (click)="openImportJp()">Import Journey Plan</button>
+          <button mat-menu-item type="button" (click)="openExportJp()">Export Journey Plan</button>
+        </mat-menu>
+      </div>
+    </div>
+    <app-journey-plan-data-table (selectedRows)="selectedRows($event)" (itemClicked)="itemClicked($event)" [newJourneyPlanData]="newJourneyPlanData">
+    </app-journey-plan-data-table>
+  </div>
+  <div class="details-box bg-white" [ngClass]="{ expanded: isDetailVisible }">
+    <app-journey-plan-detail (updateTableData)="updateTableData($event)" (detailsClosed)="closeClicked()"
+      [isDetailVisible]="isDetailVisible" [journeyPlanData]="journeyPlanData"></app-journey-plan-detail>
+  </div>
+</section>

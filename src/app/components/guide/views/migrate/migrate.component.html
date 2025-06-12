@@ -1,0 +1,509 @@
+<div class=" mt-5 p-2">
+    <div class="row ">
+        <div class="col-3">
+            <ul class="list-group list-group-flush sidebar-guide">
+                <li class="list-group-item " [class.guide-active]="step === 'step1'"><a (click)="step='step1'">
+                        Register in
+                        Merchandising</a></li>
+                <li class="list-group-item" [class.guide-active]="step === 'step2'"><a (click)="step='step2'">
+                        Signin</a>
+                </li>
+                <li class="list-group-item" [class.guide-active]="step === 'step3'"><a (click)="step='step3'">
+                        Creating
+                        Organization Profile</a></li>
+                <li class="list-group-item" [class.guide-active]="step === 'step4'"><a (click)="step='step4'">
+                        Assign
+                        User
+                        Roles</a></li>
+                <li class="list-group-item" [class.guide-active]="step === 'step5'"><a (click)="step='step5'">
+                        Enable
+                        the
+                        required modules</a></li>
+                <li class="list-group-item" [class.guide-active]="step === 'step6'"><a (click)="step='step6'">
+                        Applying Tax</a></li>
+                <li class="list-group-item" [class.guide-active]="step === 'step7'"><a (click)="step='step7'">
+                        Reason</a></li>
+                <li class="list-group-item" [class.guide-active]="step === 'step8'"><a (click)="step='step8'">
+                        Adding Bank Account</a></li>
+                <li class="list-group-item" [class.guide-active]="step === 'step9'"><a (click)="step='step9'">
+                        Adding Currencies</a></li>
+                <li class="list-group-item" [class.guide-active]="step === 'step10'"><a (click)="step='step10'">
+                        Location</a></li>
+                <!-- <li class="list-group-item" [class.guide-active]="step === 'step11'"><a (click)="step='step11'">
+                        Location</a></li> -->
+
+
+            </ul>
+        </div>
+        <div class="col-9">
+            <h1 class="title-color">Migrate to Merchandising from Other Software</h1>
+            <p>Looking to migrate from another billing software to Merchandising? It’s now made easy as ever! Just go
+                according to the steps below and you’re done.</p>
+
+            <ng-container *ngIf="step=='step1'">
+                <h2 id="step1" class="title-color mt-4"><strong>Step 1: Register in Merchandising</strong></h2>
+                <ol>
+                    <li>Go to <a
+                            href="http://merchandising.mobiato-msfa.com/auth/signup">http://merchandising.mobiato-msfa.com/auth/signup</a>
+                    </li>
+                    <li>Fill the first name, last name, email, phone no, password.</li>
+                    <li>Select Country from drop down list.</li>
+                    <li>Check I agree to terms of service and privacy policy.</li>
+                    <li>Click signup button.</li>
+                </ol>
+                <img class="img-responsive" src="" alt="">
+                <p>You can also signup with your google account. </p>
+            </ng-container>
+
+            <ng-container *ngIf="step=='step2'">
+                <h2 id="step2" class="title-color mt-4"><strong>Step 2: Signin</strong></h2>
+                <ol>
+                    <li>After registeration go to <a
+                            href="http://merchandising.mobiato-msfa.com/auth/login">http://merchandising.mobiato-msfa.com/auth/login</a>
+                    </li>
+                    <li>Enter your user name or email.</li>
+                    <li>Enter your password.</li>
+                    <li>Click on login button to sign in.</li>
+                    <li>You can also login with google account.</li>
+                </ol>
+                <img class="img-responsive" src="" alt="">
+            </ng-container>
+            <ng-container *ngIf="step=='step3'">
+                <h2 id="step3" class="title-color mt-4"><strong>Step 3: Creating Organization Profile</strong></h2>
+                <p>Get your organization registered with merchandising with the following simple steps:</p>
+                <ol>
+                    <li>Go to the top right corner of the screen and click the settings image.</li>
+                    <li>Select Organization Setting from the list.</li>
+                    <li>Fill the details of the organization.</li>
+                    <ul class="list">
+                        <li>Add the logo of size (Preferred Image Size: 240px x 240px@72 DPI Maximum size of 1
+                            MB) of the organization which would be displayed on the estimates, invoices, etc.</li>
+                        <li>Provide the Organization name.</li>
+                        <li>Business location.</li>
+                        <li>Company Address</li>
+                        <li>Contact person</li>
+                        <li>Provide with the currency used in the Organization</li>
+                        <li>Select the fiscal year used in organization.</li>
+                        <li>Add TaxID.</li>
+                        <li>Can add Additional field if required.</li>
+                        <li>Click save button to add Organization details.</li>
+                    </ul>
+                </ol>
+                <p>Now the Profile is created and other services of Merchandising are available.</p>
+                <p>Note:’*’ is used for mandatory fields.</p>
+                <img class="img-responsive" src="" alt="">
+
+
+            </ng-container>
+            <ng-container *ngIf="step=='step4'">
+                <h2 id="step4" class="title-color mt-4"><strong>Step 4: Assign User Roles </strong></h2>
+                <p>You can assign roles to the users here and can see all users and the roles assigned to them using two
+                    tabs ALL USERS and ROLES.
+                </p>
+                <ol>
+                    <li>Go to the right left corner of the screen and click INVITE USER button.
+                    </li>
+                    <li>Fill first name, last name, email address, phone number of the user.
+                    </li>
+                    <li>Select roles from the drop down.
+                    </li>
+                    <li>Click the INVITE USER button to save the role else click CANCEL button.
+                    </li>
+                    <li>In ALL USER tab the list of users and roles are listed.
+                    </li>
+                    <li>Roles tab shows all the roles created and description of the same.
+                    </li>
+                </ol>
+                <p>To add new role to the user, go to the top right corner of the screen and click on the NEW ROLE
+                    button.
+                    Fill the Role name, Description and check the access limits as per the requirement and click save
+                    button
+                    to save the role.
+                </p>
+                <p>You can make use of copy, edit or delete options given in ALL USERS tab.
+                </p>
+            </ng-container>
+            <ng-container *ngIf="step=='step5'">
+
+                <h2 class="title-color mt-4"><strong>Step 5: Enable the required modules </strong></h2>
+                <p>Preferences under settings allows to enables the modules.
+                </p>
+                <ol>
+                    <li>Under preferences Costume modules are listed and can be checked.
+                    </li>
+                    <li>Add the work flow rules.
+                    </li>
+                    <li>Templates can be used for modules.
+                    </li>
+                    <li>Activity profiles is used for maintaining the duration for each activity.
+                    </li>
+                    <li>Themes change option allows to set different themes to the pages.
+                    </li>
+                </ol>
+
+            </ng-container>
+            <ng-container *ngIf="step=='step6'">
+
+
+                <h2 class="title-color mt-4"><strong>Step 6: Applying Tax</strong></h2>
+                <p>Taxes play a vital role in the finance sector of any Organization and each country has their own way
+                    of
+                    Tax implementation, so merchandising helps manage this variation.
+                </p>
+                <ol>
+                    <li>Go to the top right corner and click on settings image and open Taxes option
+                    </li>
+                    <li>Click on the +New for adding tax name and rate.
+                    </li>
+                    <li>Click save button to save the new tax.
+                    </li>
+                    <li>Setting for GST is also present.
+                    </li>
+                </ol>
+            </ng-container>
+            <ng-container *ngIf="step=='step7'">
+                <h2 class="title-color mt-4"><strong>Step 7: Reason</strong></h2>
+                <p>Taxes play a vital role in the finance sector of any Organization and each country has their own way
+                    of
+                    Tax implementation, so merchandising helps manage this variation.
+                </p>
+                <ol>
+                    <li>categories
+                    </li>
+                    <ol>
+                        <li>Visit Reason
+                        </li>
+                        <li>Non-Service Reason
+                        </li>
+                        <li>Good Return Reason.
+                        </li>
+                        <li>Bad Return Reason.
+                        </li>
+                        <li>Debit Note Reason.
+                        </li>
+                    </ol>
+                    <li>Reason is given by the salesperson for the above categories listed
+                    </li>
+                    <li>The +New button is provided at top right corner for adding the reason
+                    </li>
+                    <li>Fill the form and press Save button to save the reason or press cancel.
+                    </li>
+                    <li>The reason created will be shown in the reason list.
+                    </li>
+                </ol>
+            </ng-container>
+            <ng-container *ngIf="step=='step8'">
+
+                <h2 class="title-color mt-4"><strong>Step 8: Adding Bank Account</strong></h2>
+                <p>Add Bank details for the transactions purpose.
+                </p>
+                <ol>
+                    <li>Go to the top right corner and click on settings image and open Bank option
+                    </li>
+                    <li>Click on the +New for adding tax.
+                    </li>
+                    <li>Provide bank code, bank name, account number and address
+                    </li>
+                    <li>Click save button to save the bank details.
+                    </li>
+                    <li>The new account will be shown in the list.
+                    </li>
+                </ol>
+            </ng-container>
+            <ng-container *ngIf="step=='step9'">
+
+                <h2 class="title-color mt-4"><strong>Step 9: Adding Currencies</strong></h2>
+                <p>Your Organization might be dealing with the customers from different countries, you can add those
+                    currencies in Merchandising
+                </p>
+                <ol>
+                    <li>Go to top left corner of the screen and click the settings image and select currency option.
+                    </li>
+                    <li>Click the +New button on the top right corner of the screen.
+                    </li>
+                    <li>Fill the form by providing currency code, currency symbol, currency name, decimal places and
+                        format.
+                    </li>
+                    <li>Click save button to save the new currency.
+                    </li>
+                    <li>The newly added currency will be displayed in the list of currencies.
+                    </li>
+                    <li>You can enable Exchange rate feeds using the button provided.
+                    </li>
+                    <li>You can use the options for edit, view or delete the exchange rates by touching the list item.
+                    </li>
+                </ol>
+            </ng-container>
+            <ng-container *ngIf="step=='step10'">
+
+                <h2 class="title-color mt-4"><strong>Step 10: Location</strong></h2>
+                <strong>Country</strong>
+                <ol>
+                    <li>Go to the top right corner of the screen and click the +New button to add a new country for the
+                        warehouse.
+                    </li>
+                    <li>Provide country code, name, dial code, currency, currency code, currency symbol.
+                    </li>
+                    <li>Click the save button to add the country.
+                    </li>
+                    <li>Newly added country is displayed in the list.
+                    </li>
+                </ol>
+                <p>
+                    Country code can be added manually by clicking the settings image in front of country code and
+                    checking
+                    “I will add them manually each time option.” And saving the choice by clicking save button.
+                </p>
+                <p>
+                    When the country is selected from the list you can find few more options:
+                </p>
+                <ol>
+                    <li>Option to import/export your country master
+                    </li>
+                    <li>Mark as active/inactive</li>
+                </ol>
+                <strong>Region</strong>
+                <ol>
+                    <li>
+                        Go to the top right corner of the screen and click the +New button to add a new region for the
+                        warehouse.
+                    </li>
+                    <li>
+                        Provide region code, region name, country (from drop down).
+                    </li>
+                    <li>
+                        Click the save button to add the region.
+                    </li>
+                    <li> Newly added region is displayed in the list.
+                    </li>
+                </ol>
+
+                <p> region code can be added manually by clicking the settings image in front of region code and
+                    checking “I
+                    will add them manually each time option.” And saving the choice by clicking save button.</p>
+                <p>When the region is selected from the list you can find few more options:</p>
+                <ol>
+                    <li>Option to import/export your region master
+                    </li>
+                    <li>Mark as active/inactive
+                    </li>
+                </ol>
+
+                <strong>Branch/Depot:
+                </strong>
+                <ol>
+                    <li>
+
+                        Go to the top right corner of the screen and click the +New button to add a new depot for the
+                        warehouse.
+                    </li>
+                    <li>
+
+                        Provide depot code, depot name, depot manager, manager contact.
+                    </li>
+                    <li>
+
+                        Select the depot and area from the drop down.
+                    </li>
+                    <li>
+
+                        Click the save button to add the depot.
+                    </li>
+                    <li>
+
+                        Newly added depot is displayed in the list.
+                    </li>
+                    <li>
+
+                    </li>
+                </ol>
+
+                <p> depot code can be added manually by clicking the settings image in front of depot code and checking
+                    “I
+                    will
+                    add them manually each time option.” And saving the choice by clicking save button.</p>
+
+                <p> When the depot is selected from the list you can find few more options:</p>
+                <ol>
+                    <li>
+                        Option to import/export your depot master
+                    </li>
+                    <li>
+                        Mark as active/inactive
+                    </li>
+                </ol>
+
+                <strong>Van:</strong>
+                <ol>
+                    <li>
+
+                        Go to the top right corner of the screen and click the +New button to add a new van for the
+                        warehouse.
+                    </li>
+                    <li>
+                        Provide van code, van description, plate number, capacity.
+
+                    </li>
+                    <li>
+
+                        Select the van type and category from the drop down.
+                    </li>
+                    <li>
+                        Click the save button to add the van.
+
+                    </li>
+                    <li>
+
+                        Newly added van is displayed in the list.
+                    </li>
+                </ol>
+
+                <p>
+                    van code can be added manually by clicking the settings image in front of van code and checking “I
+                    will
+                    add them manually each time option.” And saving the choice by clicking save button.
+                </p>
+
+                <p> When the van is selected from the list you can find few more options:</p>
+                <ol>
+                    <li>
+                        Option to import/export your van master
+                    </li>
+                    <li>
+                        Mark as active/inactive
+                    </li>
+                </ol>
+
+                <strong>Route:</strong>
+                <ol>
+                    <li>
+                        Go to the top right corner of the screen and click the +New button to add a new Route for the
+                        warehouse.
+
+                    </li>
+                    <li>
+                        Provide route code, route name.
+                    </li>
+                    <li>
+                        Select the area and depot name from the drop down.
+                    </li>
+                    <li>
+                        Click the save button to add the route.
+                    </li>
+                    <li>
+                        Newly added route is displayed in the list.
+                    </li>
+                </ol>
+                <p>
+                    route code can be added manually by clicking the settings image in front of route code and checking
+                    “I
+                    will add them manually each time option.” And saving the choice by clicking save button.
+                </p>
+                <p> When the route is selected from the list you can find few more options:</p>
+                <ol>
+                    <li>
+                        Option to import/export your route master
+                    </li>
+                    <li>
+                        Mark as active/inactive
+                    </li>
+                </ol>
+
+                <strong>
+                    Customer:
+                </strong>
+                <strong>Outlet Product Code</strong>
+                <ol>
+                    <li>
+
+                        Go to the top right corner of the screen and click the +New button to add a new outlet product
+                        code.
+                    </li>
+                    <li>
+                        Provide code, name, customers, item code, outlet item code.
+
+                    </li>
+                    <li>
+
+                        Select the item code and outlet item code name from the drop down.
+                    </li>
+                    <li>
+
+                        Click the save button to add the route.
+                    </li>
+                    <li>
+
+                        Newly added outlet product code is displayed in the list.
+                    </li>
+                </ol>
+
+                <p>
+                    code can be added manually by clicking the settings image in front of code and checking “I will add
+                    them
+                    manually each time option.” And saving the choice by clicking save button.
+                </p>
+
+
+                <strong> Item:</strong> <br>
+                &nbsp;<strong>Item group</strong>
+                <ol>
+                    <li>
+
+                        Go to the top right corner of the screen and click the +New button to add a new item group.
+                    </li>
+                    <li>
+
+                        Provide item group code, item group name.
+                    </li>
+                    <li>
+
+                        Click the save button to add the route.
+                    </li>
+                    <li>
+                        Newly added item group is displayed in the list.
+
+                    </li>
+                    <li>
+
+                    </li>
+                </ol>
+
+                <p>
+                    Item group code can be added manually by clicking the settings image in front of item group code and
+                    checking “I will add them manually each time option.” And saving the choice by clicking save button.
+
+                </p>
+
+                &nbsp;<strong>Item UOM(Unit of measure)</strong>
+
+                <ol>
+                    <li>
+                        Go to the top right corner of the screen and click the +New button to add a new item group.
+
+                    </li>
+                    <li>
+
+                        Provide item UOM code, item UOM name.
+                    </li>
+                    <li>
+
+                        Click the save button to add the route.
+                    </li>
+                    <li>
+                        Newly added route is displayed in the list.
+
+                    </li>
+                    <li>
+
+                    </li>
+                </ol>
+
+                <p>
+                    Item group code can be added manually by clicking the settings image in front of item group code and
+                    checking “I will add them manually each time option.” And saving the choice by clicking save button.
+
+                </p>
+            </ng-container>
+        </div>
+    </div>
+</div>

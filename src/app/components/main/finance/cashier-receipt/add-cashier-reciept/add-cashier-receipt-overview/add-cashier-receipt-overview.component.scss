@@ -1,0 +1,439 @@
+.card-footer {
+  position: fixed;
+  width: 100%;
+  bottom: 0;
+  z-index: 99999;
+  background-color: rgba(0, 0, 0, 0.03);
+  left: 0;
+  text-align: right;
+}
+.fullWidth {
+  width: 100% !important;
+  height: 500px;
+}
+.btn-p {
+  padding: 2px 7px;
+  border-radius: 3px;
+  color: #fff;
+  border-color: #1abc9c;
+  background-color: #1abc9c;
+  float: right !important;
+}
+.form-box {
+  overflow-y: scroll !important;
+}
+mat-table {
+  margin-left: 30px;
+  margin-right: 30px;
+  position: relative !important;
+  box-shadow: none;
+}
+.fixPosition {
+  position: relative;
+  top: -370px;
+}
+.positionFix {
+  position: relative;
+  top: -10px;
+}
+mat-header-row {
+  background-color: #fbfafa !important;
+}
+.firstFooter {
+  height: 50px !important;
+  margin-top: 24px;
+  border-bottom: 0px !important;
+}
+.secondFooter {
+  border-bottom: 0px !important;
+  margin-top: -20px;
+}
+.makeRed {
+  color: red;
+  margin-top: -55px;
+}
+.paginatorClass {
+  color: #095a67;
+  font-weight: 700;
+}
+.labelCash {
+  position: relative;
+  left: 70px;
+  top: 10px;
+  font-weight: 500;
+  font-size: 16px;
+  color: #424040;
+}
+.fa-info-circle {
+  position: relative;
+  top: 0px;
+  right: 0px;
+  font-size: 15px;
+}
+.checkFix {
+  padding-left: 0px;
+}
+.totalAmount {
+  position: relative;
+  float: right;
+  top: -30px;
+  right: 320px;
+  color: #095a67;
+  margin-bottom: 50px;
+}
+.mat-select-disabled {
+  background-color: #e9ecef !important;
+  opacity: 1 !important;
+}
+.price_Total {
+  margin-top: -42px;
+}
+.actual_page {
+  color: red;
+  margin-top: -50px;
+}
+.actual_textbox {
+  margin-top: -38px;
+}
+.variance-fix {
+  margin-top: -24px;
+}
+.cash_actual {
+  width: 80% !important;
+}
+.cashVarianceFix {
+  margin-top: -26px;
+  .vare {
+    margin-right: 15px;
+  }
+}
+.form-checking-to {
+  width: 80% !important;
+}
+
+// changes required
+.active-form {
+  background-color: #f3f3f3;
+ 
+}
+.mat-select-value {
+  padding-top: 3px;
+}
+
+.mat-select {
+  position: relative;
+  top: -13px;
+  width: 106%;
+  left: -9px;
+  height: 38px;
+}
+.overview-container {
+  padding: 0 48px;
+}
+.form-col {
+  width: 440px;
+  tr {
+    td {
+      &:first-of-type {
+        min-width: 120px;
+      }
+      &:last-of-type {
+        min-width: 320px;
+      }
+    }
+  }
+}
+.square {
+  .form-control.form-control-sm {
+    border-radius: 0;
+  }
+}
+
+section {
+  display: block;
+}
+.separator {
+  height: 2px;
+  background-color: lightgrey;
+}
+.heading-row {
+  padding: 20px 32px;
+  position: relative;
+
+  h2 {
+    margin: 0;
+  }
+}
+.heading-action {
+  position: absolute;
+  top: 20px;
+  right: calc(1.25rem + 48px);
+
+  .more-btn {
+    padding: 4px 12px;
+    font-size: 14px;
+  }
+  button {
+    min-width: 34px;
+    font-size: 18px;
+    background: none;
+    color: #485156;
+    padding: 4px;
+    margin: 0 8px;
+    border: 1px solid #ced4da;
+    border-radius: 0.25rem;
+  }
+}
+button:focus {
+  outline: none;
+}
+.order-form {
+  overflow: scroll;
+}
+input {
+  &:disabled {
+    background-color: transparent;
+  }
+}
+mat-option {
+  &#typeBtn,
+  &#custBtn {
+    height: 52px;
+  }
+}
+
+.in-opt-btn {
+  button {
+    width: 100%;
+    background-color: #181925;
+    color: white;
+    border-radius: 4px;
+    height: 34px;
+    margin: auto;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    i {
+      margin-right: 8px;
+    }
+  }
+}
+.add-btn {
+  padding-left: 0;
+  position: relative;
+
+  button {
+    cursor: pointer;
+    background-color: #181925;
+    color: white;
+    border: none;
+    border-radius: 0.25rem;
+    position: absolute;
+    top: 40px;
+
+    &:focus {
+      outline: none;
+    }
+  }
+}
+mat-form-field {
+  display: block;
+}
+.actions {
+  button {
+    background-color: #181824;
+    color: white;
+    border: none;
+    width: 132px;
+    height: 36px;
+    border-radius: 4px;
+    &:focus {
+      outline: none;
+    }
+    &:disabled {
+      background-color: #e9ecef;
+      color: #495057;
+      cursor: not-allowed;
+    }
+  }
+}
+.overview-container {
+  padding: 0 48px;
+}
+.form-col {
+  width: 440px;
+  tr {
+    td {
+      &:first-of-type {
+        min-width: 120px;
+      }
+      &:last-of-type {
+        min-width: 320px;
+      }
+    }
+  }
+}
+.spacer {
+  height: 12px;
+}
+.fixWidthsame {
+  height: 35px;
+}
+.item-container {
+  padding: 0 24px;
+  overflow: auto;
+  position: relative;
+  justify-content: flex-start;
+  display: flex;
+  margin: 20px auto 0;
+  .item-table-div {
+    width: 100%;
+    margin-right: 8px;
+  }
+  .table-check {
+    width: 20px;
+    margin: 0;
+    tr {
+      height: 32px;
+    }
+    .item-row {
+      height: 40px;
+      input {
+        position: relative;
+        top: 8px;
+      }
+    }
+  }
+}
+.item-name {
+  min-width: 120px;
+}
+.item-row {
+  position: relative;
+}
+.footer-overview-container {
+  max-width: 100%;
+  padding: 0 48px;
+  margin-top: 20px;
+}
+
+section {
+  display: block;
+  background-color: white;
+  height: 100%;
+}
+
+.heading-row {
+  padding: 14px 32px;
+
+  .heading-action {
+    top: 14px;
+  }
+}
+
+.inactive-form {
+  pointer-events: none;
+  opacity: 0.35;
+  cursor: not-allowed;
+}
+
+.item-container {
+  &.inactive-form {
+    opacity: 1;
+  }
+}
+
+.square {
+  .form-control.form-control-sm {
+    border-radius: 0;
+  }
+}
+
+.bottom-form {
+  margin-bottom: 62px;
+}
+
+.overall-stats-table {
+  border-radius: 0;
+  background-color: #f3f3f3;
+
+  div {
+    padding: 4px 0;
+  }
+  .stat-value {
+    width: calc(100% - 128px);
+    display: inline-block;
+    text-align: right;
+
+    &.final-total {
+      padding: 12px 0;
+    }
+  }
+}
+.actions {
+  position: fixed;
+  width: 100%;
+  bottom: 0;
+  padding: 14px 20px;
+  background-color: #f3f3f3;
+  border-top: 1px solid #ced4da;
+  box-shadow: 0 0 4px 0 #d3d3d3;
+  button {
+    border-radius: 0;
+  }
+}
+.spacer {
+  height: 16px;
+}
+.form-col {
+  margin-top: 0;
+}
+.mat-tab-body-content {
+  height: 104% !important;
+}
+.card-body.overview{
+  padding: 10px 40px 5px;
+}
+.card-header.overview{
+  padding: 10px 40px 5px;
+}
+
+.setting-btn{
+  position: absolute;
+  right: -35px;
+  top: 3px;
+  button{
+    background:none;
+    border:0;
+    i{
+      font-size:20px;
+      color: #181824;
+    }
+    &:hover,&:focus{
+      outline:none;
+    }
+  }
+}
+@media (max-width: 575px) {
+
+.item-container{
+  padding: 0 12px;
+}
+mat-table {
+  margin-left: 0;
+  margin-right: 0;
+
+}
+.totalAmount{
+  right: 10px;
+}
+.labelCash {
+
+  left: 20px;
+
+}
+mat-cell:first-of-type, mat-header-cell:first-of-type, mat-footer-cell:first-of-type {
+  padding-left:8px;
+}
+}

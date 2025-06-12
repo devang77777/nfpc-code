@@ -1,0 +1,156 @@
+<section class="scrolly">
+    <div class="table-responsive">
+        <table class="table table-hover" mat-table [dataSource]="dataSource">
+            <ng-container matColumnDef="select">
+                <th mat-header-cell *matHeaderCellDef>
+                    <mat-checkbox class="head-checkbox" (change)="$event ? toggleSelection() : null"
+                        (change)="getSelectedRows()" [checked]="selections.hasValue() && isAllSelected()"
+                        [indeterminate]="selections.hasValue() && !isAllSelected()" [aria-label]="checkboxLabel()">
+                    </mat-checkbox>
+                    <a class="filter-btn" *ngIf="!isDetailVisible" [matMenuTriggerFor]="menu">
+                        <i class="fa fa-table" aria-hidden="true"></i>
+                    </a>
+                    <mat-menu #menu="matMenu">
+                        <div class="card-body p-2" style="min-width: 200px;">
+                            <ul style="list-style:none; padding-left: 7px;">
+                                <li *ngFor="let column of filterColumns">
+                                    <input type="checkbox" [(ngModel)]="column.show" class="m-2"
+                                        (click)="$event.stopPropagation()">
+                                    {{column.title}}
+                                </li>
+                            </ul>
+                            <div class="float-right mb-2">
+                                <button class="btn btn-p bg-secondary">Cancel</button>
+                            </div>
+                        </div>
+                    </mat-menu>
+                </th>
+                <td mat-cell *matCellDef="let row">
+                    <mat-checkbox class="row-checkbox" (click)="$event.stopPropagation()"
+                        (change)="$event ? selections.toggle(row) : null" (change)="getSelectedRows()"
+                        [checked]="selections.isSelected(row)" [aria-label]="checkboxLabel(row)">
+                    </mat-checkbox>
+                </td>
+            </ng-container>
+            <ng-container matColumnDef="created_at">
+                <th mat-header-cell *matHeaderCellDef>
+                    <app-column-filter title="Date" (changeSelected)="onColumnFilterOpen($event)"
+                        [selected]="selectedColumnFilter" controlName="date" (close)="onColumnFilter($event)">
+                        <input class="form-control form-control-sm" [formControl]="filterForm.get('date')" placeholder="Enter Date" type="date">
+                    </app-column-filter>
+                </th>
+                <td mat-cell *matCellDef="let element"> {{element.created_at | date :"d MMM y h:mm a"}} </td>
+            </ng-container>
+            <ng-container matColumnDef="salesman">
+                <th mat-header-cell *matHeaderCellDef>
+                    <app-column-filter title=" Merchandiser Name " (changeSelected)="onColumnFilterOpen($event)"
+                        [selected]="selectedColumnFilter" controlName="salesman_name" (close)="onColumnFilter($event)">
+                        <input class="form-control form-control-sm" [formControl]="filterForm.get('salesman_name')" placeholder="Enter  Merchandiser Name " type="text">
+                    </app-column-filter>
+                </th>
+                <td mat-cell *matCellDef="let element"> {{element.salesman?.firstname}} {{element.salesman?.lastname}}
+                </td>
+            </ng-container>
+            <ng-container matColumnDef="customer_code">
+                <th mat-header-cell *matHeaderCellDef>
+                    <app-column-filter title=" Customer Code " (changeSelected)="onColumnFilterOpen($event)"
+                        [selected]="selectedColumnFilter" controlName="customer_code" (close)="onColumnFilter($event)">
+                        <input class="form-control form-control-sm" [formControl]="filterForm.get('customer_code')" placeholder="Enter  Customer Code " type="text">
+                    </app-column-filter>
+                </th>
+                <td mat-cell *matCellDef="let element"> {{element.customer?.customer_info?.customer_code || 'N/A'}}
+                </td>
+            </ng-container>
+            <ng-container matColumnDef="customer">
+                <th mat-header-cell *matHeaderCellDef>
+                    <app-column-filter title="Customer Name" (changeSelected)="onColumnFilterOpen($event)"
+                        [selected]="selectedColumnFilter" controlName="customer_name" (close)="onColumnFilter($event)">
+                        <input class="form-control form-control-sm" [formControl]="filterForm.get('customer_name')" placeholder="Enter Customer Name" type="text">
+                    </app-column-filter>
+                </th>
+                <td mat-cell *matCellDef="let element"> {{element.customer?.firstname || 'N/A'}}
+                    {{element.customer?.lastname}}
+                </td>
+            </ng-container>
+            <ng-container matColumnDef="item_code">
+                <th mat-header-cell *matHeaderCellDef>
+                    <app-column-filter title="Item Code" (changeSelected)="onColumnFilterOpen($event)"
+                        [selected]="selectedColumnFilter" controlName="item_code" (close)="onColumnFilter($event)">
+                        <input class="form-control form-control-sm" [formControl]="filterForm.get('item_code')" placeholder="Enter Item Code" type="text">
+                    </app-column-filter>
+                </th>
+                <td mat-cell *matCellDef="let element"> {{element.item?.item_code}}</td>
+            </ng-container>
+            <ng-container matColumnDef="item">
+                <th mat-header-cell *matHeaderCellDef>
+                    <app-column-filter title="Item" (changeSelected)="onColumnFilterOpen($event)"
+                        [selected]="selectedColumnFilter" controlName="item" (close)="onColumnFilter($event)">
+                        <input class="form-control form-control-sm" [formControl]="filterForm.get('item')" placeholder="Enter Item" type="text">
+                    </app-column-filter>
+                </th>
+                <td mat-cell *matCellDef="let element"> {{element.item?.item_name}}</td>
+            </ng-container>
+            <ng-container matColumnDef="type">
+                <th mat-header-cell *matHeaderCellDef>Type
+                    <!-- <app-column-filter title="Type" (changeSelected)="onColumnFilterOpen($event)"
+                        [selected]="selectedColumnFilter" controlName="complaint_id" (close)="onColumnFilter($event)">
+                        <input class="form-control form-control-sm" placeholder="Enter Type" type="text">
+                    </app-column-filter> -->
+                </th>
+                <td mat-cell *matCellDef="let element"> {{element.type}}</td>
+            </ng-container>
+            <ng-container matColumnDef="qty">
+                <th mat-header-cell *matHeaderCellDef>Qty
+                    <!-- <app-column-filter title="Qty" (changeSelected)="onColumnFilterOpen($event)"
+                        [selected]="selectedColumnFilter" (close)="onColumnFilter($event)">
+                        <input class="form-control form-control-sm" placeholder="Enter Qty" type="text">
+                    </app-column-filter> -->
+                </th>
+                <td mat-cell *matCellDef="let element"> {{element.qty}}</td>
+            </ng-container>
+            <ng-container matColumnDef="start_date">
+                <th mat-header-cell *matHeaderCellDef>
+                    <app-column-filter title="Valid From" (changeSelected)="onColumnFilterOpen($event)"
+                        [selected]="selectedColumnFilter" controlName="start_date" (close)="onColumnFilter($event)">
+                        <input class="form-control form-control-sm" [formControl]="filterForm.get('start_date')" placeholder=" Valid From" type="date">
+                    </app-column-filter>
+                </th>
+                <td mat-cell *matCellDef="let element"> {{element.start_date}}</td>
+            </ng-container>
+            <ng-container matColumnDef="end_date">
+                <th mat-header-cell *matHeaderCellDef>
+                    <app-column-filter title="Valid To" (changeSelected)="onColumnFilterOpen($event)"
+                        [selected]="selectedColumnFilter" controlName="end_date" (close)="onColumnFilter($event)">
+                        <input class="form-control form-control-sm" [formControl]="filterForm.get('end_date')" placeholder=" Valid To" type="date">
+                    </app-column-filter>
+                </th>
+                <td mat-cell *matCellDef="let element"> {{element.end_date}}</td>
+            </ng-container>
+            <ng-container matColumnDef="description">
+                <th mat-header-cell *matHeaderCellDef> description </th>
+                <td mat-cell *matCellDef="let element"> {{element.desctription}}</td>
+            </ng-container>
+            <ng-container matColumnDef="image">
+                <th mat-header-cell *matHeaderCellDef> Image </th>
+                <td mat-cell *matCellDef="let element">
+                    <ng-container *ngIf="element.image;">
+                        <div class="imageCard">
+                            <img [src]="element.image" alt="">
+                            <div class="iconsbar">
+                                <a href="javascript:;" (click)="open(element.image, 0)"><i class="fa fa-eye"></i></a>
+                            </div>
+                        </div>
+                    </ng-container>
+                </td>
+            </ng-container>
+            <tr mat-header-row *matHeaderRowDef="getDisplayedColumns()"></tr>
+            <tr mat-row *matRowDef="let row; columns: getDisplayedColumns();"></tr>
+        </table>
+    </div>
+
+    <div>
+        <mat-paginator [hidden]="apiResponse.pagination?.total_records < 10" (page)="onPageFired($event)"
+            [length]="apiResponse.pagination?.total_records" [pageSize]="pageSize" [pageSizeOptions]="[10, 25, 50]">
+        </mat-paginator>
+    </div>
+</section>

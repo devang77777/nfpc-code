@@ -1,0 +1,147 @@
+.form-box {
+  text-align: left;
+  padding: 1.25rem;
+}
+
+table {
+  width: 100%;
+  text-align: left;
+}
+
+.table thead,
+.table thead tr,
+.mat-header-row {
+  background-color: black !important;
+
+  th {
+    background: black;
+    color: #fff;
+  }
+}
+
+tr.detail-row {
+  height: 0 !important;
+}
+
+tr.element-row:not(.expanded-row):hover {
+  background: whitesmoke;
+}
+
+tr.element-row:not(.expanded-row):active {
+  background: #efefef;
+}
+
+.element-row td {
+  // border-bottom-width: 0;
+  border-top: 1px solid rgba(0, 0, 0, 0.089);
+  border-bottom: 1px solid rgba(0, 0, 0, 0.089);
+}
+
+.element-detail {
+  overflow: hidden;
+  display: flex;
+  // border-bottom: 1px solid rgba(0, 0, 0, 0.089);
+}
+
+.delete-btn {
+  background-color: #181824;
+  color: white;
+  border-radius: 0.25rem;
+
+  &:focus {
+    outline: none;
+  }
+}
+
+.list-row:last-child {
+  border: none;
+}
+
+.table-header {
+  background-color: #181824;
+  border: none;
+
+  .mat-header-cell {
+    color: white;
+  }
+}
+
+table th:first-child {
+  border-radius: 10px 0 0 10px;
+}
+
+table th:last-child {
+  border-radius: 0 10px 10px 0;
+}
+
+tr.mat-header-row {
+  border: none;
+}
+
+td.mat-cell {
+  border: none;
+}
+
+.element-description>div>input {
+  background-color: white;
+  border: 1px solid #ced4da;
+  border-radius: 0.25rem;
+  padding-left: 10px;
+  width: 130px;
+
+  &:focus {
+    outline: none;
+  }
+}
+
+.mat-column-actions {
+  width: 20%;
+}
+
+.hidden {
+  display: none;
+}
+
+th.mat-header-cell,
+td.mat-cell,
+td.mat-footer-cell {
+  padding: 0.15rem !important;
+}
+
+.btn-sm,
+.btn-group-sm>.btn {
+  padding: 0.15rem 0.5rem;
+  font-size: 0.80rem;
+}
+
+th.mat-header-cell:first-of-type,
+td.mat-cell:first-of-type,
+td.mat-footer-cell:first-of-type {
+  padding-right: 24px !important;
+}
+
+@media (max-width: 575px) {
+
+  th.mat-header-cell,
+  td.mat-cell,
+  td.mat-footer-cell {
+    padding: 0.125rem !important;
+  }
+
+  th.mat-header-cell:first-of-type,
+  td.mat-cell:first-of-type,
+  td.mat-footer-cell:first-of-type {
+    padding-left: 0.125rem !important;
+  }
+
+  .mat-column-actions {
+    width: 30%;
+  }
+
+  .tabtns {
+    .btn {
+      padding: 0.125rem 0.25rem;
+      font-size: 0.75rem;
+    }
+  }
+}

@@ -1,0 +1,26 @@
+<section>
+  <div class="row align-items-center justify-content-center">
+    <div class="col-md-12 text-left ">
+      <ng-container *ngIf="isWeekly">
+        <div *ngIf="!(appliedWeeks && appliedWeeks.length)" class="empty-weeks">
+          <h2>No weeks found!</h2>
+          <p>Please, select at least one week to add customers.</p>
+        </div>
+        <mat-tab-group *ngIf="appliedWeeks && appliedWeeks.length" [(selectedIndex)]="currentIndex" mat-stretch-tabs>
+          <mat-tab *ngFor="let config of appliedWeeks" [label]="config.tabLabel">
+            <app-journey-plan-customer-days [journeyPlanFormGroup]="journeyPlanFormGroup"
+              [weeksFormGroup]="weeksFormGroup" [isWeekly]="isWeekly" [weekNumber]="config.number"
+              [customers]="weeklyCustomers" [getCustomersByObj]="getCustomersByObj">
+            </app-journey-plan-customer-days>
+          </mat-tab>
+        </mat-tab-group>
+      </ng-container>
+      <ng-container *ngIf="!isWeekly">
+        <app-journey-plan-customer-days [journeyPlanFormGroup]="journeyPlanFormGroup" [daysFormGroup]="daysFormGroup"
+          [customers]="dailyCustomers" [getCustomersByObj]="getCustomersByObj">
+        </app-journey-plan-customer-days>
+      </ng-container>
+    </div>
+  </div>
+
+</section>

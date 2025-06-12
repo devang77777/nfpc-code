@@ -1,0 +1,95 @@
+<div style="padding:30px 50px">
+    <header>
+        <div class="container mt-3">
+            <div class="row">
+                <div class="col-md-12">
+                    <form [formGroup]="filterForm" >
+                        <div class="form-group row" style="padding: 5px;">
+                            <div class="col-sm-12">
+                                <div class="row">
+                                    <div class="col">
+
+                                        <input type="date" formControlName="startdate" (change)="applyFilter()"
+                                            class="form-control form-control-sm" placeholder="Start Date">
+                                    </div>
+                                    <div class="">
+                                        <span>_</span>
+                                    </div>
+                                    <div class="col">
+                                        <input type="date" formControlName="enddate" (change)="applyFilter()"
+                                            class="form-control form-control-sm" placeholder="End Date">
+                                    </div>
+
+                                    <div class="col">
+                                        <!-- <app-multiautocomplete isSingle="false" [options]="regionList"
+                                            (selectionchanged)="applyFilter()" [control]="filterForm.controls['region']"
+                                            text="region_name" id="id" placeholder="Search region">
+                                        </app-multiautocomplete> -->
+                                        <app-multiautocomplete isSingle="false" [options]="zoneList"
+                                            [control]="filterForm.controls['zone_id']" text="name" id="id"
+                                            (selectionchanged)="applyFilter()" placeholder="Search zone">
+                                        </app-multiautocomplete>
+                                    </div>
+
+                                    <div class="col-1">
+                                        <button (click)="applyFilterOnClick()"type="submit" class="btn btn-sm btn-info mr-1">
+                                            <i class="fa fa-arrow-right" style="height: 27px;font-size: 26px;"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </header>
+    <hr>
+    <div class="container-fluid" >
+        <div class="row">
+            <div class="col-sm-6" style="margin-top: 40px;">
+                <div style="height: 150px;">
+                    <p class="chart-heading"  *ngIf="chartData.monthly">Vehicle Load Utilization</p>
+                    <div class="card">
+                        <div class="card-body" style="padding: 0px;">
+                            <div id="chartdiv1" style="width: 100%; height: 393px"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-6" style="margin-top: 40px;">
+                <div style="height: 150px;">
+                    <p class="chart-heading" *ngIf="chartData.monthly">Vehicle Trip per day</p>
+                    <div class="card">
+                        <div class="card-body" style="padding: 0px;">
+                            <div id="chartdiv2" style="width: 100%; height: 393px"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row" style="margin-top: 300px;">
+            <div class="col-sm-6" style="margin-top: 40px;">
+                <div style="height: 150px;" >
+                    <p class="chart-heading" *ngIf="chartData.monthly">Cases Delivered ('000) </p>
+                    <div class="card">
+                        <div class="card-body" style="padding: 0px;">
+                            <div id="chartdiv4" style="width: 100%; height: 393px"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- <div class="col-sm-6" style="margin-top: 40px;">
+                <div style="height: 150px;">
+                    <p class="chart-heading">CFR%</p>
+                    <div class="card">
+                        <div class="card-body" style="padding: 0px;">
+                            <div id="chartdiv3" style="width: 100%; height: 393px"></div>
+                        </div>
+                    </div>
+                </div>
+
+            </div> -->
+        </div>
+    </div>
+</div>

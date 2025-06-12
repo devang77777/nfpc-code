@@ -1,0 +1,38 @@
+<div class=" scrolly container-fluid ">
+    <div class="row h-100 ">
+        <div class="col-md-2 p-0 lrow">
+            <div class="heading-row">
+                <h2><strong>Share of Shelf</strong></h2>
+            </div>
+            <div class="rowm">
+                <div class="scrolly-reportbar">
+                    <div class="lpane-grp">
+                        <ul class="nav nav-pills flex-column">
+                            <li class="nav-item" *ngFor="let navOption of sosNavOptions; let i = index;">
+                                <a id="ember2314" [ngClass]="isActive(navOption.routeTo, navOption.label)  ? 'active' : ''"
+                                    (click)="routeTo(navOption.routeTo,i, navOption.label)" class="nav-link ember-view">
+                                    {{ navOption.label }}
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="pl-0 col-md-10">
+            <div class="heading-row clearfix">
+                <!-- <div id="ember542" class="col-md-12 d-inline float-left">
+                    <div  class="pt-2 pb-2 mb-2 clearfix">
+                        <div class="page-header text-center">
+                            <h2 class="reports-headerspacing font-weight-bold">  {{SelectedName || ''}}  </h2> 
+                        </div>
+                    </div>  
+                </div> -->
+            </div>
+            <div class="separator"></div>
+            <div>
+                <router-outlet></router-outlet>
+            </div>
+        </div>
+    </div>
+</div>

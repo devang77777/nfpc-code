@@ -1,0 +1,37 @@
+<div>
+  <ul class=" arapdetails ember-view">
+    <li class="col-lg-5 text-left">
+      <h6 class="font-xlarge">Outstanding Receivables</h6>
+      <span
+        class="text-overdue outstanding-arap">₹{{(balance?.outstanding_receivable)? balance.outstanding_receivable : '0.00'}}</span>
+    </li>
+    <li class="col-lg-7">
+      <div class="right-pane">
+        <span class="text-muted section-width">Unused Credits</span>
+        <span
+          class="cursor-pointer right-pane-semibold">₹{{(balance?.unused_credit)? balance.unused_credit : '0.00'}}</span>
+      </div>
+      <div class="right-pane" *ngIf="customer.credit_days">
+        <span class="text-muted section-width">Payment due period</span>
+        <span class="right-pane-semibold">Net {{customer.credit_days}} days</span>
+      </div>
+    </li>
+  </ul>
+</div>
+<hr class="my-2 mx-n5" />
+<div class="row">
+  <div class="col-md-3">
+    <select #chartFilterSelect (change)="getInvoiceChartData(chartFilterSelect.value)" [(ngModel)]="selectOption"
+      class="custom-select">
+      <option [value]="filters.id" *ngFor="let filters of chartFilters">{{ filters.name }}</option>
+    </select>
+  </div>
+  <div class="col-md-12 chartoverview">
+    <p-chart type="bar" [data]="data" [options]="options" width="auto" height="280px" [responsive]="true"></p-chart>
+  </div>
+</div>
+
+<hr class="my-2 mx-n5" />
+<ng-container *ngIf="!notOpenedFromOverViewRightPanel">
+  <app-customer-detail-comment [notOpenedFromOverViewRightPanel]="false"></app-customer-detail-comment>
+</ng-container>

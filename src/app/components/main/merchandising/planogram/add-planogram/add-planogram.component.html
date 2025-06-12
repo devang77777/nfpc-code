@@ -1,0 +1,144 @@
+<div class="card">
+  <div class="card-header pt-4">
+    <span class="h6 font-weight-light">{{formType}} Planogram</span>
+    <a (click)="close()"><i class="fa fa-times fa-lg text-secondary float-right" aria-hidden="true"></i></a>
+  </div>
+  <form [formGroup]="palnogramFormGroup" (ngSubmit)="savePlanogramData()">
+    <div class="form-box">
+      <div class="card-body">
+        <div class="">
+          <mat-tab-group class=" mb-3 " [(selectedIndex)]="selectedIndex" mat-stretch-tabs>
+            <mat-tab label="Planogram">
+              <div class="row mb-4 mt-4">
+                <div class="col-md-4">Name*</div>
+                <div class="col-md-8">
+                  <input class="form-control form-control-sm" type="text" formControlName="name">
+                  <app-validation-message [control]="palnogramFormGroup.controls['name']">
+                  </app-validation-message>
+                </div>
+              </div>
+              <div class="row mb-4">
+                <div class="col-md-4 ">Valid From*</div>
+                <div class="col-md-8">
+                  <input class="form-control form-control-sm" type="Date" formControlName="start_date">
+                  <app-validation-message [control]="palnogramFormGroup.controls['start_date']">
+                  </app-validation-message>
+                </div>
+              </div>
+              <div class="row mb-4">
+                <div class="col-md-4 ">Valid To*</div>
+                <div class="col-md-8">
+                  <input class="form-control form-control-sm" type="Date" formControlName="end_date">
+                  <app-validation-message [control]="palnogramFormGroup.controls['end_date']"></app-validation-message>
+                </div>
+              </div>
+              <div class="row mb-4">
+                <div class="col-md-4">Customer*</div>
+                <div class="col-md-8">
+                  <app-multiautocomplete [options]="customers" (selectionchanged)="onWriterChange()"
+                    [control]="palnogramFormGroup.controls['customer_id']" text="" id="id" objectName="user-root"
+                    param1="firstname" param2="lastname">
+                  </app-multiautocomplete>
+
+                  <app-validation-message [control]="palnogramFormGroup.controls['customer_id']">
+                  </app-validation-message>
+                </div>
+              </div>
+            </mat-tab>
+            <mat-tab label="Customers Distributions">
+              <section *ngIf="dataSource1.data.length > 0">
+                <div class="table-responsive">
+                  <table class="table table-hover" mat-table [dataSource]="dataSource1" multiTemplateDataRows>
+                    <tr mat-header-row class="table-header" *matHeaderRowDef="columnsToDisplay1"></tr>
+                    <tr mat-row *matRowDef="let element; columns: columnsToDisplay1;"
+                      (click)="getCustomerItems(element)" class="element-row"
+                      [class.expanded-row]="expandedElement1 === element">
+                    </tr>
+                    <tr mat-row *matRowDef="let row;let i = index; columns: ['expandedDetail']" class="detail-row"></tr>
+                    <ng-container matColumnDef="name">
+                      <th mat-header-cell *matHeaderCellDef> Customer Name </th>
+                      <td mat-cell *matCellDef="let element"> {{element.firstname}} {{element.lastname}}
+                      </td>
+                    </ng-container>
+                    <!-- Expanded Content Column - The detail row is made up of this one column that spans across all columns -->
+                    <ng-container matColumnDef="expandedDetail">
+                      <td mat-cell *matCellDef="let element" [attr.colspan]="columnsToDisplay1.length">
+                        <div class="element-detail show-images"
+                          [@detailExpand]="element == expandedElement1 ? 'expanded' : 'collapsed'">
+                          <section *ngIf="dataSource2.data.length > 0">
+                            <div class="table-responsive">
+                              <table class="table table-hover" mat-table [dataSource]="dataSource2"
+                                multiTemplateDataRows>
+                                <tr mat-header-row class="table-header" *matHeaderRowDef="columnsToDisplay2"></tr>
+                                <tr mat-row *matRowDef="let element2; columns: columnsToDisplay2;"
+                                  (click)="getDistributionItems(element.id, element2)" class="element-row"
+                                  [class.expanded-row]="expandedElement2 === element2">
+                                </tr>
+                                <tr mat-row *matRowDef="let row;let i = index; columns: ['expandedDetail']"
+                                  class="detail-row"></tr>
+                                <ng-container matColumnDef="name">
+                                  <th mat-header-cell *matHeaderCellDef> Distribution Name </th>
+                                  <td mat-cell *matCellDef="let element2">
+                                    {{element2.distribution?.name || element2?.name}}
+                                  </td>
+                                </ng-container>
+
+                                <ng-container matColumnDef="action">
+
+                                  <th mat-header-cell *matHeaderCellDef> Actions </th>
+                                  <td mat-cell *matCellDef="let element2;">
+                                    <input type="file" #filePicker (change)="onImageChange($event,element.id, element2)"
+                                      multiple="" accept="image/x-png,image/gif,image/jpeg">
+                                    <button class="btn btn-sm btn-p ml-1 mr-1" type="button"
+                                      (click)="filePicker.click()">
+                                      <i class="os-icon os-icon-plus mr-2" aria-hidden="true"></i> Add Image(s)</button>
+                                  </td>
+                                </ng-container>
+                                <!-- Expanded Content Column - The detail row is made up of this one column that spans across all columns -->
+                                <ng-container matColumnDef="expandedDetail">
+                                  <td mat-cell *matCellDef="let element2" [attr.colspan]="columnsToDisplay2.length">
+                                    <div class="element-detail show-images"
+                                      [@detailExpand]="element2 == expandedElement2 ? 'expanded' : 'collapsed'">
+                                      <div *ngIf="expandedElement2Images" class="img-position show-images">
+                                        <div *ngFor='let url of expandedElement2Images' class="img-position">
+
+                                          <img [src]="url" height="150" width="150px">
+
+                                          <a class="cancel-btn iconbtn delete-circle"
+                                            (click)="removeImg(url,element.id, element2)"><i
+                                              class="os-icon os-icon-x-circle" aria-hidden="true"></i>
+                                          </a>
+                                        </div>
+                                        <br />
+                                      </div>
+                                    </div>
+                                  </td>
+                                </ng-container>
+                              </table>
+                            </div>
+                            <!-- <pre>{{output | json}}</pre> -->
+
+                          </section>
+                        </div>
+                      </td>
+                    </ng-container>
+                  </table>
+                </div>
+                <!-- <pre>{{output | json}}</pre> -->
+
+              </section>
+            </mat-tab>
+          </mat-tab-group>
+
+        </div>
+      </div>
+
+    </div>
+    <div class="card-footer">
+      <div class="d-inline float-right">
+        <button type="button" class="btn btn-sm btn-light mr-2" (click)="close()">Cancel</button>
+        <button type="submit" class="btn btn-sm btn-p">Save</button>
+      </div>
+    </div>
+  </form>
+</div>

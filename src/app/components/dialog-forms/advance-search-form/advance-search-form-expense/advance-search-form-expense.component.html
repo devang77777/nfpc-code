@@ -1,0 +1,57 @@
+<form [formGroup]="form" novalidate>
+
+    <div class="row">
+        <div class="col-md-6">
+            <div class="form-group row">
+                <label class="col-sm-3 col-form-label">Date Range</label>
+                <!-- <div class="col-sm-9" style="display:flex;">
+                    <input type="date" formControlName="startdate" class="form-control form-control-sm" placeholder="Start Date">
+                   &nbsp; &nbsp;<span>_</span>&nbsp;&nbsp;
+                   <input type="date" formControlName="enddate" class="form-control form-control-sm" placeholder="End Date">
+                </div> -->
+                <div class="col-sm-9" >
+                    <div class="row">
+                        <div class="col">
+                            <input type="date" formControlName="startdate" class="form-control form-control-sm" placeholder="Start Date">
+                        </div>
+                        <div class="col-1 p-0">
+                            &nbsp; &nbsp;<span>_</span>&nbsp;&nbsp;
+                        </div>
+                        <div class="col">
+                            <input type="date" formControlName="enddate" class="form-control form-control-sm" placeholder="End Date">
+                        </div>
+                    </div>
+                 
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="form-group row">
+                <label class="col-sm-3 col-form-label">Total Range</label>
+                <div class="col-sm-9" style="display:flex;">
+                    <input type="text" formControlName="startrange" class="form-control form-control-sm" placeholder="Start Range">
+                   &nbsp; &nbsp;<span>_</span>&nbsp;&nbsp;
+                    <input type="text" formControlName="endrange" class="form-control form-control-sm" placeholder="End Range">
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="form-group row">
+                <label class="col-sm-3 col-form-label">Category Name</label>
+                <div class="col-sm-9">
+                    <input type="text"  formControlName="category_name"class="form-control form-control-sm" placeholder="Category Name">
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="form-group row">
+                <label class="col-sm-3 col-form-label">Customer  Name</label>
+                <div class="col-sm-9">
+                    <input type="text" formControlName="customerName" class="form-control form-control-sm" placeholder="Customer  Name">
+                </div>
+            </div>
+        </div>
+      
+      
+    </div>
+</form>

@@ -1,0 +1,19 @@
+::ng-deep ngx-spinner {
+    .overlay {
+        height: 50px !important;
+    }
+    .la-ball-beat.la-2x > div {
+        width: 15px !important;
+        height: 15px !important;
+    }
+}
+.spinner {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+:host ::ng-deep .mat-progress-spinner circle, .mat-spinner circle {
+    stroke: rgba(6, 84, 158, 0.63);
+    stroke-width: 5% !important;
+}

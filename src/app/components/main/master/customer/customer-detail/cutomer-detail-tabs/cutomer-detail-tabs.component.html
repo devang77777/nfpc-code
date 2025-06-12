@@ -1,0 +1,41 @@
+
+  <mat-tab-group class="customertab" mat-align-tabs="start">
+    <mat-tab label="Overview">
+      <app-customer-detail-overview [customer]="customer" [lobInfo]="lobInfo"></app-customer-detail-overview>
+    </mat-tab>
+    <mat-tab label="Comments">
+      <app-customer-detail-comment [customer]="customer" [notOpenedFromOverViewRightPanel]="true">
+      </app-customer-detail-comment>
+    </mat-tab>
+    <mat-tab label="Sales">
+      <app-customer-detail-sales [customer]="customer"></app-customer-detail-sales>
+    </mat-tab>
+    <mat-tab label="Statement">
+      <app-customer-detail-statement [customer]="customer"></app-customer-detail-statement>
+    </mat-tab>
+    <mat-tab label="Custom Fields">
+      <div class="row">
+        <div class="col-xl-3 col-lg-5 col-md-8">
+          <ng-container *ngIf="
+              customer.custom_field_value_save &&
+              customer.custom_field_value_save.length > 0
+            ">
+            <ul class="smhlist mt-2">
+              <li *ngFor="let item of customer.custom_field_value_save">
+                <span *ngIf="
+                    item.custom_field &&
+                      item.custom_field.field_type === 'check_box';
+                    else others
+                  ">{{ item.custom_field.field_label }} :
+                  {{ item.custom_field_value == "1" ? "Yes" : "No" }}</span>
+                <ng-template #others>
+                  <span *ngIf="item.custom_field">{{ item.custom_field?.field_label }} :
+                    {{ item.custom_field_value }}</span>
+                </ng-template>
+              </li>
+            </ul>
+          </ng-container>
+        </div>
+      </div>
+    </mat-tab>
+  </mat-tab-group>

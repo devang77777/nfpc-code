@@ -1,0 +1,71 @@
+<section>
+        <div class="card-header">
+        <span class="h6">Line Of Business</span>
+        <button class="dialog-close-btn" mat-dialog-close>
+            <i class="fa fa-times fa-lg" aria-hidden="true"></i>
+        </button>
+        </div>
+
+
+        <div class="form-container" *ngIf="showForm">
+            <form [formGroup]="addLobForm">
+                <div class="card-body">
+                    <div class="row mb-4">
+                        <div class="col-md-4" style="margin-top:5px;">Line Of Business</div>
+                        <div class="col-md-8">
+                            <div class="form-group">
+                                <input type="text" 
+                                class="form-control form-control-sm inp"
+                                placeholder="Enter Line of Business"
+                                name="name" 
+                                formControlName="name">
+                            </div>
+                        </div>
+                    <!-- <div>
+                            <button class="btn-p"
+                            (click)="addLob()">
+                            <i class="os-icon os-icon-plus"></i>Add</button>
+                        </div> -->
+                    </div>
+                    <div class="cancel-btn">
+                      
+                        <button type="button" 
+                        (click)="saveLob()" class="add-new-btn">
+                        Save
+                        </button> &nbsp;&nbsp;
+                        <button mat-button class="mat-inherit-line-height"  (click)="showForm = false">
+                        Cancel
+                        </button>
+                        <!-- <button mat-button class="mat-inherit-line-height height-40" (click)="reset()">
+                        Reset
+                        </button> -->
+                    
+                    </div>
+            </div>
+            </form>
+        </div>
+
+        <div class="categories-title">
+            <h4>
+                Line Of Business
+            <span class="add-new-label"><button (click)="addNewLob()"
+                >
+                <i class="fa fa-plus-circle"></i>Add New Line Of Business
+                </button></span>
+            </h4>
+        </div>
+
+        <div class="sales-org-holder">
+            <app-tree-container [treeData]="lobList" (editData)="editLob($event)" (applyData)="applyLob($event)" (deleteData)="delete($event)"
+              >
+            </app-tree-container>
+          </div>
+
+        <div class="bottom-cancel">
+            <div class="cancel-btn">
+                <button mat-button class="mat-inherit-line-height height-40" style="float: right;" mat-dialog-close>
+                Cancel
+                </button>
+            </div>
+        </div>
+</section>  

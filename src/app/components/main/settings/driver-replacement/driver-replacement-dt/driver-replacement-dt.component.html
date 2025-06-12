@@ -1,0 +1,62 @@
+<section class="scrolly">
+    <div class="table-responsive">
+        <table class="table table-hover" mat-table [dataSource]="dataSource">
+            <ng-container matColumnDef="date">
+                <th mat-header-cell *matHeaderCellDef>Date</th>
+                <td mat-cell *matCellDef="let element">
+                    {{ element?.date }}
+                </td>
+            </ng-container>
+            <ng-container matColumnDef="order">
+                <th mat-header-cell *matHeaderCellDef>Order No</th>
+                <td mat-cell *matCellDef="let element">
+                    {{ element?.order_id }}
+                </td>
+            </ng-container>
+            <ng-container matColumnDef="new">
+                <th mat-header-cell *matHeaderCellDef>New Salesman</th>
+                <td mat-cell *matCellDef="let element">
+                    <ng-container *ngIf="element?.new_salesman">
+                        {{ element?.new_salesman?.firstname + ' ' +
+                        element?.new_salesman?.lastname }}
+                    </ng-container>
+                    <ng-container *ngIf="!element?.new_salesman">-</ng-container>
+                </td>
+            </ng-container>
+            <ng-container matColumnDef="old">
+                <th mat-header-cell *matHeaderCellDef>Old Salesman</th>
+                <td mat-cell *matCellDef="let element">
+                    <ng-container *ngIf="element?.old_salesman">{{ element?.old_salesman?.firstname + ' ' +
+                        element?.new_salesman?.lastname}}
+                    </ng-container>
+                    <ng-container *ngIf="!element?.old_salesman">-</ng-container>
+                </td>
+            </ng-container>
+            <ng-container matColumnDef="newVan">
+                <th mat-header-cell *matHeaderCellDef>New Van</th>
+                <td mat-cell *matCellDef="let element">
+                    <ng-container *ngIf="element?.new_van">{{ element?.new_van?.van_code }}</ng-container>
+                    <ng-container *ngIf="!element?.new_van">-</ng-container>
+                </td>
+            </ng-container>
+            <ng-container matColumnDef="oldVan">
+                <th mat-header-cell *matHeaderCellDef>Old Van</th>
+                <td mat-cell *matCellDef="let element">
+                    <ng-container *ngIf="element?.old_van">{{ element?.old_van?.van_code }}</ng-container>
+                    <ng-container *ngIf="!element?.old_van">-</ng-container>
+                </td>
+            </ng-container>
+            <ng-container matColumnDef="reason">
+                <th mat-header-cell *matHeaderCellDef>Reason</th>
+                <td mat-cell *matCellDef="let element">
+                    {{ element?.reason?.name }}
+                </td>
+            </ng-container>
+
+            <tr mat-header-row *matHeaderRowDef="getDisplayedColumns()"></tr>
+            <tr mat-row *matRowDef="let row; columns: getDisplayedColumns()"></tr>
+        </table>
+    </div>
+    <mat-paginator (page)="onPageFired($event)" [length]="apiResponse.pagination?.total_records" [pageSize]="pageSize"
+        [pageSizeOptions]="[10, 25, 50]"> </mat-paginator>
+</section>

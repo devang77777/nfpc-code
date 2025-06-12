@@ -1,0 +1,10 @@
+<ul>
+  <li *ngFor="let data of treeData">
+    <app-tree-node-container
+      (applyData)="applyNode($event)"
+      (deleteData)="deleteNode($event)"
+      (editData)="editNode($event)"
+      [nodeData]="data">
+    </app-tree-node-container>
+  </li>
+</ul>

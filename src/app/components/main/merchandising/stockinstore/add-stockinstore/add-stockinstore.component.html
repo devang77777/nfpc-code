@@ -1,0 +1,124 @@
+<div class="card" style="    height: 100%;">
+  <div class="card-header pt-4">
+    <span class="h6 font-weight-bold text-secondary">{{formType}} Inventory</span>
+    <a (click)="close()" class="closeicon settingclose"><i class="os-icon os-icon-x text-secondary float-right"
+        aria-hidden="true"></i></a>
+  </div>
+  <form [formGroup]="stockinstoreFormGroup" (ngSubmit)="saveStockinstoreData()" style="    height: 100%;">
+    <div class="form-box" style="height: 100%;">
+      <div class="card-body">
+        <div class="" >
+          <div class="row mb-4">
+            <div class="col-md-4">Activity Name*</div>
+            <div class="col-md-8">
+              <input class="form-control form-control-sm" type="text" formControlName="activityName">
+              <app-validation-message [control]="stockinstoreFormGroup.controls['activityName']">
+              </app-validation-message>
+            </div>
+          </div>
+          <div class="row mb-4">
+            <div class="col-md-4 ">Date From*</div>
+            <div class="col-md-8">
+              <input class="form-control form-control-sm" type="Date" formControlName="validFrom">
+              <app-validation-message [control]="stockinstoreFormGroup.controls['validFrom']"></app-validation-message>
+            </div>
+          </div>
+          <div class="row mb-4">
+            <div class="col-md-4 ">Date TO*</div>
+            <div class="col-md-8">
+              <input class="form-control form-control-sm" type="Date" formControlName="validTo">
+              <app-validation-message [control]="stockinstoreFormGroup.controls['validTo']"></app-validation-message>
+            </div>
+          </div>
+          <div class="row mb-4"
+            [style.visibility]="!stockinstoreFormGroup.controls['validFrom'].errors && !stockinstoreFormGroup.controls['validTo'].errors && !stockinstoreFormGroup.controls['activityName'].errors">
+            <div class="col-md-4">Assign Customers*</div>
+            <div class="col-md-8">
+              <app-multiautocomplete [options]="customer" [control]="stockinstoreFormGroup.controls['customers']"
+                text="" id="id" objectName="user-root" param1="firstname" param2="lastname">
+              </app-multiautocomplete>
+
+              <app-validation-message [control]="stockinstoreFormGroup.controls['customers']"></app-validation-message>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div [hidden]="stockinstoreFormGroup.invalid" class="changeMargin">
+        <div class="card-body">
+          <div class="">
+            <h3> Select Item </h3>
+            <div class="row mb-4">
+              <div class="col-md-3">Item</div>
+              <div class="col-md-8">
+                <mat-select class="form-control form-control-sm" (selectionChange)="getUomListByItem($event.value)"
+                  [formControl]="ItemCodeFormControl">
+                  <mat-option *ngFor="let item of itemData " [value]="item.id">
+                    {{ item.item_code }} / {{ item.item_name }}
+                  </mat-option>
+                </mat-select>
+              </div>
+            </div>
+            <div class="row mb-4">
+              <div class="col-md-3">Item Uom</div>
+              <div class="col-md-8">
+                <mat-select class="form-control form-control-sm" [formControl]="ItemUomCodeFormControl">
+                  <mat-option *ngFor="let uom of uomFilter " [value]="uom.id">
+                    {{ uom.name }}
+                  </mat-option>
+                </mat-select>
+              </div>
+            </div>
+            <div class="row mb-4">
+              <div class="col-md-3">Capacity</div>
+              <div class="col-md-8">
+                <input type="number" placeholder="Enter capacity" class="form-control form-control-sm"
+                  [formControl]="capacityFormControl">
+              </div>
+            </div>
+            <div class="row item-add-btn">
+              <button type="button" class="col-md-2" (click)="addItemCode()">
+                <i class="os-icon os-icon-plus"></i>Add</button>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="items-table-box">
+        <div class="table-responsive">
+          <table mat-table [dataSource]="itemSource" *ngIf="itemSource.data.length"
+            class="mat-elevation-z8 table table-hover">
+            <ng-container matColumnDef="itemName">
+              <th mat-header-cell *matHeaderCellDef> Item Name </th>
+              <td mat-cell *matCellDef="let element"> {{ element.item_name }} </td>
+            </ng-container>
+            <ng-container matColumnDef="itemUom">
+              <th mat-header-cell *matHeaderCellDef> Item Uom </th>
+              <td mat-cell *matCellDef="let element"> {{ element.item_uom_name }} </td>
+            </ng-container>
+            <ng-container matColumnDef="capacity">
+              <th mat-header-cell *matHeaderCellDef> Capacity </th>
+              <td mat-cell *matCellDef="let element"> {{ element.capacity? element.capacity : 'N/A' }} </td>
+            </ng-container>
+            <ng-container matColumnDef="actions">
+              <th mat-header-cell *matHeaderCellDef> Actions </th>
+              <td mat-cell *matCellDef="let element; index as index">
+                <button type="button" (click)="editItemCode(index, element)"><i class="fa fa-edit"></i></button>
+                <button type="button" (click)="deleteItemCode(index)" class="trash-btn"><i
+                    class="fa fa-trash"></i></button>
+              </td>
+            </ng-container>
+            <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+            <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+          </table>
+        </div>
+        <mat-paginator [hidden]="itemSource.data.length < 5" pageSize="5" [pageSizeOptions]="[5,10]">
+        </mat-paginator>
+      </div>
+    </div>
+    <div class="card-footer">
+      <div class="d-inline float-right">
+        <button type="button" class="btn btn-sm btn-white mr-2" (click)="close()">Cancel</button>
+        <button type="submit" class="btn btn-sm btn-p">Save</button>
+      </div>
+    </div>
+  </form>
+</div>

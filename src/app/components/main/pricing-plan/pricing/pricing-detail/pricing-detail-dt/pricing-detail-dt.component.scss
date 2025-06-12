@@ -1,0 +1,42 @@
+table {
+    width: 100%;
+}
+
+tr.detail-row {
+    height: 0 !important;
+}
+
+tr.element-row:not(.expanded-row):hover {
+    background: whitesmoke;
+}
+
+tr.element-row:not(.expanded-row):active {
+    background: #efefef;
+}
+
+.element-row td {
+    background: #f7f7f7;
+    td{
+        border-bottom-width: 0;
+    }
+}
+
+.element-detail {
+    overflow: hidden;
+    display: flex;
+   
+}
+
+.delete-btn {
+    background-color: #181824;
+    color: white;
+    border-radius: 0.25rem;
+
+    &:focus {
+        outline: none;
+    }
+}
+
+
+
+

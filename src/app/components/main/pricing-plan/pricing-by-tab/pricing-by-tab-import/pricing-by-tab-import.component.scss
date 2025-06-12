@@ -1,0 +1,27 @@
+.text-red {
+    color: red;
+    font-size: 20px;
+    font-weight: 600;
+}
+
+.example-full-width {
+    align-items: baseline;
+    box-sizing: border-box;
+    width: 100%;
+    border-radius: 0.25rem;
+    background-color: white;
+    border: 1px solid #ced4da;
+    padding: 0 8px;
+    height: calc(1.5em + 0.5rem + 8px);
+    border-radius: 0;
+}
+
+.card-footer {
+    margin-top: 150px !important;
+}
+
+.icon {
+    padding-right: 25px;
+    background: url("/assets/images/down.png") no-repeat right;
+    background-size: 20px;
+}

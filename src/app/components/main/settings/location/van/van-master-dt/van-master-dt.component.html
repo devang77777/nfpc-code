@@ -1,0 +1,97 @@
+<section class="scrolly">
+  <div class="table-responsive">
+    <table class="table table-hover" mat-table [dataSource]="dataSource">
+      <ng-container matColumnDef="select">
+        <th mat-header-cell *matHeaderCellDef>
+          <a class="filter-btn" *ngIf="!isDetailVisible" [matMenuTriggerFor]="menu" style="height: 30px;">
+            <i class="fa fa-table" aria-hidden="true"></i>
+          </a>
+          <mat-menu #menu="matMenu">
+            <div class="card-body p-2" style="min-width: 200px;">
+              <ul style="list-style: none; padding-left: 7px;">
+                <li *ngFor="let column of filterColumns">
+                  <input type="checkbox" [(ngModel)]="column.show" class="m-2" (click)="$event.stopPropagation()" />
+                  {{ column.title }}
+                </li>
+              </ul>
+              <div class="float-right mb-2">
+                <button class="btn btn-p bg-secondary">Cancel</button>
+              </div>
+            </div>
+          </mat-menu>
+          <mat-checkbox class="head-checkbox" (change)="$event ? toggleSelection() : null" (change)="getSelectedRows()"
+            [checked]="selections.hasValue() && isAllSelected()"
+            [indeterminate]="selections.hasValue() && !isAllSelected()" [aria-label]="checkboxLabel()">
+          </mat-checkbox>
+        </th>
+        <td mat-cell *matCellDef="let row">
+          <mat-checkbox class="row-checkbox" (click)="$event.stopPropagation()"
+            (change)="$event ? selections.toggle(row) : null" (change)="getSelectedRows()"
+            [checked]="selections.isSelected(row)" [aria-label]="checkboxLabel(row)">
+          </mat-checkbox>
+        </td>
+      </ng-container>
+      <ng-container matColumnDef="vanCode">
+        <th mat-header-cell *matHeaderCellDef>
+          <app-column-filter title="vanCode"
+            [selected]="selectedColumnFilter" controlName="vanCode" (close)="onColumnFilter($event)">
+            <input class="form-control form-control-sm" [(ngModel)]="vanCodeInput"
+              placeholder="Enter vanCode" type="text">
+          </app-column-filter>
+        </th>
+
+        <td mat-cell *matCellDef="let element">{{ element.van_code }}</td>
+      </ng-container>
+      <ng-container matColumnDef="vanPlate">
+        <!-- <th mat-header-cell *matHeaderCellDef>Plate Number</th> -->
+        <th mat-header-cell *matHeaderCellDef>
+          <app-column-filter title="Plate Number"
+            [selected]="selectedColumnFilter" controlName="vanPlate" (close)="onColumnFilter($event)">
+            <input class="form-control form-control-sm" [(ngModel)]="plateInput"
+              placeholder="Enter vanPlate" type="text">
+          </app-column-filter>
+        </th>
+        <td mat-cell *matCellDef="let element">{{ element.plate_number }}</td>
+      </ng-container>
+      <ng-container matColumnDef="vanDescription">
+        <!-- <th mat-header-cell *matHeaderCellDef>Van Description</th> -->
+        <th mat-header-cell *matHeaderCellDef>
+          <app-column-filter title="Van Description"
+            [selected]="selectedColumnFilter" controlName="vanDescription" (close)="onColumnFilter($event)">
+            <input class="form-control form-control-sm" [(ngModel)]="vandescInput"
+              placeholder="Enter vanDescription" type="text">
+          </app-column-filter>
+        </th>
+        <td mat-cell *matCellDef="let element">{{ element.description }}</td>
+      </ng-container>
+      <ng-container matColumnDef="fuelReading">
+        <!-- <th mat-header-cell *matHeaderCellDef>Fuel Reading</th> -->
+        <th mat-header-cell *matHeaderCellDef>
+          <app-column-filter title="Fuel Reading"
+            [selected]="selectedColumnFilter" controlName="fuelReading" (close)="onColumnFilter($event)">
+            <input class="form-control form-control-sm" [(ngModel)]="fuelInput"
+              placeholder="Enter fuelReading" type="text">
+          </app-column-filter>
+        </th>
+        <td mat-cell *matCellDef="let element">{{ element?.reading?element?.reading:0 }}</td>
+      </ng-container>
+      <ng-container matColumnDef="status">
+        <!-- <th mat-header-cell *matHeaderCellDef>Status</th> -->
+        <th mat-header-cell *matHeaderCellDef>
+          <app-column-filter title="Status"
+            [selected]="selectedColumnFilter" controlName="status" (close)="onColumnFilter($event)">
+            <input class="form-control form-control-sm" [(ngModel)]="statusInput"
+              placeholder="Enter status" type="text">
+          </app-column-filter>
+        </th>
+        <td mat-cell *matCellDef="let element">{{ element.van_status === 0 ? "Inactive" : "Active" }}</td>
+      </ng-container>
+      <tr mat-header-row *matHeaderRowDef="getDisplayedColumns()"></tr>
+      <tr mat-row *matRowDef="let row; columns: getDisplayedColumns()" (click)="openDetailView(row)"></tr>
+    </table>
+  </div>
+  <mat-paginator [hidden]="apiResponse.pagination?.total_records < 10" (page)="onPageFired($event)"
+    [length]="apiResponse.pagination?.total_records" [pageSize]="pageSize" [pageSizeOptions]="[10, 25, 50]">
+  </mat-paginator>
+
+</section>

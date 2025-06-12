@@ -1,0 +1,59 @@
+<mat-drawer-container class="formdrawer-container" hasBackdrop="false">
+  <mat-drawer id="formDrawer" mode="over" position="end" #formDrawer class="border">
+    <div style="min-width: 400px;">
+      <app-history [module]="module" (close)="onClose()"></app-history>
+    </div>
+  </mat-drawer>
+
+  <section class="overflow-hidden">
+    <div class="table-box customerbox" [ngClass]="{ collapsed: isDetailVisible }">
+      <div class="heading-row clearfix">
+        <p class="d-md-inline" *ngIf="!isDetailVisible">
+          <i class="os-icon os-icon-user mr-2" aria-hidden="true"></i> Debit
+          Notes
+        </p>
+        <div class="d-inline float-right">
+          <button type="button" class="btn btn-sm btn-p" mat-button [matMenuTriggerFor]="menuNew">
+            <i class="os-icon os-icon-plus mr-2" aria-hidden="true"></i>New
+          </button>
+          <mat-menu #menuNew="matMenu">
+            <button mat-menu-item (click)="openForm()" appPermission [permissions]="userPermissions"
+              [type]="'create'">Normal
+            </button>
+            <button mat-menu-item (click)="opendiscountDialog('shelf_rent', 'Shelf Rent')">Shelf Rent</button>
+            <button mat-menu-item (click)="opendiscountDialog('listing_fees', 'Listing Fee')">Listing Fee</button>
+            <button mat-menu-item (click)="opendiscountDialog('rebate_discount', 'Rebate Discount')">Rebate
+              Discount</button>
+          </mat-menu>
+
+          <button *ngIf="checkedRows.length > 0" class="btn btn-sm btn-white dropdown-toggle ml-2" mat-button
+            [matMenuTriggerFor]="menu2">
+            Bulk Actions
+          </button>
+          <mat-menu #menu2="matMenu">
+            <button mat-menu-item (click)="bulkAction('active')">Mark as Active</button>
+            <button mat-menu-item (click)="bulkAction('inactive')">Mark as Inactive</button>
+            <!-- <button mat-menu-item (click)="bulkAction('delete')" appPermission [permissions]="userPermissions" [type]="'delete'">
+              Delete
+            </button> -->
+          </mat-menu>
+          <!-- impot /Export  -->
+          <button class="btn btn-sm btn-white ml-2 dropdown-toggle" [matMenuTriggerFor]="menu3">
+            <i class="fa fa-bars" aria-hidden="true"></i>
+          </button>
+          <mat-menu #menu3="matMenu">
+            <button mat-menu-item (click)="openImportDebit()">Import Debit Note</button>
+            <button mat-menu-item type="button" (click)="openExportDebit()">Export Debit Note</button>
+          </mat-menu>
+        </div>
+      </div>
+      <app-debit-note-data-table (selectedRows)="selectedRows($event)" (detailsClosed)="closeClicked()"
+        [newDebitData]="newDebitData" (itemClicked)="itemClicked($event)"></app-debit-note-data-table>
+    </div>
+    <div class="details-box" [ngClass]="{ expanded: isDetailVisible }">
+      <app-debit-note-detail (detailsClosed)="closeClicked()" [isDetailVisible]="isDetailVisible"
+        [debitNoteData]="debitNoteData" (toggleHistory)="openHistoryView()">
+      </app-debit-note-detail>
+    </div>
+  </section>
+</mat-drawer-container>

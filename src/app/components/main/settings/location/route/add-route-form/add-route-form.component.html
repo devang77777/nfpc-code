@@ -1,0 +1,174 @@
+<div class="card" style="width: 550px;">
+  <div class="card-header pt-4">
+    <span class="h6 font-weight-light">{{ formType }} Route</span>
+    <a (click)="close()"><i class="fa fa-times fa-lg text-secondary float-right" aria-hidden="true"></i></a>
+  </div>
+  <div class="card-body">
+    <form [formGroup]="routeFormGroup">
+      <div class="card-body">
+        <div class="">
+          <div class="row mb-md-2 mb-2">
+            <div class="col-md-4 ">Route Code<i class="text-red">* </i></div>
+            <div class="col-md-8">
+              <input (keypress)="restrictLength($event)" [formControl]="routeCodeFormControl"
+                class="form-control form-control-sm" type="text" style="width: 95%;" />
+              <a [hidden]="formType == 'Edit'" (click)="open()" class="ml-2 settingIcon"><i
+                  class="os-icon os-icon-ui-46" aria-hidden="true"></i></a>
+            </div>
+          </div>
+          <div class="row mb-md-2 mb-2">
+            <div class="col-md-4 ">Route Name<i class="text-red">* </i></div>
+            <div class="col-md-8">
+              <input [formControl]="nameFormControl" class="form-control form-control-sm" type="text" />
+            </div>
+          </div>
+
+          <div class="row mb-md-2 mb-2">
+            <div class="col-md-4 ">Area<i class="text-red">* </i></div>
+            <div class="col-md-8">
+              <app-tree-dropdown class="area-dropdown" [dataSource]="areas" [dataService]="areaProvider()"
+                [buttonLabel]="'Manage Areas'" (manageClicked)="openArea()" (whenItemSelected)="areaSelected($event)"
+                [selectFormControl]="areaFormControl" [placeHolder]="'Search a area'" ngDefaultControl>
+              </app-tree-dropdown>
+            </div>
+          </div>
+          <div class="row mb-md-2 mb-2">
+            <div class="col-md-4 ">Depot Name<i class="text-red">* </i></div>
+            <div class="col-md-8">
+              <select [formControl]="depotFormControl" class="form-control form-control-sm">
+                <option *ngFor="let depot of depots" [value]="depot.id">{{
+                  depot.depot_name
+                  }}</option>
+              </select>
+            </div>
+          </div>
+          <div class="row mb-md-2 mb-2">
+            <div class="col-md-4 ">Select Vehicle<i class="text-red">* </i></div>
+            <div class="col-md-8">
+              <select [formControl]="vehicleNameControl" class="form-control form-control-sm">
+                <option *ngFor="let van of vehiclesList" [value]="van.id">
+                  {{ van.description }} {{"-"}} {{ van.van_code }}
+                </option>
+              </select>
+            </div>
+          </div>
+        </div>
+        <div class="number-range">
+          <div class="row mt-3">
+            <div class="col">
+              <p class="number-range-header">Number Range</p>
+              <hr>
+            </div>
+          </div>
+          <div class="row mb-2">
+            <div class="col">
+              <label for=""> Customer From<i class="text-red">* </i>:</label>
+              <input type="text" class="form-control form-control-sm" formControlName="customer_from">
+            </div>
+            <div class="col">
+              <label for="">Customer To<i class="text-red">* </i>:</label>
+              <input type="text" class="form-control form-control-sm" formControlName="customer_to">
+            </div>
+          </div>
+          <small
+            *ngIf="(routeFormGroup.controls['customer_from'].invalid || routeFormGroup.controls['customer_to'].invalid) && (routeFormGroup.controls['customer_from'].touched || routeFormGroup.controls['customer_to'].touched)"
+            class="text-danger">Please fill Customer form and to range</small>
+          <!-- <small
+          *ngIf="!isCustomerRange && (salesManRoleFormControl.value == 2 || salesManRoleFormControl.value == 3)"
+          class="text-danger">Please fill both form and to range</small> -->
+          <div class="row mb-2 mt-3">
+            <div class="col">
+              <label for=""> Order From<i class="text-red">* </i>:</label>
+              <input type="text" class="form-control form-control-sm" formControlName="order_from">
+            </div>
+            <div class="col">
+              <label for="">Order To<i class="text-red">* </i>:</label>
+              <input type="text" class="form-control form-control-sm" formControlName="order_to">
+            </div>
+          </div>
+          <small
+            *ngIf="(routeFormGroup.controls['order_from'].invalid || routeFormGroup.controls['order_to'].invalid) && (routeFormGroup.controls['order_from'].touched || routeFormGroup.controls['order_to'].touched)"
+            class="text-danger">Please fill Order form and to range</small>
+
+          <!-- <small *ngIf="!isOrderRange && salesManRoleFormControl.value !== 4" class="text-danger">Please fill
+          both form and to range</small> -->
+          <div class="row mb-2">
+            <div class="col">
+              <label for="">Invoice from<i class="text-red">* </i>:</label>
+              <input type="text" class="form-control form-control-sm" formControlName="invoice_from">
+            </div>
+            <div class="col">
+              <label for="">Invoice To:</label>
+              <input type="text" class="form-control form-control-sm" formControlName="invoice_to">
+            </div>
+          </div>
+          <small
+            *ngIf="(routeFormGroup.controls['invoice_from'].invalid || routeFormGroup.controls['invoice_to'].invalid) && (routeFormGroup.controls['invoice_from'].touched || routeFormGroup.controls['invoice_to'].touched)"
+            class="text-danger">Please fill Invoice form and to range</small>
+
+          <!-- <small *ngIf="!isInvoiceRange && salesManRoleFormControl.value !== 1" class="text-danger">Please fill
+          both form and to range</small> -->
+          <div class="row mb-2">
+            <div class="col">
+              <label for="">Collection From<i class="text-red">* </i>:</label>
+              <input type="text" class="form-control form-control-sm" formControlName="collection_from">
+            </div>
+            <div class="col">
+              <label for="">Collection To<i class="text-red">* </i>:</label>
+              <input type="text" class="form-control form-control-sm" formControlName="collection_to">
+            </div>
+          </div>
+          <small
+            *ngIf="(routeFormGroup.controls['collection_from'].invalid || routeFormGroup.controls['collection_to'].invalid) && (routeFormGroup.controls['collection_from'].touched || routeFormGroup.controls['collection_to'].touched)"
+            class="text-danger">Please fill Collection form and to range</small>
+
+          <!-- <small *ngIf="!isCollectionRange" class="text-danger">Please fill both form and to range</small> -->
+          <div class="row mb-2">
+            <div class="col">
+              <label for="">Return From<i class="text-red">* </i>:</label>
+              <input type="text" class="form-control form-control-sm" formControlName="credit_note_from">
+            </div>
+            <div class="col">
+              <label for="">Return To<i class="text-red">* </i>:</label>
+              <input type="text" class="form-control form-control-sm" formControlName="credit_note_to">
+            </div>
+          </div>
+          <small
+            *ngIf="(routeFormGroup.controls['credit_note_from'].invalid || routeFormGroup.controls['credit_note_to'].invalid) && (routeFormGroup.controls['credit_note_from'].touched || routeFormGroup.controls['credit_note_to'].touched)"
+            class="text-danger">Please fill Credit Note form and to range</small>
+
+          <!-- <small *ngIf="!isReturnRange" class="text-danger">Please fill both form and to range</small> -->
+          <div class="row mb-2">
+            <div class="col">
+              <label for="">Unload From<i class="text-red">* </i>:</label>
+              <input type="text" class="form-control form-control-sm" formControlName="unload_from">
+            </div>
+            <div class="col">
+              <label for="">Unload to<i class="text-red">* </i>:</label>
+              <input type="text" class="form-control form-control-sm" formControlName="unload_to">
+            </div>
+          </div>
+          <small
+            *ngIf="(routeFormGroup.controls['unload_from'].invalid || routeFormGroup.controls['unload_to'].invalid) && (routeFormGroup.controls['unload_from'].touched || routeFormGroup.controls['unload_to'].touched)"
+            class="text-danger">Please fill Unload form and to range</small>
+
+          <!-- <small
+                    *ngIf="!isUnloadRange && (salesManRoleFormControl.value == 2 || salesManRoleFormControl.value == 3)"
+                    class="text-danger">Please fill both form and to range</small> -->
+        </div>
+        <ng-container *ngIf="isCustomField">
+          <app-custom-field-form [editData]="editData" (change)="onCustomFieldUpdated($event)" [module]="moduleId">
+          </app-custom-field-form>
+        </ng-container>
+      </div>
+    </form>
+  </div>
+  <div class="card-footer">
+    <div class="d-inline float-right">
+      <button class="btn btn-sm btn-light mr-2" (click)="close()">
+        Cancel
+      </button>
+      <button class="btn btn-sm btn-p" (click)="saveRouteData()">Save</button>
+    </div>
+  </div>
+</div>

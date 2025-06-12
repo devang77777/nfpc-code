@@ -1,0 +1,49 @@
+button:focus {
+    outline: none;
+  }
+  button.mat-menu-item {
+    height: 30px;
+    line-height: normal;
+  }
+  .header-row {
+    float: left;
+    width: 100%;
+    position: relative;
+  }
+  button:active {
+    outline: none;
+  }
+  .page-title {
+    padding-top: 20px;
+    margin-bottom: 20px;
+  }
+  .actions {
+    button {
+      background-color: transparent;
+      border: none;
+      font-size: 16px;
+      font-weight: 700;
+    }
+  }
+  .actions {
+    display: flex;
+    align-items: center;
+    justify-content: space-evenly;
+  }
+  .scrollxy {
+    overflow-y: scroll !important;
+    background-color: white !important;
+  }
+  ::ng-deep mat-tab-header {
+    .mat-tab-label-container .mat-tab-label {
+      width: 50% !important;
+    }
+    .mat-ink-bar {
+      width: 50% !important;
+    }
+  }
+.backArrow {
+  position: relative !important;
+  top: -1px !important;
+  font-weight: 700 !important;
+}

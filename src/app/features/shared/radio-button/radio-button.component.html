@@ -1,0 +1,5 @@
+<label class="radio-box" [ngClass]="{ 'mat-style': isMatStyle }">
+  <span class="radio-label" *ngIf="config.label">{{ config.label }}</span>
+  <input type="radio" [value]="config.value" [name]="config.name" (change)="updateRadioButton()" [formControl]="config.control">
+  <span class="radiomark"></span>
+</label>

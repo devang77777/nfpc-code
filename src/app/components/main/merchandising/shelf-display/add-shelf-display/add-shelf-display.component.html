@@ -1,0 +1,72 @@
+<div class="card">
+  <div class="card-header pt-4">
+    <span class="h6 font-weight-light">{{formType}} Shelf Display</span>
+    <a (click)="close()"><i class="fa fa-times fa-lg text-secondary float-right" aria-hidden="true"></i></a>
+  </div>
+  <form [formGroup]="shelfDisplayFormGroup" (ngSubmit)="saveshelfDisplayData()">
+    <div class="form-box">
+      <div class="card-body">
+        <div class="">
+          <div class="row mb-4">
+            <div class="col-md-4">Name*</div>
+            <div class="col-md-8">
+              <input class="form-control form-control-sm" type="text" formControlName="name">
+              <app-validation-message [control]="shelfDisplayFormGroup.controls['name']"></app-validation-message>
+            </div>
+          </div>
+          <div class="row mb-4">
+            <div class="col-md-4 ">Valid From*</div>
+            <div class="col-md-8">
+              <input class="form-control form-control-sm" type="Date" formControlName="validFrom">
+              <app-validation-message [control]="shelfDisplayFormGroup.controls['validFrom']"></app-validation-message>
+            </div>
+          </div>
+          <div class="row mb-4">
+            <div class="col-md-4 ">Valid TO*</div>
+            <div class="col-md-8">
+              <input class="form-control form-control-sm" type="Date" formControlName="validTo">
+              <app-validation-message [control]="shelfDisplayFormGroup.controls['validTo']"></app-validation-message>
+            </div>
+          </div>
+          <div class="row mb-4">
+            <div class="col-md-4">Height(CM)*</div>
+            <div class="col-md-8">
+              <input class="form-control form-control-sm" type="number" formControlName="height">
+              <app-validation-message [control]="shelfDisplayFormGroup.controls['height']"></app-validation-message>
+            </div>
+          </div>
+          <div class="row mb-4">
+            <div class="col-md-4">width(CM)*</div>
+            <div class="col-md-8">
+              <input class="form-control form-control-sm" type="number" formControlName="width">
+              <app-validation-message [control]="shelfDisplayFormGroup.controls['width']"></app-validation-message>
+            </div>
+          </div>
+          <div class="row mb-4">
+            <div class="col-md-4">Depth(CM)*</div>
+            <div class="col-md-8">
+              <input class="form-control form-control-sm" type="number" formControlName="depth">
+              <app-validation-message [control]="shelfDisplayFormGroup.controls['depth']"></app-validation-message>
+            </div>
+          </div>
+          <div class="row mb-4">
+            <div class="col-md-4">Customers*</div>
+            <div class="col-md-8">
+
+              <app-multiautocomplete [options]="customer" [control]="shelfDisplayFormGroup.controls['customers']"
+                text="" id="id" objectName="user-root" param1="firstname" param2="lastname">
+              </app-multiautocomplete>
+              <app-validation-message [control]="shelfDisplayFormGroup.controls['customers']"></app-validation-message>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="card-footer">
+      <div class="d-inline float-right">
+        <button type="button" class="btn btn-sm btn-light mr-2" (click)="close()">Cancel</button>
+        <button type="submit" class="btn btn-sm btn-p">Save</button>
+      </div>
+    </div>
+  </form>
+</div>

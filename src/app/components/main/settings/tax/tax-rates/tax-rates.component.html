@@ -1,0 +1,57 @@
+<mat-drawer-container class="formdrawer-container" hasBackdrop="false">
+    <mat-drawer
+      id="formDrawer"
+      mode="over"
+      position="end"
+      #formDrawer
+      class="border"
+    >
+      <div style="min-width: 300px;">
+        <app-add-tax-rates (updateTableData)="updateTableData($event)"></app-add-tax-rates>
+      </div>
+    </mat-drawer>
+    <section>
+      <div
+        class="table-box customerbox"
+        [ngClass]="{ collapsed: isDetailVisible }"
+      >
+        <div class="heading-row clearfix">
+          <p class="h4 font-weight-light d-inline" *ngIf="!isDetailVisible">
+            <i aria-hidden="true" class="fa fa-university mr-2"></i> Taxes
+          </p>
+          <div class="d-inline float-right">
+            <button
+              
+              type="button"
+              class="btn btn-sm btn-p"
+              (click)="openAddTax()"
+            >
+              <i class="os-icon os-icon-plus mr-2" aria-hidden="true"></i>New
+            </button>
+            <button *ngIf="checkedRows.length > 0" class="btn btn-sm btn-white dropdown-toggle ml-2" mat-button
+              [matMenuTriggerFor]="menu2">
+              Bulk Actions
+            </button>
+            <mat-menu #menu2="matMenu">
+              <button mat-menu-item (click)="bulkAction('active')">Mark as Active</button>
+              <button mat-menu-item (click)="bulkAction('inactive')" >Mark as Inactive</button>
+              <!-- <button mat-menu-item (click)="bulkAction('delete')" appPermission [permissions]="userPermissions" [type]="'delete'">
+                Delete
+              </button> -->
+            </mat-menu>
+          </div>
+        </div>
+        <app-tax-rates-dt (selectedRows)="selectedRows($event)" [newTaxData]="newTaxData" (itemClicked)="itemClicked($event)"></app-tax-rates-dt>
+      </div>
+      <!-- <div class="details-box" [ngClass]="{ expanded: isDetailVisible }">
+        <app-tax-detail
+        (updateTableData)="updateTableData($event)"
+          (detailsClosed)="closeClicked()"
+          [isDetailVisible]="isDetailVisible"
+          [tax]="tax"
+        >
+        </app-tax-detail>
+      </div> -->
+    </section>
+  </mat-drawer-container>
+  

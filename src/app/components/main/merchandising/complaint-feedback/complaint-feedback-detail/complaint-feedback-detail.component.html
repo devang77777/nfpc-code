@@ -1,0 +1,85 @@
+<section *ngIf="complaints">
+  <div class="pl-3">
+    <div class="row">
+      <h2 class="page-title col-sm-6 font-weight-light">{{complaints.title}}</h2>
+      <div class="actions col-sm-6">
+        <div>
+          <button class="btn btn-sm btn-white mr-2" mat-button [matMenuTriggerFor]="menu2">More</button>
+          <mat-menu #menu2="matMenu">
+            <button mat-menu-item appPermission [permissions]="userPermissions" (click)="openEditComplaintFeedback()"
+              [type]="'edit'">Edit</button>
+            <button mat-menu-item appPermission [permissions]="userPermissions" (click)="openDeleteBox()"
+              [type]="'delete'">Delete</button>
+          </mat-menu>
+        </div>
+        <button *ngIf="isDetailVisible" class="btn" (click)="closeDetailView()"><i
+            class="os-icon os-icon-close"></i></button>
+      </div>
+    </div>
+  </div>
+
+  <div class="pl-3 area-data">
+    <div class="row h-100">
+      <div class="col-12">
+        <mat-tab-group class="customertab" mat-align-tabs="start">
+          <mat-tab label="Overview">
+            <div class="row">
+              <div class="col-xl-5 col-lg-5 col-md-8">
+                <ul class="smhlist mt-2">
+                  <li>
+                    <span> Date: </span>
+                    <strong>{{complaints.created_at | date :"d MMM y h:mm a"}}</strong>
+                  </li>
+                  <li>
+                    <span> Route: </span>
+                    <strong>{{complaints.route?.route_name}}</strong>
+                  </li>
+                  <li>
+                    <span> Complaint ID: </span>
+                    <strong>{{complaints.complaint_id}}</strong>
+                  </li>
+                  <li>
+                    <span> Merchandiser Name: </span>
+                    <strong>{{complaints.salesman?.firstname}} {{complaints.salesman?.lastname}}</strong>
+                  </li>
+                  <li>
+                    <span> Feedback Title: </span>
+                    <strong>{{complaints.title}}</strong>
+                  </li>
+                  <li>
+                    <span> Item: </span>
+                    <strong>{{complaints.item?.item_name}}</strong>
+                  </li>
+                  <li>
+                    <span> Description: </span>
+                    <strong>{{complaints.description}}</strong>
+                  </li>
+                </ul>
+              </div>
+            </div>
+
+
+            <ng-container *ngIf="complaints !== null">
+              <hr>
+              <div class="col-sm-12 data-block">
+                <div class="row" *ngIf="complaints.complaint_feedback_image.length > 0">
+                  <div class="col-sm-3" *ngFor="let image of complaints.complaint_feedback_image; let i=index">
+                    <mat-card class="item-card imageCard" *ngIf="image.image_string !== null">
+                      <img height="150" mat-card-image src={{image.image_string}} alt="Complaint Feedback Image" />
+                      <div class="iconsbar">
+                        <a href="javascript:;" (click)="downloadFile(image.image_string)"><i
+                            class="fa fa-download"></i></a>
+                        <a href="{{image.image_string}}" target="_blank"><i class="fa fa-external-link"></i></a>
+                        <a href="javascript:;" (click)="open(i)"><i class="fa fa-eye"></i></a>
+                      </div>
+                    </mat-card>
+                  </div>
+                </div>
+              </div>
+            </ng-container>
+          </mat-tab>
+        </mat-tab-group>
+      </div>
+    </div>
+  </div>
+</section>

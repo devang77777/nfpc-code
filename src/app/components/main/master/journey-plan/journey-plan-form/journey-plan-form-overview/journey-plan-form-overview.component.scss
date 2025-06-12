@@ -1,0 +1,36 @@
+.form-box {
+  padding: 1.25rem;
+  background: #fff;
+}
+
+#desc {
+  height: 60px;
+}
+
+#hasEnd:focus {
+  box-shadow: none;
+}
+
+.check-box-div {
+  position: relative;
+}
+
+input:disabled {
+  cursor: not-allowed;
+}
+
+.mat-form-field {
+  display: block;
+}
+@media (max-width: 575px) {
+  .check-box-div{
+    padding: 10px;
+    margin: 0 0 10px;
+    .form-check-label {
+      margin-bottom: 0;
+      position: relative;
+      top: 13px;
+      left: 45px;
+  }
+  }
+}

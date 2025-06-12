@@ -1,0 +1,47 @@
+<section *ngIf="Survey">
+    <div class="pl-3">
+        <div class="row">
+            <h2 class="page-title col-sm-6 font-weight-light">{{Survey?.name}}</h2>
+
+            <div class="actions col-sm-6" *ngIf="preview == 1">
+                <button class="btn btn-sm btn-white mr-2 dropdown-toggle" mat-button
+                    [matMenuTriggerFor]="menu2">More</button>
+                <mat-menu #menu2="matMenu">
+                    <button mat-menu-item (click)="editSruvey(Survey)" appPermission [permissions]="userPermissions"
+                        [type]="'edit'">Edit</button>
+                    <button mat-menu-item (click)="openDeleteBox()" appPermission [permissions]="userPermissions"
+                        [type]="'delete'">Delete</button>
+                </mat-menu>
+                <button *ngIf="isDetailVisible" class="btn" (click)="closeDetailView()"><i
+                        class="os-icon os-icon-close"></i></button>
+            </div>
+            <div class="actions col-sm-6" *ngIf="preview == 2">
+                <button class="btn btn-sm btn-p mr-2" (click)="preview = 1">Cancel</button>
+                <button *ngIf="isDetailVisible" class="btn" (click)="changePreview(1)"><i
+                        class="os-icon os-icon-close"></i></button>
+            </div>
+        </div>
+    </div>
+
+    <div class="pl-3 area-data scrolly" *ngIf="preview == 1">
+        <div class="row h-100">
+            <div class="col-12">
+                <mat-tab-group class="customertab" [(selectedIndex)]="selectedTab" mat-align-tabs="start"
+                    (selectedTabChange)="selectedTabChange($event.index)">
+                    <mat-tab label="Overview">
+                        <app-survey-preview [surveyQAs]="surveyQAs"></app-survey-preview>
+                    </mat-tab>
+                    <mat-tab label="Survey Post">
+                        <br />
+                        <app-survey-post-list (surveyHandler)="surveyHandler($event)" [surveyPostData]="surveyPostData"
+                            [survey_id]="Survey?.id">
+                        </app-survey-post-list>
+                    </mat-tab>
+                </mat-tab-group>
+            </div>
+        </div>
+    </div>
+    <div class="pl-3 area-data scrolly" *ngIf="preview == 2">
+        <app-survey-qa-preview [surveyQAs]="surveyQAs"></app-survey-qa-preview>
+    </div>
+</section>

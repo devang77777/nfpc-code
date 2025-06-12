@@ -1,0 +1,112 @@
+<div class="pl-3 row mb-4 mt-4" *ngIf="postList">
+    <div class="col-md-1 col-form-label">Date</div>
+    <div class="col-md-3 mb-2 mb-md-0">
+        <input class="form-control form-control-sm" type="date" [formControl]="dateFilterControl">
+    </div>
+    <div class="col-md-3 item-add-btn">
+        <button type="button" (click)="getPromotionalPostList('date', true)"
+            class=" mr-2 btn btn-sm btn-primary">Filter</button>
+        <button type="button" (click)="getPromotionalPostList('all', true)" class=" btn btn-sm btn-danger">All</button>
+    </div>
+</div>
+<div class="pl-3 items-table-box">
+    <div class="table-responsive">
+        <table mat-table [dataSource]="itemSource" class="mat-elevation-z8 table table-hover" multiTemplateDataRows>
+            <ng-container matColumnDef="created_at">
+                <th mat-header-cell *matHeaderCellDef>
+                    <app-column-filter title="Date" (changeSelected)="onColumnFilterOpen($event)"
+                        [selected]="selectedColumnFilter" (close)="onColumnFilter($event)">
+                        <input class="form-control form-control-sm" placeholder="Enter Date" type="date">
+                    </app-column-filter>
+                </th>
+                <td mat-cell *matCellDef="let element"> {{ element.created_at | date :"d MMM y h:mm a"}} </td>
+            </ng-container>
+            <ng-container matColumnDef="free_item">
+                <th mat-header-cell *matHeaderCellDef>
+                    <app-column-filter title=" Free Item" (changeSelected)="onColumnFilterOpen($event)"
+                        [selected]="selectedColumnFilter" (close)="onColumnFilter($event)">
+                        <input class="form-control form-control-sm" placeholder="Enter  Free Item" type="text">
+                    </app-column-filter>
+
+                </th>
+                <td mat-cell *matCellDef="let element"> {{ element.free_item}} </td>
+            </ng-container>
+            <ng-container matColumnDef="invoice">
+                <th mat-header-cell *matHeaderCellDef>
+                    <app-column-filter title="Invoice" (changeSelected)="onColumnFilterOpen($event)"
+                        [selected]="selectedColumnFilter" (close)="onColumnFilter($event)">
+                        <input class="form-control form-control-sm" placeholder="Enter Invoice" type="text">
+                    </app-column-filter>
+                </th>
+                <td mat-cell *matCellDef="let element"> {{ element.invoice_code}} </td>
+            </ng-container>
+            <ng-container matColumnDef="customer">
+                <th mat-header-cell *matHeaderCellDef>
+                    <app-column-filter title="Customer" (changeSelected)="onColumnFilterOpen($event)"
+                        [selected]="selectedColumnFilter" (close)="onColumnFilter($event)">
+                        <input class="form-control form-control-sm" placeholder="Enter Customer" type="text">
+                    </app-column-filter>
+                </th>
+                <td mat-cell *matCellDef="let element"> {{ element.customer }}</td>
+            </ng-container>
+            <ng-container matColumnDef="salesman">
+                <th mat-header-cell *matHeaderCellDef>
+                    <app-column-filter title="Merchandiser" (changeSelected)="onColumnFilterOpen($event)"
+                        [selected]="selectedColumnFilter" (close)="onColumnFilter($event)">
+                        <input class="form-control form-control-sm" placeholder="Enter Merchandiser" type="text">
+                    </app-column-filter>
+                </th>
+                <td mat-cell *matCellDef="let element"> {{ element.salesman?.firstname }}
+                    {{ element.salesman?.lastname }}</td>
+            </ng-container>
+            <ng-container matColumnDef="phone">
+                <th mat-header-cell *matHeaderCellDef>
+                    <app-column-filter title="Phone" (changeSelected)="onColumnFilterOpen($event)"
+                        [selected]="selectedColumnFilter" (close)="onColumnFilter($event)">
+                        <input class="form-control form-control-sm" placeholder="Enter Phone" type="text">
+                    </app-column-filter>
+                </th>
+                <td mat-cell *matCellDef="let element"> {{ element.phone }} </td>
+            </ng-container>
+            <ng-container matColumnDef="amount_spend">
+                <th mat-header-cell *matHeaderCellDef>
+                    <app-column-filter title="Amount Spend" (changeSelected)="onColumnFilterOpen($event)"
+                        [selected]="selectedColumnFilter" (close)="onColumnFilter($event)">
+                        <input class="form-control form-control-sm" placeholder="Enter Amount Spend" type="text">
+                    </app-column-filter>
+                </th>
+                <td mat-cell *matCellDef="let element"> {{ element.amount_spend }} </td>
+            </ng-container>
+            <ng-container matColumnDef="expandedDetail">
+                <td mat-cell *matCellDef="let element" [attr.colspan]="displayedColumns.length">
+                    <div class="element-detail show-images"
+                        [@detailExpand]="element == expandedElement ? 'expanded' : 'collapsed'">
+                        <div *ngIf='element.image' class="img-position pr-4 imageCard">
+                            <img src="{{element.image}}" height="150" width="200" />
+                            <div class="iconsbar">
+                                <a href="javascript:;" (click)="downloadFile(element.image)"><i
+                                        class="fa fa-download"></i></a>
+                                <a href="{{element.image}}" target="_blank"><i class="fa fa-external-link"></i></a>
+                                <a href="javascript:;" (click)="open(element.image, 0)"><i class="fa fa-eye"></i></a>
+                            </div>
+                        </div>
+                        <div class="pl-4">
+                            <mat-list>
+                                <h2>Items</h2>
+                                <mat-list-item *ngFor='let item of element.promotional_post_item'> Item:
+                                    {{ item.item.item_name }}</mat-list-item>
+                            </mat-list>
+                        </div>
+                        <br />
+                    </div>
+                </td>
+            </ng-container>
+            <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+            <tr mat-row *matRowDef="let row; columns: displayedColumns;" (click)="expandList(row)" class="element-row"
+                [class.expanded-row]="expandedElement === row"></tr>
+            <tr mat-row *matRowDef="let row;let i = index; columns: ['expandedDetail']" class="detail-row"></tr>
+        </table>
+    </div>
+    <mat-paginator [hidden]="hidePaginator(itemSource.data.length)" pageSize="10" [pageSizeOptions]="[5,10]">
+    </mat-paginator>
+</div>

@@ -1,0 +1,35 @@
+<mat-drawer-container class="formdrawer-container" hasBackdrop="false">
+  <section>
+    <div class="table-box customerbox" [ngClass]="{ collapsed: isDetailVisible }">
+      <div class="heading-row clearfix">
+        <p class="d-inline">
+          <i class="os-icon os-icon-user mr-2" aria-hidden="true"></i>
+          Purchase Orders
+        </p>
+        <div class="d-inline float-right">
+          <button type="button" class="btn btn-sm btn-p" (click)="openForm()" appPermission
+            [permissions]="userPermissions" [type]="'create'">
+            <i class="os-icon os-icon-plus mr-2" aria-hidden="true"></i>New
+          </button>
+          <button *ngIf="checkedRows.length > 0" class="btn btn-sm btn-white dropdown-toggle ml-2" mat-button
+            [matMenuTriggerFor]="menu2">
+            Bulk Actions
+          </button>
+          <mat-menu #menu2="matMenu">
+            <button mat-menu-item (click)="bulkAction('active')">Mark as Active</button>
+            <button mat-menu-item (click)="bulkAction('inactive')" >Mark as Inactive</button>
+            <!-- <button mat-menu-item (click)="bulkAction('delete')" appPermission [permissions]="userPermissions" [type]="'delete'">
+              Delete
+            </button> -->
+          </mat-menu>
+        </div>
+      </div>
+      <app-purchase-order-data-table (selectedRows)="selectedRows($event)" [newPOrderData]="newPOrderData" (itemClicked)="itemClicked($event)"></app-purchase-order-data-table>
+    </div>
+    <div class="details-box" [ngClass]="{ expanded: isDetailVisible }">
+      <app-purchase-order-detail (detailsClosed)="closeClicked()" [isDetailVisible]="isDetailVisible"
+        [purchaseOrderData]="orderData">
+      </app-purchase-order-detail>
+    </div>
+  </section>
+</mat-drawer-container>

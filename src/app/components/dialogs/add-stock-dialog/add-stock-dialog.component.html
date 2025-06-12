@@ -1,0 +1,113 @@
+<section class="makeScrollable">
+  <div class="card-header">
+    <span class="h6" style="font-size: 20px;"><b>Add Stock</b></span>
+    <button class="dialog-close-btn" (click)="close()" mat-dialog-close>
+      <i class="fa fa-times fa-lg" aria-hidden="true"></i>
+    </button>
+  </div>
+  <div class="form-container" *ngIf="showForm">
+    <form [formGroup]="stockFormBGroup">
+      <div class="">
+        <div class="row mb-2">
+          <div class="col-md-2 labelFixItem ">Item Name</div>
+          <div class="col-md-4" [ngClass]="saveStockForm && itemFormControl.hasError('required') ? '' : 'addMarginBottom'">
+            <mat-form-field class="example-full-width">
+              <input type="text" class="form-controls form-control-sms" (keyup)="getSearchData()" matInput
+                [formControl]="itemFormControl" [matAutocomplete]="items" />
+              <mat-error class="mt-1 font-fix" style="margin-top: -7px;"
+                *ngIf="saveStockForm && itemFormControl.hasError('required')">
+                Item name is required
+              </mat-error>
+              <mat-autocomplete #items="matAutocomplete" (optionSelected)="getuomname()">
+                <mat-option *ngFor="let option of filterItem" [value]="option.item_name ">
+                  {{ option.item_name }}
+                </mat-option>
+              </mat-autocomplete>
+            </mat-form-field>
+          </div>
+        </div>
+        <div class="row mb-2">
+          <div class="col-md-2 labelFix ">Item Uom</div>
+          <div class="col-md-4">
+            <input class="form-control form-control-sm" type="text" [formControl]="uomFormControl" />
+            <mat-error class="mt-1 font-fix" *ngIf="saveStockForm && uomFormControl.hasError('required')">
+              Item Uom is required
+            </mat-error>
+          </div>
+        </div>
+        <div class="row mb-2">
+          <div class="col-md-2 labelFix ">Quantity</div>
+          <div class="col-md-4">
+            <input class="form-control form-control-sm" type="text" [formControl]="quantityFormControl" />
+            <mat-error class="mt-1 font-fix" *ngIf="saveStockForm && quantityFormControl.hasError('required')">
+              Quantity is required
+            </mat-error>
+          </div>
+        </div>
+        <div class="row mb-2">
+          <div class="col-md-2 labelFix ">Batch</div>
+          <div class="col-md-4">
+            <input class="form-control form-control-sm" type="text" [formControl]="batchFormControl" />
+          
+          </div>
+        </div>
+      </div>
+      <div class="save-btn">
+        <button mat-button class="mat-inherit-line-height btn-green" (click)="saveStock()">
+          Save
+        </button>
+        <button mat-button class="mat-inherit-line-height" (click)="cancelForm()">
+          Cancel
+        </button>
+      </div>
+    </form>
+  </div>
+  <div class="categories-title">
+    <h4>
+      Stock
+      <span class="add-new-label">
+        <button (click)="addNewStock()">
+          <i class="fa fa-plus-circle"></i>Add New Stock
+        </button>
+      </span>
+    </h4>
+  </div>
+  <div class="channel-holder">
+    <div class=" data-body">
+      <mat-table #table [dataSource]="dataSource">
+        <ng-container matColumnDef="item_code">
+          <th mat-header-cell *matHeaderCellDef> Item Code </th>
+          <td mat-cell *matCellDef="let element"> {{element.item.item_code}} </td>
+        </ng-container>
+        <ng-container matColumnDef="item_name">
+          <th mat-header-cell *matHeaderCellDef> Item Name </th>
+          <td mat-cell *matCellDef="let element"> {{element.item.item_name}} </td>
+        </ng-container>
+        <ng-container matColumnDef="name">
+          <th mat-header-cell *matHeaderCellDef> UOM </th>
+          <td mat-cell *matCellDef="let element"> {{element.item_uom.name}} </td>
+        </ng-container>
+        <ng-container matColumnDef="batch">
+          <th mat-header-cell *matHeaderCellDef> Batch </th>
+          <td mat-cell *matCellDef="let element"> {{element.batch}} </td>
+        </ng-container>
+        <ng-container matColumnDef="qty">
+          <th mat-header-cell *matHeaderCellDef> Quantity </th>
+          <td mat-cell *matCellDef="let element"> {{element.qty}} </td>
+        </ng-container>
+
+        <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+        <mat-row *matRowDef="let row; columns: displayedColumns;" >
+        </mat-row>
+    </mat-table>
+    </div>
+    <div [ngClass]="{ hidden: getPaginatorValue(dataSource.data.length) }">
+      <mat-paginator pageSize="5" [pageSizeOptions]="[5, 10]"></mat-paginator>
+    </div>
+  </div>
+  <div class="cancel-btn">
+    <button mat-button class="mat-inherit-line-height height-40" (click)="close()" mat-dialog-close>
+      Cancel
+    </button>
+  </div>
+</section>

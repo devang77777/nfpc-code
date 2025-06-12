@@ -1,0 +1,122 @@
+<div class="pl-3  items-table-box">
+    <div class="table-responsive">
+        <table mat-table [dataSource]="itemSource" class="mat-elevation-z8 table table-hover">
+            <ng-container matColumnDef="created_at">
+                <th mat-header-cell *matHeaderCellDef>
+                    <app-column-filter title="Created Date" (changeSelected)="onColumnFilterOpen($event)"
+                        [selected]="selectedColumnFilter" controlName="date" (close)="onColumnFilter($event)">
+                        <input class="form-control form-control-sm" [formControl]="filterForm.get('date')" placeholder="Enter Created Date" type="date">
+                    </app-column-filter>
+                </th>
+                <td mat-cell *matCellDef="let element"> {{ element.created_at | date :"d MMM y h:mm a" }} </td>
+            </ng-container>
+            <ng-container matColumnDef="customer_name">
+                <th mat-header-cell *matHeaderCellDef>
+                    <app-column-filter title="Customer Name" (changeSelected)="onColumnFilterOpen($event)"
+                        [selected]="selectedColumnFilter" controlName="customer_name" (close)="onColumnFilter($event)">
+                        <input class="form-control form-control-sm" [formControl]="filterForm.get('customer_name')" placeholder="Enter Customer Name" type="text">
+                    </app-column-filter>
+                </th>
+                <td mat-cell *matCellDef="let element">
+                    {{ element.customer?.firstname +' '+element.customer?.lastname }} </td>
+            </ng-container>
+            <ng-container matColumnDef="is_return">
+                <th mat-header-cell *matHeaderCellDef>Is Return
+                    <!-- <app-column-filter title="Is Return" (changeSelected)="onColumnFilterOpen($event)"
+                        [selected]="selectedColumnFilter" (close)="onColumnFilter($event)">
+                        <input class="form-control form-control-sm" placeholder="Enter Is Return" type="text">
+                    </app-column-filter> -->
+                </th>
+                <td mat-cell *matCellDef="let element"> {{ element.is_return }} </td>
+            </ng-container>
+            <ng-container matColumnDef="order_number">
+                <th mat-header-cell *matHeaderCellDef>
+                    <app-column-filter title="Order#" (changeSelected)="onColumnFilterOpen($event)"
+                        [selected]="selectedColumnFilter" controlName="order_number" (close)="onColumnFilter($event)">
+                        <input class="form-control form-control-sm" [formControl]="filterForm.get('order_number')" placeholder="Enter Order#" type="text">
+                    </app-column-filter>
+                </th>
+                <td mat-cell *matCellDef="let element"> {{ element.order_number }} </td>
+            </ng-container>
+            <ng-container matColumnDef="order_date">
+                <th mat-header-cell *matHeaderCellDef>Order Date
+                    <!-- <app-column-filter title=" Order Date" (changeSelected)="onColumnFilterOpen($event)"
+                        [selected]="selectedColumnFilter" (close)="onColumnFilter($event)">
+                        <input class="form-control form-control-sm" placeholder="Enter  Order Date" type="date">
+                    </app-column-filter> -->
+                </th>
+                <td mat-cell *matCellDef="let element"> {{ element.order_date | date :"d MMM y h:mm a" }} </td>
+            </ng-container>
+            <ng-container matColumnDef="due_date">
+                <th mat-header-cell *matHeaderCellDef>
+                    <app-column-filter title="Due Date" controlName="due_date" (changeSelected)="onColumnFilterOpen($event)"
+                        [selected]="selectedColumnFilter" (close)="onColumnFilter($event)">
+                        <input class="form-control form-control-sm" [formControl]="filterForm.get('due_date')" placeholder="Enter Due Date" type="date">
+                    </app-column-filter>
+                </th>
+                <td mat-cell *matCellDef="let element"> {{ element.due_date | date :"d MMM y h:mm a" }} </td>
+            </ng-container>
+            <ng-container matColumnDef="total_discount_amount">
+                <th mat-header-cell *matHeaderCellDef>Discount
+                    <!-- <app-column-filter title="Discount" (changeSelected)="onColumnFilterOpen($event)"
+                        [selected]="selectedColumnFilter" (close)="onColumnFilter($event)">
+                        <input class="form-control form-control-sm" placeholder="Enter Discount" type="text">
+                    </app-column-filter> -->
+                </th>
+                <td mat-cell *matCellDef="let element"> {{ numberFormatWithSymbol(element.total_discount_amount) }}
+                </td>
+            </ng-container>
+            <ng-container matColumnDef="total_excise">
+                <th mat-header-cell *matHeaderCellDef>Excise
+                    <!-- <app-column-filter title="Excise" (changeSelected)="onColumnFilterOpen($event)"
+                        [selected]="selectedColumnFilter" (close)="onColumnFilter($event)">
+                        <input class="form-control form-control-sm" placeholder="Enter Excise" type="text">
+                    </app-column-filter> -->
+                </th>
+                <td mat-cell *matCellDef="let element"> {{ numberFormatWithSymbol(element.total_excise)}} </td>
+            </ng-container>
+            <ng-container matColumnDef="total_gross">
+                <th mat-header-cell *matHeaderCellDef>Gross
+                    <!-- <app-column-filter title="Gross" (changeSelected)="onColumnFilterOpen($event)"
+                        [selected]="selectedColumnFilter" (close)="onColumnFilter($event)">
+                        <input class="form-control form-control-sm" placeholder="Enter Gross" type="text">
+                    </app-column-filter> -->
+                </th>
+                <td mat-cell *matCellDef="let element"> {{ numberFormatWithSymbol(element.total_gross)}} </td>
+            </ng-container>
+            <ng-container matColumnDef="total_net">
+                <th mat-header-cell *matHeaderCellDef>Total Net
+                    <!-- <app-column-filter title="Total Net" (changeSelected)="onColumnFilterOpen($event)"
+                        [selected]="selectedColumnFilter" (close)="onColumnFilter($event)">
+                        <input class="form-control form-control-sm" placeholder="Enter Total Net" type="text">
+                    </app-column-filter> -->
+                </th>
+                <td mat-cell *matCellDef="let element"> {{ numberFormatWithSymbol(element.total_net)}} </td>
+            </ng-container>
+            <ng-container matColumnDef="total_vat">
+                <th mat-header-cell *matHeaderCellDef>Total Vat
+                    <!-- <app-column-filter title="Total Vat" (changeSelected)="onColumnFilterOpen($event)"
+                        [selected]="selectedColumnFilter" (close)="onColumnFilter($event)">
+                        <input class="form-control form-control-sm" placeholder="Enter Total Vat" type="text">
+                    </app-column-filter> -->
+                </th>
+                <td mat-cell *matCellDef="let element">{{ numberFormatWithSymbol(element.total_vat)}}
+                </td>
+            </ng-container>
+            <ng-container matColumnDef="grand_total">
+                <th mat-header-cell *matHeaderCellDef>Grand Total
+                    <!-- <app-column-filter title="Grand Total" (changeSelected)="onColumnFilterOpen($event)"
+                        [selected]="selectedColumnFilter" (close)="onColumnFilter($event)">
+                        <input class="form-control form-control-sm" placeholder="Enter Grand Total" type="text">
+                    </app-column-filter> -->
+                </th>
+                <td mat-cell *matCellDef="let element">
+                    {{ numberFormatWithSymbol(element.grand_total)}} </td>
+            </ng-container>
+
+            <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+            <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+        </table>
+    </div>
+    <!-- <mat-paginator pageSize="50" [pageSizeOptions]="[5,10,15,25,50,100]"></mat-paginator> -->
+</div>

@@ -1,0 +1,36 @@
+
+<div class="card" style="width: 550px;">
+  <div class="card-header pt-4">
+      <span class="h6 font-weight-light">{{formType}} SalesPerson</span>
+      <a (click)="close()"><i class="fa fa-times fa-lg text-secondary float-right" aria-hidden="true"></i></a>
+  </div>
+  <div class="form-box">
+      <form [formGroup]="bankFormGroup" >
+      <div class="card-body">
+          <div class="container">
+              <div class="row mb-4">
+                  <div class="col-4 markred">SalesPerson Name*</div>
+                  <div class="col-8">
+                      <input class="form-control form-control-sm" type="text" [formControl]="NameFormControl">
+                  </div>
+              </div>
+              <div class="row mb-4">
+                  <div class="col-4 markred">Email*</div>
+                  <div class="col-8">
+                      <input class="form-control form-control-sm" type="text" [formControl]="emailFormControl">
+                  </div>
+              </div>
+
+          </div>
+      </div>
+    </form>
+      <app-custom-field-form></app-custom-field-form>
+    </div>
+
+  <div class="card-footer">
+    <div class="d-inline float-right">
+        <button class="btn btn-sm btn-light mr-2" (click)="close()">Cancel</button>
+        <button class="btn btn-sm btn-p" (click)="saveBankData()">Save</button>
+    </div>
+</div>
+</div>

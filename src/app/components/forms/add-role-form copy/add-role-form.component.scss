@@ -1,0 +1,80 @@
+.role-form{
+    width: 550px;
+}
+a {
+    cursor: pointer;
+}
+.card{
+    position: relative;
+    
+}
+.form-body{
+    height: calc(100vh - 170px);
+    overflow-y: scroll;
+}
+
+
+.form-footer {
+    position: fixed;
+    width: 550px;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.03);;
+}
+a {
+  cursor: pointer;
+}
+
+button:active {
+  outline: none !important;
+}
+
+
+.selection-label {
+  position: relative;
+
+  span {
+    position: absolute;
+    top: 10px;
+  }
+}
+
+.item-add-btn {
+  display: flex;
+  flex-direction: row-reverse;
+
+  button {
+    margin-right: 72px;
+    border-radius: 5px;
+    font-size: 14px;
+    max-width: 80px;
+    border: none;
+    background-color: #1abc9c;
+    color: white;
+
+    i {
+      margin-right: 8px;
+    }
+  }
+}
+
+td{
+  text-align: center;
+  // min-width: 70px;
+}
+@media (max-width: 575px) {
+  td{
+    text-align: left;
+    padding: 0.5rem;
+    min-width: 50px;
+  }
+  .role-form{
+    width: 364px;
+}
+.form-footer {
+      width: 364px;
+  }
+  .form-body .card-header{
+      background: #1abc9c;
+      color: #fff;
+  }
+}

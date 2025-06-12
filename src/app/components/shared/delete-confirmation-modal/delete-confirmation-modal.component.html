@@ -1,0 +1,30 @@
+<div class="dialog-box">
+  <i class="os-icon os-icon-alert-circle"></i>
+  <h3 class="title" *ngIf="customData.title">{{ customData.title }}</h3>
+  <p class="description" *ngIf="customData.description">{{ customData.description }}</p>
+  <ng-container *ngIf="showReason">
+    <form [formGroup]="deleteConfirmReasonForm">
+      <div class="row form-group">
+        <div class="col-lg">
+          <!-- <select class="form-control form-control-sm" [(ngModel)]="customData.reason_id">
+            <option value="0" disabled>Select Reason</option>
+            <option *ngFor="let rl of reasonsList" [value]="rl.id">{{rl.name}}</option>
+          </select> -->
+          <label>Select Reason</label>
+          <app-multiautocomplete isSingle="true" [options]="reasonsList"
+            [control]="deleteConfirmReasonForm.controls['reason_id']" ext="name" id="id" objectName="reason-root"
+            param1="code" param2="name" placeholder="Search Reason">
+          </app-multiautocomplete>
+        </div>
+      </div>
+      <div class="mt-3 mb-3">
+        <button class="btn btn-primary" type="button" (click)="submitReason()">Submit</button>
+      </div>
+    </form>
+  </ng-container>
+  <div class="dialogbtn" *ngIf="!showReason">
+    <button (click)="cancel()" class="btn btn-secondary mr-3">No, mistake!</button>
+    <button class="btn btn-danger" (click)="confirm()" cdkFocusInitial>Yes,
+      {{customData.btnText !== undefined && customData.btnText !== '' ? customData.btnText : 'remove' }} !</button>
+  </div>
+</div>

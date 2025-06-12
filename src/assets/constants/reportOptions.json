@@ -1,0 +1,107 @@
+[
+    {
+        "label": "Consolidated Load",
+        "routeTo": "reports/consolidated-load",
+        "domain": "presales-prodmobiato"
+    },
+    {
+        "label": "Consolidated Load Return",
+        "routeTo": "reports/consolidated-return-load",
+        "domain": "presales-prodmobiato"
+    },
+    {
+        "label": "Loading Chart By Warehouse",
+        "routeTo": "reports/loading-chart-by-warehouse",
+        "domain": "presales-prodmobiato"
+    },
+    {
+        "label": "Order Details",
+        "routeTo": "reports/order-details",
+        "domain": "presales-prodmobiato"
+    },
+    {
+        "label": "Daily Operation",
+        "routeTo": "reports/daily-operation",
+        "domain": "presales-prodmobiato"
+    },
+    {
+        "label": "Time Sheets",
+        "routeTo": "reports/timesheets",
+        "domain": "presales-prodmobiato"
+    },
+    {
+        "label": "Salesman Performance",
+        "routeTo": "reports/salesman-performance",
+        "domain": "presales-prodmobiato"
+    },
+    {
+        "label": "Truck Utilisation",
+        "routeTo": "reports/truck-utilisation",
+        "domain": "presales-prodmobiato"
+    },
+    {
+        "label": "Daily CRF",
+        "routeTo": "reports/daily-crf",
+        "domain": "presales-prodmobiato"
+    },
+    {
+        "label": "Sales Vs GRV",
+        "routeTo": "reports/sales-vs-grv",
+        "domain": "presales-prodmobiato"
+    },
+    {
+        "label": "DIFOT",
+        "routeTo": "reports/difot",
+        "domain": "presales-prodmobiato"
+    },
+    {
+      "label": "Delivery Report",
+      "routeTo": "reports/delivery-report",
+      "domain": "presales-prodmobiato"
+  },
+    {
+        "label": "Loading Chart Final By Route",
+        "routeTo": "reports/loading-chart-final-by-route",
+        "domain": "presales-prodmobiato"
+    },
+    {
+        "label": "Daily GRV Report",
+        "routeTo": "reports/daily-grv",
+        "domain": "presales-prodmobiato"
+    },
+    {
+        "label": "Daily Spot Return",
+        "routeTo": "reports/daily-spot-return",
+        "domain": "presales-prodmobiato"
+    },
+    {
+        "label": "Driver Loaded Qty",
+        "routeTo": "reports/driver-loaded-qty",
+        "domain": "presales-prodmobiato"
+    },
+    {
+        "label": "Daily Cancel Order",
+        "routeTo": "reports/daily-cancel-order",
+        "domain": "presales-prodmobiato"
+    },
+    {
+        "label": "Monthly KPI",
+        "routeTo": "reports/monthly-kpi",
+        "domain": "presales-prodmobiato"
+    },
+    {
+        "label": "YTD KPI",
+        "routeTo": "reports/ytd-kpi",
+        "domain": "presales-prodmobiato"
+    },
+    {
+        "label": "Geo Approval",
+        "routeTo": "reports/geo-approvals",
+        "domain": "presales-prodmobiato"
+    },
+    {
+        "label": "Delivery Export Report",
+        "routeTo": "reports/delivery-export-report",
+        "domain": "presales-prodmobiato"
+    }
+]

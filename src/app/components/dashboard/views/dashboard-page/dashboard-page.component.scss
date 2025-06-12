@@ -1,0 +1,252 @@
+@font-face {
+  font-family: Axiforma;
+  font-style: normal;
+  font-weight: 900;
+  font-display: swap;
+  src: url("../../../../../Axiforma-ExtraBold.ttf");
+}
+.dasboard {
+  overflow-y: scroll;
+  padding-bottom: 20px;
+  height: calc(100vh - 60px);
+  header {
+    padding: 15px;
+    font-family: europa, sans-serif;
+    .media {
+      .mimg {
+        width: 62px;
+        height: 62px;
+        border-radius: 50px;
+        margin-left: 1rem;
+        position: relative;
+      }
+      .media-body {
+        h4 {
+          font-size: 20px;
+          text-transform: uppercase;
+          letter-spacing: 10px;
+          font-weight: bold;
+          border-bottom: 1px solid #e2e2e2;
+          margin: 0 0 6px;
+          padding: 0 0 10px;
+          text-align: right;
+          font-family: Axiforma;
+        }
+        p {
+          font-size: 12px;
+          text-align: right;
+        }
+      }
+    }
+    .title {
+      h1 {
+        font-size: 36px;
+        font-weight: bold;
+        margin: 0 0 6px;
+        text-transform: uppercase;
+        font-size: 40px;
+        font-family: Axiforma;
+      }
+      h2 {
+        display: inline-block;
+        background-image: linear-gradient(45deg, #1cb4ae, #0bd1a4);
+        color: #fff;
+        font-size: 16px;
+        border-radius: 50px;
+        padding: 0px 15px;
+        height: 30px;
+        line-height: 32px;
+        margin: 0 15px 0 0;
+        text-transform: uppercase;
+        font-family: Axiforma;
+      }
+      .circle {
+        background-color: #0bd1a4;
+        width: 30px;
+        height: 30px;
+        line-height: 30px;
+        border-radius: 50px;
+      }
+      .subtitle {
+        display: flex;
+        align-items: center;
+      }
+    }
+  }
+}
+.innercard {
+  padding: 0 15px 15px;
+  .card {
+    margin-bottom: 20px;
+    border: 1px solid #e2e2e2;
+    border-radius: 8px;
+    min-height: 200px;
+
+    .btitle {
+      font-size: 36px;
+      font-weight: bold !important;
+      margin: 0 0 10px;
+      color: #45465e;
+      font-family: Axiforma;
+    }
+    .subtxt {
+      font-size: 11px;
+    }
+  }
+}
+.secondrow {
+  .card-body {
+    min-height: 426px;
+  }
+}
+
+.vrcenter {
+  align-items: center;
+  justify-content: center;
+  display: flex;
+}
+.stripinfo {
+  display: flex;
+  align-items: center;
+
+  &:before {
+    content: "";
+    border-bottom: 2px dotted #45465e;
+    position: absolute;
+    left: 60px;
+    width: calc(100% - 115px);
+    height: 1px;
+    top: 50%;
+    transform: translateY(-50%);
+  }
+  li {
+    text-align: center;
+    position: relative;
+    width: 20%;
+
+    .tooltipt {
+      background-image: linear-gradient(45deg, #0fb696, #23b075);
+      color: #fff;
+      padding: 2px 6px;
+      border-radius: 50px;
+      position: relative;
+      font-size: 12px;
+      font-weight: bold;
+      max-width: 65px;
+      margin: 0 auto;
+      font-family: Axiforma;
+      &:before {
+        content: "";
+        border-left: 6px solid transparent;
+        border-right: 6px solid transparent;
+        border-bottom: 6px solid transparent;
+        border-top: 6px solid #0fb696;
+        position: absolute;
+        left: 50%;
+        bottom: -12px;
+        transform: translateX(-50%);
+      }
+    }
+    .roundcircle {
+      width: 16px;
+      height: 16px;
+      background: #45465e;
+      position: relative;
+      border-radius: 50px;
+      display: inline-block;
+      margin: 15px 0 0;
+      z-index: 2;
+      &:before {
+        content: "";
+        position: absolute;
+        width: 22px;
+        height: 22px;
+        left: -3px;
+        top: -3px;
+        border: 1px solid #45465e;
+        border-radius: 50px;
+      }
+    }
+    p small {
+      color: #888;
+    }
+  }
+}
+.secondrow {
+  .card {
+    min-height: 240px;
+  }
+}
+.progress {
+  height: 8px;
+}
+.progress-bar {
+  background-color: #3c464f;
+}
+.bg-success {
+  background-color: #4a6e7a !important;
+}
+
+.bg-info {
+  background-color: #5f92ad !important;
+}
+.bcard {
+  h2 {
+    font-size: 36px;
+    font-weight: bold !important;
+    margin: 0 0 10px;
+    color: #45465e;
+    font-family: Axiforma;
+  }
+  p {
+    small {
+      color: #727e94;
+    }
+  }
+  ul.bullets {
+    display: inline-block;
+    li {
+      width: 16px;
+      height: 16px;
+      border-radius: 50px;
+      background-color: #63d2a7;
+      margin: 0 4px;
+      display: inline-block;
+      &.light {
+        background-color: #0bd1a4;
+      }
+      &.medium {
+        background-color: #1cb4ae;
+      }
+      &.dark {
+        background-color: #146669;
+      }
+    }
+  }
+}
+@media (max-width: 575px) {
+  .dasboard header .title .subtitle {
+    margin: 10px 0;
+  }
+  .stripinfo {
+    flex-wrap: wrap;
+    &:before {
+      display: none;
+      border: 0;
+      background: none;
+    }
+    li {
+      width: 50%;
+    }
+  }
+  .innercard {
+    .card {
+      min-height: 100%;
+    }
+  }
+  .secondrow {
+    .card-body {
+      min-height: 100%;
+    }
+  }
+}

@@ -1,0 +1,65 @@
+.card {
+  position: relative;
+}
+
+.red {
+  color: red;
+}
+
+.card-body {
+  height: calc(100vh - 170px);
+  overflow-y: scroll;
+}
+
+label {
+  font-weight: normal;
+}
+
+button {
+  margin-left: 3px;
+}
+
+.mat-stepper-horizontal {
+  margin-top: 8px;
+}
+
+.mat-form-field {
+  margin-top: 16px;
+}
+
+div {
+  padding-bottom: 15px;
+}
+
+ul {
+  list-style-type: disc;
+  padding-left: 22px;
+  padding-top: 15px;
+}
+
+li {
+  padding-bottom: 10px;
+}
+
+.font-style {
+  color: #777 !important;
+  font-size: 12px;
+}
+
+@media (max-width: 575px) {
+  .card-body {
+    width: 320px;
+  }
+}
+
+@media screen and (min-width: 992px) {
+  .stepper-width {
+    width: 100%;
+  }
+}
+
+@media screen and (min-width: 1400px) {
+  .stepper-width {
+    width: 50%;
+  }
+}

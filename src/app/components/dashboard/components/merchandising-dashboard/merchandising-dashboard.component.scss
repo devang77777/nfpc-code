@@ -1,0 +1,60 @@
+.basis {
+  flex: 1 1;
+}
+
+.box {
+  border: 1px solid gainsboro;
+  width: 23%;
+  margin-bottom: 15px;
+  margin-right: 21px;
+}
+
+.header-bottom {
+  margin-bottom: 3px;
+}
+
+.table-responsive {
+  font-size: 10px !important;
+}
+
+.th-custom {
+  font-size: 8px;
+}
+
+.tr-brown {
+  background-color: beige;
+}
+
+.tr-green {
+  background-color: #87e7ad;
+}
+
+.tr-blue {
+  background-color: #e2e5f3;
+}
+
+.expanBtn {
+  font-size: 21px;
+  position: absolute;
+  right: 2px;
+  top: 2px;
+  cursor: pointer;
+}
+
+.flex1 {
+  flex: 1;
+  cursor: pointer;
+}
+
+.flex12 {
+  flex: 12;
+}
+
+.expandBox {
+  z-index: 9999;
+  width: 100%;
+  height: 100%;
+  position: fixed;
+  top: 0;
+  left: 0;
+}

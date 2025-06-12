@@ -1,0 +1,34 @@
+<section (clickOutside)="closeDropdown()">
+  <div class="btn-section">
+    <button (click)="toggleDropdown()">
+      <span class="placeholder" *ngIf="!selectedItem">{{ placeHolder }}</span>
+      <span *ngIf="selectedItem">
+        <span *ngIf="selectedItem.name">{{ selectedItem.name }}</span>
+        <span *ngIf="selectedItem.area_name">{{ selectedItem.area_name }}</span>
+        <span *ngIf="selectedItem.brand_name">{{ selectedItem.brand_name }}</span>
+      </span>
+      <span class="caret-icon"><i class="fa" [ngClass]="{ 'fa-chevron-down': !toggle, 'fa-chevron-up': toggle }"></i></span>
+    </button>
+  </div>
+  <div class="dropdown-section" *ngIf="toggle">
+    <div class="search-box">
+      <div>
+        <input type="text" id="searchField" tabindex="1" class="custom-search" [formControl]="searchControl" [placeholder]="placeHolder">
+        <button (click)="clearSearch()"><i class="fa fa-close"></i></button>
+      </div>
+    </div> 
+    <div class="tree-dropdown-menu">
+      <ul class="tree-dropdown-results">
+        <li [tabindex]="i + 1" class="menu-li" [ngClass]="{ 'selected': item.id === selectedItemNumber }" *ngFor="let item of filteredData; let i = index" (click)="itemSelected(item)">
+          <div class="menu-row"><span *ngFor="let num of getArrayOf(item.node_level * 6)">&nbsp;</span> <span>• </span> 
+            <span *ngIf="item.name">{{ item.name }}</span>
+            <span *ngIf="item.area_name">{{ item.area_name }}</span>
+            <span *ngIf="item.brand_name">{{ item.brand_name }}</span>
+          </div>
+        </li>
+      </ul>
+      <mat-divider></mat-divider>
+      <button mat-button *ngIf="isManageable" (click)="clickOnManage()" class="mat-inherit-line-height manage-btn"><i class="fa fa-gear"></i> {{ buttonLabel }}</button>
+    </div>
+  </div>
+</section>

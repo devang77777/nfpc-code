@@ -1,0 +1,53 @@
+<mat-toolbar class="toolbar1 m-0">
+    <mat-toolbar-row class="d-flex justify-content-between">
+        <div class="logo mb-24 mb-md-0" class="d-flex align-items-center">
+
+            <h3 class="title">{{selected}}</h3>&nbsp;&nbsp;<span style="margin-top: 15px;
+            font-size: small;" class="badge badge-success">{{selectedData?.percentage || '0%'}}</span>
+        </div>
+        <button (click)="onClose()" mat-icon-button class="title" aria-label="Close dialog">
+            <mat-icon>close</mat-icon>
+        </button>
+    </mat-toolbar-row>
+</mat-toolbar>
+<div class="container mb-5">
+    <hr>
+    <div class="row">
+        <div class=" col-md-12" [hidden]="!checkChart('line')">
+            <div class="d-flex flex-wrap " >
+                <div class="box d-flex flex-column">
+                    <div class="d-flex justify-content-center header-bottom ">
+                        <strong class="text-warning">Trends by {{ labelBy }}</strong>
+                    </div>
+                    <div class="d-flex">
+                        <div id="chartdivLine" style="width: 100%; height: 500px; position: relative; "></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class=" col-md-12" [hidden]="!checkChart('bar')">
+            <div  class="d-flex flex-wrap " >
+                <div class="box d-flex flex-column">
+                    <div class="d-flex justify-content-center header-bottom ">
+                        <strong class="text-warning">Comparison by {{ labelBy }}</strong>
+                    </div>
+                    <div class="d-flex">
+                        <div id="chartdivBar" style="width: 100%; height: 500px; position: relative; "></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class=" col-md-12" [hidden]="!checkChart('pie')">
+            <div  class="d-flex flex-wrap " >
+                <div class="box d-flex flex-column">
+                    <div class="d-flex justify-content-center header-bottom ">
+                        <strong class="text-warning">Contribution by {{ labelBy }}</strong>
+                    </div>
+                    <div class="d-flex">
+                        <div id="chartdivPie" style="width: 100%; height: 500px; position: relative; "></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

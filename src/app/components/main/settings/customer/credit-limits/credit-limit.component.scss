@@ -1,0 +1,35 @@
+.radioMarginRight {
+  margin-right: 7px !important;
+  margin-top: 9px;
+}
+
+.top {
+  margin-top: 19px;
+}
+
+.form-box {
+  max-height: calc(100vh - 170px);
+  overflow-y: scroll;
+}
+
+.items-table-box {
+  margin-bottom: 50px;
+  padding-bottom: 50px;
+  mat-paginator,
+  .mat-table {
+    max-width: 75%;
+    margin: auto;
+  }
+  button {
+    background-color: transparent;
+    border: none;
+    font-size: 15px;
+    &:active {
+      outline: none;
+    }
+  }
+}
+
+.inp {
+  padding-top: -9px 2px;
+}

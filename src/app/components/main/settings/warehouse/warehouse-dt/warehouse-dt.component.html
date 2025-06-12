@@ -1,0 +1,95 @@
+<section class="scrolly">
+  <div class="table-responsive">
+    <table class="table table-hover" mat-table [dataSource]="dataSource">
+      <ng-container matColumnDef="select">
+        <th mat-header-cell *matHeaderCellDef>
+          <mat-checkbox
+            class="head-checkbox"
+            (change)="$event ? toggleSelection() : null"
+            (change)="getSelectedRows()"
+            [checked]="selections.hasValue() && isAllSelected()"
+            [indeterminate]="selections.hasValue() && !isAllSelected()"
+            [aria-label]="checkboxLabel()"
+          >
+          </mat-checkbox>
+          <a
+            class="filter-btn"
+            *ngIf="!isDetailVisible"
+            [matMenuTriggerFor]="menu"
+            style="height: 30px;"
+          >
+            <i class="fa fa-table" aria-hidden="true"></i>
+          </a>
+          <mat-menu #menu="matMenu">
+            <div class="card-body p-2" style="min-width: 200px;">
+              <ul style="list-style: none; padding-left: 7px;">
+                <li *ngFor="let column of filterColumns">
+                  <input
+                    type="checkbox"
+                    [(ngModel)]="column.show"
+                    class="m-2"
+                    (click)="$event.stopPropagation()"
+                  />
+                  {{ column.title }}
+                </li>
+              </ul>
+              <div class="float-right mb-2">
+                <button class="btn btn-p bg-secondary">Cancel</button>
+              </div>
+            </div>
+          </mat-menu>
+        </th>
+        <td mat-cell *matCellDef="let row">
+          <mat-checkbox
+            class="row-checkbox"
+            (click)="$event.stopPropagation()"
+            (change)="$event ? selections.toggle(row) : null"
+            (change)="getSelectedRows()"
+            [checked]="selections.isSelected(row)"
+            [aria-label]="checkboxLabel(row)"
+          >
+          </mat-checkbox>
+        </td>
+      </ng-container>
+      <ng-container matColumnDef="code">
+        <th mat-header-cell *matHeaderCellDef>Code</th>
+        <td mat-cell *matCellDef="let element">{{ element.code }}</td>
+      </ng-container>
+      <ng-container matColumnDef="name">
+        <th mat-header-cell *matHeaderCellDef>Name</th>
+        <td mat-cell *matCellDef="let element">
+          {{ element.name }}
+        </td>
+      </ng-container>
+      <ng-container matColumnDef="manager">
+        <th mat-header-cell *matHeaderCellDef>Manager</th>
+        <td mat-cell *matCellDef="let element">{{ element.manager }}</td>
+      </ng-container>
+      <!-- <ng-container matColumnDef="primary_warehouse">
+        <th mat-header-cell *matHeaderCellDef>Primary Warehouse</th>
+        <td mat-cell *matCellDef="let element">{{ element.primary_warehouse }}</td>
+      </ng-container> -->
+      <ng-container matColumnDef="depot.depot_name">
+        <th mat-header-cell *matHeaderCellDef>Depot</th>
+        <td mat-cell *matCellDef="let element">{{ element?.depot?.depot_name}}</td>
+      </ng-container>
+      <!-- <ng-container matColumnDef="view_stock">
+            <th mat-header-cell *matHeaderCellDef></th>
+            <td mat-cell *matCellDef>
+                <button type="button" class="btn btns btn-primary" click-stop-propagation> View Stock </button>
+            </td>
+        </ng-container> -->
+    
+      <tr mat-header-row *matHeaderRowDef="getDisplayedColumns()"></tr>
+      <tr mat-row *matRowDef="let row; columns: getDisplayedColumns()"
+        (click)="openDetailView(row)"
+      ></tr>
+    </table>
+  </div>
+  
+  <div>
+    <mat-paginator [hidden]="apiResponse.pagination?.total_records < 10" (page)="onPageFired($event)" [length]="apiResponse.pagination?.total_records"
+            [pageSize]="pageSize" [pageSizeOptions]="[10, 25, 50]"> </mat-paginator>
+  </div>
+  
+</section>

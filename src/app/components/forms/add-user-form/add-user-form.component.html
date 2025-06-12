@@ -1,0 +1,105 @@
+<div class="item-form">
+    <div class="card">
+        <div class="card-header pt-4">
+            <span class="h6 font-weight-bold text-secondary">
+                <span *ngIf="isEdit">Edit </span>
+                Invite user</span>
+            <a (click)="close()" class="closeicon settingclose"><i class="os-icon os-icon-x float-right"
+                    aria-hidden="true"></i></a>
+        </div>
+
+        <div class="card-body">
+            <form [formGroup]="inviteUserFormGroup">
+                <div class="row mb-2">
+                    <div class="col">
+                        <label for="" class="">First Name*:</label>
+                        <input
+                            [ngClass]="{'invalid-input': inviteUserFormGroup.invalid && (firstname.dirty || firstname.touched)}"
+                            type="text" class="form-control form-control-sm" formControlName="firstname">
+                        <div *ngIf="inviteUserFormGroup.invalid && (firstname.dirty || firstname.touched)" class="">
+                            <div *ngIf="firstname.errors.required">
+                                <small>First name is required.</small>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col">
+                        <label for="" class="">Last Name*:</label>
+                        <input
+                            [ngClass]="{'invalid-input': inviteUserFormGroup.invalid && (lastname.dirty || lastname.touched)}"
+                            type="text" class="form-control form-control-sm" formControlName="lastname">
+                        <div *ngIf="inviteUserFormGroup.invalid && (lastname.dirty || lastname.touched)" class="">
+                            <div *ngIf="lastname.errors.required">
+                                <small>Last name is required.</small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row mb-2">
+                    <div class="col">
+                        <label for="" class="">Email*:</label>
+                        <input *ngIf="!isEdit"
+                            [ngClass]="{'invalid-input': inviteUserFormGroup.invalid && (email.dirty || email.touched)}"
+                            type="text" class="form-control form-control-sm" formControlName="email">
+                        <input type="text" class="form-control form-control-sm" formControlName="email" *ngIf="isEdit"
+                            disabled>
+                        <div *ngIf="inviteUserFormGroup.invalid && (email.dirty || email.touched)" class="">
+                            <div *ngIf="email.errors.required">
+                                <small>Email is required.</small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row mb-2">
+                    <div class="col">
+                        <label for="" class="">Phone*:</label>
+                        <input
+                            [ngClass]="{'invalid-input': inviteUserFormGroup.invalid && (mobile.dirty || mobile.touched)}"
+                            type="text" class="form-control form-control-sm" formControlName="mobile">
+                        <div *ngIf="inviteUserFormGroup.invalid && (mobile.dirty || mobile.touched)" class="">
+                            <div *ngIf="mobile.errors.required">
+                                <small>Phone is required.</small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row mb-2">
+                    <div class="col">
+                        <label for="" class="">Roles*:</label>
+                        <select
+                            [ngClass]="{'invalid-input': inviteUserFormGroup.invalid && (role_id.dirty || role_id.touched)}"
+                            class="form-control form-control-sm" formControlName="role_id">
+                            <option *ngFor="let role of roles" [value]="role.id">{{role.name}}</option>
+                        </select>
+                        <div *ngIf="inviteUserFormGroup.invalid && (role_id.dirty || role_id.touched)" class="">
+                            <div *ngIf="role_id.errors.required">
+                                <small>Role is required.</small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row mb-2">
+                    <div class="col">
+                        <label for="" class="">Branch Plant:</label>
+                        <!-- <app-multiautocomplete isSingle="false"  [options]="warehouseList" 
+                             [control]="user_branch_plant"
+                            text="name" id="id" placeholder="Select Branch Plant" objectName="customer-root-ddl" [param1]="'code'" [param2]="'name'">
+                        </app-multiautocomplete> -->
+                        <angular2-multiselect [(data)]="warehouseList" formControlName="user_branch_plant" [(ngModel)]="selectedItems" 
+                            [settings]="dropdownSettings">
+                        </angular2-multiselect>
+                    </div>
+                </div>
+
+            </form>
+        </div>
+
+        <div class="card-footer">
+            <div class="d-inline float-right">
+                <button class="btn btn-sm btn-light mr-2" (click)="close()">Cancel</button>
+                <button class="btn btn-sm btn-p" (click)="inviteUser()"><span *ngIf="isEdit">Update User</span><span
+                        *ngIf="!isEdit">Invite user</span></button>
+            </div>
+        </div>
+
+    </div>
+</div>

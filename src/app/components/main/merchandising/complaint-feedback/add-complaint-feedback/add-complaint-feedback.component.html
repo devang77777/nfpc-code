@@ -1,0 +1,78 @@
+<div class="card" style="width: 550px;">
+  <div class="card-header pt-4">
+    <span class="h6 font-weight-light">{{formType}} Complaint FeedBack</span>
+    <a (click)="close()"><i class="fa fa-times fa-lg text-secondary float-right" aria-hidden="true"></i></a>
+  </div>
+  <form [formGroup]="ComplaintFeedbackFormGroup" (ngSubmit)="saveComplaintFeedbackData()">
+    <div class="form-box">
+      <div class="card-body">
+        <div class="">
+          <div class="row mb-4">
+            <div class="col-md-4">Feedback Title*</div>
+            <div class="col-md-8">
+              <input class="form-control form-control-sm" type="text" formControlName="feedBack">
+              <app-validation-message [control]="ComplaintFeedbackFormGroup.controls['feedBack']">
+              </app-validation-message>
+            </div>
+          </div>
+          <div class="row mb-4">
+            <div class="col-md-4">Merchandiser*</div>
+            <div class="col-md-8">
+              <!-- <app-autocomplete [data]="merchandiser" text="" id="user_id" objectName="user" param1="firstname"
+                param2="lastname" placeholder="Search merchandiser"
+                [control]="ComplaintFeedbackFormGroup.controls['merchandiser']"> -->
+
+              <app-multiautocomplete isSingle="true" [options]="merchandiser"
+                [control]="ComplaintFeedbackFormGroup.controls['merchandiser']" text="" id="user_id" objectName="user"
+                param1="firstname" param2="lastname">
+              </app-multiautocomplete>
+
+              <app-validation-message [control]="ComplaintFeedbackFormGroup.controls['merchandiser']">
+              </app-validation-message>
+            </div>
+          </div>
+          <div class="row mb-4">
+            <div class="col-md-4">Item*</div>
+            <div class="col-md-8">
+              <!-- <app-autocomplete [data]="items" text="item_name" id="id" placeholder="Search item"
+                [control]="ComplaintFeedbackFormGroup.controls['item']">
+              </app-autocomplete> -->
+              <app-multiautocomplete isSingle="true" [options]="items"
+                [control]="ComplaintFeedbackFormGroup.controls['item']" text="item_name" id="id">
+              </app-multiautocomplete>
+
+              <app-validation-message [control]="ComplaintFeedbackFormGroup.controls['item']"></app-validation-message>
+            </div>
+          </div>
+          <div class="row mb-4">
+            <div class="col-md-4">Type*</div>
+            <div class="col-md-8">
+              <!-- <app-autocomplete [data]="items" text="item_name" id="id" placeholder="Search item"
+                [control]="ComplaintFeedbackFormGroup.controls['item']">
+              </app-autocomplete> -->
+              <app-multiautocomplete isSingle="true" [options]="complaint_type_list"
+                [control]="ComplaintFeedbackFormGroup.controls['type']" text="itemName" id="id">
+              </app-multiautocomplete>
+
+              <app-validation-message [control]="ComplaintFeedbackFormGroup.controls['type']"></app-validation-message>
+            </div>
+          </div>
+          <div class="row mb-4">
+            <div class="col-md-4">Description*</div>
+            <div class="col-md-8">
+              <textarea class="form-control form-control-sm" formControlName="description"></textarea>
+              <app-validation-message [control]="ComplaintFeedbackFormGroup.controls['description']">
+              </app-validation-message>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="card-footer">
+      <div class="d-inline float-right">
+        <button type="button" class="btn btn-sm btn-light mr-2" (click)="close()">Cancel</button>
+        <button type="submit" class="btn btn-sm btn-p">Save</button>
+      </div>
+    </div>
+  </form>
+</div>

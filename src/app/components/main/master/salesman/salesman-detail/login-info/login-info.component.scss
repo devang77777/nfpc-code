@@ -1,0 +1,34 @@
+.table {
+  width: 95%;
+}
+
+.items-table-box {
+  overflow-y: scroll !important;
+  min-width: 45%;
+
+  mat-paginator,
+  .mat-table {
+    max-width: 100%;
+  }
+
+  button {
+    background-color: transparent;
+    border: none;
+    font-size: 15px;
+
+    &:active {
+      outline: none;
+    }
+  }
+}
+
+.table thead,
+.table thead tr,
+.mat-header-row {
+  background-color: black !important;
+
+  th {
+    background: black;
+    color: #fff;
+  }
+}

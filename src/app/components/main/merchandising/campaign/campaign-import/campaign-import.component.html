@@ -1,0 +1,141 @@
+<div class="card">
+
+  <div class="card-header">
+    <p class="h4 font-weight-light d-inline">
+      Import Campaign
+    </p>
+  </div>
+  <div class="row">
+    <mat-horizontal-stepper>
+      <mat-step label="Configure" state="chat">
+        <div class=" card-body">
+          <div class="row">
+            <div class="col-lg-7">
+              <form [formGroup]="importForm">
+                <div>
+                  <p class="font-medium">Download a <a href="#">sample
+                      csv file</a> or <a href="#">sample
+                      xls file</a>
+                    and compare it to your import file to ensure you have the file perfect for the import.</p>
+                </div>
+
+                <div class="row">
+                  <div class="col-lg-4"> <label>Upload Files : </label></div>
+                  <div class="col-lg-7">
+                    <!-- input type='file' class="btn btn-sm btn-p" multiple (change)="onSelectFile($event)" *ngIf='!(filesList.length > 0)'> -->
+                    <input style="display: none" type="file" (change)="onSelectFile(file,$event)"
+                      formControlName="campaign_file" name="campaign_file" [(ngModel)]="importFile.campaign_file" #file>
+                    <button class="btn btn-sm btn-p" *ngIf='!(filesList.length > 0)' (click)="file.click()">Upload
+                      file</button>
+                    <span *ngIf='!(filesList.length > 0)'>No file selected</span>
+                    <mat-chip-list #chipList aria-label="selection" *ngIf='(filesList.length > 0)'>
+                      <mat-chip *ngFor="let file of filesList" [removable]="removable" (removed)="remove(file)">
+                        {{file.name}}
+                        <mat-icon matChipRemove *ngIf="removable">cancel</mat-icon>
+                      </mat-chip>
+                    </mat-chip-list>
+                    <div class="font-style"> <small> Maximum File Size: 5 MB </small>&nbsp;|&nbsp; <small> File Format:
+                        CSV or TSV or XLS </small> </div>
+                  </div>
+
+                  <div class="col-lg-4"><label> Duplicate Handling: </label></div>
+                  <div class="col-lg-8">
+                    <mat-radio-group formControlName="skipduplicate" name="skipduplicate"
+                      [(ngModel)]="importFile.skipduplicate">
+                      <mat-radio-button value=1>Skip</mat-radio-button>
+                      <p>Retains the records in Invoice and does not sync the identical records from the import file.
+                      </p>
+                      <mat-radio-button value=0>Overwrite</mat-radio-button>
+                      <p>Overwrites existing records in Invoice with the identical records in the import file.</p>
+                    </mat-radio-group>
+                  </div>
+                </div>
+              </form>
+            </div>
+          </div>
+          <div>
+            <button mat-button matStepperNext class="btn btn-sm btn-p" (click)="importCampaign()">Next</button>
+            <button mat-button class="btn btn-sm btn-light mr-2" (click)="bactToCampaign()">Cancle</button>
+          </div>
+        </div>
+      </mat-step>
+      <mat-step label="Map Fields" state="chat">
+        <div class="card-body">
+          <div class="row">
+            <div class="col-sm-4">
+              <p>Your Selected File :</p>
+            </div>
+            <div class="col-sm-4"><span *ngFor="let name of fileName1">{{name}}</span></div>
+          </div>
+          <div class="row" style="display: inline-block;margin:10px;">he best match to each field on the selected file
+            have been auto-selected.
+            <div>
+              <h4> Customer Details </h4>
+            </div>
+
+            <form [formGroup]="fieldFrom">
+              <div class="row">
+                <div class="col-6">CUSTOMER INVOICE FIELD</div>
+                <div class="col-6">IMPORTED FILE HEADERS</div>
+              </div>
+              <div class="row" *ngFor="let titel of data[0]">
+                <div class="col-6"><label>{{titel}}</label></div>
+                <div class="col-6">
+                  <mat-select class="form-control form-control-sm" name="mapField" formControlName="mapField"
+                    (selectionChange)="mapChange($event.value)">
+                    <mat-option *ngFor="let field of data[0]" [value]="field">{{field}}</mat-option>
+                  </mat-select>
+                </div>
+              </div>
+              <div>
+                <button mat-button matStepperPrevious class="btn btn-sm btn-light mr-2">Back</button>
+                <button mat-button matStepperNext class="btn btn-sm btn-p" [disabled]="isFlag">Next</button>
+              </div>
+            </form>
+          </div>
+        </div>
+
+      </mat-step>
+      <mat-step label="Preview">
+        <div class="card-body">
+          <div class="row">
+            <div class="col-12">
+              <mat-expansion-panel (opened)="!panelOpenState" (closed)="panelOpenState = false">
+                <mat-expansion-panel-header>
+                  <mat-panel-title>
+                    Duplicate Fields ({{unMappedCount}})
+                  </mat-panel-title>
+                </mat-expansion-panel-header>
+                <div *ngFor="let data of duplicate">
+                  <label> Duplicate row no. {{data}} found in your File</label>
+                </div>
+              </mat-expansion-panel>
+
+              <mat-expansion-panel (opened)="!panelOpenState" (closed)="panelOpenState = false">
+                <mat-expansion-panel-header>
+                  <mat-panel-title>
+                    Unmapped Fields ({{unMappedCount}})
+                  </mat-panel-title>
+                </mat-expansion-panel-header>
+                <div *ngFor="let mapped of unmappedList">
+                  <label>{{mapped}}</label>
+                </div>
+              </mat-expansion-panel>
+            </div>
+          </div>
+        </div>
+        <div class="card-footer">
+          <div class="d-inline float-left">
+            <button class="btn btn-sm btn-p" disabled>Import</button>
+            <button class="btn btn-sm btn-light mr-2" (click)="bactToCampaign()">Cancle</button>
+          </div>
+        </div>
+      </mat-step>
+
+      <!-- Icon overrides. -->
+      <ng-template matStepperIcon="chat">
+        <mat-icon>forum</mat-icon>
+      </ng-template>
+    </mat-horizontal-stepper>
+  </div>
+</div>

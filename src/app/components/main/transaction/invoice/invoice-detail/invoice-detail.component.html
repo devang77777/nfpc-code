@@ -1,0 +1,295 @@
+<mat-drawer-container class="formdrawer-container" hasBackdrop="false">
+  <mat-drawer id="formDrawer2" mode="over" position="end" #formDrawer2 class="border">
+    <div style="min-width: 500px;">
+      <ng-container *ngIf="invoiceData">
+        <ng-container *ngIf="selectedRightBar=='record-payment'">
+          <app-invoice-collection [invoiceData]="invoiceData"></app-invoice-collection>
+        </ng-container>
+        <ng-container *ngIf="selectedRightBar=='history'">
+          <app-history [module]="module" (close)="onClose()"></app-history>
+        </ng-container>
+        <ng-container *ngIf="selectedRightBar=='setting'">
+          <app-invoice-setting [invoiceData]="invoiceData" (close)="onClose()" (reminder)="onReminderAdded($event)">
+          </app-invoice-setting>
+        </ng-container>
+      </ng-container>
+    </div>
+  </mat-drawer>
+  <section>
+    <div class="heading-row clearfix">
+      <h2 class="h4 font-weight-light d-md-inline">
+        <i class="fa fa-file-text-o mr-2"></i>Invoice
+        <span class="order-number">#{{ invoiceData?.invoice_number }}</span>
+      </h2>
+      <div class="d-inline float-right">
+        <div class="btn-group btnrow mr-2">
+          <button class="btn" type="button" [autoClose]="'outside'" triggers="manual" #email="ngbPopover" disabled
+            placement="bottom" (click)="email.open();setting.close();" [ngbPopover]="emailPopContent"
+            [popoverTitle]="emailPopTitle">
+            <i class="os-icon os-icon-mail"></i>
+          </button>
+          <button class="btn" type="button" *ngIf="showEditDel" disabled
+            [routerLink]="['/transaction/invoice/edit', invoiceData?.uuid]">
+            <i class="os-icon os-icon-edit-32"></i>
+          </button>
+          <button class="btn" type="button" (click)="getDocument('pdf')">
+            <mat-icon [inline]="true">picture_as_pdf</mat-icon>
+          </button>
+          <button class="btn" type="button" [autoClose]="'outside'" triggers="manual" #setting="ngbPopover"
+            placement="bottom" (click)="setting.open();email.close(); " [ngbPopover]="settingPopContent"
+            popoverTitle="Reminder" disabled>
+            <mat-icon [inline]="true">notification_important</mat-icon>
+          </button>
+          <button class="btn" type="button" printSectionId="print-section" printTitle="Statement" [printStyle]="{
+            h1: { color: 'red' },
+            h2: { border: 'solid 1px' }
+          }" [useExistingCss]="true" ngxPrint disabled>
+            <i class="os-icon os-icon-printer"></i>
+          </button>
+
+
+          <button class="btn" type="button" disabled>
+            <mat-icon [inline]="true">attach_file</mat-icon>
+          </button>
+          <button (click)="openRightbar('history')" class="btn" type="button" disabled>
+            <mat-icon [inline]="true">textsms</mat-icon>
+          </button>
+
+        </div>
+
+        <button class="btn btn-sm btn-white dropdown-toggle mr-2" [matMenuTriggerFor]="menu2" disabled>
+          More
+        </button>
+        <mat-menu #menu2="matMenu" xPosition="before">
+          <button *ngIf="showOrderStatusOptions" mat-menu-item class="height30"
+            (click)="openRightbar('record-payment')">
+            Record Payment
+          </button>
+          <button *ngIf="showEditDel" mat-menu-item class="height30" appPermission [permissions]="userPermissions"
+            [type]="'delete'" (click)="openDeleteBox()">
+            Delete
+          </button>
+          <!-- <button *ngIf="invoiceData?.oddo_post_id != null" mat-menu-item class="height30" (click)="postOdoo()">
+            Odoo Posted
+          </button> -->
+        </mat-menu>
+        <button class="btn" (click)="closeDetailView()">
+          <i class="os-icon os-icon-close"></i>
+        </button>
+      </div>
+    </div>
+    <div class="separator"></div>
+
+    <div class="approval-holder" *ngIf="hasApprovalPending">
+      <div class="approval-box">
+        <div class="approve-icon">
+          <i class="fa fa-check-square-o"></i>
+        </div>
+        <div class="approve-content">
+          <h2>Approve this Invoice</h2>
+          <p>
+            This invoice has been submitted for approval. Verify and approve the
+            invoice.
+          </p>
+        </div>
+        <div class="approve-actions">
+          <button mat-button class="approve" (click)="approve()">
+            Approve
+          </button>
+          <button mat-button class="reject" (click)="reject()">Reject</button>
+        </div>
+      </div>
+    </div>
+
+    <form class="order-form custom-mat square scrolly">
+      <div class="card-header active-form overview">
+        <div class="row justify-content-between">
+          <div class="col-md-4">
+            <div class="form-group">
+              <label for="">Invoice Type</label>
+              <input type="text" class="form-control form-control-sm non-editable" [value]="invoiceTypeTitle"
+                disabled />
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="card-body overview">
+        <div class="row justify-content-between">
+          <div class="col-md-4">
+            <div class="form-group" *ngIf="!isDepotOrder">
+              <label for="">Customer</label>
+              <input type="text" class="form-control form-control-sm non-editable" [value]="
+                  invoiceData?.user?.firstname +
+                  ' ' +
+                  invoiceData?.user?.lastname
+                " disabled />
+            </div>
+            <div class="form-group" *ngIf="!isDepotOrder">
+              <label for="">Customer Lob</label>
+              <input type="text" class="form-control form-control-sm non-editable" [value]="
+                  invoiceData?.lob?.name || ''" disabled />
+            </div>
+            <div class="form-group" *ngIf="invoiceData?.storagelocation?.code">
+              <label for="">Warehouse</label>
+              <input type="text" class="form-control form-control-sm non-editable" [value]="
+              invoiceData?.storagelocation?.code +'-'+ invoiceData?.storagelocation?.name || ''" disabled />
+            </div>
+            <div class="form-group" *ngIf="!isDepotOrder">
+              <label>{{domain == 'nfpc' || domain == 'merchandising' ? 'Merchandiser' : 'Salesman'}}</label>
+              <input type="text" class="form-control form-control-sm non-editable" [value]="
+                invoiceData?.salesman_user ? invoiceData?.salesman_user?.firstname +' '+ invoiceData?.salesman_user?.lastname : ''
+                " disabled />
+            </div>
+            <div class="form-group" *ngIf="LPO">
+              <label for="">Customer LPO</label>
+              <input type="text" class="form-control form-control-sm non-editable" [value]="" disabled />
+            </div>
+            <div class="form-group" *ngIf="exchangeNumber">
+              <label for="">Exchange Number</label>
+              <input type="text" class="form-control form-control-sm non-editable" [value]="
+              invoiceData?.exchange_number || '' " disabled />
+            </div>
+            <div class="form-group" *ngIf="isDepotOrder">
+              <label for="">Depot</label>
+              <input type="text" class="form-control form-control-sm non-editable"
+                [value]="invoiceData?.depot?.depot_name" disabled />
+            </div>
+          </div>
+          <div class="col-md-4">
+            <div class="form-group">
+              <label for=""> Invoice Number</label>
+              <input type="text" class="form-control form-control-sm non-editable" [value]="invoiceData?.invoice_number"
+                disabled />
+            </div>
+            <div class="form-group">
+              <label for="">Invoice Date</label>
+              <input type="text" class="form-control form-control-sm non-editable" [value]="invoiceData?.invoice_date"
+                disabled />
+            </div>
+            <div class="form-group">
+              <label for="">Payment Terms</label>
+              <input type="text" class="form-control form-control-sm non-editable"
+                [value]="paymentTermTitle ? paymentTermTitle : ''" disabled />
+            </div>
+            <div class="form-group">
+              <label for=""> Due Date</label>
+              <input type="date" class="form-control form-control-sm non-editable"
+                [value]="invoiceData?.invoice_due_date" disabled />
+            </div>
+          </div>
+        </div>
+      </div>
+      <div>
+        <div class="item-container custom-mat custom-mat-no-border">
+          <div class="table-responsive">
+            <table class="item-table cardtable">
+              <thead>
+                <tr>
+                  <th class="head" *ngFor="let head of itemTableHeaders">
+                    {{ head.label }}
+                  </th>
+                </tr>
+              </thead>
+              <tbody class="form-body" *ngIf="invoiceData && invoiceData.invoices.length > 0">
+                <tr class="item-row" *ngFor="let item of invoiceData?.invoices; let i = index">
+                  <td data-th="#" class="item-seq">{{ i + 1 }}</td>
+                  <td data-th="Item Code" style="width: 150px;" class="item-name">
+                    <!-- <input type="text" class="form-control form-control-sm non-editable" [value]="item.item?.item_name"
+                      disabled /> -->
+                    <span style="word-break:break-word; font-size: 11px;">{{item?.item?.item_code}}</span>
+                  </td>
+                  <td data-th="Item Name" style="width: 150px;" class="item-name">
+                    <!-- <input type="text" class="form-control form-control-sm non-editable" [value]="item.item?.item_name"
+                      disabled /> -->
+                    <span style="word-break:break-word; font-size: 11px;">{{item?.item?.item_name}}</span>
+                  </td>
+                  <td data-th="UOM" class="uom-td">
+                    <input type="text" class="form-control form-control-sm non-editable" [value]="item.item_uom?.name"
+                      disabled />
+                  </td>
+
+                  <td data-th="Quantity">
+                    <input type="number" min="0" class="form-control non-editable" [value]="item.item_qty" disabled />
+                  </td>
+                  <td data-th="Price">
+                    <input type="text" class="form-control non-editable" [value]="numberFormat(item.item_price)"
+                      disabled />
+                  </td>
+                  <td data-th="Excise">
+                    <input type="text" class="form-control non-editable" [value]="numberFormat(item.item_excise)"
+                      disabled />
+                  </td>
+                  <td data-th="Discount">
+                    <input type="text" class="form-control non-editable"
+                      [value]="numberFormat(item.item_discount_amount)" disabled />
+                  </td>
+                  <td data-th="Net">
+                    <input type="text" class="form-control non-editable" [value]="numberFormat(item.item_net)"
+                      disabled />
+                  </td>
+                  <td data-th="Vat">
+                    <input type="text" class="form-control non-editable" [value]="numberFormat(item.item_vat)"
+                      disabled />
+                  </td>
+
+
+                  <td data-th="Total">
+                    <input type="text" class="form-control non-editable" [value]="numberFormat(item.item_grand_total)"
+                      disabled />
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+        <div class="container footer-overview-container">
+          <div class="row justify-content-end">
+            <!-- <div class="form-group col-sm-5">
+            <label for="note">Customer Note</label>
+            <textarea class="form-control form-control-sm" id="note" [value]="invoiceData.customer_note ? invoiceData.customer_note : ''" disabled></textarea>
+          </div> -->
+            <div class="col-sm-4">
+              <div class="overall-stats-table">
+                <div *ngFor="
+                    let stat of orderStats.slice(0, orderStats.length - 1)
+                  ">
+                  <span class="stat-label">{{ stat.label }}</span>
+                  <span class="stat-value">{{
+                    invoiceData && numberFormatWithSymbol(invoiceData[stat.key])
+
+                    }}</span>
+                </div>
+                <div>
+                  <span class="stat-label final-total">Total</span>
+                  <span class="stat-value final-total">{{
+                    numberFormatWithSymbol(invoiceData?.grand_total)
+                    }}</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </form>
+
+  </section>
+</mat-drawer-container>
+
+
+<ng-template #emailPopTitle>
+  <span>Send Invoice {{invoiceData?.invoice_number}}</span>
+</ng-template>
+<ng-template #emailPopContent>
+  <app-send-email [data]="emailData" (close)="email.close()"></app-send-email>
+</ng-template>
+<ng-template #settingPopContent>
+  <div style="padding-bottom:10px; display: flex; justify-content: center; cursor: pointer;">
+    <mat-slide-toggle [checked]="isRemindedAdded" (change)="setting.close();toggleReminder($event)">Reminder
+    </mat-slide-toggle>
+  </div>
+</ng-template>
+
+<div class="card border" id="print-section">
+  <div class="card-body" [innerHTML]="invoiceTemplate"></div>
+</div>

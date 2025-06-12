@@ -1,0 +1,107 @@
+<div class="card">
+    <div class="card-header pt-4">
+        <span class="h6 font-weight-light">{{formType}} Competitor</span>
+        <a (click)="close()"><i class="fa fa-times fa-lg text-secondary float-right" aria-hidden="true"></i></a>
+    </div>
+    <form [formGroup]="competitorFormGroup" (ngSubmit)="savecompetitorData()">
+        <div class="form-box">
+            <div class="card-body">
+                <div class="">
+                    <div class="row mb-4">
+                        <div class="col-md-4 pt-2">Company Name*</div>
+                        <div class="col-md-8">
+                            <input class="form-control form-control-sm" type="text" formControlName="companyName">
+                            <app-validation-message [control]="competitorFormGroup.controls['companyName']">
+                            </app-validation-message>
+                        </div>
+                    </div>
+                    <div class="row mb-4">
+                        <div class="col-md-4 pt-2">Brand*</div>
+                        <div class="col-md-3">
+                            <input class="form-control form-control-sm" type="text" formControlName="brandName">
+                            <app-validation-message [control]="competitorFormGroup.controls['brandName']">
+                            </app-validation-message>
+                        </div>
+                        <div class="col-md-1 pr-0 pt-2">Vs</div>
+                        <div class="col-md-4">
+                            <app-multiautocomplete [options]="brands"
+                                [control]="competitorFormGroup.controls['compareBrands']" text="brand_name" id="id">
+                            </app-multiautocomplete>
+
+                            <app-validation-message [control]="competitorFormGroup.controls['compareBrands']">
+                            </app-validation-message>
+                        </div>
+                    </div>
+                    <div class="row mb-4">
+                        <div class="col-md-4 pt-2">Merchandiser*</div>
+                        <div class="col-md-8">
+
+                            <app-multiautocomplete isSingle="true" [options]="merchandisers"
+                                [control]="competitorFormGroup.controls['merchandiser']" text="" id="user_id"
+                                objectName="user" param1="firstname" param2="lastname"
+                                placeholder="Search merchandiser">
+                            </app-multiautocomplete>
+
+                            <app-validation-message [control]="competitorFormGroup.controls['merchandiser']">
+                            </app-validation-message>
+                        </div>
+                    </div>
+                    <div class="row mb-4">
+                        <div class="col-md-4 pt-2">Item Name*</div>
+                        <div class="col-md-8">
+                            <input class="form-control form-control-sm" type="text" formControlName="itemName">
+                            <app-validation-message [control]="competitorFormGroup.controls['itemName']">
+                            </app-validation-message>
+                        </div>
+                    </div>
+                    <div class="row mb-4">
+                        <div class="col-md-4 pt-2">Price*</div>
+                        <div class="col-md-8">
+                            <input class="form-control form-control-sm" type="number" formControlName="price">
+                            <app-validation-message [control]="competitorFormGroup.controls['price']">
+                            </app-validation-message>
+                        </div>
+                    </div>
+                    <div class="row mb-4">
+                        <div class="col-md-4 pt-2">Promotion*</div>
+                        <div class="col-md-8">
+                            <input class="form-control form-control-sm" type="text" formControlName="promotion">
+                            <app-validation-message [control]="competitorFormGroup.controls['promotion']">
+                            </app-validation-message>
+                        </div>
+                    </div>
+                    <div class="row mb-4">
+                        <div class="col-md-4 pt-2">Notes*</div>
+                        <div class="col-md-8">
+                            <textarea class="form-control form-control-sm" type="text"
+                                formControlName="notes"></textarea>
+                            <app-validation-message [control]="competitorFormGroup.controls['notes']">
+                            </app-validation-message>
+                        </div>
+                    </div>
+                    <div class="row mb-4">
+                        <div class="col-md-4 pt-2">Capture Image*</div>
+                        <div class="col-md-8">
+                            <input class="form-control form-control-sm" multiple #file type="file"
+                                (change)="fileChosen($event)" accept="image/x-png,image/gif,image/jpeg" />
+                            <app-validation-message [control]="competitorFormGroup.controls['image']">
+                            </app-validation-message>
+                            <br />
+                            <div class="row">
+                                <div *ngFor='let url of selectedFiles' class="col-md-6 pb-2 img-position">
+                                    <img [src]="url" height="150" width="150px">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="card-footer">
+            <div class="d-inline float-right">
+                <button type="button" class="btn btn-sm btn-light mr-2" (click)="close()">Cancel</button>
+                <button type="submit" class="btn btn-sm btn-p">Save</button>
+            </div>
+        </div>
+    </form>
+</div>

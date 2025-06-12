@@ -1,0 +1,36 @@
+.sidenav-container {
+  height: 100%;
+}
+.formdrawer-container {
+  height: 100%;
+}
+mat-drawer-content {
+  background-color: #ecf0f4;
+}
+
+#formDrawer {
+  margin-top: 50px;
+  height: calc(100vh - 50px);
+  box-shadow: -2px 5px 10px 1px rgba(0, 0, 0, 0.176);
+}
+
+.router-outlet {
+  height: calc(100vh - 50px);
+  background-color: white;
+}
+@media (min-width: 576px) {
+  .mat-drawer {
+    overflow-y: visible;
+  }
+  .router-outlet {
+    overflow-y: scroll;
+  }
+  .mat-drawer-content {
+    overflow: visible !important;
+  }
+}
+@media (max-width: 575px) {
+  .sidedrawer {
+    min-width: 300px !important;
+  }
+}

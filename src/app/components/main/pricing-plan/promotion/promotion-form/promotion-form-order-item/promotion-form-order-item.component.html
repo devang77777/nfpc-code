@@ -1,0 +1,66 @@
+<section>
+  <form [formGroup]="orderItemFormGroup">
+      <div class="table-responsive">
+        <mat-table class="table table-hover cardtable" [dataSource]="dataSource" formArrayName="orderItemFormArray">
+          <mat-header-row *matHeaderRowDef="displayColumns; sticky: true"></mat-header-row>
+          <mat-row class="list-row" *matRowDef="let row; let i = index; columns: displayColumns"></mat-row>
+          <!-- Column definitions -->
+          <!-- <ng-container matColumnDef="itemCode">
+            <mat-header-cell *matHeaderCellDef> Item Code </mat-header-cell>
+            <mat-cell *matCellDef="let row; let index = index" [formGroupName]="index">
+              <input class="input-control" formControlName="itemCode" placeholder="">
+            </mat-cell>
+          </ng-container> -->
+    
+          <ng-container matColumnDef="itemDesc">
+            <mat-header-cell *matHeaderCellDef> Item Name </mat-header-cell>
+            <mat-cell *matCellDef="let row; let index = index" [formGroupName]="index" data-th="Item Name ">
+              <!-- <input class="input-control" formControlName="itemDescription" placeholder=""> -->
+              <ng-select [items]="items" [appendTo]="'body'" bindLabel="item_name" autofocus bindValue="id"
+                formControlName="item_id" (change)="onItemChange($event,index)">
+              </ng-select>
+            </mat-cell>
+          </ng-container>
+          <ng-container matColumnDef="quantity">
+            <mat-header-cell *matHeaderCellDef> Quantity </mat-header-cell>
+            <mat-cell *matCellDef="let row; let index = index" [formGroupName]="index" data-th="Quantity">
+              <input type="number" class="input-control" formControlName="item_qty" placeholder="" />
+            </mat-cell>
+          </ng-container>
+          <ng-container matColumnDef="uom">
+            <mat-header-cell *matHeaderCellDef> UOM </mat-header-cell>
+            <mat-cell *matCellDef="let row; let index = index" [formGroupName]="index"  data-th="UOM">
+              <select *ngIf="!orderItems" class="form-control form-control-sm input-control" formControlName="item_uom_id">
+                <option *ngFor="let uom of uomArray[index]" [value]="uom.id">{{ uom.name}}</option>
+              </select>
+              <select *ngIf="orderItems" class="form-control form-control-sm input-control" formControlName="item_uom_id">
+                <option *ngFor="let uom of uoms" [value]="uom.id">{{ uom.name}}</option>
+              </select>
+            </mat-cell>
+          </ng-container>
+          <ng-container matColumnDef="price">
+            <mat-header-cell *matHeaderCellDef> Price </mat-header-cell>
+            <mat-cell *matCellDef="let row; let index = index" [formGroupName]="index" data-th="Price">
+              <input type="number" class="input-control" formControlName="price" placeholder="" />
+            </mat-cell>
+          </ng-container>
+          <ng-container matColumnDef="action">
+            <mat-header-cell *matHeaderCellDef> Action </mat-header-cell>
+            <mat-cell *matCellDef="let row; let index = index" data-th="Action">
+              <button class="add-btn" *ngIf="isFirstRow(index); else showDelete" (click)="addRow()">
+                <i class="fa fa-plus-circle" aria-hidden="true"></i> Add
+              </button>
+              <ng-template #showDelete>
+                <button class="delete-btn" (click)="deleteItem(index)">
+                  <i class="fa fa-trash"></i> Delete
+                </button>
+              </ng-template>
+            </mat-cell>
+          </ng-container>
+        </mat-table>
+      </div>
+  </form>
+  <!-- <pre>
+    {{orderItemFormGroup.value | json}}
+  </pre> -->
+</section>

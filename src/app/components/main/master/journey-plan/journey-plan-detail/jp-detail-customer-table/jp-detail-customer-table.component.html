@@ -1,0 +1,111 @@
+<section>
+  <div class="loader-holder" *ngIf="!hasNewChanges">
+    <div class="loader-content"></div>
+  </div>
+  <mat-tab-group *ngIf="hasNewChanges && isWeekly">
+    <mat-tab *ngFor="let week of customersData; let weekIndex = index;" [label]="getWeekNameLabel(week.week_number)">
+      <mat-tab-group>
+        <mat-tab *ngFor="let day of week.journey_plan_days; let dayIndex = index;" [label]="day.day_name">
+          <div class="head-container m-2">
+            <div class="head-container m-2">
+              <div class=" head-row m-0 d-flex justify-content-between">
+                <div style="    flex: 1; padding:7px;">Sequence
+                  <!-- <app-column-filter title="Sequence" (changeSelected)="onColumnFilterOpen($event)"
+                    [selected]="selectedColumnFilter" (close)="onColumnFilter($event)">
+                    <input class="form-control form-control-sm" placeholder="Enter Sequence" type="text">
+                  </app-column-filter> -->
+                </div>
+                <div style="    flex: 1; padding:7px;">
+                  <app-column-filter title="Code" (changeSelected)="onColumnFilterOpen($event)"
+                    [selected]="selectedColumnFilter" (close)="onColumnFilter($event, day, weekIndex, dayIndex)"  controlName="customer_code">
+                    <input class="form-control form-control-sm" [formControl]="filterForm.get('customer_code')" placeholder="Enter Code" type="text">
+                  </app-column-filter>
+                </div>
+                <div style="    flex: 1; padding:7px;">
+                  <app-column-filter title="Name" (changeSelected)="onColumnFilterOpen($event)"
+                    [selected]="selectedColumnFilter" (close)="onColumnFilter($event, day, weekIndex, dayIndex)" controlName="customer">
+                    <input class="form-control form-control-sm" [formControl]="filterForm.get('customer')" placeholder="Enter Name" type="text">
+                  </app-column-filter>
+                </div>
+                <div style="    flex: 1; padding:7px;">TRN No</div>
+                <div style="    flex: 1; padding:7px;">Start Time
+                  <!-- <app-column-filter title="Start Time" (changeSelected)="onColumnFilterOpen($event)"
+                    [selected]="selectedColumnFilter" (close)="onColumnFilter($event)">
+                    <input class="form-control form-control-sm" placeholder="Enter Start Time" type="date">
+                  </app-column-filter> -->
+                </div>
+                <div style="    flex: 1; padding:7px;">End Date
+                  <!-- <app-column-filter title="End Date " (changeSelected)="onColumnFilterOpen($event)"
+                    [selected]="selectedColumnFilter" (close)="onColumnFilter($event)">
+                    <input class="form-control form-control-sm" placeholder="Enter End Date " type="date">
+                  </app-column-filter> -->
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="data-body">
+            <div class="row data-row m-0 d-flex justify-content-between"
+              *ngFor="let user of day.journey_plan_customers">
+              <div style="    flex: 1; padding:7px;">{{ user.day_customer_sequence }}</div>
+              <div style="flex: 1; padding:7px;">{{user.customer_info ? user.customer_info?.customer_code : 'N/A' }}</div>
+              <div style="    flex: 1; padding:7px;">{{ getUsersName(user) }}</div>
+              <div style="    flex: 1; padding:7px;">{{ user?.customer_info?.trn_no }}</div>
+              <div style="    flex: 1; padding:7px;">{{ user.day_start_time ? user.day_start_time : '00:00' }}</div>
+              <div style="    flex: 1; padding:7px;">{{ user.day_end_time ? user.day_end_time : '00:00' }}</div>
+            </div>
+          </div>
+        </mat-tab>
+      </mat-tab-group>
+    </mat-tab>
+  </mat-tab-group>
+  <mat-tab-group *ngIf="hasNewChanges && !isWeekly">
+    <mat-tab *ngFor="let day of customersData; let dayIndex = index;" [label]="day.day_name">
+      <div class="head-container m-2">
+        <div class=" head-row m-0 d-flex justify-content-between">
+          <div style="    flex: 1; padding:7px;">Sequence
+            <!-- <app-column-filter title="Sequence" (changeSelected)="onColumnFilterOpen($event)"
+              [selected]="selectedColumnFilter" (close)="onColumnFilter($event)">
+              <input class="form-control form-control-sm" placeholder="Enter Sequence" type="text">
+            </app-column-filter> -->
+          </div>
+          <div style="    flex: 1; padding:7px;">
+            <app-column-filter title="Code" (changeSelected)="onColumnFilterOpen($event)"
+                    [selected]="selectedColumnFilter" (close)="onColumnFilter($event, day, '', dayIndex)"  controlName="customer_code">
+                    <input class="form-control form-control-sm" [formControl]="filterForm.get('customer_code')" placeholder="Enter Code" type="text">
+                  </app-column-filter>
+          </div>
+          <div style="    flex: 1; padding:7px;">
+            <app-column-filter title="Name" (changeSelected)="onColumnFilterOpen($event)"
+                    [selected]="selectedColumnFilter" (close)="onColumnFilter($event, day, '', dayIndex)" controlName="customer">
+                    <input class="form-control form-control-sm" [formControl]="filterForm.get('customer')" placeholder="Enter Name" type="text">
+                  </app-column-filter>
+          </div>
+          <div style="    flex: 1; padding:7px;">TRN No</div>
+          <div style="    flex: 1; padding:7px;">Start Time
+            <!-- <app-column-filter title="Start Time" (changeSelected)="onColumnFilterOpen($event)"
+              [selected]="selectedColumnFilter" (close)="onColumnFilter($event)">
+              <input class="form-control form-control-sm" placeholder="Enter Start Time" type="date">
+            </app-column-filter> -->
+          </div>
+          <div style="    flex: 1; padding:7px;">End Date
+            <!-- <app-column-filter title="End Date " (changeSelected)="onColumnFilterOpen($event)"
+              [selected]="selectedColumnFilter" (close)="onColumnFilter($event)">
+              <input class="form-control form-control-sm" placeholder="Enter End Date " type="date">
+            </app-column-filter> -->
+          </div>
+        </div>
+      </div>
+      <div class="data-body">
+        <div class=" data-row m-0 d-flex justify-content-between" *ngFor="let user of day.journey_plan_customers">
+          <div style="    flex: 1; padding:7px;">{{ user.day_customer_sequence }}</div>
+          <div style="    flex: 1; padding:7px;">{{user.customer_info ? user.customer_info.customer_code : 'N/A' }}
+          </div>
+          <div style="    flex: 1; padding:7px;">{{ getUsersName(user) }}</div>
+          <div style="    flex: 1; padding:7px;">{{ user?.customer_info?.trn_no }}</div>
+          <div style="    flex: 1; padding:7px;">{{ user.day_start_time ? user.day_start_time : '00:00' }}</div>
+          <div style="    flex: 1; padding:7px;">{{ user.day_end_time ? user.day_end_time : '00:00' }}</div>
+        </div>
+      </div>
+    </mat-tab>
+  </mat-tab-group>
+</section>

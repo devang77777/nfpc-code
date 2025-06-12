@@ -1,0 +1,80 @@
+<section>
+    <div class="heading-row clearfix">
+        <p class="h4 font-weight-light d-inline">
+            <i aria-hidden="true" class="fa fa-university mr-2"></i> Gst Settings
+        </p>
+    </div>
+    <div class="divider"></div>
+    <form [formGroup]="gstSettingFormGroup" (ngSubmit)="saveGstSettingData()">
+        <div class="form-box">
+            <div class="card-body">
+                <div class="col-8">
+                    <div class="row mb-4 bg-secondary-light p-3">
+                        <div class="col-md-4">Is your business registered for GST?</div>
+                        <div class="col-md-8">
+                            <input class="" type="radio" (change)="onChnageVat($event.target.value)" value="1" name="isGst" id="is_vat_yes" formControlName="isGst">&nbsp;
+                            <label for="is_vat_yes">Yes</label>&nbsp;&nbsp;&nbsp;
+                            <input class="" type="radio" (change)="onChnageVat($event.target.value)" value="0" name="isGst" id="is_vat_no" formControlName="isGst">&nbsp;
+                            <label for="is_vat_no">No</label>
+                        </div>
+                    </div>
+                    <div *ngIf="gstSettingFormGroup.controls['isGst'].value == '1'">
+                        <div class="row mb-4">
+                            <div class="col-md-4">GSTIN *</div>
+                            <div class="col-md-5">
+                                <input class="form-control form-control-sm" type="text" formControlName="GSTIN">
+                                <app-validation-message [control]="gstSettingFormGroup.controls['GSTIN']">
+                                </app-validation-message>
+                            </div>
+                        </div>
+                        <div class="row mb-4">
+                            <div class="col-md-4">Composition Scheme</div>
+                            <div class="col-md-8">
+                                <input class="" type="checkbox" name="int_trade" id="compositionScheme" formControlName="compositionScheme">&nbsp;
+                                <label for="compositionScheme">My business is registered for Composition Scheme.</label>
+                            </div>
+                        </div>
+                        <div class="row mb-4" *ngIf="gstSettingFormGroup.controls['compositionScheme'].value == '1'">
+                            <div class="col-md-4">Composition Scheme Percentage</div>
+                            <div class="col-md-8">
+                                <input class="" type="radio" value="1" name="compositionSchemePercentage" id="is_vat_1" formControlName="compositionSchemePercentage">&nbsp;
+                                <label for="is_vat_1">1% (For Traders and Manufacturers)</label><br>
+                                <input class="" type="radio" value="5" name="compositionSchemePercentage" id="is_vat_5" formControlName="compositionSchemePercentage">&nbsp;
+                                <label for="is_vat_5">5% (For Restaurant sector)</label><br>
+                                <input class="" type="radio" value="6" name="compositionSchemePercentage" id="is_vat_6" formControlName="compositionSchemePercentage">&nbsp;
+                                <label for="is_vat_6">6% (For Suppliers of Services or Mixed Suppliers)</label>
+                            </div>
+                        </div>
+                        <div class="row mb-4">
+                            <div class="col-md-4">Reverse Charge</div>
+                            <div class="col-md-8">
+                                <input class="" type="checkbox" name="reverseCharge" id="reverseCharge" formControlName="reverseCharge">&nbsp;
+                                <label for="reverseCharge">Enable Reverse Charge in Sales transactions.</label>
+                            </div>
+                        </div>
+                        <div class="row mb-4">
+                            <div class="col-md-4">Digital Services</div>
+                            <div class="col-md-8">
+                                <input class="" type="checkbox" name="digitalServices" id="digitalServices" formControlName="digitalServices">&nbsp;
+                                <label for="digitalServices">Track sale of digital services to overseas customers</label><br>
+                                <small>Enabling this option will let you record and track export of digital services to individuals.</small>
+                            </div>
+                        </div>
+                        <div class="row mb-4">
+                            <div class="col-md-4">VAT Registered On*</div>
+                            <div class="col-md-8">
+                                <input class="form-control form-control-sm" type="date" formControlName="vatRegisteredOn">
+                                <app-validation-message [control]="gstSettingFormGroup.controls['vatRegisteredOn']">
+                                </app-validation-message>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="d-inline float-right">
+                        <button type="submit" class="btn btn-sm btn-p">Save</button>
+                    </div>
+                </div>
+            </div>
+            
+        </div>
+    </form>
+</section>

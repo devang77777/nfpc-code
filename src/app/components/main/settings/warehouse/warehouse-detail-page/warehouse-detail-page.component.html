@@ -1,0 +1,229 @@
+<mat-drawer-container class="formdrawer-container" hasBackdrop="false">
+  <mat-drawer id="locationStorageDrawer" mode="over" position="end" #locationStorageDrawer class="border">
+    <div style="min-width: 600px;">
+      <app-add-location-storage (updateLocationTableData)="updateLocationTableData($event)"
+        (closeStorageDrawer)=closeStorageDrawer()></app-add-location-storage>
+    </div>
+  </mat-drawer>
+  <section *ngIf="warehouse">
+    <div class="pl-3">
+      <div class="row">
+        <h2 class="page-title col-md-8 col-sm-7 font-weight-light">
+          {{ warehouse.name }}
+        </h2>
+        <div class="actions col-md-4 col-sm-5">
+          <button *ngIf="!currentIndex" (click)="openEditWarehouse()" class="iconbtn">
+            <i class="os-icon os-icon-edit" aria-hidden="true"></i>
+          </button>
+          <button *ngIf="currentIndex" class="btn btn-sm btn-white" mat-button [matMenuTriggerFor]="menu3">
+            More
+          </button>
+          <div>
+            <button *ngIf="!currentIndex" class="btn btn-sm btn-white" mat-button [matMenuTriggerFor]="menu2">
+              More
+            </button>
+            <mat-menu #menu2="matMenu">
+              <button mat-menu-item (click)="toggleStatus()">
+                Mark as {{ warehouse.status === 0 ? "Active" : "Inactive" }}
+              </button>
+              <button mat-menu-item (click)="openDeleteBox()">Delete</button>
+              <button mat-menu-item *ngIf="warehouse.name =='W1' || warehouse.name =='W7'|| warehouse.name =='W8'"
+                (click)="downloadWareHouseReport()">
+                Download
+              </button>
+            </mat-menu>
+            <mat-menu #menu3="matMenu">
+              <button mat-menu-item>
+                <i class="fa fa-file-excel-o" aria-hidden="true"></i> Import
+              </button>
+              <button mat-menu-item>
+                <i class="fa fa-share-square" aria-hidden="true"></i> Export
+              </button>
+              <button mat-menu-item *ngIf="warehouse.name =='W1' || warehouse.name =='W7'|| warehouse.name =='W8'"
+                (click)="downloadWareHouseReport()">
+                <i class="fa fa-download" aria-hidden="true"></i> Download
+              </button>
+            </mat-menu>
+          </div>
+          <button *ngIf="currentIndex" (click)="addStorage()" type="button" class="btn btn-sm btn-p ml-1 mr-1">
+            <i class="os-icon os-icon-plus mr-2" aria-hidden="true"></i>Add Storage
+          </button>
+          <button *ngIf="isDetailVisible" class="btn" (click)="closeDetailView()">
+            <i class="os-icon os-icon-close"></i>
+          </button>
+        </div>
+      </div>
+    </div>
+    <div class="pl-3 salesMan-data">
+      <div class="row h-100">
+        <div class="col-12">
+          <mat-tab-group class="customertab" [(selectedIndex)]="currentIndex" mat-align-tabs="start">
+            <mat-tab label="Overview">
+              <div class="row">
+                <div class="col-xl-4 col-lg-6 col-md-9">
+                  <ul class="smhlist mt-2">
+                    <li>
+                      <span>Warehouse Code:</span>
+                      <strong>{{ warehouse.code }}</strong>
+                    </li>
+                    <li>
+                      <span>Name:</span>
+                      <strong>{{ warehouse.name }}</strong>
+                    </li>
+                    <li>
+                      <span>Warehouse Manager:</span>
+                      <strong>{{ warehouse?.manager }}</strong>
+                    </li>
+                    <li>
+                      <span>Depot:</span>
+                      <strong>{{ warehouse.depot?.depot_name }}</strong>
+                    </li>
+                    <li>
+                      <span>Location:</span>
+                      <strong>{{ warehouse.route?.route_name }}</strong>
+                    </li>
+                    <li>
+                      <span>Status:</span>
+                      <strong>{{
+                        warehouse?.status === 0 ? "Inactive" : "Active"
+                        }}</strong>
+                    </li>
+                    <li>
+                      <span></span>
+                      <strong></strong>
+                    </li>
+                    <!-- <li>
+                    <span>Primary Warehouse:</span>
+                    <strong>{{ warehouse.primary_warehouse }}</strong>
+                  </li> -->
+                  </ul>
+                </div>
+              </div>
+            </mat-tab>
+            <mat-tab label="View Location Storage">
+              <div class="storageList table-responsive">
+                <table class="table table-hover" multiTemplateDataRows mat-table [dataSource]="dataSource">
+                  <tr mat-header-row class="table-header" *matHeaderRowDef="displayedColumns"></tr>
+                  <tr mat-row *matRowDef="let element; columns: displayedColumns;" (click)="getStorageItems(element)"
+                    class="element-row" [class.expanded-row]="expandedElement === element">
+                  </tr>
+                  <tr mat-row *matRowDef="let row;let i = index; columns: ['expandedDetail']" class="detail-row"></tr>
+                  <ng-container matColumnDef="storage_code">
+                    <th mat-header-cell *matHeaderCellDef>Code</th>
+                    <td mat-cell *matCellDef="let element">
+                      {{ element.code }}
+                    </td>
+                  </ng-container>
+                  <ng-container matColumnDef="storage_name">
+                    <th mat-header-cell *matHeaderCellDef>Storage Name</th>
+                    <td mat-cell *matCellDef="let element">
+                      {{ element.name }}
+                    </td>
+                  </ng-container>
+                  <ng-container matColumnDef="storage_type">
+                    <th mat-header-cell *matHeaderCellDef>Type</th>
+                    <td mat-cell *matCellDef="let element">{{ element.loc_type == 1 ? 'Finished' : 'Bad' }}</td>
+                  </ng-container>
+                  <ng-container matColumnDef="action">
+                    <th mat-header-cell *matHeaderCellDef>Action</th>
+                    <td mat-cell *matCellDef="let element">
+                      <button (click)="addStock(element)" class="btn btn-sm btn-p ml-1 mr-1">
+                        <i class="os-icon os-icon-plus mr-2" aria-hidden="true"></i> Add</button>
+                      <button (click)="editStock(element)" class="btn btn-sm btn-p ml-1 mr-1">
+                        <i class="os-icon os-icon-edit mr-2" aria-hidden="true"></i>
+                        Edit</button>
+                      <button class="btn btn-sm btn-p ml-1 mr-1">
+                        <i class="os-icon os-icon-close mr-2" aria-hidden="true"></i> Delete</button>
+                    </td>
+                  </ng-container>
+
+                  <ng-container matColumnDef="expandedDetail">
+                    <td mat-cell *matCellDef="let element" [attr.colspan]="displayedColumns.length">
+                      <div class="element-detail"
+                        [@detailExpand]="element == expandedElement ? 'expanded' : 'collapsed'">
+                        <div *ngIf="selectedStorageItems" class="w-100">
+                          <app-stock-item-dt [itemsData]="selectedStorageItems"></app-stock-item-dt>
+                        </div>
+                      </div>
+                    </td>
+                  </ng-container>
+                </table>
+              </div>
+              <mat-paginator pageSize="5" [pageSizeOptions]="[5, 10]"></mat-paginator>
+            </mat-tab>
+            <!-- <mat-tab label="View Stock">
+           <div class="table-responsive">
+            <table class="table table-hover" mat-table [dataSource]="dataSource">
+              <ng-container matColumnDef="item_code">
+                <th mat-header-cell *matHeaderCellDef>Item Code</th>
+                <td mat-cell *matCellDef="let element">
+                  {{ element.item.item_code }}
+                </td>
+              </ng-container>
+              <ng-container matColumnDef="item_name">
+                <th mat-header-cell *matHeaderCellDef>Item Name</th>
+                <td mat-cell *matCellDef="let element">
+                  {{ element.item.item_name }}
+                </td>
+              </ng-container>
+              <ng-container matColumnDef="name">
+                <th mat-header-cell *matHeaderCellDef>UOM</th>
+                <td mat-cell *matCellDef="let element">
+                  {{ element.item_uom.name }}
+                </td>
+              </ng-container>
+              <ng-container matColumnDef="batch">
+                <th mat-header-cell *matHeaderCellDef>Batch</th>
+                <td mat-cell *matCellDef="let element">{{ element.batch }}</td>
+              </ng-container>
+              <ng-container matColumnDef="qty">
+                <th mat-header-cell *matHeaderCellDef>Quantity</th>
+                <td mat-cell *matCellDef="let element">{{ element.qty }}</td>
+              </ng-container>
+
+              <mat-header-row
+                *matHeaderRowDef="displayedColumns"
+              ></mat-header-row>
+              <mat-row *matRowDef="let row; columns: displayedColumns">
+              </mat-row>
+            </table>
+           </div>
+            <mat-paginator
+              pageSize="5"
+              [pageSizeOptions]="[5, 10]"
+            ></mat-paginator>
+          </mat-tab> -->
+            <mat-tab label="Custom Fields">
+              <div class="row">
+                <div class="col-xl-3 col-lg-5 col-md-8">
+                  <ng-container *ngIf="
+                    warehouse.custom_field_value_save &&
+                    warehouse.custom_field_value_save.length > 0
+                  ">
+                    <h3><strong>Custom Fields</strong></h3>
+                    <ul class="smhlist mt-2">
+                      <li *ngFor="let item of warehouse.custom_field_value_save">
+                        <span *ngIf="
+                          item.custom_field &&
+                            item.custom_field.field_type === 'check_box';
+                          else others
+                        ">{{ item.custom_field.field_label }} :
+                          {{
+                          item.custom_field_value == "1" ? "Yes" : "No"
+                          }}</span>
+                        <ng-template #others>
+                          <span *ngIf="item.custom_field">{{ item.custom_field?.field_label }} :
+                            {{ item.custom_field_value }}</span>
+                        </ng-template>
+                      </li>
+                    </ul>
+                  </ng-container>
+                </div>
+              </div>
+            </mat-tab>
+          </mat-tab-group>
+        </div>
+      </div>
+    </div>
+  </section>
+</mat-drawer-container>

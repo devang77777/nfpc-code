@@ -1,0 +1,37 @@
+<mat-drawer-container class="sidenav-container" autosize>
+    <mat-drawer #sidenav mode="side" opened>
+        <app-sidenav *ngIf="isLoggedIn()"></app-sidenav>
+    </mat-drawer>
+    <mat-drawer-content>
+        <!-- <div class="sidenav-toggle-btn" (click)="sidenav.toggle()"><i class="fa fa-chevron-right" aria-hidden="true"></i></div> -->
+        <mat-drawer-container class="formdrawer-container" hasBackdrop="false"
+            [@routeAnimations]="prepareRoute(outlet)">
+            <app-navbar *ngIf="isLoggedIn()" [formDrawer]="formDrawer"></app-navbar>
+            <mat-drawer id="formDrawer" mode="over" position="end" #formDrawer class="border">
+                <div class="sidedrawer" style="min-width: 400px;" [ngSwitch]="formName">
+                    <app-settings-drawer *ngSwitchCase="'settings'"></app-settings-drawer>
+                    <app-profile-drawer *ngSwitchCase="'profile'"></app-profile-drawer>
+                    <app-add-expenses *ngSwitchCase="'add-expense'"></app-add-expenses>
+                    <app-add-item-group-form *ngSwitchCase="'itemGroup'"></app-add-item-group-form>
+                    <app-add-item-uoms-form *ngSwitchCase="'add-Uoms'"></app-add-item-uoms-form>
+                    <app-customer-category-form *ngSwitchCase="'add-customer-category'"></app-customer-category-form>
+                    <app-outlet-product-form *ngSwitchCase="'add-outlet-product-code'"></app-outlet-product-form>
+                    <app-add-role-form *ngSwitchCase="'role'"></app-add-role-form>
+                    <app-add-user-form *ngSwitchCase="'user'"></app-add-user-form>
+                    <app-add-tax-form *ngSwitchCase="'TAX-SETTINGS'"></app-add-tax-form>
+                    <app-add-vendor-form *ngSwitchCase="'vendor'"></app-add-vendor-form>
+                    <!-- <app-add-portfolio-management *ngSwitchCase="'portfolio-management'"></app-add-portfolio-management> -->
+                    <app-add-warehouse-page *ngSwitchCase="'warehouse'"></app-add-warehouse-page>
+                    <app-notifications-drawer *ngSwitchCase="'notifications'"></app-notifications-drawer>
+                    <div *ngSwitchDefault></div>
+                </div>
+            </mat-drawer>
+            <div class="router-outlet">
+                <router-outlet #outlet="outlet"></router-outlet>
+                <!-- <ngx-ui-loader></ngx-ui-loader> -->
+                <ngx-spinner bdColor="rgba(248,247,247,0.8)" size="medium" color="#0f0f0f" type="ball-beat"
+                    [fullScreen]="true"></ngx-spinner>
+            </div>
+        </mat-drawer-container>
+    </mat-drawer-content>
+</mat-drawer-container>

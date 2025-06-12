@@ -1,0 +1,50 @@
+<div class="items-table-box">
+  <div class="table-responsive">
+    <table mat-table [dataSource]="itemSource" *ngIf="itemSource.data.length"
+      class="mat-elevation-z8 table table-hover">
+      <ng-container matColumnDef="item_code">
+        <th mat-header-cell *matHeaderCellDef>
+          <app-column-filter title="Item Code" (changeSelected)="onColumnFilterOpen($event)"
+            [selected]="selectedColumnFilter" controlName="item_code" (close)="onColumnFilter($event)">
+            <input class="form-control form-control-sm" placeholder="Enter Item Code" type="text"
+              (keyup)="applyFilter($event.target.value)">
+          </app-column-filter>
+        </th>
+        <td mat-cell *matCellDef="let element">
+          {{ element?.item?.item_code }}
+        </td>
+      </ng-container>
+      <ng-container matColumnDef="item_name">
+        <th mat-header-cell *matHeaderCellDef>
+          <app-column-filter title="Item Name" (changeSelected)="onColumnFilterOpen($event)"
+            [selected]="selectedColumnFilter" controlName="item_name" (close)="onColumnFilter($event)">
+            <input class="form-control form-control-sm" (keyup)="applyFilter($event.target.value)"
+              placeholder="Enter Item Name" type="text">
+          </app-column-filter>
+        </th>
+        <!-- <th mat-header-cell *matHeaderCellDef>Item Name</th> -->
+        <td mat-cell *matCellDef="let element">
+          {{ element?.item?.item_name }}
+        </td>
+      </ng-container>
+      <ng-container matColumnDef="name">
+        <th mat-header-cell *matHeaderCellDef>UOM</th>
+        <td mat-cell *matCellDef="let element">
+          {{ element?.item_uom?.name }}
+        </td>
+      </ng-container>
+      <ng-container matColumnDef="batch">
+        <th mat-header-cell *matHeaderCellDef>Batch</th>
+        <td mat-cell *matCellDef="let element">{{ element?.batch }}</td>
+      </ng-container>
+      <ng-container matColumnDef="qty">
+        <th mat-header-cell *matHeaderCellDef>Quantity</th>
+        <td mat-cell *matCellDef="let element">{{ element?.qty }}</td>
+      </ng-container>
+      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+      <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+    </table>
+  </div>
+  <mat-paginator [hidden]="hidePaginator(itemSource.data.length)" pageSize="5" [pageSizeOptions]="[5,10]">
+  </mat-paginator>
+</div>

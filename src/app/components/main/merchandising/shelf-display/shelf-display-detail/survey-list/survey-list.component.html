@@ -1,0 +1,63 @@
+<div class="pl-3 row mb-4 mt-4" *ngIf="surveyData">
+    <div class="col-md-1 col-form-label">Date</div>
+    <div class="col-md-3 mb-md-0 mb-2">
+        <input class="form-control form-control-sm" type="date" [formControl]="dateFilterControl">
+    </div>
+    <div class="col-md-3 item-add-btn">
+        <button type="button" (click)="getSurveyList('date', true)" class=" mr-2 btn btn-sm btn-primary">Filter</button>
+        <button type="button" (click)="getSurveyList('all', true)" class=" btn btn-sm btn-danger">All</button>
+    </div>
+</div>
+<div class="pl-3  items-table-box">
+    <div class="table-responsive">
+        <table mat-table [dataSource]="itemSource" class="mat-elevation-z8 table table-hover">
+            <ng-container matColumnDef="created_at">
+                <th mat-header-cell *matHeaderCellDef>
+                    <app-column-filter title="Date" (changeSelected)="onColumnFilterOpen($event)"
+                        [selected]="selectedColumnFilter"  controlName="date" (close)="onColumnFilter($event)">
+                        <input class="form-control form-control-sm" [formControl]="filterForm.get('date')" placeholder="Enter Date" type="date">
+                    </app-column-filter>
+                </th>
+                <td mat-cell *matCellDef="let element"> {{ element.created_at | date :"d MMM y h:mm a"}} </td>
+            </ng-container>
+            <ng-container matColumnDef="name">
+                <th mat-header-cell *matHeaderCellDef>
+                    <app-column-filter title="Survey Name" (changeSelected)="onColumnFilterOpen($event)"
+                        [selected]="selectedColumnFilter" controlName="name" (close)="onColumnFilter($event)">
+                        <input class="form-control form-control-sm" [formControl]="filterForm.get('name')" placeholder="Enter Survey Name" type="text">
+                    </app-column-filter>
+                </th>
+                <td mat-cell *matCellDef="let element"> {{ element.name }} </td>
+            </ng-container>
+            <ng-container matColumnDef="start_date">
+                <th mat-header-cell *matHeaderCellDef>
+                    <app-column-filter title="From Date" (changeSelected)="onColumnFilterOpen($event)"
+                        [selected]="selectedColumnFilter" controlName="start_date" (close)="onColumnFilter($event)">
+                        <input class="form-control form-control-sm" [formControl]="filterForm.get('start_date')" placeholder="Enter From Date" type="date">
+                    </app-column-filter>
+                </th>
+                <td mat-cell *matCellDef="let element"> {{ element.start_date }} </td>
+            </ng-container>
+            <ng-container matColumnDef="end_date">
+                <th mat-header-cell *matHeaderCellDef>
+                    <app-column-filter title="To Date" (changeSelected)="onColumnFilterOpen($event)"
+                        [selected]="selectedColumnFilter" controlName="end_date" (close)="onColumnFilter($event)">
+                        <input class="form-control form-control-sm" [formControl]="filterForm.get('end_date')" placeholder="Enter To Date" type="date">
+                    </app-column-filter>
+                </th>
+                <td mat-cell *matCellDef="let element"> {{ element.end_date }} </td>
+            </ng-container>
+            <ng-container matColumnDef="actions">
+                <th mat-header-cell *matHeaderCellDef> Actions </th>
+                <td mat-cell *matCellDef="let element">
+                    <span (click)="editSruvey(element)" class="ml-1 mr-1 pointer"><i class="fa fa-edit"></i></span>
+                    <span (click)="showSurveyPostList(element)" class="ml-1 mr-1 pointer"><i
+                            class="fa fa-eye"></i></span>
+                </td>
+            </ng-container>
+            <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+            <tr mat-row *matRowDef="let row; columns: displayedColumns;" (click)="openSurveyDetailView(row)"></tr>
+        </table>
+    </div>
+    <mat-paginator pageSize="10" [pageSizeOptions]="[5,10]"></mat-paginator>
+</div>

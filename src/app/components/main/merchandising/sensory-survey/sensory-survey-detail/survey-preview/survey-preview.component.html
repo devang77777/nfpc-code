@@ -1,0 +1,44 @@
+<section *ngIf="surveyQAs">
+    <div class="area-data">
+        <div class="row">
+            <div class="col-md-2"></div>
+            <div class="col-md-8">
+                <mat-card class="example-card" *ngFor="let qa of surveyQAs; let i = index">
+                    <mat-card-header>
+                        <mat-card-title> {{qa.question}} </mat-card-title>
+                    </mat-card-header>
+                    <mat-card-content>
+                        <p *ngIf="qa.question_type == 'text'">
+                            <input class="form-control form-control-sm" />
+                        </p>
+                        <p *ngIf="qa.question_type == 'textarea'">
+                            <textarea class="form-control form-control-sm"></textarea>
+                        </p>
+                        <div *ngIf="qa.question_type == 'checkbox'">
+                            <p *ngFor="let val of qa.survey_question_value">
+                                <input type="checkbox" class="form-control form-control-sm card-input" id="qa_{{i}}"
+                                    name="qa_{{i}}" />
+                                <label for="qa_{{i}}">{{val.question_value || val}}</label>
+                            </p>
+                        </div>
+                        <div *ngIf="qa.question_type == 'radio'">
+                            <p *ngFor="let val of qa.survey_question_value">
+                                <input type="radio" class="form-control form-control-sm card-input" id="qa_{{i}}"
+                                    name="qa_{{i}}" />
+                                <label for="qa_{{i}}">{{val.question_value || val}}</label>
+                            </p>
+                        </div>
+                        <p *ngIf="qa.question_type == 'select'">
+                            <select class="form-control form-control-sm">
+                                <option *ngFor="let val of qa.survey_question_value">
+                                    {{val.question_value || val}}
+                                </option>
+                            </select>
+                        </p>
+                    </mat-card-content>
+                </mat-card>
+            </div>
+            <div class="col-md-2"></div>
+        </div>
+    </div>
+</section>

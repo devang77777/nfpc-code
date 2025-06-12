@@ -1,0 +1,85 @@
+a {
+  cursor: pointer;
+}
+
+.card-footer {
+  position: fixed;
+  width: 550px;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.03);
+}
+
+.form-box {
+  max-height: calc(100vh - 170px);
+  overflow-y: scroll;
+}
+
+button:active {
+  outline: none !important;
+}
+
+.selection-label {
+  position: relative;
+  span {
+    position: absolute;
+    top: 10px;
+  }
+}
+
+.item-add-btn {
+  display: flex;
+  flex-direction: row-reverse;
+  button {
+    margin-right: 72px;
+    border-radius: 5px;
+    font-size: 14px;
+    max-width: 80px;
+    border: none;
+    background-color: #1abc9c;
+    color: white;
+    i {
+      margin-right: 8px;
+    }
+  }
+}
+
+.items-table-box {
+  margin-bottom: 50px;
+  padding-bottom: 50px;
+  mat-paginator,
+  .mat-table {
+    max-width: 75%;
+    margin: auto;
+  }
+  button {
+    background-color: transparent;
+    border: none;
+    font-size: 15px;
+    &:active {
+      outline: none;
+    }
+  }
+}
+.changeMargin {
+  margin-top: -30px;
+}
+.settingIcon
+{
+  position: absolute;
+  top: 1px;
+  right: 0 ;
+    i{
+      font-size: 20px;
+    }
+}
+.card{
+  width: 550px;
+}
+@media (max-width: 575px) {
+  .card{
+    width: 360px;
+  }
+  .card-footer {
+    width: 360px;
+  }
+}

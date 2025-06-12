@@ -1,0 +1,251 @@
+<section>
+  <div class="heading-row clearfix">
+    <h2 class="d-md-inline "><i class="fa fa-sticky-note-o mr-2"></i>{{ pageTitle }}</h2>
+    <div class="d-md-inline float-right text-right">
+      <button mat-button class="btn btn-sm btn-secondary ml-1" (click)="goBackToGRNList()"><i
+          class="fa fa-angle-left mr-1"></i><span class="back-btn"> Back</span></button>
+    </div>
+  </div>
+  <div class="separator"></div>
+  <form [formGroup]="grnFormGroup" class="order-form custom-mat square scrolly">
+
+
+    <div>
+      <div class="card-body overview">
+        <div class="row justify-content-between">
+          <div class="col-md-4">
+            <div class="form-group smmatinput" *ngIf="!isEditForm">
+              <label for="">Source Warehouse </label>
+              <app-multiautocomplete isSingle="true" [options]="selectedSourceWarehouseId" [control]="sourceFormControl"
+                text="name" id="id" placeholder="Select source warehouse">
+              </app-multiautocomplete>
+              <!-- <mat-form-field id="sourceFormField">
+                <mat-label>Select source warehouse</mat-label>
+                <mat-select class="no-disabled-text" (blur)="checkFormValidation()" required
+                  [formControl]="sourceFormControl">
+                  <mat-option *ngFor="let warehouse of selectedSourceWarehouseId" [value]="warehouse.id">
+                    {{ warehouse.name }}</mat-option>
+                </mat-select>
+                <mat-error *ngIf="sourceFormControl.hasError('required')">Please select a warehouse</mat-error>
+              </mat-form-field> -->
+            </div>
+            <div class="form-group smmatinput">
+              <label for="">Destination Warehouse </label>
+              <app-multiautocomplete isSingle="true" [options]="selectedDestWarehouseId"
+                [control]="destinationFormControl" text="name" id="id" placeholder="Select destination warehouse"
+                [disable]="isEditForm">
+              </app-multiautocomplete>
+              <!-- <mat-form-field id="destFormField">
+                <mat-label>Select destination warehouse</mat-label>
+                <mat-select class="no-disabled-text" (blur)="checkFormValidation()" required
+                  [formControl]="destinationFormControl">
+                  <mat-option *ngFor="let warehouse of selectedDestWarehouseId" [value]="warehouse.id">
+                    {{ warehouse.name }}</mat-option>
+                </mat-select>
+                <mat-error *ngIf="sourceFormControl.hasError('required')">Please select a warehouse</mat-error>
+              </mat-form-field> -->
+            </div>
+            <!-- <div class="form-group smmatinput">
+              <label for="">Reason </label>
+              <mat-form-field id="reasonFormField">
+                <mat-label>Select a Reason</mat-label>
+                <mat-select class="no-disabled-text" (blur)="checkFormValidation()" [formControl]="reasonFormControl">
+                  <mat-option *ngFor="let reason of returnReasons" [value]="reason.name">{{ reason.name }}</mat-option>
+                </mat-select>
+                <mat-error>
+                  <app-mat-error [control]="reasonFormControl"></app-mat-error>
+                </mat-error>
+              </mat-form-field>
+            </div> -->
+          </div>
+          <div class="col-md-4">
+            <div class="form-group">
+              <label for="">GRN Number </label>
+              <div class="position-relative">
+                <input type="text" class="form-control form-control-sm" (keypress)="restrictLength($event)"
+                  [formControl]="numberFormControl" id="grnNumber" [disabled]="isEditForm">
+                <span class="setting-btn" [hidden]="isEditForm"><button (click)="openNumberSettings()"><i
+                      class="os-icon os-icon-ui-46"></i></button></span>
+              </div>
+
+            </div>
+            <div class="form-group">
+              <label for="">GRN Date </label>
+              <input type="date" class="form-control form-control-sm" [formControl]="dateFormControl" id="grnNumber"
+                [disabled]="isEditForm">
+
+            </div>
+
+          </div>
+
+        </div>
+
+      </div>
+
+      <div class="bottom-form">
+        <div class="item-container custom-mat custom-mat-no-border">
+          <!--          <table class="table-check">-->
+          <!--            <thead>-->
+          <!--            <tr><th class="head"></th></tr>-->
+          <!--            </thead>-->
+          <!--            <tbody>-->
+          <!--            <tr class="item-row" *ngFor="let item of payloadItems; let i = index;">-->
+          <!--              <input class="item-checkbox" (change)="itemDidSelected($event, item)" type="checkbox" name="item">-->
+          <!--            </tr>-->
+          <!--            </tbody>-->
+          <!--          </table>-->
+
+          <div class="item-table-div">
+            <table class="item-table">
+              <thead>
+                <tr>
+                  <th class="head" *ngFor="let head of itemTableHeaders">{{ head.label }}</th>
+                  <th *ngIf="!isEditForm">Action</th>
+                </tr>
+
+              </thead>
+              <tbody class="form-body">
+                <tr formArrayName="items" class="item-row" *ngFor="let item of itemFormControls; let i = index;">
+                  <ng-container [formGroupName]="i">
+                    <td>{{ i + 1 }}</td>
+                    <td class="item-name">
+                      <mat-form-field class="item-name-field">
+                        <input type="text" required placeholder="Search an item" matInput formControlName="item"
+                          [matAutocomplete]="auto">
+                        <mat-autocomplete #auto="matAutocomplete" (opened)="checkFormValidation()"
+                          (optionSelected)="itemDidSearched($event.option.value, i)"
+                          [displayWith]="itemsControlDisplayValue">
+                          <mat-option *ngFor="let item of filteredItems" [value]="itemControlValue(item)">
+                            {{item.item?.item_code}} - {{ item.item?.item_name }}
+                          </mat-option>
+                        </mat-autocomplete>
+                      </mat-form-field>
+                    </td>
+                    <td class="item-name">
+                      <input type="text" class="form-control form-control-sm non-editable item-name"
+                        formControlName="item_name" disabled>
+                    </td>
+                    <td class="uom-td">
+                      <select class="custom-select" required formControlName="item_uom_id" disabled="isEditForm">
+                        <option [value]="uom.id" *ngFor="let uom of uoms">{{ uom.name }}</option>
+                      </select>
+                    </td>
+                    <!-- <td class="stats-cell"><input type="number" min="0" class="form-control form-control-sm"
+                        placeholder="Quantity" formControlName="qty"></td>
+                    <td data-th="Reason" class="uom-td">
+                      <select class="custom-select" required formControlName="reason">
+                        <option [value]="reason.name" *ngFor="let reason of returnReasons">{{ reason.name }}</option>
+                      </select>
+                    </td> -->
+                    <!-- <td  class="stats-cell" *ngIf="!isEditForm">
+                      <input type="number" min="0" class="form-control" placeholder="Quantity"
+                        [readonly]="item?.value?.is_free" formControlName="item_qty">
+                    </td> -->
+                    <td class="stats-cell" [class.non-editable]="item?.value?.is_deleted">
+                      <span *ngIf="item?.value?.is_deleted===1" [class.reason_valid]="item?.value?.is_deleted">
+                        {{item?.item_qty}}
+                      </span>
+                      <input type="number" min="0" class="form-control" placeholder="Quantity"
+                        (input)="changeQty(item?.value?.item_qty,item?.value?.original_item_qty,i)"
+                        formControlName="item_qty">
+                    </td>
+
+                    <td class="reason" *ngIf="isEditForm" [class.invalid_reason]="reasonHighlight(item,i)">
+                      <!-- <input type="text" *ngIf="!showReasons && isEditForm" (focus)="openReasons(i,item)"
+                        class="form-control non-editable" [value]="payloadItems[i]?.reason?.name"> -->
+                      <!-- <select class="custom-select" formControlName="reason_id" required (change)="onChange()">
+
+                        <option value=""><input type="text"></option>
+                        <option *ngFor="let rl of reasonsList" [value]="rl.id">{{rl.name}}</option>
+                      </select> -->
+                      <!-- <app-multiautocomplete isSingle="true" [options]="reasonsList"
+                        [control]="item.controls['reason_id']" text="name" id="id" placeholder="Select Reason"
+                        (selectionchanged)="onChange($event)" [param1]="'name'">
+                      </app-multiautocomplete> -->
+                      <mat-form-field class="item-name-field">
+                        <input type="text" placeholder="Search an reason" matInput formControlName="reason"
+                          (input)="fiterReason($event.target.value)" [matAutocomplete]="auto">
+                        <mat-autocomplete appOptionScroll [panelWidth]="300" #auto="matAutocomplete"
+                          [displayWith]="reasonControlDisplayValue"
+                          (optionSelected)="onSelectionChange($event,payloadItems[i])">
+                          <mat-option class="mat-option" *ngFor="let reason of reasonsList "
+                            [value]="reasonValue(reason)">
+                            {{reason?.code}} - {{reason?.name}} </mat-option>
+
+                        </mat-autocomplete>
+                      </mat-form-field>
+                    </td>
+                    <td class="reason" *ngIf="isEditForm">
+                      <!-- <input type="text" *ngIf="!showReasons && isEditForm" (focus)="openReasons(i,item)"
+                        class="form-control non-editable" [value]="payloadItems[i]?.reason?.name"> -->
+                      <!-- <select class="custom-select" formControlName="reason_id" required (change)="onChange()">
+
+                        <option value=""><input type="text"></option>
+                        <option *ngFor="let rl of reasonsList" [value]="rl.id">{{rl.name}}</option>
+                      </select> -->
+                      <!-- <app-multiautocomplete isSingle="true" [options]="reasonsList"
+                        [control]="item.controls['reason_id']" text="name" id="id" placeholder="Select Reason"
+                        (selectionchanged)="onChange($event)" [param1]="'name'">
+                      </app-multiautocomplete> -->
+                      <mat-form-field class="item-name-field">
+                        <input type="text" placeholder="Search an return reason" matInput formControlName="returnReason"
+                          (input)="fiterReturnReason($event.target.value)" [matAutocomplete]="auto">
+                          <mat-icon matSuffix>keyboard_arrow_down</mat-icon>
+                        <mat-autocomplete appOptionScroll [panelWidth]="300" #auto="matAutocomplete"
+                          [displayWith]="returnReasonControlDisplayValue"
+                          (optionSelected)="onReturnReasonSelectionChange($event,payloadItems[i])">
+                          <mat-option class="mat-option" *ngFor="let reason of returnReasons"
+                            [value]="returnReasonValue(reason)">
+                            {{reason?.name}} </mat-option>
+
+                        </mat-autocomplete>
+                      </mat-form-field>
+                    </td>
+                    <td> <button [disabled]="itemFormControls.length <= 1" class="trash-btn" (click)="deleteItemRow(i)"
+                        *ngIf="!isEditForm"><i class="fa fa-close"></i></button></td>
+                  </ng-container>
+                </tr>
+              </tbody>
+            </table>
+            <button class="add-item-btn" mat-button (click)="addItem()" *ngIf="!isEditForm">Add Item</button>
+          </div>
+
+          <!-- <table class="table-check">
+            <thead>
+            <tr><th class="head"></th></tr>
+            </thead>
+            <tbody>
+            <tr class="item-row" *ngFor="let item of itemFormControls; let i = index;">
+             
+            </tr>
+            </tbody>
+          </table> -->
+        </div>
+        <div class=" footer-overview-container">
+          <div class="row">
+            <div class="form-group col-sm-5">
+              <label for="note">GRN Remark</label>
+              <textarea class="form-control form-control-sm" [formControl]="remarkFormControl" id="note"
+                [readonly]="isEditForm"></textarea>
+            </div>
+            <!--            <div class="offset-2 col-sm-5">-->
+            <!--              <div class="overall-stats-table">-->
+            <!--                <div *ngFor="let stat of objectValues(orderFinalStats)">-->
+            <!--                  <span class="stat-label">{{ stat.label }}</span>-->
+            <!--                  <span class="stat-value">{{ stat.value | currency: currencyCode:"symbol": currencyDecimalFormat }}</span>-->
+            <!--                </div>-->
+            <!--                <div>-->
+            <!--                  <span class="stat-label final-total">{{ orderFinalStats.grand_total.label }}</span>-->
+            <!--                  <span class="stat-value final-total">{{ orderFinalStats.grand_total.value | currency: currencyCode:"symbol": currencyDecimalFormat }}</span>-->
+            <!--                </div>-->
+            <!--              </div>-->
+            <!--            </div>-->
+          </div>
+        </div>
+      </div>
+    </div>
+  </form>
+  <div class="actions">
+    <button class="btn btn-primary" mat-button (click)="postFinalOrder('order')">Save & Submit</button>
+  </div>
+</section>

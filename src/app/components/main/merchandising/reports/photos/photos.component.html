@@ -1,0 +1,337 @@
+<div class="container">
+    <mat-accordion>
+        <mat-expansion-panel>
+            <mat-expansion-panel-header>
+                <mat-panel-title>
+                    Distribution Post Image
+                </mat-panel-title>
+            </mat-expansion-panel-header>
+            <table mat-table [dataSource]="distributionPosts" class="mat-elevation-z8 table table-hover">
+                <ng-container matColumnDef="createdAt">
+                    <th mat-header-cell *matHeaderCellDef> Date </th>
+                    <td mat-cell *matCellDef="let element"> {{ element.createdAt | date :"d MMM y h:mm a"}} </td>
+                </ng-container>
+                <ng-container matColumnDef="customerName">
+                    <th mat-header-cell *matHeaderCellDef>Customer Name </th>
+                    <td mat-cell *matCellDef="let element"> {{ element.customerName }} </td>
+                </ng-container>
+                <ng-container matColumnDef="customerCode">
+                    <th mat-header-cell *matHeaderCellDef>Customer Code </th>
+                    <td mat-cell *matCellDef="let element"> {{ element.customerCode }} </td>
+                </ng-container>
+                <ng-container matColumnDef="distributionName">
+                    <th mat-header-cell *matHeaderCellDef>Distribution Name </th>
+                    <td mat-cell *matCellDef="let element"> {{ element.distributionName }} </td>
+                </ng-container>
+                <ng-container matColumnDef="merchandiserName">
+                    <th mat-header-cell *matHeaderCellDef> Merchandiser Name </th>
+                    <td mat-cell *matCellDef="let element"> {{ element.merchandiserName }} </td>
+                </ng-container>
+                <ng-container matColumnDef="image1">
+                    <th mat-header-cell *matHeaderCellDef> Image 1 </th>
+                    <td mat-cell *matCellDef="let element">
+                        <ng-container *ngIf="element.image1; else elseTemplate">
+                            <div class="imageCard">
+                                <img [src]="element.image1" alt="">
+                                <div class="iconsbar">
+                                    <a href="javascript:;" (click)="open(element.image1, 0)"><i class="fa fa-eye"></i></a>
+                                </div>
+                            </div>
+                        </ng-container>
+                    </td>
+                </ng-container>
+                <ng-container matColumnDef="image2">
+                    <th mat-header-cell *matHeaderCellDef> Image 2 </th>
+                    <td mat-cell *matCellDef="let element">
+                        <ng-container *ngIf="element.image2; else elseTemplate">
+                            <div class="imageCard">
+                                <img [src]="element.image2" alt="">
+                                <div class="iconsbar">
+                                    <a href="javascript:;" (click)="open(element.image2, 0)"><i class="fa fa-eye"></i></a>
+                                </div>
+                            </div>
+                        </ng-container>
+                    </td>
+                </ng-container>
+                <ng-container matColumnDef="image3">
+                    <th mat-header-cell *matHeaderCellDef> Image 3 </th>
+                    <td mat-cell *matCellDef="let element">
+                        <ng-container *ngIf="element.image3; else elseTemplate">
+                            <div class="imageCard">
+                                <img [src]="element.image3" alt="">
+                                <div class="iconsbar">
+                                    <a href="javascript:;" (click)="open(element.image3, 0)"><i class="fa fa-eye"></i></a>
+                                </div>
+                            </div>
+                        </ng-container>
+                </ng-container>
+                <ng-container matColumnDef="image4">
+                    <th mat-header-cell *matHeaderCellDef> Image 4 </th>
+                    <td mat-cell *matCellDef="let element">
+                        <ng-container *ngIf="element.image4; else elseTemplate">
+                            <div class="imageCard">
+                                <img [src]="element.image4" alt="">
+                                <div class="iconsbar">
+                                    <a href="javascript:;" (click)="open(element.image4, 0)"><i class="fa fa-eye"></i></a>
+                                </div>
+                            </div>
+                        </ng-container>
+
+
+                    </td>
+                </ng-container>
+
+                <tr mat-header-row *matHeaderRowDef="distributionColumns"></tr>
+                <tr mat-row *matRowDef="let row; columns: distributionColumns;"></tr>
+            </table>
+
+        </mat-expansion-panel>
+        <mat-expansion-panel>
+            <mat-expansion-panel-header>
+                <mat-panel-title>
+                    Planogram Post
+                </mat-panel-title>
+            </mat-expansion-panel-header>
+            <table mat-table [dataSource]="planogramPosts" class="mat-elevation-z8 table table-hover">
+
+                <ng-container matColumnDef="customerCode">
+                    <th mat-header-cell *matHeaderCellDef>Customer Code </th>
+                    <td mat-cell *matCellDef="let element"> {{ element.customerCode }} </td>
+                </ng-container>
+                <ng-container matColumnDef="distributionName">
+                    <th mat-header-cell *matHeaderCellDef>Distributio Name </th>
+                    <td mat-cell *matCellDef="let element"> {{ element.distributionName }} </td>
+                </ng-container>
+                <ng-container matColumnDef="merchandiserName">
+                    <th mat-header-cell *matHeaderCellDef>Merchandiser Name </th>
+                    <td mat-cell *matCellDef="let element"> {{ element.merchandiserName }} </td>
+                </ng-container>
+                <ng-container matColumnDef="planogramName">
+                    <th mat-header-cell *matHeaderCellDef>Planogram Name </th>
+                    <td mat-cell *matCellDef="let element"> {{ element.planogramName }} </td>
+                </ng-container>
+
+                <ng-container matColumnDef="before_images">
+                    <th mat-header-cell *matHeaderCellDef> Before Images </th>
+                    <td mat-cell *matCellDef="let element">
+                        <ng-container *ngIf="element.planogram_post_before_image; else elseTemplate">
+                            <div class="imageCard" *ngFor="let img of element.planogram_post_before_image; let i = index;">
+                                <img [src]="img.image_string" alt="">
+                                <div class="iconsbar">
+                                    <a href="javascript:;" (click)="open(img.image_string, 0)"><i class="fa fa-eye"></i></a>
+                                </div>
+                            </div>
+                        </ng-container>
+                    </td>
+                </ng-container>
+                <ng-container matColumnDef="after_images">
+                    <th mat-header-cell *matHeaderCellDef> After Images </th>
+                    <td mat-cell *matCellDef="let element">
+                        <ng-container *ngIf="element.planogram_post_after_image; else elseTemplate">
+                            <div class="imageCard" *ngFor="let img of element.planogram_post_after_image; let i = index;">
+                                <img [src]="img.image_string" alt="">
+                                <div class="iconsbar">
+                                    <a href="javascript:;" (click)="open(img.image_string, 0)"><i class="fa fa-eye"></i></a>
+                                </div>
+                            </div>
+                        </ng-container>
+                    </td>
+                </ng-container>
+
+
+                <tr mat-header-row *matHeaderRowDef="planogramColumns"></tr>
+                <tr mat-row *matRowDef="let row; columns: planogramColumns;"></tr>
+            </table>
+
+        </mat-expansion-panel>
+        <mat-expansion-panel>
+            <mat-expansion-panel-header>
+                <mat-panel-title>
+                    Asset Tracking
+                </mat-panel-title>
+            </mat-expansion-panel-header>
+            <table mat-table [dataSource]="assetTrackingList" class="mat-elevation-z8 table table-hover">
+
+                <ng-container matColumnDef="assetName">
+                    <th mat-header-cell *matHeaderCellDef>Asset Name</th>
+                    <td mat-cell *matCellDef="let element"> {{ element.assetName }} </td>
+                </ng-container>
+                <ng-container matColumnDef="feedback">
+                    <th mat-header-cell *matHeaderCellDef>Feedback </th>
+                    <td mat-cell *matCellDef="let element"> {{ element.feedback }} </td>
+                </ng-container>
+
+                <ng-container matColumnDef="image_0">
+                    <th mat-header-cell *matHeaderCellDef> Image 1 </th>
+                    <td mat-cell *matCellDef="let element">
+                        <ng-container *ngIf="element.image_0; else elseTemplate">
+                            <div class="imageCard">
+                                <img [src]="element.image_0" alt="">
+                                <div class="iconsbar">
+                                    <a href="javascript:;" (click)="open(element.image_0, 0)"><i class="fa fa-eye"></i></a>
+                                </div>
+                            </div>
+                        </ng-container>
+                    </td>
+                </ng-container>
+                <ng-container matColumnDef="image_1">
+                    <th mat-header-cell *matHeaderCellDef> Image 2 </th>
+                    <td mat-cell *matCellDef="let element">
+                        <ng-container *ngIf="element.image_1; else elseTemplate">
+                            <div class="imageCard">
+                                <img [src]="element.image_1" alt="">
+                                <div class="iconsbar">
+                                    <a href="javascript:;" (click)="open(element.image_1, 0)"><i class="fa fa-eye"></i></a>
+                                </div>
+                            </div>    
+                        </ng-container>
+                    </td>
+                </ng-container>
+
+
+                <tr mat-header-row *matHeaderRowDef="assetTrackingColumns"></tr>
+                <tr mat-row *matRowDef="let row; columns: assetTrackingColumns;"></tr>
+            </table>
+
+        </mat-expansion-panel>
+        <mat-expansion-panel>
+            <mat-expansion-panel-header>
+                <mat-panel-title>
+                    Campaign Pictures
+                </mat-panel-title>
+            </mat-expansion-panel-header>
+            <table mat-table [dataSource]="campaignPictures" class="mat-elevation-z8 table table-hover">
+
+                <ng-container matColumnDef="customerName">
+                    <th mat-header-cell *matHeaderCellDef>Customer Name</th>
+                    <td mat-cell *matCellDef="let element"> {{ element.customerName }} </td>
+                </ng-container>
+                <ng-container matColumnDef="customerCode">
+                    <th mat-header-cell *matHeaderCellDef>Customer Code</th>
+                    <td mat-cell *matCellDef="let element"> {{ element.customerCode }} </td>
+                </ng-container>
+                <ng-container matColumnDef="merchandiserName">
+                    <th mat-header-cell *matHeaderCellDef>Feedback </th>
+                    <td mat-cell *matCellDef="let element"> {{ element.merchandiserName }} </td>
+                </ng-container>
+                <ng-container matColumnDef="campaign_code">
+                    <th mat-header-cell *matHeaderCellDef>Campaing Code </th>
+                    <td mat-cell *matCellDef="let element"> {{ element.campaign_code }} </td>
+                </ng-container>
+
+                <ng-container matColumnDef="image_0">
+                    <th mat-header-cell *matHeaderCellDef> Image </th>
+                    <td mat-cell *matCellDef="let element">
+                        <ng-container *ngIf="element.image_0; else elseTemplate">
+                            <div class="imageCard">
+                                <img [src]="element.image_0" alt="">
+                                <div class="iconsbar">
+                                    <a href="javascript:;" (click)="open(element.image_0, 0)"><i class="fa fa-eye"></i></a>
+                                </div>
+                            </div>
+                        </ng-container>
+                    </td>
+                </ng-container>
+
+
+                <tr mat-header-row *matHeaderRowDef="campaignColumns"></tr>
+                <tr mat-row *matRowDef="let row; columns: campaignColumns;"></tr>
+            </table>
+
+        </mat-expansion-panel>
+        <mat-expansion-panel>
+            <mat-expansion-panel-header>
+                <mat-panel-title>
+                    Complaint Feedback
+                </mat-panel-title>
+            </mat-expansion-panel-header>
+            <table mat-table [dataSource]="complaintFeedback" class="mat-elevation-z8 table table-hover">
+
+                <ng-container matColumnDef="customerName">
+                    <th mat-header-cell *matHeaderCellDef>Customer Name</th>
+                    <td mat-cell *matCellDef="let element"> {{ element.customerName }} </td>
+                </ng-container>
+                <ng-container matColumnDef="customerCode">
+                    <th mat-header-cell *matHeaderCellDef>Customer Code</th>
+                    <td mat-cell *matCellDef="let element"> {{ element.customerCode }} </td>
+                </ng-container>
+                <ng-container matColumnDef="merchandiserName">
+                    <th mat-header-cell *matHeaderCellDef>Feedback </th>
+                    <td mat-cell *matCellDef="let element"> {{ element.merchandiserName }} </td>
+                </ng-container>
+                <ng-container matColumnDef="campaign_code">
+                    <th mat-header-cell *matHeaderCellDef>Campaing Code </th>
+                    <td mat-cell *matCellDef="let element"> {{ element.campaign_code }} </td>
+                </ng-container>
+
+                <ng-container matColumnDef="image_0">
+                    <th mat-header-cell *matHeaderCellDef> Image </th>
+                    <td mat-cell *matCellDef="let element">
+                        <ng-container *ngIf="element.image_0; else elseTemplate">
+                            <div class="imageCard">
+                                <img [src]="element.image_0" alt="">
+                                <div class="iconsbar">
+                                    <a href="javascript:;" (click)="open(element.image_0, 0)"><i class="fa fa-eye"></i></a>
+                                </div>
+                            </div>    
+                        </ng-container>
+                    </td>
+                </ng-container>
+
+
+                <tr mat-header-row *matHeaderRowDef="campaignColumns"></tr>
+                <tr mat-row *matRowDef="let row; columns: campaignColumns;"></tr>
+            </table>
+
+        </mat-expansion-panel>
+        <mat-expansion-panel>
+            <mat-expansion-panel-header>
+                <mat-panel-title>
+                    Competitor Info
+                </mat-panel-title>
+            </mat-expansion-panel-header>
+            <table mat-table [dataSource]="competitorInfo" class="mat-elevation-z8 table table-hover">
+
+                <ng-container matColumnDef="item">
+                    <th mat-header-cell *matHeaderCellDef>Item</th>
+                    <td mat-cell *matCellDef="let element"> {{ element.item }} </td>
+                </ng-container>
+                <ng-container matColumnDef="merchandiserName">
+                    <th mat-header-cell *matHeaderCellDef>Merchandiser Name</th>
+                    <td mat-cell *matCellDef="let element"> {{ element.merchandiserName }} </td>
+                </ng-container>
+                <ng-container matColumnDef="note">
+                    <th mat-header-cell *matHeaderCellDef>Note </th>
+                    <td mat-cell *matCellDef="let element"> {{ element.note }} </td>
+                </ng-container>
+                <ng-container matColumnDef="price">
+                    <th mat-header-cell *matHeaderCellDef>Price</th>
+                    <td mat-cell *matCellDef="let element"> {{ element.price }} </td>
+                </ng-container>
+
+                <ng-container matColumnDef="image_0">
+                    <th mat-header-cell *matHeaderCellDef> Image </th>
+                    <td mat-cell *matCellDef="let element" class="imageCard">
+                        <ng-container *ngIf="element.image_0; else elseTemplate">
+                            <div class="imageCard">
+                                <img [src]="element.image_0" alt="">
+                                <div class="iconsbar">
+                                    <a href="javascript:;" (click)="open(element.image_0, 0)"><i class="fa fa-eye"></i></a>
+                                </div>
+                            </div>    
+                        </ng-container>
+                    </td>
+                </ng-container>
+
+
+                <tr mat-header-row *matHeaderRowDef="competitorInfoColumns"></tr>
+                <tr mat-row *matRowDef="let row; columns: competitorInfoColumns;"></tr>
+            </table>
+
+        </mat-expansion-panel>
+    </mat-accordion>
+</div>
+
+<ng-template #elseTemplate>
+    <app-default-message></app-default-message>
+</ng-template>

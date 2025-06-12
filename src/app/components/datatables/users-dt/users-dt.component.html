@@ -1,0 +1,63 @@
+<section class="scrolly">
+  <div class="table-responsive">
+    <table class="table table-hover" mat-table [dataSource]="dataSource">
+
+      <ng-container matColumnDef="user_details">
+        <th mat-header-cell *matHeaderCellDef> 
+           <app-column-filter title="Details" (changeSelected)="onColumnFilterOpen($event)"
+              [selected]="selectedColumnFilter" controlName="user_name" (close)="onColumnFilter($event)">
+              <input class="form-control form-control-sm" [formControl]="filterForm.get('user_name')"
+                placeholder="Enter Name" type="text">
+            </app-column-filter>  </th>
+        <td mat-cell *matCellDef="let element">
+          <div class="d-flex">
+            <div class="p-2">
+              <img src="assets/images/user.png" alt="" class="img-rounded img-sm">
+            </div>
+            <div class="p-2">
+              <span> {{element.firstname || element.user?.firstname}} {{element.lastname || element.user?.lastname}}
+                ({{element.status === 1 ? 'Active' : 'In Active'}})</span><br>
+              <span>{{element.email || element.user?.email}}</span>
+            </div>
+          </div>
+        </td>
+      </ng-container>
+      <ng-container matColumnDef="role">
+        <th mat-header-cell *matHeaderCellDef>   
+          <app-column-filter title="Role" (changeSelected)="onColumnFilterOpen($event)"
+              [selected]="selectedColumnFilter" controlName="role_name" (close)="onColumnFilter($event)">
+              <input class="form-control form-control-sm" [formControl]="filterForm.get('role_name')"
+                placeholder="Enter Name" type="text">
+            </app-column-filter> </th>
+        <td mat-cell *matCellDef="let element"> {{element.role?.name || element.user?.role?.name}} </td>
+      </ng-container>
+      <!-- <ng-container matColumnDef="role">
+          <th mat-header-cell *matHeaderCellDef>
+            <app-column-filter title="Enter Name" (changeSelected)="onColumnFilterOpen($event)"
+              [selected]="selectedColumnFilter" controlName="role_name" (close)="onColumnFilter($event)">
+              <input class="form-control form-control-sm" [formControl]="filterForm.get('role_name')"
+                placeholder="Enter Name" type="text">
+            </app-column-filter>
+
+          </th>
+          <td mat-cell *matCellDef="let element" (click)="openDetailView(element)">
+            <ng-container>
+             {{element.role?.name || element.user?.role?.name}} 
+            </ng-container>
+          </td>
+        </ng-container> -->
+      <ng-container matColumnDef="actions">
+        <th mat-header-cell *matHeaderCellDef></th>
+        <td mat-cell *matCellDef="let element"><a (click)="$event.stopPropagation()"><i class="fa fa-lg fa-cog"
+              aria-hidden="true"></i></a> </td>
+      </ng-container>
+
+      <tr mat-header-row *matHeaderRowDef="getDisplayedColumns()"></tr>
+      <tr mat-row *matRowDef="let row; columns: getDisplayedColumns();" (click)="openDetailView(row)"></tr>
+    </table>
+  </div>
+
+  <div [ngClass]="{'hidden':dataSource.data.length < 10}">
+    <mat-paginator pageSize=10 [pageSizeOptions]="[10, 25, 50]"></mat-paginator>
+  </div>
+</section>

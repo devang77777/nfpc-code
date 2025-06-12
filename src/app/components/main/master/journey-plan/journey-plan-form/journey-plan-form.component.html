@@ -1,0 +1,44 @@
+<section class="mainsection">
+  <div class="heading-row">
+    <p><i aria-hidden="true" class="os-icon os-icon-layers mr-2"></i> {{ pageTitle }}</p>
+  </div>
+
+  <form [formGroup]="journeyFormGroup">
+
+    <div class="scrolly p-md-5 p-0 row align-items-center justify-content-center">
+      <div class="col-xl-9 col-lg-10 col-md-11 text-right">
+        <mat-tab-group class="bg-light mb-3 border" [(selectedIndex)]="selectedIndex" mat-stretch-tabs>
+          <mat-tab label="Overview">
+            <div class="form-holder">
+              <app-journey-plan-form-overview *ngIf="isEditForm" [isEditForm]="isEditForm"
+                [journeyPlanFormGroup]="journeyFormGroup"></app-journey-plan-form-overview>
+              <app-journey-plan-form-overview *ngIf="!isEditForm" [journeyPlanFormGroup]="journeyFormGroup">
+              </app-journey-plan-form-overview>
+            </div>
+          </mat-tab>
+          <mat-tab label="Schedule">
+            <div class="form-holder">
+              <app-journey-plan-form-schedule *ngIf="isEditForm" (customerHandler)="customerHandler($event)"
+                [isEditForm]="isEditForm" [journeyPlanFormGroup]="journeyFormGroup"></app-journey-plan-form-schedule>
+              <app-journey-plan-form-schedule *ngIf="!isEditForm" (customerHandler)="customerHandler($event)"
+                [journeyPlanFormGroup]="journeyFormGroup"></app-journey-plan-form-schedule>
+            </div>
+          </mat-tab>
+          <mat-tab label="Customers" [disabled]="disableCustomerTab">
+            <div class="form-holder customer-tab">
+              <app-journey-plan-form-customers *ngIf="isEditForm" [getCustomersByObj]="getCustomersByObj"
+                [isEditForm]="isEditForm" [journeyPlanFormGroup]="journeyFormGroup"></app-journey-plan-form-customers>
+              <app-journey-plan-form-customers *ngIf="!isEditForm" [getCustomersByObj]="getCustomersByObj"
+                [journeyPlanFormGroup]="journeyFormGroup"></app-journey-plan-form-customers>
+            </div>
+          </mat-tab>
+        </mat-tab-group>
+        <button [disabled]="selectedIndex === 0" (click)="previous()" class="btn btn-secondary mr-2">Back</button>
+        <button *ngIf="selectedIndex !== 2" [disabled]="selectedIndex == 1 && disableCustomerTab" (click)="next()"
+          class="btn btn-primary">Next</button>
+        <button *ngIf="selectedIndex === 2" (click)="saveJourney()" class="btn btn-primary">{{addEditBtn}}</button>
+      </div>
+    </div>
+
+  </form>
+</section>

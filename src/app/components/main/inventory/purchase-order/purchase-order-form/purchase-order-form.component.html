@@ -1,0 +1,201 @@
+<section>
+  <div class="heading-row">
+    <h2 class="d-inline "><i class="os-icon os-icon-shopping-cart mr-2"></i>{{ pageTitle }}</h2>
+    <div class="d-inline float-right ">
+      <button mat-button class="btn btn-sm btn-white dropdown-toggle" [matMenuTriggerFor]="menu2">More</button>
+      <mat-menu #menu2="matMenu" xPosition="before">
+        <!--        <button mat-menu-item class="height-40" (click)="postFinalOrder('delivery')">Convert to Delivery</button>-->
+        <button mat-menu-item class="height-40" (click)="goToOrder()">All Purchase Orders</button>
+      </mat-menu>
+    </div>
+  </div>
+  <div class="separator"></div>
+  <form [formGroup]="orderFormGroup" class="order-form custom-mat square scrolly">
+
+    <div class="card-body active-form overview">
+      <div class="row justify-content-between">
+        <div class="col-md-4">
+          <div class="form-group smmatinput">
+            <label for="">Vendor </label>
+            <p *ngIf="isDeliveryForm"><input type="text" class="form-control form-control-sm non-editable"
+                [value]="purchaseOrderData.vendor.vendor_name"></p>
+            <p *ngIf="!isDeliveryForm">
+              <mat-form-field class="example-full-width" id="vendorFormField">
+                <input type="text" placeholder="Search Vendor" (blur)="checkFormValidation()" matInput required
+                  [formControl]="vendorFormControl" [matAutocomplete]="auto">
+                <mat-autocomplete #auto="matAutocomplete" (optionActivated)="checkFormValidation()"
+                  [displayWith]="customerControlDisplayValue">
+                  <mat-option *ngFor="let vendor of filteredCustomers" [value]="vendor">{{ vendor?.firstname }}
+                    {{vendor?.lastname}}</mat-option>
+                  <mat-option id="custBtn" class="in-opt-btn"><button (click)="addCustomer()"><i
+                        class="os-icon os-icon-plus"></i>
+                      Add Vendor</button></mat-option>
+                </mat-autocomplete>
+                <mat-error *ngIf="vendorFormControl.hasError('required')">Please select a vendor</mat-error>
+              </mat-form-field>
+            </p>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <div [ngClass]="{ 'inactive-form': vendorFormControl.invalid }">
+      <div class="card-body overview">
+        <div class="row justify-content-between">
+          <div class="col-md-4">
+            <div class="form-group">
+              <label for="">Reference# </label>
+              <input type="text" class="form-control form-control-sm" required [formControl]="referenceFormControl"
+                id="reference">
+            </div>
+            <div class="form-group">
+              <label for="">Purchase Order Date </label>
+              <input type="date" [formControl]="orderDateFormControl" required class="form-control form-control-sm"
+                id="orderDate">
+            </div>
+          </div>
+          <div class="col-md-4">
+            <div class="form-group">
+              <label for="">Purchase Order# </label>
+              <div class="position-relative">
+                <input type="text" class="form-control form-control-sm" (keypress)="restrictLength($event)"
+                  [formControl]="poNumberFormControl">
+                <span class="setting-btn" [hidden]="isEditForm"><button (click)="openNumberSettings()"><i
+                      class="os-icon os-icon-ui-46"></i></button></span>
+              </div>
+            </div>
+            <div class="form-group">
+              <label for="">Expected Delivery Date </label>
+              <input type="date" class="form-control form-control-sm" required [formControl]="deliveryDateFormControl"
+                id="deliveryDate">
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+      <div class="bottom-form">
+        <div class="item-container custom-mat custom-mat-no-border"
+          [ngClass]="{ 'inactive-form': vendorFormControl.invalid }">
+          <!-- <table class="table-check">
+            <thead>
+              <tr>
+                <th class="head"></th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr class="item-row" *ngFor="let item of payloadItems; let i = index;">
+               
+              </tr>
+            </tbody>
+          </table> -->
+
+          <div class="item-table-div">
+            <table class="item-table">
+              <thead>
+                <tr>
+                  <th class="head" *ngFor="let head of itemTableHeaders">{{ head.label }}</th>
+                  <th>Action</th>
+                </tr>
+              </thead>
+              <tbody class="form-body">
+                <tr formArrayName="items" class="item-row" *ngFor="let item of itemFormControls; let i = index;">
+                  <ng-container [formGroupName]="i">
+                    <td>
+                      <span>{{ i + 1 }} </span>
+                      <input class="item-checkbox" (change)="itemDidSelected($event, item)" type="checkbox" name="item">
+                    </td>
+                    <td class="item-name" *ngIf="isDeliveryForm"><input type="text"
+                        class="form-control form-control-sm non-editable" [value]="payloadItems[i].item.name" disabled>
+                    </td>
+                    <td class="item-name" *ngIf="!isDeliveryForm">
+                      <mat-form-field class="item-name-field">
+                        <input type="text" required placeholder="Search an item" matInput formControlName="item"
+                          [matAutocomplete]="auto">
+                        <mat-autocomplete #auto="matAutocomplete" (opened)="checkFormValidation()"
+                          (optionSelected)="itemDidSearched($event.option.value, i)"
+                          [displayWith]="itemsControlDisplayValue">
+                          <mat-option *ngFor="let item of filteredItems" [value]="itemControlValue(item)">
+                            {{ item.item_name }} - {{item.item_code}} </mat-option>
+                        </mat-autocomplete>
+                      </mat-form-field>
+                    </td>
+                    <td class="uom-td" *ngIf="isDeliveryForm"><input type="text"
+                        class="form-control form-control-sm non-editable" [value]="getUomValue(payloadItems[i])"
+                        disabled></td>
+                    <td class="uom-td" *ngIf="!isDeliveryForm">
+                      <select class="custom-select" required formControlName="item_uom_id">
+                        <option [value]="uom.id" *ngFor="let uom of uoms">{{ uom.name }}</option>
+                      </select>
+                    </td>
+                    <td class="stats-cell"><input type="number" min="0" class="form-control" placeholder="Quantity"
+                        formControlName="qty"></td>
+                    <td class="stats-cell"><input type="number" class="form-control non-editable"
+                        [value]="numberFormat(payloadItems[i].item_price)" disabled></td>
+                    <td class="stats-cell"><input type="text" class="form-control non-editable"
+                        [value]="numberFormat(payloadItems[i].item_discount_amount)" disabled></td>
+                    <td class="stats-cell"><input type="text" class="form-control non-editable"
+                        [value]="numberFormat(payloadItems[i].item_vat)" disabled></td>
+                    <td class="stats-cell"><input type="text" class="form-control non-editable"
+                        [value]="numberFormat(payloadItems[i].item_net)" disabled></td>
+                    <td class="stats-cell"><input type="text" class="form-control non-editable"
+                        [value]="numberFormat(payloadItems[i].item_excise)" disabled></td>
+                    <td class="stats-cell"><input type="text" class="form-control non-editable"
+                        [value]="numberFormat(payloadItems[i].item_grand_total)" disabled></td>
+                    <td>
+                      <button [disabled]="(itemFormControls.length <= 1) || isDeliveryForm" class="trash-btn"
+                        (click)="deleteItemRow(i)"><i class="fa fa-close"></i></button>
+                    </td>
+                  </ng-container>
+                </tr>
+              </tbody>
+            </table>
+            <button class="add-item-btn" mat-button [disabled]="isDeliveryForm" (click)="addItem()">
+              <!--            <i class="os-icon os-icon-plus"></i>-->
+              Add Item
+            </button>
+          </div>
+
+          <!-- <table class="table-check">
+            <thead>
+              <tr>
+                <th class="head"></th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr class="item-row" *ngFor="let item of payloadItems; let i = index;">
+                <button [disabled]="(itemFormControls.length <= 1) || isDeliveryForm" class="trash-btn"
+                  (click)="deleteItemRow(i)"><i class="fa fa-close"></i></button>
+              </tr>
+            </tbody>
+          </table> -->
+        </div>
+        <div class=" footer-overview-container">
+          <div class="row justify-content-between">
+            <div class="form-group col-sm-5">
+              <label for="note">Customer Note</label>
+              <textarea class="form-control form-control-sm" [formControl]="noteFormControl" id="note"></textarea>
+            </div>
+            <div class="col-sm-4">
+              <div class="overall-stats-table">
+                <div *ngFor="let stat of objectValues(orderFinalStats)">
+                  <span class="stat-label">{{ stat.label }}</span>
+                  <span class="stat-value">{{ numberFormatWithSymbol(stat.value) }}</span>
+                </div>
+                <div>
+                  <span class="stat-label final-total">{{ orderFinalStats.grand_total.label }}</span>
+                  <span class="stat-value final-total">{{ numberFormatWithSymbol(orderFinalStats.grand_total.value)
+                    }}</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </form>
+  <div class="actions">
+    <button class="btn btn-primary btn-sm" (click)="postFinalOrder('order')">Save & Submit</button>
+  </div>
+</section>

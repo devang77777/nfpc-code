@@ -1,0 +1,33 @@
+<section>
+  <div class="table-box">
+    <div class="heading-row">
+      <h2 class="d-inline">
+        <i class="fa fa-chain-broken mr-2"></i>Depot Expairy
+      </h2>
+      <div class="d-inline float-right">
+        <button
+          class="btn btn-sm btn-p mr-2"
+          mat-button
+          (click)="openForm()"
+          appPermission
+          [permissions]="userPermissions"
+          [type]="'create'"
+        >
+          <i class="os-icon os-icon-plus mr-2" aria-hidden="true"></i>New
+        </button>
+        <button *ngIf="checkedRows.length > 0" class="btn btn-sm btn-white dropdown-toggle ml-2" mat-button
+          [matMenuTriggerFor]="menu2">
+          Bulk Actions
+        </button>
+        <mat-menu #menu2="matMenu">
+          <button mat-menu-item (click)="bulkAction('active')">Mark as Active</button>
+          <button mat-menu-item (click)="bulkAction('inactive')" >Mark as Inactive</button>
+          <!-- <button mat-menu-item (click)="bulkAction('delete')" appPermission [permissions]="userPermissions" [type]="'delete'">
+            Delete
+          </button> -->
+        </mat-menu>
+      </div>
+    </div>
+    <app-depot-expairydt (selectedRows)="selectedRows($event)" [newDepotExpData]="newDepotExpData"></app-depot-expairydt>
+  </div>
+</section>

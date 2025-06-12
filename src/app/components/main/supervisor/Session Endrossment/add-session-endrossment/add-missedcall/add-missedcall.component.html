@@ -1,0 +1,24 @@
+
+
+<div class="table-responsive">
+  <table class="table table-bordered">
+    <thead>
+      <tr>
+        <th *ngFor="let head of displayedColumns" scope="col">{{head}} </th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let el of ELEMENT_DATA">
+      <td>{{el.CustomerName}}</td>
+      <td>{{el.CustomerCode}}</td>
+      <td>{{el.LastDay}}</td>
+      <td>{{el.CategoryName}}</td>
+      <td>{{el.Tot_Value}}</td>
+      <td>{{el.sal_value}}</td>
+      <td>{{el.Return}}</td>
+      <td>{{el.Returnvalue}}</td>
+      <td>{{el.Calls}}</td>
+      </tr>
+    </tbody>
+  </table>
+</div>

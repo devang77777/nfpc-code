@@ -1,0 +1,97 @@
+<section class="scrolly clearfix">
+  <ng-container *ngIf="advanceSearchRequest.length>0">
+    <app-search-criteria [data]="advanceSearchRequest" (change)="onChangeCriteria()" (close)="onCloseCriteria()">
+    </app-search-criteria>
+  </ng-container>
+
+  <div class="table-responsive">
+    <table class="table  table-hover" mat-table [dataSource]="dataSource">
+      <ng-container matColumnDef="select">
+        <th mat-header-cell *matHeaderCellDef>
+          <mat-checkbox class="head-checkbox" (change)="$event ? toggleSelection() : null" (change)="getSelectedRows()"
+            [checked]="selections.hasValue() && isAllSelected()"
+            [indeterminate]="selections.hasValue() && !isAllSelected()" [aria-label]="checkboxLabel()">
+          </mat-checkbox>
+          <a class="filter-btn btn btn-sm" *ngIf="!isDetailVisible" [matMenuTriggerFor]="menu">
+            <i class="fa fa-table" aria-hidden="true"></i>
+          </a>
+          <mat-menu #menu="matMenu">
+            <div class="card-body p-2" style="min-width: 200px;">
+              <ul style="list-style:none; padding-left: 7px;">
+                <li *ngFor="let column of filterColumns">
+                  <input type="checkbox" [(ngModel)]="column.show" class="m-2" (click)="$event.stopPropagation()">
+                  {{column.title}}
+                </li>
+              </ul>
+              <div class="float-right mb-2">
+                <button class="btn btn-p bg-secondary">Cancel</button>
+              </div>
+            </div>
+          </mat-menu>
+        </th>
+        <td mat-cell *matCellDef="let row">
+          <mat-checkbox class="row-checkbox" (click)="$event.stopPropagation()"
+            (change)="$event ? selections.toggle(row) : null" (change)="getSelectedRows()"
+            [checked]="selections.isSelected(row)" [aria-label]="checkboxLabel(row)">
+          </mat-checkbox>
+        </td>
+      </ng-container>
+      <ng-container matColumnDef="item_code">
+        <th mat-header-cell *matHeaderCellDef>
+          <app-column-filter title="Code" (changeSelected)="onColumnFilterOpen($event)"
+            [selected]="selectedColumnFilter"  controlName="item_code" (close)="onColumnFilter($event)">
+            <input class="form-control form-control-sm" [formControl]="filterForm.get('item_code')" placeholder="Enter Code" type="text">
+          </app-column-filter>
+        </th>
+        <td mat-cell *matCellDef="let element"> {{element.item_code}} </td>
+      </ng-container>
+      <ng-container matColumnDef="item_name">
+        <th mat-header-cell *matHeaderCellDef>
+          <app-column-filter title="Name" (changeSelected)="onColumnFilterOpen($event)"
+            [selected]="selectedColumnFilter"  controlName="item_name" (close)="onColumnFilter($event)">
+            <input class="form-control form-control-sm" [formControl]="filterForm.get('item_name')" placeholder="Enter Name" type="text">
+          </app-column-filter>
+        </th>
+        <td mat-cell *matCellDef="let element"> {{element.item_name}} </td>
+      </ng-container>
+      <ng-container matColumnDef="item_description">
+        <th mat-header-cell *matHeaderCellDef> Description </th>
+        <td mat-cell *matCellDef="let element"> {{element.item_description ? element.item_description : "-" }} </td>
+      </ng-container>
+      <ng-container matColumnDef="brand">
+        <th mat-header-cell *matHeaderCellDef> 
+          <app-column-filter title="Brand" (changeSelected)="onColumnFilterOpen($event)"
+            [selected]="selectedColumnFilter"  controlName="brand" (close)="onColumnFilter($event)">
+            <input class="form-control form-control-sm" [formControl]="filterForm.get('brand')" placeholder="Enter Brand" type="text">
+          </app-column-filter> </th>
+        <td mat-cell *matCellDef="let element">{{element.brand?.brand_name}} </td>
+      </ng-container>
+      <ng-container matColumnDef="category">
+        <th mat-header-cell *matHeaderCellDef> 
+          <app-column-filter title="Category" (changeSelected)="onColumnFilterOpen($event)"
+            [selected]="selectedColumnFilter"  controlName="category" (close)="onColumnFilter($event)">
+            <input class="form-control form-control-sm" [formControl]="filterForm.get('category')" placeholder="Enter Category" type="text">
+          </app-column-filter> </th>
+        <td mat-cell *matCellDef="let element">{{element.item_major_category?.name}} </td>
+      </ng-container>
+      <ng-container matColumnDef="item_group_name">
+        <th mat-header-cell *matHeaderCellDef> Item Group </th>
+        <td mat-cell *matCellDef="let element">{{element.item_group?.name}} </td>
+      </ng-container>
+
+      <ng-container matColumnDef="item_lob">
+        <th mat-header-cell *matHeaderCellDef> Item Lob </th>
+        <td mat-cell *matCellDef="let element">{{element.lob?.name}} </td>
+      </ng-container>
+
+      <tr mat-header-row *matHeaderRowDef="getDisplayedColumns()"></tr>
+      <tr mat-row *matRowDef="let row; columns: getDisplayedColumns();" (click)="openDetailView(row)"></tr>
+    </table>
+    <div [ngClass]="{'hidden': !dataSource.data.length}">
+      <mat-paginator (page)="onPageFired($event)" [length]="apiResponse.pagination?.total_records" [pageSize]="pageSize"
+        [pageSizeOptions]="[10, 25, 50]"></mat-paginator>
+    </div>
+  </div>
+
+  
+</section>

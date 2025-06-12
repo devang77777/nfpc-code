@@ -1,0 +1,42 @@
+<div class="dialog-box">
+    <!-- <i class="os-icon os-icon-alert-circle"></i> -->
+    <h3 class="title">Allocated GRV</h3>
+    <form [formGroup]="allocatedGRVForm">
+        <!-- <div class="row form-group" style="text-align: left;">
+      <div class="col-lg">
+        <label>Select Van</label>
+
+
+        <app-multiautocomplete isSingle="true" [options]="vanList" text="description" id="id" objectName="code-root"
+          param1="van_code" param2="description" [control]="allocatedGRVForm.controls['van_id']"
+          placeholder="Search Van">
+        </app-multiautocomplete>
+      </div>
+    </div> -->
+        <div class="row form-group" style="text-align: left;">
+            <div class="col-lg">
+                <label>Select Salesman</label>
+                <app-multiautocomplete isSingle="true" [options]="salesmanList" text="" id="id" objectName="user" param1="firstname" param2="lastname" [control]="allocatedGRVForm.controls['salesman_id']" placeholder="Search Salesman">
+                </app-multiautocomplete>
+                <!-- <select class="form-control form-control-sm" [(ngModel)]="customData.salesman_id">
+        <option value="0" disabled>Select Salesman</option>
+        <option *ngFor="let sl of salesmanList" [value]="sl.id">{{sl.salesman_code}}</option>
+      </select> -->
+            </div>
+        </div>
+        <div class="mt-3 mb-3">
+            <button class="btn btn-primary" type="button" (click)="submit()">Submit</button>
+        </div>
+    </form>
+    <!-- <h3 class="title" *ngIf="customData.title">{{ customData.title }}</h3>
+    <p class="description" *ngIf="customData.description">{{ customData.description }}</p>
+    <ng-container *ngIf="showReason">
+      
+  
+    </ng-container>
+    <div class="dialogbtn" *ngIf="!showReason">
+      <button (click)="cancel()" class="btn btn-secondary mr-3">No, mistake!</button>
+      <button class="btn btn-danger" (click)="confirm()" cdkFocusInitial>Yes,
+        {{customData.btnText !== undefined && customData.btnText !== '' ? customData.btnText : 'remove' }} !</button>
+    </div> -->
+</div>

@@ -1,0 +1,176 @@
+<div *ngIf="customer" class="details fill-container scroll-xy">
+    <div class="details-info w-100">
+        <div class="group">
+            <strong>Hariss</strong>
+            <hr>
+            <div class="person ">
+                <div class="media">
+                    <img src="{{customer?.profile_image || 'https://secure.gravatar.com/avatar/1aedb8d9dc4751e229a335e371db8058?&amp;d=mm'}}"
+                        class="cp-pic mr-2">
+                    <div class="media-body" id="297877000000007198">
+                        <strong>{{customer?.user?.firstname}}{{customer?.user?.lastname}}</strong>
+                        <p class="mt-1 mb-1">{{customer?.user?.email}}</p>
+                        <i class="os-icon os-icon-phone"></i> {{customer?.customer_phone}}
+                        <br>
+                        <div class="line-seperator">
+                            <!-- <small class="coll">
+                                <a href="javascript:void(0)">Edit</a>
+                            </small> -->
+                            <small class="coll">
+                                <a href="javascript:void(0)">Send Email</a>
+                            </small>
+                            <!-- <small class="coll">
+                                <a href="javascript:void(0)">Delete</a>
+                            </small> -->
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+        <div id="ember2018" class="ember-view">
+            <div id="ember2019" class="ember-view">
+                <div id="ember2020" (click)="showCollapsedAddr = !showCollapsedAddr"
+                    [ngClass]="showCollapsedAddr ? 'collapsed' : ''" class="toggle-header cursor-pointer ember-view">
+                    <div class="uppercase font-weight-light">
+                        <svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" x="0" y="0"
+                            viewBox="0 0 512 512" xml:space="preserve"
+                            class="icon icon-xsmall align-text-bottom float-right icon-up-open-big">
+                            <path d="M255.5 190.8L-.5 449.6V512l256-258.8 256 258.8v-62.4z"></path>
+                        </svg>Address
+                    </div>
+                </div>
+                <div id="ember2021" [ngClass]="!showCollapsedAddr ? 'show' : ''" class="ember-view collapse">
+                    <div class="group">
+                        <strong>Billing Address</strong>
+                        <div id="ember2022" class="popovercontainer address-group ember-view">
+                            <span class="cursor-pointer text-muted float-right" data-ember-action=""
+                                data-ember-action-2023="2023"> <i aria-hidden="true"
+                                    class="os-icon os-icon-edit"></i></span>
+
+                            <address id="ember2024" class="text-muted font-small ember-view">
+                                <strong>{{customer?.user?.firstname}}</strong>
+                                <div class="preserve-wrap">
+
+                                </div>
+                                {{customer?.customer_address_1}}<br>{{customer?.customer_address_1_lat ? 'Latitude: ' +
+                                customer?.customer_address_1_lat : ''}}<br>
+                                {{customer?.customer_address_1_lang ? 'Longitude: ' + customer?.customer_address_1_lang
+                                : ''}}<br>
+                                {{customer?.radius ? 'Radius: ' + customer?.radius :
+                                ''}}<br>{{customer?.customer_state}} <br>
+                                {{customer?.customer_city}}<br>
+                            </address>
+                        </div>
+
+                    </div>
+                </div>
+                <div id="ember2020" (click)="showCollapsedAttr = !showCollapsedAttr"
+                    [ngClass]="showCollapsedAttr ? 'collapsed' : ''" class="toggle-header cursor-pointer ember-view">
+                    <div class="uppercase font-weight-light">
+                        <svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" x="0" y="0"
+                            viewBox="0 0 512 512" xml:space="preserve"
+                            class="icon icon-xsmall align-text-bottom float-right icon-up-open-big">
+                            <path d="M255.5 190.8L-.5 449.6V512l256-258.8 256 258.8v-62.4z"></path>
+                        </svg>Attributes
+                    </div>
+                </div>
+                <div id="ember2021" [ngClass]="!showCollapsedAttr ? 'show' : ''" class="ember-view collapse">
+                    <div class="group">
+                        <div id="ember2022" class="popovercontainer address-group ember-view">
+                            <address id="ember2024" class="text-muted font-small ember-view">
+                                <div class="container" style="padding: 20px;">
+                                    <div class="row">
+                                        <strong>Grand Channel: &nbsp;</strong>
+                                        <span>{{customer.customer_category?.customer_category_name}}</span>
+                                    </div> <br>
+                                    <div class="row">
+                                        <strong>Parent Channel:&nbsp;</strong>
+                                        <span>{{customer.channel?.name}}</span>
+                                    </div> <br>
+                                    <div class="row">
+                                        <strong>Region: &nbsp;</strong>
+                                        <span>{{customer.region?.region_name}}</span>
+                                    </div>
+                                    <br>
+                                    <div class="row">
+                                        <strong>Customer Type: &nbsp;</strong>
+                                        <span>{{customer.customer_type?.customer_type_name}}</span>
+                                    </div> <br>
+
+                                    <div class="row">
+                                        <strong>Sales Organization: &nbsp;</strong>
+                                        <span>{{customer.sales_organisation?.name}}</span>
+                                    </div>
+                                    <br>
+                                    <div class="row">
+                                        <strong>ERP Code: &nbsp;</strong>
+                                        <span>{{customer.erp_code}}</span>
+                                    </div> <br>
+                                    <div class="row">
+                                        <strong>TRN No: &nbsp;</strong>
+                                        <span>{{customer.trn_no}}</span>
+                                    </div> <br>
+                                    <div class="row">
+                                        <strong>Credit Limit: &nbsp;</strong>
+                                        <span>{{customer.credit_limit}}</span>
+                                    </div> <br>
+                                    <div class="row">
+                                        <strong>Status: &nbsp;</strong>
+                                        <span>{{customer.status==0?'In Active':'Active'}}</span>
+                                    </div> <br>
+                                    <div class="" style="margin-left: -15px;">
+                                        <p><strong>Merchandisers: &nbsp;</strong></p>
+                                        <p *ngFor="let merchandiser of customer.customer_merchandiser">
+                                            {{merchandiser.salesman?.firstname}} {{merchandiser.salesman?.lastname}}</p>
+                                    </div>
+
+                                </div>
+                            </address>
+                        </div>
+
+                    </div>
+                </div>
+
+                <div id="ember1022" (click)="showCollapsedPartner = !showCollapsedPartner"
+                    [ngClass]="showCollapsedPartner ? 'collapsed' : ''" class="toggle-header cursor-pointer ember-view">
+                    <div class="uppercase font-weight-light">
+                        <svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" x="0" y="0"
+                            viewBox="0 0 512 512" xml:space="preserve"
+                            class="icon icon-xsmall align-text-bottom float-right icon-up-open-big">
+                            <path d="M255.5 190.8L-.5 449.6V512l256-258.8 256 258.8v-62.4z"></path>
+                        </svg>Partner Function
+                    </div>
+                </div>
+                <div id="ember1022" [ngClass]="!showCollapsedPartner ? 'show' : ''" class="ember-view collapse">
+                    <div class="group">
+                        <div id="ember1022" class="popovercontainer address-group ember-view">
+                            <address id="ember1024" class="text-muted font-small ember-view">
+                                <div class="container" style="padding: 20px;">
+                                    <div class="row">
+                                        <strong>ShipTo Party:&nbsp;</strong>
+                                        <span>{{customer.ship_to_party?.user.firstname}}</span>
+                                    </div> <br>
+                                    <div class="row">
+                                        <strong>SoldTo Party:&nbsp;</strong>
+                                        <span>{{customer.sold_to_party?.user.firstname}}</span>
+                                    </div> <br>
+                                    <div class="row">
+                                        <strong>Payer:&nbsp;</strong>
+                                        <span>{{customer.payer?.user?.firstname}}</span>
+                                    </div> <br>
+                                    <div class="row">
+                                        <strong>Bill To Party:&nbsp;</strong>
+                                        <span>{{customer.bill_to_payer?.user?.firstname}}</span>
+                                    </div> <br>
+
+                                </div>
+                            </address>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

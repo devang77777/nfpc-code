@@ -1,0 +1,31 @@
+button:active {
+  outline: none;
+}
+
+button.mat-menu-item {
+  height: 30px;
+  line-height: normal;
+
+  &:focus {
+    outline: none;
+  }
+}
+
+.page-title {
+  padding-top: 20px;
+  margin-bottom: 20px;
+}
+
+.actions {
+  button {
+    background-color: transparent;
+    border: none;
+    font-size: 16px;
+  }
+}
+
+.actions {
+  display: flex;
+  align-items: center;
+  justify-content: space-evenly;
+}

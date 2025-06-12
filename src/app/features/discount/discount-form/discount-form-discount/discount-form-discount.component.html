@@ -1,0 +1,119 @@
+<section>
+  <div class="container">
+    <div class="form-box">
+      <form [formGroup]="discountFormGroup">
+        <div class="form-group">
+          <label for="name">Name</label>
+          <input type="text" class="form-control" [formControl]="nameFormControl" id="name" />
+        </div>
+        <div class="form-group">
+          <div class="row">
+            <div class="col-sm-6">
+              <label for="sdate">Start Date</label>
+              <input type="date" class="form-control" [formControl]="sdateFormControl" id="sdate" />
+            </div>
+            <div class="col-sm-6">
+              <label for="edate">End Date</label>
+              <input type="date" class="form-control" [formControl]="edateFormControl" id="edate" />
+            </div>
+          </div>
+        </div>
+        <div class="form-group">
+          <div class="row">
+            <div class="col-sm-6">
+              <label>Type</label>
+              <select class="form-control" [formControl]="typeFormControl">
+                <option value="slab">Slab</option>
+                <option value="normal">Normal</option>
+              </select>
+            </div>
+            <div class="col-sm-6">
+              <label>Discount Type</label>
+              <select class="form-control" [formControl]="discountTypeFormControl">
+                <option value="fixed">Fixed</option>
+                <option value="percentage">Percentage</option>
+              </select>
+            </div>
+          </div>
+        </div>
+        <div class="row" *ngIf="typeFormControl.value === 'normal'">
+          <div class="col-6">
+            <div class="form-group" *ngIf="discountTypeFormControl.value === 'percentage' &&
+            typeFormControl.value === 'normal'">
+              <label>Discount Percentage</label>
+              <div class="input-group">
+                <input type="text" class="form-control" [formControl]="discountPercentageFormControl" />
+                <div class="input-group-append">
+                  <span class="input-group-text">%</span>
+                </div>
+              </div>
+            </div>
+            <!-- <div class="form-group" *ngIf="discountTypeFormControl.value === 'percentage' &&
+            typeFormControl.value === 'normal'">
+              <label>Discount Percentage</label>
+              <div class="input-group">
+                <input type="text" class="form-control" [formControl]="discountPercentageFormControl" />
+                <div class="input-group-append">
+                  <span class="input-group-text">%</span>
+                </div>
+              </div>
+            </div> -->
+            <div class="form-group" *ngIf="discountTypeFormControl.value === 'fixed' &&
+            typeFormControl.value === 'normal'">
+              <label>Discount Value</label>
+              <input type="text" class="form-control" [formControl]="discountValueFormControl" />
+            </div>
+          </div>
+
+          <div class="col-3" *ngIf="typeFormControl.value === 'normal' && discountTypeFormControl.value">
+            <label>Discount Apply on</label>
+            <select class="form-control" [formControl]="applyOnFormControl" >
+              <option value="quantity">Quantity</option>
+              <option value="value">Value</option>
+            </select>
+          </div>
+          <!-- if else for value and quantity -->
+          <div class="col-3" *ngIf="applyOnFormControl.value =='value'">
+            <label class="invisible">Value</label>
+            <input type="text" class="form-control" [formControl]="applyOnValueFormControl" />
+          </div>
+          <div class="col-3" *ngIf="applyOnFormControl.value =='quantity'">
+            <label class="invisible">Quantity</label>
+            <input type="text" class="form-control" [formControl]="applyOnQuantityFormControl" />
+          </div>
+        </div>
+        <!-- <div class="row" *ngIf="
+            discountTypeFormControl.value === 'fixed' &&
+            typeFormControl.value === 'normal'
+          "> -->
+        <!-- <div class="col-6">
+            <div class="form-group">
+              <label>Discount Value</label>
+              <input type="text" class="form-control" [formControl]="discountValueFormControl" />
+            </div>
+          </div> -->
+        <!-- <div class="col-3">
+            <label>Discount Apply on</label>
+            <select class="form-control" [formControl]="applyOnFormControl">
+              <option>Quantity</option>
+              <option>Value</option>
+            </select>
+          </div>
+          <div class="col-3">
+            <label class="invisible">Value</label>
+            <input type="text" class="form-control" [formControl]="applyOnValueFormControl" />
+          </div> -->
+        <!-- </div> -->
+      </form>
+
+      <div class="container mt-4">
+        <app-discount-form-slab-table *ngIf="
+            discountTypeFormControl.value != '' &&
+            typeFormControl.value === 'slab'
+          " [overviewFormGroup]="overviewFormGroup" [discountType]="discountTypeFormControl.value">
+        </app-discount-form-slab-table>
+      </div>
+    </div>
+  </div>
+</section>
+<!-- <pre>{{overviewFormGroup.value |json}}</pre> -->

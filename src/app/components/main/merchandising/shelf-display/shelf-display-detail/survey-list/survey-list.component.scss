@@ -1,0 +1,24 @@
+.table{
+    width: 95%;
+}
+.items-table-box {
+    overflow-y: scroll !important;
+    min-width: 45%;
+    mat-paginator,
+    .mat-table {
+      max-width: 100%;
+    }
+  }
+
+  .table thead, .table thead tr, .mat-header-row{
+    background-color: black !important;
+    th{
+      background: black;
+      color: #fff;
+    }
+  }
+  .expanded {
+    .pl-3.area-data{
+      padding-left: 0 !important;
+    }
+  }

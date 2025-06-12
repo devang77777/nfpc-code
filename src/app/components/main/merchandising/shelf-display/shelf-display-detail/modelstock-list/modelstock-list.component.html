@@ -1,0 +1,112 @@
+<div class="pl-3 row mb-4 mt-4" *ngIf="stockData">
+  <div class="col-md-1 col-form-label">Date</div>
+  <div class="col-md-3 mb-2 mb-md-0">
+    <input class="form-control form-control-sm" type="date" [formControl]="dateFilterControl">
+  </div>
+  <div class="col-md-3 item-add-btn">
+    <button type="button" (click)="getStockItemList('date', true)" class=" mr-2 btn btn-sm btn-primary">Filter</button>
+    <button type="button" (click)="getStockItemList('all', true)" class="btn btn-sm btn-danger">All</button>
+  </div>
+</div>
+<div class="pl-3 items-table-box">
+  <div class="table-responsive">
+    <table mat-table [dataSource]="itemSource" class="mat-elevation-z8 table table-hover">
+      <ng-container matColumnDef="created_at">
+        <th mat-header-cell *matHeaderCellDef>
+          <app-column-filter title="Date" (changeSelected)="onColumnFilterOpen($event)"
+            [selected]="selectedColumnFilter" controlName="date" (close)="onColumnFilter($event)">
+            <input class="form-control form-control-sm" [formControl]="filterForm.get('date')" placeholder="Enter Date" type="date">
+          </app-column-filter>
+        </th>
+        <td mat-cell *matCellDef="let element"> {{ element.created_at | date :"d MMM y h:mm a"}} </td>
+      </ng-container>
+      <ng-container matColumnDef="salesman">
+        <th mat-header-cell *matHeaderCellDef>
+          <app-column-filter title="Merchandiser" (changeSelected)="onColumnFilterOpen($event)"
+            [selected]="selectedColumnFilter" controlName="salesman_name" (close)="onColumnFilter($event)">
+            <input class="form-control form-control-sm" [formControl]="filterForm.get('salesman_name')" placeholder="Enter Merchandiser" type="text">
+          </app-column-filter>
+        </th>
+        <td mat-cell *matCellDef="let element"> {{ element.salesman?.firstname }} {{ element.salesman?.lastname }}</td>
+      </ng-container>
+      <ng-container matColumnDef="customer">
+        <th mat-header-cell *matHeaderCellDef>
+          <app-column-filter title="Customer Name" (changeSelected)="onColumnFilterOpen($event)"
+            [selected]="selectedColumnFilter" controlName="customer_name" (close)="onColumnFilter($event)">
+            <input class="form-control form-control-sm" [formControl]="filterForm.get('customer_name')" placeholder="Enter Customer Name" type="text">
+          </app-column-filter>
+        </th>
+        <td mat-cell *matCellDef="let element"> {{ element.customer?.firstname }} {{ element.customer?.lastname }}</td>
+      </ng-container>
+      <ng-container matColumnDef="customerCode">
+        <th mat-header-cell *matHeaderCellDef>
+          <app-column-filter title="Customer Code" (changeSelected)="onColumnFilterOpen($event)"
+            [selected]="selectedColumnFilter" controlName="customer_code" (close)="onColumnFilter($event)">
+            <input class="form-control form-control-sm" [formControl]="filterForm.get('customer_code')" placeholder="Enter Customer Code" type="text">
+          </app-column-filter>
+        </th>
+        <td mat-cell *matCellDef="let element"> {{element.customer?.customer_info ?
+          element.customer?.customer_info?.customer_code :'N/A' }}</td>
+      </ng-container>
+      <ng-container matColumnDef="capacity">
+        <th mat-header-cell *matHeaderCellDef>
+          Capacity
+          <!-- <app-column-filter title="Capacity" (changeSelected)="onColumnFilterOpen($event)"
+            [selected]="selectedColumnFilter" (close)="onColumnFilter($event)">
+            <input class="form-control form-control-sm" placeholder="Enter Capacity" type="text">
+          </app-column-filter> -->
+        </th>
+        <td mat-cell *matCellDef="let element"> {{ element.capacity }} </td>
+      </ng-container>
+      <ng-container matColumnDef="item">
+        <th mat-header-cell *matHeaderCellDef>
+          <app-column-filter title="Item Name" (changeSelected)="onColumnFilterOpen($event)"
+            [selected]="selectedColumnFilter" controlName="item_name" (close)="onColumnFilter($event)">
+            <input class="form-control form-control-sm" [formControl]="filterForm.get('item_name')" placeholder="Enter Item Name" type="text">
+          </app-column-filter>
+        </th>
+        <td mat-cell *matCellDef="let element"> {{ element.item?.item_name }} </td>
+      </ng-container>
+      <ng-container matColumnDef="ItemCode">
+        <th mat-header-cell *matHeaderCellDef>
+          <app-column-filter title="Item Code" (changeSelected)="onColumnFilterOpen($event)"
+            [selected]="selectedColumnFilter" controlName="item_code" (close)="onColumnFilter($event)">
+            <input class="form-control form-control-sm" [formControl]="filterForm.get('item_code')" placeholder="Enter Item Code" type="text">
+          </app-column-filter>
+        </th>
+        <td mat-cell *matCellDef="let element"> {{ element.item?.item_code }} </td>
+      </ng-container>
+
+      <ng-container matColumnDef="saleable">
+        <th mat-header-cell *matHeaderCellDef>
+          Good Saleable
+          <!-- <app-column-filter title="Good Saleable" (changeSelected)="onColumnFilterOpen($event)"
+            [selected]="selectedColumnFilter" (close)="onColumnFilter($event)">
+            <mat-select class="form-control form-control-sm">
+              <mat-option value="1">Yes</mat-option>
+              <mat-option value="0">No</mat-option>
+            </mat-select>
+          </app-column-filter> -->
+        </th>
+        <td mat-cell *matCellDef="let element"> {{ element.stock }} </td>
+      </ng-container>
+      <ng-container matColumnDef="is_out_of_stock">
+        <th mat-header-cell *matHeaderCellDef>
+          Is Out Of Stock
+          <!-- <app-column-filter title="Is Out Of Stock" (changeSelected)="onColumnFilterOpen($event)"
+            [selected]="selectedColumnFilter" (close)="onColumnFilter($event)">
+            <mat-select class="form-control form-control-sm">
+              <mat-option value="1">Yes</mat-option>
+              <mat-option value="0">No</mat-option>
+            </mat-select>
+          </app-column-filter> -->
+        </th>
+        <td mat-cell *matCellDef="let element"> {{ element.is_out_of_stock == 0 ? 'No' : 'Yes' }} </td>
+      </ng-container>
+      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+      <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+    </table>
+  </div>
+  <mat-paginator [hidden]="hidePaginator(itemSource.data.length)" pageSize="5" [pageSizeOptions]="[5,10]">
+  </mat-paginator>
+</div>

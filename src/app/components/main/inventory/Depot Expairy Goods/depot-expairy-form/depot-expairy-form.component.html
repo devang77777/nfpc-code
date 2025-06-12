@@ -1,0 +1,138 @@
+<section>
+  <div class="heading-row">
+    <h2><i class="fa fa-home mr-2"></i>{{ pageTitle }}</h2>
+    <!-- <div class="heading-action">
+      <button mat-button class="mat-inherit-line-height more-btn" [matMenuTriggerFor]="menu2">More</button>
+      <mat-menu #menu2="matMenu" xPosition="before">
+        <button mat-menu-item class="height-40" (click)="goToStockAdjustmentList()">Go to List</button>
+      </mat-menu>
+    </div> -->
+  </div>
+  <div class="separator"></div>
+  <form [formGroup]="stockAdjustFormGroup" class="order-form custom-mat square scrolly">
+
+    <div class="card-body active-form overview">
+      <div class="row justify-content-between">
+        <div class="col-md-4">
+          <div class="form-group">
+            <label for="">Date </label>
+            <input type="date" [formControl]="dateFormControl" required class="form-control form-control-sm"
+              id="orderDate">
+          </div>
+        </div>
+      </div>
+
+
+    </div>
+
+    <div>
+      <div class="card-body overview">
+        <div class="row justify-content-between">
+          <div class="col-md-4">
+            <div class="form-group smmatinput">
+              <label for="">DEPOT </label>
+              <mat-form-field id="accountFormField">
+                <mat-label>Select an Depot</mat-label>
+                <mat-select class="no-disabled-text" (blur)="checkFormValidation()" required
+                  [formControl]="depotFormControl">
+                  <mat-option *ngFor="let depot of selectedDepotId" [value]="depot.id">{{ depot.depot_name }}
+                  </mat-option>
+                </mat-select>
+              </mat-form-field>
+            </div>
+          </div>
+          <div class="col-md-4">
+            <div class="form-group">
+              <label for="">Reference Number </label>
+              <div class="position-relative">
+                <input type="text" class="form-control form-control-sm" (keypress)="restrictLength($event)"
+                  [formControl]="referenceFormControl" id="grnNumber">
+                <span class="setting-btn" [hidden]="isEditForm"><button (click)="openNumberSettings()"><i
+                      class="os-icon os-icon-ui-46"></i></button></span>
+              </div>
+            </div>
+
+          </div>
+        </div>
+
+      </div>
+
+      <div class="bottom-form">
+        <div class="item-container custom-mat custom-mat-no-border"
+          [ngClass]="{ 'inactive-form': depotFormControl.invalid }">
+          <!--          <table class="table-check">-->
+          <!--            <thead>-->
+          <!--            <tr><th class="head"></th></tr>-->
+          <!--            </thead>-->
+          <!--            <tbody>-->
+          <!--            <tr class="item-row" *ngFor="let item of payloadItems; let i = index;">-->
+          <!--              <input class="item-checkbox" (change)="itemDidSelected($event, item)" type="checkbox" name="item">-->
+          <!--            </tr>-->
+          <!--            </tbody>-->
+          <!--          </table>-->
+
+          <div class="item-table-div">
+            <table class="item-table">
+              <thead>
+                <tr>
+                  <th class="head" *ngFor="let head of qtyTableHeaders">{{ head.label }}</th>
+                  <th>Action</th>
+                </tr>
+              </thead>
+              <tbody class="form-body">
+                <tr formArrayName="items" class="item-row" *ngFor="let item of itemFormControls; let i = index;">
+                  <ng-container [formGroupName]="i">
+                    <td>{{ i + 1 }}</td>
+                    <td class="item-name">
+                      <mat-form-field class="item-name-field">
+                        <input type="text" required placeholder="Search an item" matInput formControlName="item"
+                          [matAutocomplete]="auto">
+                        <mat-autocomplete #auto="matAutocomplete" (opened)="checkFormValidation()"
+                          (optionSelected)="itemDidSearched($event.option.value, i)"
+                          [displayWith]="itemsControlDisplayValue">
+                          <mat-option *ngFor="let item of filteredItems" [value]="itemControlValue(item)">
+                            {{ item.item_name }} - {{item.item_code}} </mat-option>
+                        </mat-autocomplete>
+                      </mat-form-field>
+                    </td>
+                    <td class="uom-td">
+                      <select class="custom-select" required formControlName="item_uom_id">
+                        <option [value]="uom.id" *ngFor="let uom of uoms">{{ uom.name }}</option>
+                      </select>
+                    </td>
+                    <td class="stats-cell"><input type="number" min="0" class="form-control form-control-sm"
+                        placeholder="available qty" formControlName="qty"></td>
+                    <td class="stats-cell">
+                      <select class="custom-select" required formControlName="reason_id">
+                        <option [value]="uom.id" *ngFor="let uom of selectedReasonId">{{ uom.name }}</option>
+                      </select>
+                    </td>
+                    <td><button [disabled]="itemFormControls.length <= 1" class="trash-btn"
+                        (click)="deleteItemRow(i)"><i class="fa fa-close"></i></button></td>
+                  </ng-container>
+                </tr>
+              </tbody>
+            </table>
+            <button class="add-item-btn" mat-button (click)="addItem()">Add Item</button>
+          </div>
+
+          <!-- <table class="table-check">
+            <thead>
+              <tr>
+                <th class="head"></th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr class="item-row" *ngFor="let item of itemFormControls; let i = index;">
+                
+              </tr>
+            </tbody>
+          </table> -->
+        </div>
+      </div>
+    </div>
+  </form>
+  <div class="actions">
+    <button class="btn btn-primary" (click)="postFinalOrder('draft')">Save & Submitt</button>
+  </div>
+</section>

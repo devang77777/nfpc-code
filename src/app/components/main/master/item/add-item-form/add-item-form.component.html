@@ -1,0 +1,674 @@
+<div class="item-form">
+    <div class="card">
+        <div class="card-header pt-4">
+            <span class="h6 font-weight-bold text-secondary">{{formType}} Item</span>
+
+            <a class="closeicon settingclose" (click)="close()"><i class="os-icon os-icon-x text-secondary float-right"
+                    aria-hidden="true"></i></a>
+        </div>
+        <div class="card-body">
+            <mat-tab-group class=" mb-3 " [(selectedIndex)]="selectedIndex" mat-stretch-tabs>
+                <mat-tab label="Item">
+                    <form [formGroup]="itemFormGroup" class="mt-3">
+                        <div class="row">
+                            <div class="col">
+                                <div class="form-group">
+                                    <label class="" for="">Item Code*:</label>
+                                    <div class="siconhol">
+                                        <input
+                                            [ngClass]="{'invalid-input': itemCodeFormControl.invalid && (itemCodeFormControl.dirty || itemCodeFormControl.touched)}"
+                                            type="text" [ngClass]="isEdit ? '' : 'fixWidth'"
+                                            (keypress)="restrictLength($event)" class="form-control form-control-sm"
+                                            [formControl]="itemCodeFormControl">
+                                        <a [hidden]="formType == 'Edit'" (click)="open()" class="ml-2 settingIcon"><i
+                                                class="os-icon os-icon-ui-46" aria-hidden="true"></i></a>
+                                    </div>
+                                </div>
+
+                            </div>
+
+
+                        </div>
+                        <div class="row mb-3">
+                            <div class="col">
+                                <label for="">Item Image:</label>
+                                <input class="form-control" #file type="file" (change)="itemFileChosen($event)"
+                                    accept="image/x-png,image/gif,image/jpeg" />
+                                <br />
+                                <div *ngFor='let url of itemSelectedFiles' class="img-position">
+                                    <img [src]="url" height="150" width="150px">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col">
+                                <div class="form-group">
+                                    <label class="" for="">Item Name*:</label>
+                                    <input
+                                        [ngClass]="{'invalid-input': itemNameFormControl.invalid && (itemNameFormControl.dirty || itemNameFormControl.touched)}"
+                                        type="text" class="form-control form-control-sm"
+                                        [formControl]="itemNameFormControl">
+                                    <app-validation-message [control]="itemNameFormControl">
+                                    </app-validation-message>
+                                </div>
+                            </div>
+
+                        </div>
+                        <div class="row">
+                            <div class="col">
+                                <div class="form-group">
+                                    <label for="">Item Description:</label>
+                                    <textarea class="form-control form-control-sm" row="3"
+                                        [formControl]="itemDescriptionFormControl"></textarea>
+                                </div>
+                            </div>
+
+                        </div>
+                        <!-- <div class="row">
+                        <div class="col">
+                            <div class="form-group">
+                                <label class="" for="">Item Lob*:</label>
+                                <mat-select
+                                    [ngClass]="{'invalid-input': salesmanlobFormControl.invalid && (salesmanlobFormControl.dirty || salesmanlobFormControl.touched)}"
+                                    class="form-control form-control-sm" [formControl]="salesmanlobFormControl">
+                                    <mat-option *ngFor="let lob of lobs" [value]="lob.id">
+                                        {{lob.name}}
+                                    </mat-option>
+                                </mat-select>
+                                <app-validation-message [control]="salesmanlobFormControl">
+                                </app-validation-message>
+                            </div>
+                        </div>
+                    </div> -->
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label class="" for="">Category*:</label>
+                                    <app-tree-dropdown class="tree-dropdown" [dataSource]="majorCategories"
+                                        [dataService]="categoryProvider()" [buttonLabel]="'Manage Category'"
+                                        (manageClicked)="openCategory()" (whenItemSelected)="categorySelected($event)"
+                                        [selectFormControl]="majorCategoryIdFormControl"
+                                        [placeHolder]="'Search a Category'" ngDefaultControl>
+                                    </app-tree-dropdown>
+                                    <app-validation-message [control]="majorCategoryIdFormControl">
+                                    </app-validation-message>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label class="" for="">Brand*:</label>
+                                    <app-tree-dropdown class="tree-dropdown" [dataSource]="brands"
+                                        [dataService]="brandProvider()" [buttonLabel]="'Manage Brand'"
+                                        (manageClicked)="openBrand()" (whenItemSelected)="brandSelected($event)"
+                                        [selectFormControl]="brandIdFormControl" [placeHolder]="'Search a Brand'"
+                                        ngDefaultControl>
+                                    </app-tree-dropdown>
+                                    <app-validation-message [control]="brandIdFormControl">
+                                    </app-validation-message>
+                                </div>
+                            </div>
+
+
+                        </div>
+
+                        <div class="row">
+                            <div class="col">
+                                <div class="form-group">
+                                    <label class="" for="">Item Group*:</label>
+                                    <mat-select
+                                        [ngClass]="{'invalid-input': itemGroupIdFormControl.invalid && (itemGroupIdFormControl.dirty || itemGroupIdFormControl.touched)}"
+                                        class="form-control form-control-sm" [formControl]="itemGroupIdFormControl">
+                                        <mat-option *ngFor="let itemGroup of itemGroups" [value]="itemGroup.id">
+                                            {{itemGroup.name}}
+                                        </mat-option>
+                                        <mat-option id="typeBtn" style="text-align: center;" (click)="addNewItemGroup()"
+                                            class="in-opt-btn">Add New
+                                        </mat-option>
+                                    </mat-select>
+                                    <app-validation-message [control]="itemGroupIdFormControl">
+                                    </app-validation-message>
+                                </div>
+                            </div>
+                            <div class="col">
+                                <div class="form-group">
+                                    <label for="">Item Barcode:</label>
+                                    <input type="text" class="form-control form-control-sm"
+                                        [formControl]="itemBarcodeFormControl">
+                                </div>
+                            </div>
+
+
+                        </div>
+
+                        <div class="row">
+                            <div class="col">
+                                <div class="form-group">
+                                    <label for="">Item Weight (KG):</label>
+                                    <input type="number" class="form-control form-control-sm"
+                                        [formControl]="itemWeightFormControl">
+                                </div>
+                            </div>
+                            <div class="col">
+                                <div class="form-group">
+                                    <label for="">Item Shelf Life (Days):</label>
+                                    <input type="number" class="form-control form-control-sm"
+                                        [formControl]="itemShelfLifeFormControl">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col">
+                                <div class="form-group">
+                                    <label for="">Volume (ltr):</label>
+                                    <input type="number" class="form-control form-control-sm"
+                                        [formControl]="baseUOMVolumFormControl">
+                                </div>
+                            </div>
+                            <div class="col">
+                                <label for="">ERP Code:</label>
+                                <input type="text" class="form-control form-control-sm"
+                                    [formControl]="erpCodeFormControl" />
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="" for="">Is Promotional*:</label>
+                            <div class="siconhol">
+                                <mat-radio-group aria-label="Select an option" [formControl]="isPromotionalFormControl">
+                                    <mat-radio-button class="mr-4" value="1">Yes</mat-radio-button>
+                                    <mat-radio-button value="0">No</mat-radio-button>
+                                </mat-radio-group>
+                                <app-validation-message [control]="isPromotionalFormControl">
+                                </app-validation-message>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="" for="">Is Tax Applicable*:</label>
+                            <div class="siconhol">
+                                <mat-radio-group aria-label="Select an option" [formControl]="isTaxApplyFormControl">
+                                    <mat-radio-button class="mr-4" value="1">Yes</mat-radio-button>
+                                    <mat-radio-button value="0">No</mat-radio-button>
+                                </mat-radio-group>
+                                <app-validation-message [control]="isTaxApplyFormControl">
+                                </app-validation-message>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="" for="">Is Excise*:</label>
+                            <div class="siconhol">
+                                <mat-radio-group aria-label="Select an option" [formControl]="isExciseApplyFormControl">
+                                    <mat-radio-button class="mr-4" value="1">Yes</mat-radio-button>
+                                    <mat-radio-button value="0">No</mat-radio-button>
+                                </mat-radio-group>
+                                <app-validation-message [control]="isExciseApplyFormControl">
+                                </app-validation-message>
+                            </div>
+                        </div>
+                        <div class="row" [hidden]="isExciseApplyFormControl?.value != 1">
+                            <div class="col">
+                                <div class="form-group">
+                                    <label class="" for="">Excise Value*:</label>
+                                    <input type="text" class="form-control form-control-sm"
+                                        [formControl]="isItemExciseApplyFormControl">
+
+                                </div>
+                            </div>
+                            <div class="col">
+                                <div class="form-group">
+                                    <label class="" for="">Excise UOM*:</label>
+                                    <app-tree-dropdown class="tree-dropdown" [dataSource]="exciseUoms"
+                                        [dataService]="uomProvider()" (whenItemSelected)="uomSelected($event)"
+                                        [selectFormControl]="itemExciseUomFormControl" [placeHolder]="'Search a Uom'"
+                                        ngDefaultControl>
+                                    </app-tree-dropdown>
+                                    <app-validation-message [control]="itemExciseUomFormControl">
+                                    </app-validation-message>
+                                </div>
+                            </div>
+
+
+                        </div>
+                        <div class="row" [hidden]="isTaxApplyFormControl?.value != 1">
+                            <div class="col">
+                                <div class="form-group">
+                                    <label class="" for="">Vat Percentage*:</label>
+                                    <input type="number" class="form-control form-control-sm"
+                                        [formControl]="isVatPercentageFormControl">
+                                    
+                                </div>
+                            </div>
+
+                        </div>
+                        <div class="row">
+                            <div class="col">
+                                <div class="form-group">
+                                    <label class="" for="">New Launch:</label>
+                                    <input type="checkbox" style="width: 5%;" class="form-control"
+                                        [formControl]="newLaunchFormControl">
+                                    <app-validation-message [control]="newLaunchFormControl">
+                                    </app-validation-message>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row" *ngIf="newLaunchFormControl.value == '1'">
+                            <div class="col">
+                                <div class="form-group">
+                                    <label class="" for="">Start Date:</label>
+                                    <input type="date" class="form-control"
+                                        [formControl]="newLaunchStartDateFormControl">
+                                    <app-validation-message [control]="newLaunchStartDateFormControl">
+                                    </app-validation-message>
+                                </div>
+                            </div>
+                            <div class="col">
+                                <div class="form-group">
+                                    <label class="" for="">End Date:</label>
+                                    <input type="date" class="form-control" [formControl]="newLaunchEndDateFormControl">
+                                    <app-validation-message [control]="newLaunchEndDateFormControl">
+                                    </app-validation-message>
+                                </div>
+                            </div>
+                        </div>
+
+                    </form>
+
+                    <ng-container *ngIf="isCustomField">
+                        <app-custom-field-form [editData]="editData" (change)="onCustomFieldUpdated($event)"
+                            [module]="moduleId"></app-custom-field-form>
+                    </ng-container>
+                </mat-tab>
+                <mat-tab label="UOM">
+                    <br>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label class="" for="">Base UOM*:</label>
+                                <mat-select
+                                    [ngClass]="{'invalid-input': lowerUnitUOMIdFormControl.invalid && (lowerUnitUOMIdFormControl.dirty || lowerUnitUOMIdFormControl.touched)}"
+                                    class="form-control form-control-sm" [formControl]="lowerUnitUOMIdFormControl">
+                                    <mat-option *ngFor="let uom of uoms" [value]="uom.id">{{uom.name}}</mat-option>
+                                    <mat-option id="typeBtn" style="text-align: center;"
+                                        (click)="addNewItemUom('primary')" class="in-opt-btn">Add New
+                                    </mat-option>
+                                </mat-select>
+                                <app-validation-message [control]="lowerUnitUOMIdFormControl">
+                                </app-validation-message>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label class="" for="">Base UOM Purchase Price*:</label>
+                                <input
+                                    [ngClass]="{'invalid-input': baseUOMPurchasePriceFormControl.invalid && (baseUOMPurchasePriceFormControl.dirty || baseUOMPurchasePriceFormControl.touched)}"
+                                    type="number" class="form-control form-control-sm"
+                                    [formControl]="baseUOMPurchasePriceFormControl">
+                                <app-validation-message [control]="baseUOMPurchasePriceFormControl">
+                                </app-validation-message>
+                            </div>
+                        </div>
+
+                    </div>
+
+                    <div class=" mt-3 row">
+                        <div class="col">
+                            <p><label>Is stock keeping unit ?</label></p>
+                            <mat-radio-group aria-label="Select an option" [formControl]="baseStockUOMFormControl">
+                                <mat-radio-button class="mr-4" value="1">Yes</mat-radio-button>
+                                <mat-radio-button value="0">No</mat-radio-button>
+                            </mat-radio-group>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label class="" for="">Base UOM UPC*:</label>
+                                <input
+                                    [ngClass]="{'invalid-input': lowerUOMUPCFormControl.invalid && (lowerUOMUPCFormControl.dirty || lowerUOMUPCFormControl.touched)}"
+                                    type="number" class="form-control form-control-sm"
+                                    [formControl]="lowerUOMUPCFormControl">
+                                <app-validation-message [control]="lowerUOMUPCFormControl">
+                                </app-validation-message>
+                                <div *ngIf="lowerUOMUPCFormControl.invalid && (lowerUOMUPCFormControl.dirty || lowerUOMUPCFormControl.touched)"
+                                    class="text-danger">
+                                    <div *ngIf="lowerUOMUPCFormControl.errors.required">
+                                        <small>Base UOM UPC is required.</small>
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label class="" for="">Base UOM Price*:</label>
+                                <input
+                                    [ngClass]="{'invalid-input': lowerUOMPriceFormControl.invalid && (lowerUOMPriceFormControl.dirty || lowerUOMPriceFormControl.touched)}"
+                                    type="number" class="form-control form-control-sm"
+                                    [formControl]="lowerUOMPriceFormControl">
+                                <app-validation-message [control]="lowerUOMPriceFormControl">
+                                </app-validation-message>
+                            </div>
+
+
+                        </div>
+
+                    </div>
+
+
+                    <hr>
+                    <h3>Secondary UOM</h3>
+                    <form [formGroup]="itemMainPriceFormGroup" class="mb-3">
+                        <div class="noscroll">
+                            <div class="row">
+                                <div class="col">
+                                    <label for="">UOM</label>
+                                    <mat-select [formControl]="itemUOMIdFormControl"
+                                        class="form-control form-control-sm">
+                                        <mat-option *ngFor="let item of uoms" [value]="item.id">{{item?.name}}
+                                        </mat-option>
+                                        <mat-option id="typeBtn" style="text-align: center;"
+                                            (click)="addNewItemUom('secondary')" class="in-opt-btn">Add New
+                                        </mat-option>
+                                    </mat-select>
+                                </div>
+                                <div class="col">
+                                    <label for="">UPC</label>
+                                    <input [formControl]="itemUPCFormControl" class="form-control form-control-sm"
+                                        type="text">
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col">
+                                    <label for="">Price</label>
+                                    <input [formControl]="itemPriceFromControl" class="form-control form-control-sm"
+                                        type="text">
+                                </div>
+
+                            </div>
+
+                            <div class="form-group">
+                                <h3><label>Is stock keeping unit ?</label></h3>
+                                <mat-radio-group aria-label="Select an option"
+                                    [formControl]="secondaryStockUOMFormControl"
+                                    [disabled]="isSecondaryStock || isBaseStock">
+                                    <mat-radio-button class="mr-4" value="1">Yes</mat-radio-button>
+                                    <mat-radio-button value="0">No</mat-radio-button>
+                                </mat-radio-group>
+                            </div>
+                            <div class=" form-group">
+                                <label for="">Purchase Price</label>
+                                <input [formControl]="bpoFormControl" class="form-control form-control-sm" type="text">
+                            </div>
+
+                            <div class=" item-add-btn">
+                                <button class="btn" [disabled]="itemMainPriceFormGroup.invalid"
+                                    (click)="addItemCode()"><i class="os-icon os-icon-plus "></i>Add</button>
+                            </div>
+
+                            <div class="items-table-box mt-4">
+                                <table mat-table [dataSource]="itemMainPriceSource"
+                                    *ngIf="itemMainPriceSource.data.length" class="mat-elevation-z8">
+                                    <ng-container matColumnDef="uom">
+                                        <th mat-header-cell *matHeaderCellDef> UOM </th>
+                                        <td mat-cell *matCellDef="let element"> {{getUOMName(element.item_uom_id)}}
+                                        </td>
+                                    </ng-container>
+                                    <ng-container matColumnDef="upc">
+                                        <th class="ml-2" mat-header-cell *matHeaderCellDef> UPC </th>
+                                        <td mat-cell *matCellDef="let element"> {{element.item_upc}} </td>
+                                    </ng-container>
+                                    <ng-container matColumnDef="price">
+                                        <th class="ml-2" mat-header-cell *matHeaderCellDef> Price </th>
+                                        <td class="ml-1" mat-cell *matCellDef="let element"> {{element.item_price}}
+                                        </td>
+                                    </ng-container>
+                                    <ng-container matColumnDef="Is stock measured UOM?">
+                                        <th class="ml-2" mat-header-cell *matHeaderCellDef> Stock Keeping Unit </th>
+                                        <td class="ml-1" style="padding-left: 25px;" mat-cell *matCellDef="let element">
+                                            {{element.stock_keeping_unit == 1 ? 'Yes' : element.stock_keeping_unit == 0
+                                            ? 'No' : ''}}
+                                        </td>
+                                    </ng-container>
+                                    <ng-container matColumnDef="Basic Purchase Order">
+                                        <th class="ml-2" mat-header-cell *matHeaderCellDef> Purchase Price </th>
+                                        <td style="padding-left: 25px;" mat-cell *matCellDef="let element">
+                                            {{element.purchase_order_price == 0 ? '' : element.purchase_order_price}}
+                                        </td>
+                                    </ng-container>
+                                    <ng-container matColumnDef="actions">
+                                        <th class="ml-2" mat-header-cell *matHeaderCellDef> Actions </th>
+                                        <td mat-cell *matCellDef="let element; index as index">
+                                            <button (click)="editItemCode(index, element)"><i
+                                                    class="fa fa-edit"></i></button>
+                                            <button (click)="deleteItemCode(index)" class="trash-btn"><i
+                                                    class="fa fa-trash"></i></button>
+                                        </td>
+                                    </ng-container>
+                                    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                                    <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+                                </table>
+                                <mat-paginator [hidden]="itemPriceLen(itemMainPriceSource.data.length)" pageSize="5"
+                                    [pageSizeOptions]="[3,5]">
+                                </mat-paginator>
+                            </div>
+                            <div class="pt-4">
+                                <small class="text-danger"
+                                    *ngIf="!isBaseStock && !isSecondaryStock && isSubmitted">*Please select a stock
+                                    measured UOM.</small>
+                            </div>
+                        </div>
+                    </form>
+                </mat-tab>
+                <mat-tab label="Product Catalog">
+                    <form [formGroup]="productCalalogFormGroup" class="mb-3 mt-3">
+                        <div class="form-group">
+                            <label class="" for="">Is Product Catalog*:</label>
+                            <div class="siconhol">
+                                <mat-radio-group aria-label="Select an option"
+                                    [formControl]="isProductCatalogFormControl">
+                                    <mat-radio-button class="mr-4" value="1">Yes</mat-radio-button>
+                                    <mat-radio-button value="0">No</mat-radio-button>
+                                </mat-radio-group>
+                                <app-validation-message [control]="isProductCatalogFormControl">
+                                </app-validation-message>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col">
+                                <div class="form-group">
+                                    <label class="" for="">Net Weight:</label>
+                                    <div class="siconhol">
+                                        <input
+                                            [ngClass]="{'invalid-input': net_weightFormControl.invalid && (net_weightFormControl.dirty || net_weightFormControl.touched)}"
+                                            [formControl]="net_weightFormControl" class="form-control form-control-sm"
+                                            type="number">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col">
+                                <div class="form-group">
+                                    <label class="" for="">Flawer:</label>
+                                    <div class="siconhol">
+                                        <input
+                                            [ngClass]="{'invalid-input': flawerFormControl.invalid && (flawerFormControl.dirty || flawerFormControl.touched)}"
+                                            [formControl]="flawerFormControl" class="form-control form-control-sm"
+                                            type="text">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col">
+                                <div class="form-group">
+                                    <label class="" for="">Shelf File:</label>
+                                    <div class="siconhol">
+                                        <input
+                                            [ngClass]="{'invalid-input': shelf_fileFormControl.invalid && (shelf_fileFormControl.dirty || shelf_fileFormControl.touched)}"
+                                            [formControl]="shelf_fileFormControl" class="form-control form-control-sm"
+                                            type="text">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col">
+                                <div class="form-group">
+                                    <label class="" for="">Ingredients:</label>
+                                    <div class="siconhol">
+                                        <input
+                                            [ngClass]="{'invalid-input': ingredientsFormControl.invalid && (ingredientsFormControl.dirty || ingredientsFormControl.touched)}"
+                                            [formControl]="ingredientsFormControl" class="form-control form-control-sm"
+                                            type="text">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col">
+                                <div class="form-group">
+                                    <label class="" for="">Energy:</label>
+                                    <div class="siconhol">
+                                        <input
+                                            [ngClass]="{'invalid-input': energyFormControl.invalid && (energyFormControl.dirty || energyFormControl.touched)}"
+                                            [formControl]="energyFormControl" class="form-control form-control-sm"
+                                            type="text">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col">
+                                <div class="form-group">
+                                    <label class="" for="">Fat:</label>
+                                    <div class="siconhol">
+                                        <input
+                                            [ngClass]="{'invalid-input': fatFormControl.invalid && (fatFormControl.dirty || fatFormControl.touched)}"
+                                            [formControl]="fatFormControl" class="form-control form-control-sm"
+                                            type="text">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col">
+                                <div class="form-group">
+                                    <label class="" for="">Protein:</label>
+                                    <div class="siconhol">
+                                        <input
+                                            [ngClass]="{'invalid-input': proteinFormControl.invalid && (proteinFormControl.dirty || proteinFormControl.touched)}"
+                                            [formControl]="proteinFormControl" class="form-control form-control-sm"
+                                            type="text">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col">
+                                <div class="form-group">
+                                    <label class="" for="">Carbohydrate:</label>
+                                    <div class="siconhol">
+                                        <input
+                                            [ngClass]="{'invalid-input': carbohydrateFormControl.invalid && (carbohydrateFormControl.dirty || carbohydrateFormControl.touched)}"
+                                            [formControl]="carbohydrateFormControl" class="form-control form-control-sm"
+                                            type="text">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col">
+                                <div class="form-group">
+                                    <label class="" for="">Calcium:</label>
+                                    <div class="siconhol">
+                                        <input
+                                            [ngClass]="{'invalid-input': calciumFormControl.invalid && (calciumFormControl.dirty || calciumFormControl.touched)}"
+                                            [formControl]="calciumFormControl" class="form-control form-control-sm"
+                                            type="text">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col">
+                                <div class="form-group">
+                                    <label class="" for="">Sodium:</label>
+                                    <div class="siconhol">
+                                        <input
+                                            [ngClass]="{'invalid-input': sodiumFormControl.invalid && (sodiumFormControl.dirty || sodiumFormControl.touched)}"
+                                            [formControl]="sodiumFormControl" class="form-control form-control-sm"
+                                            type="text">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col">
+                                <div class="form-group">
+                                    <label class="" for="">Potassium:</label>
+                                    <div class="siconhol">
+                                        <input
+                                            [ngClass]="{'invalid-input': potassiumFormControl.invalid && (potassiumFormControl.dirty || potassiumFormControl.touched)}"
+                                            [formControl]="potassiumFormControl" class="form-control form-control-sm"
+                                            type="text">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col">
+                                <div class="form-group">
+                                    <label class="" for="">Crude Fibre:</label>
+                                    <div class="siconhol">
+                                        <input
+                                            [ngClass]="{'invalid-input': crude_fibreFormControl.invalid && (crude_fibreFormControl.dirty || crude_fibreFormControl.touched)}"
+                                            [formControl]="crude_fibreFormControl" class="form-control form-control-sm"
+                                            type="text">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col">
+                                <div class="form-group">
+                                    <label class="" for="">Vitamin:</label>
+                                    <div class="siconhol">
+                                        <input
+                                            [ngClass]="{'invalid-input': vitaminFormControl.invalid && (vitaminFormControl.dirty || vitaminFormControl.touched)}"
+                                            [formControl]="vitaminFormControl" class="form-control form-control-sm"
+                                            type="text">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col">
+                                <div class="form-group">
+                                    <label class="" for="">Image:</label>
+                                    <div class="siconhol">
+                                        <input
+                                            [ngClass]="{'invalid-input': imageFormControl.invalid && (imageFormControl.dirty || imageFormControl.touched)}"
+                                            [formControl]="imageFormControl" class="form-control form-control-sm"
+                                            type="file" (change)="fileChosen($event)">
+                                        <br />
+                                        <div *ngFor='let url of selectedFiles' class="img-position">
+                                            <img [src]="url" height="150" width="150px">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </mat-tab>
+            </mat-tab-group>
+        </div>
+        <div class="card-footer">
+            <div class="d-inline float-right">
+                <button class="btn btn-sm btn-light mr-2" (click)="close()">Cancel</button>
+                <button class="btn btn-sm btn-p" (click)="saveItemData()">Save</button>
+            </div>
+        </div>
+
+    </div>
+</div>

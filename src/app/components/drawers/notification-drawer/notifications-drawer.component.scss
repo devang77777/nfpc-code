@@ -1,0 +1,139 @@
+.card-header {
+  background-color: #f1f5fa;
+  border: 0;
+}
+
+a {
+  cursor: pointer;
+}
+
+.menus {
+  display: block;
+  padding: 8px 20px;
+  text-decoration: none;
+  font-size: 14px;
+  font-weight: 400;
+  color: #000000;
+}
+
+.menus:hover {
+  color: #fff;
+  background-color: #268ddd;
+}
+
+.arrow-up {
+  right: 122px;
+  top: -10px;
+  position: absolute;
+  z-index: 10;
+  width: 0;
+  height: 0;
+  border-left: 10px solid transparent;
+  border-right: 10px solid transparent;
+
+  border-bottom: 10px solid black;
+}
+
+.card {
+  position: relative;
+}
+
+input:focus {
+  outline: none;
+}
+
+.mat-expansion-panel {
+  box-shadow: none;
+}
+
+// .mat-expansion-panel-header{
+//     height: 35px !important;
+// }
+::ng-deep .mat-expansion-panel-body {
+  padding: 0 0px 16px 24px !important;
+}
+
+.settingmenuholder {
+  overflow-y: scroll;
+  overflow-x: visible;
+  height: calc(100vh - 160px);
+}
+
+.notification-unread{
+  background-color: #f5f5f5;
+}
+
+// .mat-list-base {
+//   padding-top: 49px;
+//   width: 100%;
+//   clear: both;
+//   /* float: left; */
+//   position: absolute;
+//   margin: 0 auto;
+// }
+
+.mat-raised-button{
+  line-height: 15px !important;
+}
+button.mat-focus-indicator.mat-raised-button.mat-button-base.mat-warn {
+  padding: 0;
+}
+button.mat-focus-indicator.mat-raised-button.mat-button-base.mat-primary {
+  padding: 0;
+}
+
+button.btn-approve {
+  background-color: green;
+  margin-right: 20px;
+  color: #fff;
+  padding: 0px 8px 0px 4px;
+}
+
+button.btn-reject{
+  background-color: red;
+  margin-right: 20px;
+  color: #fff;
+  padding: 0px 8px 0px 4px
+}
+
+
+mat-icon.icon-done {
+  font-size: 20px;
+}
+.mat-list-base .mat-list-item.mat-2-line, .mat-list-base .mat-list-option.mat-2-line {
+  height: 95px;
+}
+.mat-list-base {
+ padding-top: 0px; 
+}
+.mat-list-item .mat-list-item-content {
+  display: block !important;
+}
+
+.mat-list-base .mat-list-item .mat-list-item-content{
+  display: block !important;
+}
+
+.mat-list-base .mat-list-item .mat-line{
+  margin-bottom:4px;
+}
+
+.mat-list-base .btn-block{
+  text-align:right;
+  padding-top: 48px;
+}
+.mat-list-base .mat-list-item .mat-list-item-content, .mat-list-base .mat-list-option .mat-list-item-content{
+  flex-flow:wrap !important;
+}
+
+.mat-form-field + .mat-form-field {
+  margin-left: 8px;
+}
+
+.mat-accordion>.mat-expansion-panel-spacing:last-child, .mat-accordion>*:last-child:not(.mat-expansion-panel) .mat-expansion-panel-spacing {
+  float: left;
+}
+
+.mat-accordion .mat-expansion-panel:last-of-type {
+  float: left;
+}

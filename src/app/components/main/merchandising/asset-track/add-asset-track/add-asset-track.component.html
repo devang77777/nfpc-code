@@ -1,0 +1,224 @@
+<div class="card">
+    <div class="card-header pt-4">
+        <span class="h6 font-weight-light">{{formType}} Asset Tracking</span>
+        <a (click)="close()"><i class="fa fa-times fa-lg text-secondary float-right" aria-hidden="true"></i></a>
+    </div>
+    <form [formGroup]="AssetTrackFormGroup" (ngSubmit)="saveAssetTrackData()">
+        <div class="form-box">
+            <div class="card-body">
+                <div class="">
+                    <div class="row mb-4">
+                        <div class="col-md-4">Asset Code*</div>
+                        <div class="col-md-8">
+                            <input class="form-control form-control-sm" (keypress)="restrictLength($event)"
+                                style="width: 95%;" type="text" formControlName="assetCode">
+                            <app-validation-message [control]="AssetTrackFormGroup.controls['assetCode']">
+                            </app-validation-message>
+                            <a [hidden]="formType == 'Edit'" (click)="openSetting()" class="ml-2 settingIcon"><i
+                                    class="os-icon os-icon-settings" aria-hidden="true"></i></a>
+                        </div>
+                    </div>
+                    <div class="row mb-4">
+                        <div class="col-md-4">Image*</div>
+                        <div class="col-md-8">
+                            <input class="form-control form-control-sm" #file type="file" (change)="fileChosen($event)"
+                                accept="image/x-png,image/gif,image/jpeg" />
+                            <app-validation-message [control]="AssetTrackFormGroup.controls['image']">
+                            </app-validation-message>
+                            <br />
+                            <div *ngFor='let url of selectedFiles' class="img-position">
+                                <img [src]="url" height="150" width="150px">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row mb-4">
+                        <div class="col-md-4">Title*</div>
+                        <div class="col-md-8">
+                            <input class="form-control form-control-sm" type="text" formControlName="title">
+                            <app-validation-message [control]="AssetTrackFormGroup.controls['title']">
+                            </app-validation-message>
+                        </div>
+                    </div>
+                    <div class="row mb-4">
+                        <div class="col-md-4">Description*</div>
+                        <div class="col-md-8">
+                            <input class="form-control form-control-sm" type="text" formControlName="description">
+                            <app-validation-message [control]="AssetTrackFormGroup.controls['description']">
+                            </app-validation-message>
+                        </div>
+                    </div>
+                    <div class="row mb-4">
+                        <div class="col-md-4 ">From Date*</div>
+                        <div class="col-md-8">
+                            <input class="form-control form-control-sm" type="Date" formControlName="startDate">
+                            <app-validation-message [control]="AssetTrackFormGroup.controls['startDate']">
+                            </app-validation-message>
+                        </div>
+                    </div>
+                    <div class="row mb-4">
+                        <div class="col-md-4 ">TO Date*</div>
+                        <div class="col-md-8">
+                            <input class="form-control form-control-sm" type="Date" formControlName="endDate">
+                            <app-validation-message [control]="AssetTrackFormGroup.controls['endDate']">
+                            </app-validation-message>
+                        </div>
+                    </div>
+                    <div class="row mb-4">
+                        <div class="col-md-4">Model Name*</div>
+                        <div class="col-md-8">
+                            <input class="form-control form-control-sm" type="text" formControlName="modelName">
+                            <app-validation-message [control]="AssetTrackFormGroup.controls['modelName']">
+                            </app-validation-message>
+                        </div>
+                    </div>
+                    <div class="row mb-4">
+                        <div class="col-md-4">Barcode*</div>
+                        <div class="col-md-8">
+                            <input class="form-control form-control-sm" type="text" formControlName="barcode">
+                            <app-validation-message [control]="AssetTrackFormGroup.controls['barcode']">
+                            </app-validation-message>
+                        </div>
+                    </div>
+                    <div class="row mb-4">
+                        <div class="col-md-4">Category*</div>
+                        <div class="col-md-8">
+                            <input class="form-control form-control-sm" type="text" formControlName="category">
+                            <app-validation-message [control]="AssetTrackFormGroup.controls['category']">
+                            </app-validation-message>
+                        </div>
+                    </div>
+                    <div class="row mb-4">
+                        <div class="col-md-4">Location*</div>
+                        <div class="col-md-8">
+                            <input class="form-control form-control-sm" type="text" formControlName="location"
+                                (keydown.enter)="$event.preventDefault()" autocorrect="off" autocapitalize="off"
+                                spellcheck="off" #locationSrch>
+                            <app-validation-message [control]="AssetTrackFormGroup.controls['location']">
+                            </app-validation-message>
+                        </div>
+                    </div>
+                    <div class="row mb-4">
+                        <div class="col-md-4">Area*</div>
+                        <div class="col-md-8">
+                            <input class="form-control form-control-sm" type="text" formControlName="area">
+                            <app-validation-message [control]="AssetTrackFormGroup.controls['area']">
+                            </app-validation-message>
+                        </div>
+                    </div>
+                    <div class="row mb-4">
+                        <div class="col-md-4">Wroker</div>
+                        <div class="col-md-8">
+                            <input class="form-control form-control-sm" type="text" formControlName="wroker">
+                            <app-validation-message [control]="AssetTrackFormGroup.controls['wroker']">
+                            </app-validation-message>
+                        </div>
+                    </div>
+                    <div class="row mb-4">
+                        <div class="col-md-4">Additional Wroker</div>
+                        <div class="col-md-8">
+                            <input class="form-control form-control-sm" type="text" formControlName="additionalWroker">
+                            <app-validation-message [control]="AssetTrackFormGroup.controls['additionalWroker']">
+                            </app-validation-message>
+                        </div>
+                    </div>
+                    <div class="row mb-4">
+                        <div class="col-md-4">Team</div>
+                        <div class="col-md-8">
+                            <input class="form-control form-control-sm" type="text" formControlName="team">
+                            <app-validation-message [control]="AssetTrackFormGroup.controls['team']">
+                            </app-validation-message>
+                        </div>
+                    </div>
+                    <div class="row mb-4">
+                        <div class="col-md-4">Vendors</div>
+                        <div class="col-md-8">
+                            <input class="form-control form-control-sm" type="text" formControlName="vendors">
+                            <app-validation-message [control]="AssetTrackFormGroup.controls['vendors']">
+                            </app-validation-message>
+                        </div>
+                    </div>
+                    <div class="row mb-4">
+                        <div class="col-md-4">Customer*</div>
+                        <div class="col-md-8">
+                            <app-multiautocomplete isSingle="true" [options]="customer"
+                                [control]="AssetTrackFormGroup.controls['customer']" text="" id="id" objectName="user-root"
+                                param1="firstname" param2="lastname">
+                            </app-multiautocomplete>
+                            <!-- <mat-select formControlName="customer" class="form-control form-control-sm">
+                                <mat-option *ngFor="let item of customer" [value]="item.user_id">
+                                    {{item.user?.firstname}}
+                                </mat-option>
+                            </mat-select> -->
+                            <app-validation-message [control]="AssetTrackFormGroup.controls['customer']">
+                            </app-validation-message>
+                        </div>
+                    </div>
+                    <div class="row mb-4">
+                        <div class="col-md-4 ">Purchase Date</div>
+                        <div class="col-md-8">
+                            <input class="form-control form-control-sm" type="Date" formControlName="purchaseDate">
+                            <app-validation-message [control]="AssetTrackFormGroup.controls['purchaseDate']">
+                            </app-validation-message>
+                        </div>
+                    </div>
+                    <div class="row mb-4">
+                        <div class="col-md-4 ">Placed In Service</div>
+                        <div class="col-md-8">
+                            <input class="form-control form-control-sm" type="Date" formControlName="placedInService">
+                            <app-validation-message [control]="AssetTrackFormGroup.controls['placedInService']">
+                            </app-validation-message>
+                        </div>
+                    </div>
+                    <div class="row mb-4">
+                        <div class="col-md-4">Purchase Price</div>
+                        <div class="col-md-8">
+                            <input class="form-control form-control-sm" type="number" formControlName="purchasePrice">
+                            <app-validation-message [control]="AssetTrackFormGroup.controls['purchasePrice']">
+                            </app-validation-message>
+                        </div>
+                    </div>
+                    <div class="row mb-4">
+                        <div class="col-md-4 ">Warranty Expiration</div>
+                        <div class="col-md-8">
+                            <input class="form-control form-control-sm" type="Date"
+                                formControlName="warrantyExpiration">
+                            <app-validation-message [control]="AssetTrackFormGroup.controls['warrantyExpiration']">
+                            </app-validation-message>
+                        </div>
+                    </div>
+                    <div class="row mb-4">
+                        <div class="col-md-4">Residual Price</div>
+                        <div class="col-md-8">
+                            <input class="form-control form-control-sm" type="number" formControlName="residualPrice">
+                            <app-validation-message [control]="AssetTrackFormGroup.controls['residualPrice']">
+                            </app-validation-message>
+                        </div>
+                    </div>
+                    <div class="row mb-4">
+                        <div class="col-md-4">Useful Life</div>
+                        <div class="col-md-8">
+                            <input class="form-control form-control-sm" type="number" formControlName="usefulLife">
+                            <app-validation-message [control]="AssetTrackFormGroup.controls['usefulLife']">
+                            </app-validation-message>
+                        </div>
+                    </div>
+                    <div class="row mb-4">
+                        <div class="col-md-4">Additional Information</div>
+                        <div class="col-md-8">
+                            <textarea class="form-control form-control-sm"
+                                formControlName="additionalInformation"></textarea>
+                            <app-validation-message [control]="AssetTrackFormGroup.controls['additionalInformation']">
+                            </app-validation-message>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="card-footer">
+            <div class="d-inline float-right">
+                <button type="button" class="btn btn-sm btn-light mr-2" (click)="close()">Cancel</button>
+                <button type="submit" class="btn btn-sm btn-p">Save</button>
+            </div>
+        </div>
+    </form>
+</div>

@@ -1,0 +1,38 @@
+<section>
+    <mat-table [dataSource]="dataSource">
+        <mat-header-row *matHeaderRowDef="displayColumns; sticky: true"></mat-header-row>
+        <mat-row class="list-row" *matRowDef="let row; let i = index; columns: displayColumns;"></mat-row>
+        <!-- Column definitions -->
+        <ng-container matColumnDef="minSlab">
+            <mat-header-cell *matHeaderCellDef> Min Slab</mat-header-cell>
+            <mat-cell *matCellDef="let row">
+                {{row.min_slab}}
+            </mat-cell>
+        </ng-container>
+        <ng-container matColumnDef="filler">
+            <mat-header-cell *matHeaderCellDef> </mat-header-cell>
+            <mat-cell *matCellDef="let row">
+                -
+            </mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="maxSlab">
+            <mat-header-cell *matHeaderCellDef> Max Slab </mat-header-cell>
+            <mat-cell *matCellDef="let row">
+                {{row.max_slab}}
+            </mat-cell>
+        </ng-container>
+        <ng-container matColumnDef="value">
+            <mat-header-cell *matHeaderCellDef> Value </mat-header-cell>
+            <mat-cell *matCellDef="let row">
+                {{row.value}}
+            </mat-cell>
+        </ng-container>
+        <ng-container matColumnDef="percentage">
+            <mat-header-cell *matHeaderCellDef> Percentage </mat-header-cell>
+            <mat-cell *matCellDef="let row">
+                {{row.percentage}}
+            </mat-cell>
+        </ng-container>
+    </mat-table>
+</section>

@@ -1,0 +1,206 @@
+<section>
+  <div class="heading-row">
+    <h2 class="d-md-inline">
+      <i class="fa fa-calculator mr-2"></i>Estimate Detail
+      <span class="order-number">#{{ estimateData?.estimate_code }}</span>
+    </h2>
+    <div class="d-md-inline float-md-right text-right">
+      <div class="btn-group btnrow mr-2">
+        <button class="btn" type="button" [autoClose]="'outside'" triggers="manual" #email="ngbPopover"
+          placement="bottom" (click)="email.open();" [ngbPopover]="emailPopContent" [popoverTitle]="emailPopTitle">
+          <i class="os-icon os-icon-mail"></i>
+        </button>
+        <button class="btn" type="button" (click)="editOrder()">
+          <i class="os-icon os-icon-edit-32"></i>
+        </button>
+        <button class="btn" type="button" (click)="getDocument('pdf')">
+          <mat-icon [inline]="true">picture_as_pdf</mat-icon>
+        </button>
+        <button class="btn" type="button" printSectionId="print-section" printTitle="Statement" [printStyle]="{
+            h1: { color: 'red' },
+            h2: { border: 'solid 1px' }
+          }" [useExistingCss]="true" ngxPrint>
+          <i class="os-icon os-icon-printer"></i>
+        </button>
+      </div>
+      <span>
+        <button mat-button class="btn btn-sm btn-white mr-2 dropdown-toggle" [matMenuTriggerFor]="menu2">
+          More
+        </button>
+        <mat-menu #menu2="matMenu" xPosition="before">
+          <button mat-menu-item class="height-40" appPermission [permissions]="userPermissions" [type]="'delete'"
+            (click)="openDeleteBox()">
+            Delete
+          </button>
+        </mat-menu>
+      </span>
+      <button class="btn" (click)="closeDetailView()">
+        <i class="os-icon os-icon-close"></i>
+      </button>
+    </div>
+  </div>
+  <div class="separator"></div>
+
+
+
+  <form class="order-form custom-mat scrolly">
+    <div class="card-body active-form overview">
+      <div class="row justify-content-between">
+        <div class="col-md-4">
+          <div class="form-group">
+            <label for="">Customer</label>
+            <input type="text" class="form-control form-control-sm non-editable"
+              [value]="estimateData?.customer_info.user?.display_name" disabled />
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <div class="card-body overview">
+      <div class="row justify-content-between">
+        <div class="col-md-4">
+          <div class="form-group">
+            <label for="">Estimate Date</label>
+            <input type="date" class="form-control form-control-sm non-editable" [value]="estimateData?.estimate_date"
+              disabled />
+          </div>
+          <div class="form-group">
+            <label for="">Expairy Date</label>
+            <input type="date" class="form-control form-control-sm non-editable" [value]="estimateData?.expairy_date"
+              disabled />
+          </div>
+          <div class="form-group">
+            <label for="">SalesPerson</label>
+            <input type="text" class="form-control form-control-sm non-editable"
+              [value]="estimateData?.salesperson?.name" disabled />
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div class="form-group">
+            <label for="">Estimate Code#</label>
+            <input type="text" class="form-control form-control-sm non-editable" [value]="estimateData?.estimate_code"
+              disabled />
+          </div>
+          <div class="form-group">
+            <label for="">Reference#</label>
+            <input type="text" class="form-control form-control-sm non-editable" [value]="estimateData?.reference"
+              disabled />
+          </div>
+          <div class="form-group">
+            <label for="">Subject#</label>
+            <input type="text" class="form-control form-control-sm non-editable" [value]="estimateData?.subject"
+              disabled />
+          </div>
+        </div>
+      </div>
+
+    </div>
+    <div>
+      <div class="item-container custom-mat custom-mat-no-border">
+        <table class="item-table cardtable">
+          <thead>
+            <tr>
+              <th class="head" *ngFor="let head of itemTableHeaders">
+                {{ head.label }}
+              </th>
+            </tr>
+          </thead>
+          <tbody class="form-body">
+            <tr class="item-row" *ngFor="
+                let item of estimateData?.estimationdetail;
+                let i = index
+              ">
+              <td data-th="#">{{ i + 1 }}</td>
+              <td data-th="Item Name	" class="item-name">
+                <input type="text" class="form-control form-control-sm non-editable" [value]="item.item?.item_name"
+                  disabled />
+              </td>
+              <td data-th="UOM" class="uom-td">
+                <input type="text" class="form-control form-control-sm non-editable" [value]="item.item_uom?.name"
+                  disabled />
+              </td>
+              <td data-th="Quantity">
+                <input type="number" min="0" class="form-control non-editable" [value]="numberFormat(item.item_qty)"
+                  disabled />
+              </td>
+              <td data-th="Price">
+                <input type="text" class="form-control non-editable" [value]="numberFormat(item.item_price)" disabled />
+              </td>
+              <td data-th="Discount">
+                <input type="text" class="form-control non-editable" [value]="numberFormat(item.item_discount_amount)"
+                  disabled />
+              </td>
+              <td data-th="Vat">
+                <input type="text" class="form-control non-editable" [value]="numberFormat(item.item_vat)" disabled />
+              </td>
+              <td data-th="Net">
+                <input type="text" class="form-control non-editable" [value]="numberFormat(item.item_net)" disabled />
+              </td>
+              <td data-th="Excise">
+                <input type="text" class="form-control non-editable" [value]="numberFormat(item.item_excise)"
+                  disabled />
+              </td>
+              <td data-th="Total">
+                <input type="text" class="form-control non-editable" [value]="numberFormat(item.item_grand_total)"
+                  disabled />
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class=" footer-overview-container">
+        <div class="row justify-content-between">
+          <div class="form-group col-sm-5">
+            <label for="note">Customer Note</label>
+            <textarea class="form-control form-control-sm" id="note" [value]="estimateData?.customer_note"
+              disabled></textarea>
+          </div>
+          <div class="col-sm-4">
+            <div class="overall-stats-table">
+              <div>
+                <span class="stat-label">Gross Total</span>
+                <span class="stat-value">{{
+                  numberFormatWithSymbol(estimateData?.gross_total)
+                }}</span>
+                <span class="stat-label">Discount</span>
+                <span class="stat-value">{{ numberFormatWithSymbol(estimateData?.discount) }}</span>
+                <span class="stat-label">Vat</span>
+                <span class="stat-value">{{
+                  numberFormatWithSymbol(estimateData?.vat) 
+                }}</span>
+                <span class="stat-label">Net</span>
+                <span class="stat-value">{{
+                  numberFormatWithSymbol(estimateData?.net_total) 
+                }}</span>
+                <span class="stat-label">Excise</span>
+                <span class="stat-value">{{
+                  numberFormatWithSymbol(estimateData?.exise) 
+                }}</span>
+              </div>
+              <div>
+                <span class="stat-label final-total">Total</span>
+                <span class="stat-value final-total">{{
+                  numberFormatWithSymbol(estimateData?.total) 
+                }}</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+
+    </div>
+  </form>
+</section>
+<ng-template #emailPopTitle>
+  <span>Sent estimate {{estimateData.estimate_number}}</span>
+</ng-template>
+<ng-template #emailPopContent>
+  <app-send-email [data]="emailData" (close)="email.close()"></app-send-email>
+</ng-template>
+
+<div class="card border" id="print-section">
+  <div class="card-body" [innerHTML]="estimateTemplate"></div>
+</div>

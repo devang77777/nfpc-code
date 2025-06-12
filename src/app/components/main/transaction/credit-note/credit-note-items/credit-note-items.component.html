@@ -1,0 +1,41 @@
+<div id="ember612" class="modal-header ember-view">
+  <h2 class="modal-title">Invoice Items</h2>
+  <button class="close no-outline" (click)="dialog.close()" type="button">
+    &times;
+  </button>
+</div>
+<form [formGroup]="itemsForm" (ngSubmit)="submit()">
+  <div class="modal-body">
+    <div class="container">
+      <div class="row">
+        <div class="col">
+          <div class="table-responsive">
+            <table class="table table-hover">
+              <tr>
+                <th></th>
+                <th>Item Code</th>
+                <th>Item Name</th>
+                <th>UOM</th>
+                <th>Quantity</th>
+                <th>Price</th>
+              </tr>
+              <tr formArrayName="items" *ngFor="let item of itemsFormArray.controls; let i = index">
+                <td><input type="checkbox" [formControlName]="i" /></td>
+                <td>{{ itemsData[i].item.item_code }}</td>
+                <td>{{ itemsData[i].item.item_name }}</td>
+                <td>{{ itemsData[i].item_uom.name }}</td>
+                <td>{{ itemsData[i].item_qty }}</td>
+                <td>{{ itemsData[i].item_price }}</td>
+              </tr>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="modal-footer">
+    <button class="btn btn-primary ember-view" type="submit">
+      Add</button>&nbsp;
+    <button class="btn btn-secondary" (click)="dialog.close()">Cancel</button>
+  </div>
+</form>

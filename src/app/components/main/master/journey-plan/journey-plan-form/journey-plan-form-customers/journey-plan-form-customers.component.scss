@@ -1,0 +1,13 @@
+.empty-weeks {
+  padding: 1.25rem;
+  background: #fff;
+}
+.mat-row:hover{
+  cursor: pointer;
+}
+
+@media (max-width: 575px) {
+  .mat-step-header {
+    display: block;
+}
+}

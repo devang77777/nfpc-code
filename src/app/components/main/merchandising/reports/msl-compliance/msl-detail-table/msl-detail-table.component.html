@@ -1,0 +1,61 @@
+<div class="pl-3  items-table-box" *ngIf="itemSource.data.length > 0">
+    <div class="table-responsive">
+        <table mat-table [dataSource]="itemSource" class="mat-elevation-z8 table table-hover" multiTemplateDataRows>
+            <ng-container *ngFor="let col of displayedColumns; ;let i = index;" matColumnDef="{{col}}">
+                <th mat-header-cell *matHeaderCellDef> {{displayLabels[i]}} </th>
+                <td mat-cell *matCellDef="let element"> 
+                    <ng-container>
+                        <div *ngIf="col == 'merchandiserCode'">
+                            {{ element.salesman_code}}
+                        </div>
+                        <div *ngIf="col == 'merchandiserName'">
+                            {{ element.salesman_name}}
+                        </div>
+                        <div *ngIf="col == 'customerCode'">
+                            {{ element.customer_code}}
+                        </div>
+                        <div *ngIf="col == 'customerName'">
+                            {{ element.customer_name}}
+                        </div>
+                        <div *ngIf="col == 'channelName'">
+                            {{ element.channel_name}}
+                        </div>
+                        <div *ngIf="col == 'itemName'">
+                            {{ element.item_name}}
+                        </div>
+                        <div *ngIf="col == 'itemCode'">
+                            {{ element.item_code }}
+                        </div>
+                        <div *ngIf="col == 'modelCapacity'">
+                            {{ element.model_qty }}
+                        </div>                     
+                        <div *ngIf="col == 'outOfStock'">
+                            {{ element.out_of_stock }}
+                        </div>
+                        <div *ngIf="col == 'mslPerform'">
+                            {{ element.is_check }}
+                        </div>
+                    </ng-container>
+                </td>
+            </ng-container>
+            <!-- <ng-container matColumnDef="expandedDetail">
+                <td mat-cell *matCellDef="let element" [attr.colspan]="displayedColumns.length">
+                  <div class="element-detail w-100"
+                    [@detailExpand]="element == expandedElement ? 'expanded' : 'collapsed'">
+                    <div *ngIf='element.customer_activity.length > 0' class="w-100">
+                      <app-activitytable [displayData]="element.customer_activity"></app-activitytable>
+                    </div>
+                    <br />
+                  </div>
+                </td>
+              </ng-container> -->
+              <!-- <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr> -->
+              <!-- <tr mat-row *matRowDef="let row; columns: displayedColumns; let i = index" (click)="expandList(row)" class="element-row"
+            [class.expanded-row]="row === expandedElement ? true : false"></tr> -->
+          <!-- <tr mat-row *matRowDef="let row;let i = index; columns: ['expandedDetail']" class="detail-row"></tr> -->
+          <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+          <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+        </table>
+    </div>
+    <mat-paginator [length]="itemSource.data.length" pageSize="50" [pageSizeOptions]="[5,10,15,25,50,100]"></mat-paginator>
+</div>

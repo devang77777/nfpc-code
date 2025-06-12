@@ -1,0 +1,350 @@
+<section>
+  <div class="heading-row">
+    <h2 class="d-inline"><i class="fa fa-bullseye mr-2"></i>{{ pageTitle }}</h2>
+    <div class="d-inline float-right">
+      <button mat-button class="btn btn-white btn-sm dropdown-toggle" [matMenuTriggerFor]="menu2">More</button>
+      <mat-menu #menu2="matMenu" xPosition="before">
+        <button mat-menu-item class="height-40" (click)="goToAllDataList()">Go to List</button>
+      </mat-menu>
+    </div>
+  </div>
+  <div class="separator"></div>
+  <form [formGroup]="salesTargetFormGroup" class="order-form custom-mat square scrolly">
+
+    <div class="card-body active-form overview">
+
+      <div class="row justify-content-between">
+        <div class="col-md-4">
+          <div class="form-group">
+            <label for="">Target Entity</label>
+            <mat-form-field id="targetEntity">
+              <mat-label>Select a target entity</mat-label>
+              <mat-select class="no-disabled-text" (selectionChange)="targetOnChanged($event)"
+                [formControl]="targetOnFormControl">
+                <mat-option *ngFor="let type of targetTypes" [value]="type.id">{{ type.name }}</mat-option>
+              </mat-select>
+              <mat-error>
+                <app-mat-error [control]="targetOnFormControl"></app-mat-error>
+              </mat-error>
+
+            </mat-form-field>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <div>
+      <div class="card-body overview">
+        <div class="row justify-content-between">
+          <div class="col-md-4">
+            <div class="form-group">
+              <label for="">Target Name</label>
+              <input type="text" placeholder="Enter target name" class="form-control form-control-sm"
+                [formControl]="nameFormControl" id="nameControl">
+              <app-validation-message [control]="nameFormControl"></app-validation-message>
+            </div>
+            <div class="form-group">
+              <label for="">Target Owner</label>
+              <mat-form-field id="targetOwner">
+                <mat-label>Select a target owner</mat-label>
+                <mat-select class="no-disabled-text" (selectionChange)="ownerChanged($event)"
+                  [formControl]="ownerFormControl">
+                  <mat-option *ngFor="let owner of owners" [value]="owner.id">{{ owner.name }}</mat-option>
+                </mat-select>
+                <mat-error>
+                  <app-mat-error [control]="ownerFormControl"></app-mat-error>
+                </mat-error>
+              </mat-form-field>
+            </div>
+            <div class="form-group">
+              <label for="">Start Date</label>
+              <input type="date" class="form-control form-control-sm" [min]="startOfMonth" [max]="startOfMonth"
+                [formControl]="startDateFormControl" id="sdateControl">
+              <app-validation-message [control]="startDateFormControl"></app-validation-message>
+            </div>
+            <div class="form-group">
+              <label for="">End Date</label>
+              <input type="date" [min]="endOfMonth" [max]="endOfMonth" class="form-control form-control-sm"
+                [formControl]="endDateFormControl" id="edateControl">
+              <app-validation-message [control]="endDateFormControl"></app-validation-message>
+            </div>
+          </div>
+          <div class="col-md-4">
+            <div class="form-group">
+              <label for="">Apply On</label>
+              <ul class="list-inline">
+                <li class="list-inline-item">
+                  <span class="radio">
+                    <app-radio-button [isMatStyle]="true"
+                      [config]="{ label: 'Item', value: 'item', name: 'applyOn', control: applyLevelFormControl }">
+                    </app-radio-button>
+                  </span>
+                </li>
+                <li class="list-inline-item">
+                  <span class="radio">
+                    <app-radio-button [isMatStyle]="true"
+                      [config]="{ label: 'Header', value: 'header', name: 'applyOn', control: applyLevelFormControl }">
+                    </app-radio-button>
+                  </span>
+                </li>
+              </ul>
+
+
+            </div>
+
+
+            <div class="form-group">
+              <label for="">Target Type</label>
+              <ul class="list-inline">
+                <li class="list-inline-item">
+                  <span class="radio">
+                    <app-radio-button [isMatStyle]="true"
+                      [config]="{ label: 'Quantity', value: 'quantity', name: 'targetType', control: targetTypeFormControl }">
+                    </app-radio-button>
+                  </span>
+
+                </li>
+                <li class="list-inline-item">
+                  <span class="radio">
+                    <app-radio-button [isMatStyle]="true"
+                      [config]="{ label: 'Value', value: 'value', name: 'targetType', control: targetTypeFormControl }">
+                    </app-radio-button>
+                  </span>
+
+                </li>
+              </ul>
+            </div>
+            <div class="form-group">
+              <label for="">Target Variance</label>
+              <ul class="list-inline">
+                <li class="list-inline-item">
+                  <td class="radio">
+                    <app-radio-button [isMatStyle]="true"
+                      [config]="{ label: 'Fixed', value: 'fixed', name: 'targetVariance', control: rangeTypeFormControl }">
+                    </app-radio-button>
+                  </td>
+
+                </li>
+                <li class="list-inline-item">
+                  <td class="radio">
+                    <app-radio-button [isMatStyle]="true"
+                      [config]="{ label: 'Slab', value: 'slab', name: 'targetVariance', control: rangeTypeFormControl }">
+                    </app-radio-button>
+                  </td>
+
+                </li>
+              </ul>
+            </div>
+            <div class="form-group">
+              <label for="">Commission Type</label>
+              <ul class="list-inline">
+                <li class="list-inline-item">
+                  <span class="radio">
+                    <app-radio-button [isMatStyle]="true"
+                      [config]="{ label: 'Fixed', value: 'fixed', name: 'commType', control: commissionTypeFormControl }">
+                    </app-radio-button>
+                  </span>
+
+                </li>
+                <li class="list-inline-item">
+                  <span class="radio">
+                    <app-radio-button [isMatStyle]="true"
+                      [config]="{ label: 'Percentage', value: 'percentage', name: 'commType', control: commissionTypeFormControl }">
+                    </app-radio-button>
+                  </span>
+
+                </li>
+              </ul>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+      <div class="bottom-form">
+
+        <div class="item-container custom-mat custom-mat-no-border" *ngIf="applyLevelFormControl.value === 'item'">
+          <div class="item-table-div">
+            <table class="item-table">
+              <thead>
+                <tr *ngIf="targetControl === 'HEAD_VALUE'">
+                  <ng-container *ngIf="isItemSelected">
+                    <th class="head" *ngFor="let head of itemTableHeaders">{{ head.label }}</th>
+                  </ng-container>
+                  <th class="head" *ngFor="let head of headTableHeadersValue">{{ head.label }}</th>
+                  <th>Action</th>
+                </tr>
+                <tr *ngIf="targetControl === 'HEAD_QTY'">
+                  <ng-container *ngIf="isItemSelected">
+                    <th class="head" *ngFor="let head of itemTableHeaders">{{ head.label }}</th>
+                  </ng-container>
+                  <th class="head" *ngFor="let head of headTableHeadersQty">{{ head.label }}</th>
+                  <th>Action</th>
+                </tr>
+                <tr *ngIf="targetControl === 'HEAD_FIXED_VALUE'">
+                  <ng-container *ngIf="isItemSelected">
+                    <th class="head" *ngFor="let head of itemTableHeaders">{{ head.label }}</th>
+                  </ng-container>
+                  <th class="head" *ngFor="let head of headTableHeadersFixedValue">{{ head.label }}</th>
+
+                  <th>Action</th>
+                </tr>
+                <tr *ngIf="targetControl === 'HEAD_FIXED_QTY'">
+                  <ng-container *ngIf="isItemSelected">
+                    <th class="head" *ngFor="let head of itemTableHeaders">{{ head.label }}</th>
+                  </ng-container>
+                  <th class="head" *ngFor="let head of headTableHeadersFixedQty">{{ head.label }}</th>
+                  <th>Action</th>
+
+                </tr>
+              </thead>
+              <tbody class="form-body">
+                <tr formArrayName="items" class="item-row" *ngFor="let item of itemFormControls; let i = index;">
+                  <ng-container [formGroup]="item">
+                    <td class="item-name" *ngIf="isItemSelected">
+                      <mat-form-field class="item-name-field">
+                        <input type="text" placeholder="Search an item" matInput formControlName="item"
+                          [matAutocomplete]="auto">
+                        <mat-autocomplete #auto="matAutocomplete"
+                          (optionSelected)="itemDidSearched($event.option.value, i)"
+                          [displayWith]="itemsControlDisplayValue">
+                          <mat-option *ngFor="let item of filteredItems" [value]="itemControlValue(item)">
+                            {{ item.item_name }} - {{item.item_code}} </mat-option>
+                        </mat-autocomplete>
+                      </mat-form-field>
+                    </td>
+                    <td class="uom-td" *ngIf="isItemSelected">
+                      <select class="custom-select" formControlName="item_uom_id">
+                        <option [value]="uom.id" *ngFor="let uom of uoms">{{ uom.name }}</option>
+                      </select>
+                    </td>
+                    <td *ngIf="targetControl === 'HEAD_VALUE'"><input type="number" min="0"
+                        class="form-control form-control-sm" placeholder="start value" formControlName="from_value">
+                    </td>
+                    <td *ngIf="targetControl === 'HEAD_VALUE'"><input type="number" min="0"
+                        class="form-control form-control-sm" placeholder="end value" formControlName="to_value"></td>
+                    <td *ngIf="targetControl === 'HEAD_QTY'"><input type="number" min="0"
+                        class="form-control form-control-sm" placeholder="start quantity" formControlName="from_qty">
+                    </td>
+                    <td *ngIf="targetControl === 'HEAD_QTY'"><input type="number" min="0"
+                        class="form-control form-control-sm" placeholder="end quantity" formControlName="to_qty"></td>
+                    <td *ngIf="targetControl === 'HEAD_FIXED_VALUE'"><input type="number" min="0"
+                        class="form-control form-control-sm" placeholder="fixed value" formControlName="fixed_value">
+                    </td>
+                    <td *ngIf="targetControl === 'HEAD_FIXED_QTY'"><input type="number" min="0"
+                        class="form-control form-control-sm" placeholder="fixed quantity" formControlName="fixed_qty">
+                    </td>
+                    <td [ngClass]="{ 'percent': commissionTypeFormControl.value === 'percentage' }">
+                      <input type="number" min="0" class="form-control form-control-sm" placeholder="commission"
+                        formControlName="commission">
+                      <i *ngIf="commissionTypeFormControl.value === 'percentage'" class="fa fa-percent"></i>
+                    </td>
+                    <td>
+                      <button [disabled]="itemFormControls.length <= 1" class="trash-btn" (click)="deleteItemRow(i)"><i
+                          class="fa fa-close"></i></button>
+                    </td>
+                  </ng-container>
+                </tr>
+              </tbody>
+            </table>
+
+            <button mat-button class="mat-inherit-line-height add-item-btn" (click)="addItem()">Add another
+              line</button>
+          </div>
+
+          <!-- <table class="table-check">
+            <thead>
+              <tr>
+                <th class="head"></th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr class="item-row" *ngFor="let item of itemFormControls; let i = index;">
+                <button [disabled]="itemFormControls.length <= 1" class="trash-btn" (click)="deleteItemRow(i)"><i
+                    class="fa fa-close"></i></button>
+              </tr>
+            </tbody>
+          </table> -->
+        </div>
+
+        <div class="item-container custom-mat custom-mat-no-border" *ngIf="applyLevelFormControl.value === 'header'">
+
+          <div class="item-table-div">
+            <table class="item-table">
+              <thead>
+                <tr *ngIf="targetControl === 'HEAD_VALUE'">
+                  <th class="head" *ngFor="let head of headTableHeadersValue">{{ head.label }}</th>
+                  <th>Action</th>
+                </tr>
+                <tr *ngIf="targetControl === 'HEAD_QTY'">
+                  <th class="head" *ngFor="let head of headTableHeadersQty">{{ head.label }}</th>
+                  <th>Action</th>
+                </tr>
+                <tr *ngIf="targetControl === 'HEAD_FIXED_VALUE'">
+                  <th class="head" *ngFor="let head of headTableHeadersFixedValue">{{ head.label }}</th>
+                  <th>Action</th>
+                </tr>
+                <tr *ngIf="targetControl === 'HEAD_FIXED_QTY'">
+                  <th class="head" *ngFor="let head of headTableHeadersFixedQty">{{ head.label }}</th>
+                  <th>Action</th>
+                </tr>
+
+              </thead>
+              <tbody class="form-body">
+                <tr formArrayName="items" class="item-row" *ngFor="let item of headersFormControls; let i = index;">
+                  <ng-container [formGroup]="item">
+                    <td *ngIf="targetControl === 'HEAD_VALUE'"><input type="number" min="0"
+                        class="form-control form-control-sm" placeholder="start value" formControlName="from_value">
+                    </td>
+                    <td *ngIf="targetControl === 'HEAD_VALUE'"><input type="number" min="0"
+                        class="form-control form-control-sm" placeholder="end value" formControlName="to_value"></td>
+                    <td *ngIf="targetControl === 'HEAD_QTY'"><input type="number" min="0"
+                        class="form-control form-control-sm" placeholder="start quantity" formControlName="from_qty">
+                    </td>
+                    <td *ngIf="targetControl === 'HEAD_QTY'"><input type="number" min="0"
+                        class="form-control form-control-sm" placeholder="end quantity" formControlName="to_qty"></td>
+                    <td *ngIf="targetControl === 'HEAD_FIXED_VALUE'"><input type="number" min="0"
+                        class="form-control form-control-sm" placeholder="fixed value" formControlName="fixed_value">
+                    </td>
+                    <td *ngIf="targetControl === 'HEAD_FIXED_QTY'"><input type="number" min="0"
+                        class="form-control form-control-sm" placeholder="fixed quantity" formControlName="fixed_qty">
+                    </td>
+                    <td [ngClass]="{ 'percent': commissionTypeFormControl.value === 'percentage' }">
+                      <input type="number" min="0" class="form-control form-control-sm" placeholder="commission"
+                        formControlName="commission">
+                      <i *ngIf="commissionTypeFormControl.value === 'percentage'" class="fa fa-percent"></i>
+                    </td>
+                    <td>
+                      <button [disabled]="headersFormControls.length <= 1" class="trash-btn"
+                        (click)="deleteHeadersRow(i)"><i class="fa fa-close"></i></button>
+                    </td>
+                  </ng-container>
+                </tr>
+              </tbody>
+            </table>
+            <button mat-button class="add-item-btn mat-inherit-line-height" (click)="addHeader()">Add another
+              line</button>
+          </div>
+
+          <!-- <table class="table-check">
+            <thead>
+              <tr>
+                <th class="head"></th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr class="item-row" *ngFor="let item of headersFormControls; let i = index;">
+                
+              </tr>
+            </tbody>
+          </table> -->
+        </div>
+
+      </div>
+    </div>
+    <div class="actions">
+      <button class="btn btn-primary" (click)="onSubmit()">Save</button>
+    </div>
+  </form>
+</section>

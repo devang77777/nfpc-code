@@ -1,0 +1,114 @@
+[
+    {
+        "label": "Customer",
+        "routeTo": "masters/customer"
+    },
+    {
+        "label": "Invoice",
+        "routeTo": "transaction/invoice"
+    },
+    {
+        "label": "Order",
+        "routeTo": "transaction/order"
+    },
+    {
+        "label": "Delivery",
+        "routeTo": "transaction/delivery"
+    },
+    {
+        "label": "Salesman",
+        "routeTo": "masters/salesman"
+    },
+    {
+        "label": "Merchandiser",
+        "routeTo": "masters/merchandiser"
+    },
+    {
+        "label": "Item",
+        "routeTo": "masters/item"
+    },
+    {
+        "label": "Journey Plan",
+        "routeTo": "masters/journey-plan"
+    },
+    {
+        "label": "Collection",
+        "routeTo": "transaction/collection"
+    },
+    {
+        "label": "Credit Note",
+        "routeTo": "transaction/credit-note"
+    },
+    {
+        "label": "Debit Note",
+        "routeTo": "transaction/debit-note"
+    },
+    {
+        "label": "Expenses",
+        "routeTo": "expense"
+    },
+    {
+        "label": "Estimate",
+        "routeTo": "/estimate"
+    },
+    {
+        "label": "Vendor",
+        "routeTo": "masters/vendor"
+    },
+    {
+        "label": "Purchase Order",
+        "routeTo": "inventory/purchase-order"
+    },
+    {
+        "label": "Complaint Feedback",
+        "routeTo": "merchandising/complaint-feedback"
+    },
+    {
+        "label": "Stock In Store",
+        "routeTo": "merchandising/stockinstore"
+    },
+    {
+        "label": "Competitor Info",
+        "routeTo": "merchandising/competitors"
+    },
+    {
+        "label": "Campaign",
+        "routeTo": "merchandising/campaigns"
+    },
+    {
+        "label": "Planogram",
+        "routeTo": "merchandising/planograms"
+    },
+    {
+        "label": "Shelf Display",
+        "routeTo": "merchandising/shelf-display"
+    },
+    {
+        "label": "Pricing Check",
+        "routeTo": "merchandising/price-check"
+    },
+    {
+        "label": "Share Of Shelf",
+        "routeTo": "merchandising/sos"
+    },
+    {
+        "label": "Asset Tracking",
+        "routeTo": "merchandising/asset-tracking"
+    },
+    {
+        "label": "Consumer Survey",
+        "routeTo": "merchandising/consumer-survey"
+    },
+    {
+        "label": "Sensory Survey",
+        "routeTo": "merchandising/sensory-survey"
+    },
+    {
+        "label": "Promotional Accountability",
+        "routeTo": "merchandising/promotional"
+    },
+    {
+        "label": "Market Promotion",
+        "routeTo": "merchandising/market-promotion"
+    }
+]

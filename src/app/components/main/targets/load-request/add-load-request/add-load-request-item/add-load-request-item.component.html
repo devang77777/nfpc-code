@@ -1,0 +1,79 @@
+<form [formGroup]="orderFormGroup">
+    <div class="item-container custom-mat square custom-mat-no-border">
+        <div class="table-responsive">
+            <table class="item-table">
+                <thead>
+                    <tr>
+                        <th class="head" *ngFor="let head of itemTableHeaders">{{ head.label }}</th>
+                        <th>On Hand Qty</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody class="form-body">
+                    <tr formArrayName="items" class="item-row" [hidden]="depotid == 0||depotid == null"
+                        *ngFor="let item of itemFormControls.controls; let i = index;">
+                        <ng-container [formGroupName]="i">
+                            <td class="item-sequence">
+                                <span>{{ i + 1 }}</span>
+                            </td>
+                            <td>
+                                <mat-form-field class="item-name-field">
+                                    <input type="text" placeholder="Search an item" matInput formControlName="item"
+                                        [matAutocomplete]="auto">
+                                    <mat-autocomplete appOptionScroll (optionsScroll)="onScrollItem()"
+                                        #auto="matAutocomplete" [displayWith]="itemsControlDisplayValue"
+                                        (optionSelected)="onItemSelection($event.option.value, i)">
+                                        <mat-option class="mat-option-cst" *ngFor="let item of filteredItems"
+                                            [value]="itemControlValue(item)">
+                                            <span class="mat-option-text">{{item.item_code}} - {{ item.item_name
+                                                }}</span>
+                                        </mat-option>
+                                        <mat-option
+                                            *ngIf="isLoading && filteredItems.length >= 10 || !filteredItems.length">
+                                            <div class="select-placeholder-container">
+                                                <mat-spinner class="spinner" diameter="20"></mat-spinner>
+                                            </div>
+                                        </mat-option>
+                                    </mat-autocomplete>
+                                </mat-form-field>
+                                <!-- <mat-form-field class="item-name-field">
+                      <input type="text" required placeholder="Search an item" matInput formControlName="item" [matAutocomplete]="auto">
+                      <mat-autocomplete #auto="matAutocomplete" (optionSelected)="itemDidSearched($event.option.value, i)" [displayWith]="itemsControlDisplayValue">
+                        <mat-option *ngFor="let item of filteredItems"  [value]="itemControlValue(item)">{{ item.item_name }}</mat-option>
+                      </mat-autocomplete>
+                    </mat-form-field> -->
+                            </td>
+                            <td>
+                                <select class="custom-select" formControlName="uom" (change)="isStockCheck(item)">
+                                    <option [value]="uom.id" *ngFor="let uom of uomArray[i]">{{ uom.name }}</option>
+                                </select>
+                                <!-- <select *ngIf="editData" class="custom-select" formControlName="uom">
+                      <option [value]="uom.id" *ngFor="let uom of uoms">{{ uom.name }}</option>
+                    </select> -->
+                                <!-- <select class="custom-select" required formControlName="uom">
+                      <option [value]="uom.id" *ngFor="let uom of item.value.uom_list">{{ uom.name }}</option>
+                    </select> -->
+                            </td>
+                            <td [ngClass]="{'itemQtyAvlaible' : itemQtyAvlaible[item?.value?.item.id] == false}"><input
+                                    type="number" min="0" class="form-control" placeholder="Quantity"
+                                    formControlName="qty"></td>
+                            <td><input type="number" min="0" class="form-control" placeholder="on hand qty"
+                                    formControlName="onhand_qty"></td>
+                            <td>
+                                <div class="trash-btn-div"><button [disabled]="itemFormControls.length <= 1"
+                                        class="trash-btn" (click)="deleteItemRow(i)"><i
+                                            class="fa fa-close"></i></button></div>
+                            </td>
+
+                        </ng-container>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <button class="add-item-btn" [hidden]="depotid == 0||depotid == null" mat-button (click)="addItem()"> Add
+        Row</button>
+</form>
+<!-- <pre>{{uomArray | json}}</pre> -->
+
+<!-- <pre>{{editData?.salesman_load_details |json}}</pre> -->

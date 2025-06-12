@@ -1,0 +1,152 @@
+<div class="card">
+  <div class="card-header pt-4">
+    <span class="h6 font-weight-bold">Export Pricing</span>
+    <a [mat-dialog-close]="true" class="closeicon settingclose"><i class="os-icon os-icon-x"></i></a>
+  </div>
+  <div class="card-body">
+    <form [formGroup]="exportForm">
+      <div>
+        <section class="full-w">
+          <mat-radio-group formControlName="type" name="type" [(ngModel)]="export.type">
+            <mat-radio-button class="example-margin full-w" value="0">All Pricing</mat-radio-button>
+            <mat-radio-button class="example-margin full-w" value="1" (onchange)="onRadioChange()">Specified Pricing</mat-radio-button>
+          </mat-radio-group>
+            <div class="col-12" *ngIf="export.type === '0' || export.type === '1' ">
+                    <mat-radio-group formControlName="spci_price" name="spci_price"
+                      [(ngModel)]="export.spci_price">
+                      <mat-radio-button class="example-margin full-w" value="2">Active</mat-radio-button>
+                      <mat-radio-button class="example-margin full-w" value="3">In Active</mat-radio-button>
+                      <mat-radio-button class="example-margin full-w" value="4">Both</mat-radio-button>
+                    </mat-radio-group>
+                  </div>
+
+                   <div class="col-lg-7" *ngIf="export.type==='1'" >
+            <label  >Upload Files :</label>
+            <input style="display: none" type="file" (change)="onSelectFile($event)"
+              formControlName="customer_file" name="customer_file" #file required>
+            <button class="btn btn-sm btn-p" *ngIf='!(filesList.length > 0)' (click)="file.click()">Upload file</button>
+            <span *ngIf='!(filesList.length > 0)'>No file selected</span>
+
+            <mat-chip-list #chipList aria-label="selection" *ngIf='(filesList.length > 0)'>
+              <mat-chip *ngFor="let file of filesList" [removable]="removable" (removed)="remove(file)">
+                {{file.name}}
+                <mat-icon matChipRemove *ngIf="removable" >Cancel</mat-icon>
+              </mat-chip>
+            </mat-chip-list>
+
+            <div class="font-style">
+              <small> Maximum File Size: 5 MB </small>&nbsp;|&nbsp;
+              <small> File Format: CSV or TSV or XLS </small>
+            </div>
+          </div>
+             <div class="row mt-4" *ngIf="data && data.length > 0">
+  <div class="col-12">
+    <label class="font-weight-bold mb-2">Preview:</label>
+
+    <!-- 🔽 Scrollable Container Start -->
+    <div class="table-scroll-container">
+      <table class="invoice-table cardtable table">
+        <tbody class="form-body">
+          <tr class="item-row" *ngFor="let list of data; let i = index">
+            <ng-container *ngIf="list.length > 0">
+              <td data-th="#" class="center"><span>{{ i + 1 }}</span></td>
+              <td *ngFor="let obj of list">{{ obj }}</td>
+            </ng-container>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <!-- 🔼 Scrollable Container End -->
+
+  </div>
+  </div>
+
+     
+        </section>
+
+ 
+    <div class="d-inline float-right">
+      <button class="btn btn-sm btn-p" [mat-dialog-close]="true" (click)="exportPricing('csv')">
+        Export
+      </button>
+      <button class="btn btn-sm btn-white mr-2" mat-dialog-close>Cancel</button>
+  
+  </div>
+</div>
+
+
+<!--          
+          <div class="row" style="margin:10px" >
+           
+          
+        </div>
+          <div class="col-lg-7" *ngIf="export.spci_price==='1'" >
+            <label  >Upload Files :</label>
+            <input style="display: none" type="file" (change)="onSelectFile($event)"
+              formControlName="customer_file" name="customer_file" #file required>
+            <button class="btn btn-sm btn-p" *ngIf='!(filesList.length > 0)' (click)="file.click()">Upload file</button>
+            <span *ngIf='!(filesList.length > 0)'>No file selected</span>
+
+            <mat-chip-list #chipList aria-label="selection" *ngIf='(filesList.length > 0)'>
+              <mat-chip *ngFor="let file of filesList" [removable]="removable" (removed)="remove(file)">
+                {{file.name}}
+                <mat-icon matChipRemove *ngIf="removable">Cancel</mat-icon>
+              </mat-chip>
+            </mat-chip-list>
+
+            <div class="font-style">
+              <small> Maximum File Size: 5 MB </small>&nbsp;|&nbsp;
+              <small> File Format: CSV or TSV or XLS </small>
+            </div>
+          </div>
+      -->
+
+        <!-- 🔽 Preview Table Inserted Here -->
+        <!-- <div class="row mt-4" *ngIf="data && data.length > 0">
+          <div class="col-12">
+            <label class="font-weight-bold mb-2">Preview:</label>
+            <table class="invoice-table cardtable table">
+              <tbody class="form-body">
+                <tr class="item-row" *ngFor="let list of data; let i = index">
+                  <ng-container *ngIf="list.length > 0">
+                    <td data-th="#" class="center"><span>{{ i + 1 }}</span></td>
+                    <td *ngFor="let obj of list">{{ obj }}</td>
+                  </ng-container>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <div class="col-12 mt-2">
+            <div class="d-inline float-left">
+              <button mat-button class="btn btn-sm btn-light mr-2" (click)="backToMain()">Back</button>
+              <button class="btn btn-sm btn-p" (click)="importData()">Import</button>
+              <button class="btn btn-sm btn-light mr-2" (click)="backToMain()">Cancel</button>
+            </div>
+          </div>
+        </div> -->
+   <!-- <div class="row mt-4" *ngIf="data && data.length > 0">
+  <div class="col-12">
+    <label class="font-weight-bold mb-2">Preview:</label> -->
+
+    <!-- 🔽 Scrollable Container Start -->
+    <!-- <div class="table-scroll-container">
+      <table class="invoice-table cardtable table">
+        <tbody class="form-body">
+          <tr class="item-row" *ngFor="let list of data; let i = index">
+            <ng-container *ngIf="list.length > 0">
+              <td data-th="#" class="center"><span>{{ i + 1 }}</span></td>
+              <td *ngFor="let obj of list">{{ obj }}</td>
+            </ng-container>
+          </tr>
+        </tbody>
+      </table>
+    </div> -->
+    <!-- 🔼 Scrollable Container End -->
+
+  <!-- </div>
+  </div>
+
+
+      </div>
+    </form>
+  </div> -->

@@ -1,0 +1,70 @@
+<section>
+  <div class="card-header">
+    <span class="h6">Manage Van Category</span>
+    <button class="dialog-close-btn" mat-dialog-close>
+      <i class="fa fa-times fa-lg" aria-hidden="true"></i>
+    </button>
+  </div>
+  <div class="form-container" *ngIf="showForm">
+    <form [formGroup]="vcFormGroup">
+      <div class="card-body">
+        <div class="container">
+          <div class="row mb-4">
+            <div class="col-4 ">Name*</div>
+            <div class="col-8">
+              <input [formControl]="vcNameFormControl" class="form-control form-control-sm" type="text" />
+            </div>
+          </div>
+          <div class="row mb-4">
+            <div class="col-4 ">Parent*</div>
+            <div class="col-8">
+              <app-tree-dropdown class="salesorg-dropdown" [dataSource]="categoryList" [isManageable]="false"
+                [dataService]="getAllVanCategories()" (whenItemSelected)="vanCategorySelected($event)"
+                [selectFormControl]="parentFormControl" [placeHolder]="'Search a Parent'" ngDefaultControl>
+              </app-tree-dropdown>
+            </div>
+          </div>
+        </div>
+        <div class="cancel-btn">
+          <button type="button" [disabled]="!vcNameFormControl.value"
+            (click)="saveVanCategoryData()" class=" btn btn-primary height-40">
+            Save
+          </button> &nbsp;&nbsp;
+          <button mat-button class="mat-inherit-line-height height-40" (click)="reset()">
+            Reset
+          </button>
+        </div>
+      </div>
+    </form>
+  </div>
+
+  <div class="categories-title">
+    <h4>
+      Van Category
+      <span class="add-new-label"><button (click)="addNewVanCategory()" *ngIf="categoryList.length > 0"
+          >
+          <i class="fa fa-plus-circle"></i>Add New Van Category
+        </button></span>
+    </h4>
+  </div>
+  <div class="empty-list text-center mt-4" *ngIf="isLoaded">
+    <p class="text-muted" *ngIf="categoryList.length == 0">
+      No Van Category available
+    </p>
+    <button mat-button class="add-new-btn"
+      *ngIf="categoryList.length == 0 && !showForm" (click)="addNewVanCategory()">
+      Add New Van Category
+    </button>
+  </div>
+  <div class="sales-org-holder">
+    <app-tree-container [treeData]="categoryList" (deleteData)="delete($event)"
+      (applyData)="applySalesOrganisation($event)" (editData)="edit($event)">
+    </app-tree-container>
+  </div>
+
+  <div class="cancel-btn">
+    <button mat-button class="mat-inherit-line-height height-40" mat-dialog-close>
+      Cancel
+    </button>
+  </div>
+</section>

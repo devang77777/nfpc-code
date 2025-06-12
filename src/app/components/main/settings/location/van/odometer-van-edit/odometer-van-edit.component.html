@@ -1,0 +1,36 @@
+<div class="card">
+  <div class="card-header pt-4">
+    <span class="h6 font-weight-bold">Edit Odometer</span>
+    <a [mat-dialog-close]="true" class="closeicon settingclose"><i class="os-icon os-icon-x"></i></a>
+  </div>
+  <div class="card-body">
+    <form [formGroup]="editForm">
+      <div class="form-group row">
+        <div class="col-sm-12">
+          <div class="row">
+            <div class="col">
+              <input type="number" formControlName="start_fuel" 
+                class="form-control form-control-sm" placeholder="Start Fuel">
+            </div>
+            <div class="col">
+              <input type="number" formControlName="end_fuel" 
+                class="form-control form-control-sm" placeholder="End Fuel">
+            </div>
+            <div class="col">
+              <input type="number" formControlName="diesel" 
+                class="form-control form-control-sm" placeholder="Diesel">
+            </div>
+          </div>
+        </div>
+      </div>
+    </form>
+  </div>
+  <div class="card-footer">
+    <div class="d-inline float-right">
+      <button class="btn btn-sm btn-p" [mat-dialog-close]="true" (click)="save()">
+        Save
+      </button>
+      <button class="btn btn-sm btn-white mr-2" mat-dialog-close>Cancel</button>
+    </div>
+  </div>
+</div>

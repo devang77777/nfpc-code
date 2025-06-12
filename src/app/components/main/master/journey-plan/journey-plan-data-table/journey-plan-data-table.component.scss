@@ -1,0 +1,52 @@
+
+:host {
+  float: left;
+  width: 100%;
+}
+
+.cdk-column-select {
+  position: relative;
+
+  .filter-btn {
+    position: absolute;
+    left: 0px;
+    top: 0;
+    height: 35px;
+    line-height: 36px;
+    width: 30px;
+    padding: 0;
+    margin: 0;
+    text-align: center;
+    display: block;
+  }
+}
+
+button {
+  background-color: transparent;
+  border: none;
+
+
+}
+
+.trash-btn {
+  margin-left: 8px;
+}
+
+.cdk-column-select {
+  width: 8%;
+}
+
+
+
+.head-checkbox {
+  display: inline-block;
+  margin-left: 4px;
+  position: relative;
+  top: 0;
+}
+
+.row-checkbox {
+  margin-left: 4px;
+  position: relative;
+  top: -2px;
+}

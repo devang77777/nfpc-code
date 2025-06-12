@@ -1,0 +1,75 @@
+<section class="makeScrollable">
+  <div class="card-header">
+    <span class="h6" style="font-size: 20px;"><b>Add Item</b></span>
+    <button class="dialog-close-btn" (click)="close()" mat-dialog-close>
+      <i class="fa fa-times fa-lg" aria-hidden="true"></i>
+    </button>
+  </div>
+  <div class="channel-holder scrolly">
+    <div class=" data-body">
+      <div class="table-responsive">
+        <table class="table table-hover" mat-table [dataSource]="dataSource" [formGroup]="itemsFormGroup">
+            <ng-container matColumnDef="select">
+                <th mat-header-cell *matHeaderCellDef>
+                    <mat-checkbox class="head-checkbox" (change)="$event ? toggleSelection() : null"
+                        [checked]="selections.hasValue() && isAllSelected()"
+                        [indeterminate]="selections.hasValue() && !isAllSelected()" [aria-label]="checkboxLabel()">
+                    </mat-checkbox>
+                </th>
+                <td mat-cell *matCellDef="let row">
+                    <mat-checkbox class="row-checkbox" (click)="$event.stopPropagation()"
+                        (change)="$event ? selections.toggle(row) : null" [checked]="selections.isSelected(row)"
+                        [aria-label]="checkboxLabel(row)">
+                    </mat-checkbox>
+                </td>
+            </ng-container>
+            <ng-container matColumnDef="item_code">
+              <th mat-header-cell *matHeaderCellDef> Item Code </th>
+              <td mat-cell *matCellDef="let element"> {{element.item_code}} </td>
+            </ng-container>
+            <ng-container matColumnDef="item_name">
+              <th mat-header-cell *matHeaderCellDef> Item Name </th>
+              <td mat-cell *matCellDef="let element"> {{element.item_name}} </td>
+            </ng-container>
+            <ng-container matColumnDef="item_uom" formArrayName="capacity">
+              <th mat-header-cell *matHeaderCellDef> UOM </th>
+              <td mat-cell *matCellDef="let element let i = index;" [formGroupName]="i"> 
+                <!-- {{element.item_uom_lower_unit.name}}  -->
+                <mat-select class="form-control" formControlName="item_uom_id">
+                  <mat-option *ngFor="let uom of itemUomLists" [value]="uom.id">{{uom.name}}</mat-option>
+                </mat-select>
+                <app-validation-message [control]="itemsFormGroup.controls.capacity.controls[i].controls['item_uom_id']"></app-validation-message>
+              </td>
+            </ng-container>
+            <ng-container matColumnDef="capacity" formArrayName="capacity">
+              <th mat-header-cell *matHeaderCellDef> capacity </th>
+              <td mat-cell *matCellDef="let element;  let i = index;" [formGroupName]="i">
+                  <input class="form-control form-control-sm w-80" type="number" formControlName="capacityValue">
+                  <app-validation-message [control]="itemsFormGroup.controls.capacity.controls[i].controls['capacityValue']"></app-validation-message>
+              </td>
+            </ng-container>
+            <ng-container matColumnDef="total_number_of_facing" formArrayName="capacity">
+              <th mat-header-cell *matHeaderCellDef> Total No Of Facing </th>
+              <td mat-cell *matCellDef="let element;  let i = index;" [formGroupName]="i">
+                  <input class="form-control form-control-sm w-80" type="number" formControlName="totalFacing">
+                  <app-validation-message [control]="itemsFormGroup.controls.capacity.controls[i].controls['totalFacing']"></app-validation-message>
+              </td>
+            </ng-container>
+            <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+            <tr mat-row *matRowDef="let row; columns: displayedColumns; let i = index" ></tr>
+          </table>
+      </div> 
+      <div [ngClass]="{'hidden': !dataSource.data.length}">
+        <!-- <mat-paginator pageSize="100" [pageSizeOptions]="[10, 25, 50, 100]"></mat-paginator> -->
+      </div>
+    </div>
+  </div>
+  <div class="cancel-btn">
+    <button mat-button class="mat-inherit-line-height height-40" (click)="close()" mat-dialog-close>
+      Cancel
+    </button>
+    <button class="btn btn-sm btn-p btn-primary mr-2" (click)="saveCustomerItems()">
+      Save
+    </button>
+  </div>
+</section>

@@ -1,0 +1,49 @@
+<div>
+    <div class="mat-paginator" style="display: block;">
+        <div class="mat-paginator-outer-container" style="display: flex;">
+            <div class="mat-paginator-container"
+                style="display: flex;align-items: center;justify-content: flex-end;min-height: 56px;padding: 0 8px;flex-wrap: wrap-reverse;width: 100%;">
+                <div class="mat-paginator-range-actions" style="display: flex;align-items: center;">
+                    <div class="mat-paginator-range-label" style="margin: 0 32px 0 24px;order: 2;"> {{startNumber+1}}
+                        –
+                        {{endNumber}} of {{length}}
+                    </div>
+                    <button (click)="previousPage()" type="button" ng-reflect-message="Previous page"
+                        aria-label="Previous page"
+                        class="mat-focus-indicator mat-paginator-navigation-previous mat-icon-button mat-button-base"
+                        style="order: 1;">
+                        <span class="mat-button-wrapper">
+                            <span class="mat-button-wrapper">
+                                <svg viewBox="0 0 24 24" focusable="false" class="mat-paginator-icon">
+                                    <path d="M15.41 7.41L14 6l-6 6 6 6 1.41-1.41L10.83 12z"></path>
+                                </svg>
+                            </span>
+                            <div matripple="" class="mat-ripple mat-button-ripple mat-button-ripple-round"></div>
+                            <div class="mat-button-focus-overlay"></div>
+                        </span>
+                        <div matripple="" class="mat-ripple mat-button-ripple mat-button-ripple-round"
+                            ng-reflect-centered="true" ng-reflect-trigger="[object HTMLButtonElement]"></div>
+                        <div class="mat-button-focus-overlay"></div>
+                    </button>
+                    <button (click)="nextPage()" type="button"
+                        class="mat-focus-indicator mat-paginator-navigation-next mat-icon-button mat-button-base"
+                        style="order: 3;">
+                        <span class="mat-button-wrapper">
+                            <span class="mat-button-wrapper">
+                                <svg viewBox="0 0 24 24" focusable="false" class="mat-paginator-icon">
+                                    <path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"></path>
+                                </svg>
+                            </span>
+                            <div matripple="" class="mat-ripple mat-button-ripple mat-button-ripple-round"></div>
+                            <div class="mat-button-focus-overlay"></div>
+                        </span>
+                        <div matripple="" class="mat-ripple mat-button-ripple mat-button-ripple-round"
+                            ng-reflect-disabled="false" ng-reflect-centered="true"
+                            ng-reflect-trigger="[object HTMLButtonElement]"></div>
+                        <div class="mat-button-focus-overlay"></div>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

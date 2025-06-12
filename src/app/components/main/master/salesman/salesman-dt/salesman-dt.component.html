@@ -1,0 +1,198 @@
+<section class="scrolly clearfix">
+  <ng-container *ngIf="advanceSearchRequest.length>0">
+    <app-search-criteria [data]="advanceSearchRequest" (change)="onChangeCriteria()" (close)="onCloseCriteria()">
+    </app-search-criteria>
+  </ng-container>
+  <div class="table-responsive">
+    <table class="table  table-hover" mat-table [dataSource]="dataSource">
+      <ng-container matColumnDef="select">
+        <th mat-header-cell *matHeaderCellDef>
+          <mat-checkbox class="head-checkbox" (change)="$event ? toggleSelection() : null" (change)="getSelectedRows()"
+            [checked]="selections.hasValue() && isAllSelected()"
+            [indeterminate]="selections.hasValue() && !isAllSelected()" [aria-label]="checkboxLabel()">
+          </mat-checkbox>
+          <a class="filter-btn btn btn-sm " *ngIf="!isDetailVisible" [matMenuTriggerFor]="menu">
+            <i class="fa fa-table" aria-hidden="true"></i>
+          </a>
+          <mat-menu #menu="matMenu">
+            <div class="card-body p-2" style="min-width: 200px;">
+              <ul style="list-style:none; padding-left: 7px;">
+                <li *ngFor="let column of filterColumns">
+                  <input type="checkbox" [(ngModel)]="column.show" class="m-2" (click)="$event.stopPropagation()">
+                  {{column.title}}
+                </li>
+              </ul>
+              <div class="float-right mb-2">
+                <button class="btn btn-p bg-secondary">Cancel</button>
+              </div>
+            </div>
+          </mat-menu>
+        </th>
+        <td mat-cell *matCellDef="let row">
+          <mat-checkbox class="row-checkbox" (click)="$event.stopPropagation()"
+            (change)="$event ? selections.toggle(row) : null" (change)="getSelectedRows()"
+            [checked]="selections.isSelected(row)" [aria-label]="checkboxLabel(row)">
+          </mat-checkbox>
+        </td>
+      </ng-container>
+      <ng-container matColumnDef="salesman_info.salesman_code">
+        <th mat-header-cell *matHeaderCellDef>
+          <app-column-filter
+            title="{{ domain == 'merchandising' || domain == 'nfpc' ? 'Merchandiser' : 'Salesman' }} Code"
+            (changeSelected)="onColumnFilterOpen($event)" controlName="salesman_code" [selected]="selectedColumnFilter"
+            (close)="onColumnFilter($event)">
+            <input class="form-control form-control-sm" [formControl]="filterForm.get('salesman_code')"
+              placeholder="Enter Code" type="text">
+          </app-column-filter>
+
+        </th>
+        <td mat-cell *matCellDef="let element"> {{ element?.salesman_code }}</td>
+      </ng-container>
+      <ng-container matColumnDef="name">
+        <th mat-header-cell *matHeaderCellDef>
+
+          <app-column-filter
+            title="{{ domain == 'merchandising' || domain == 'nfpc' ? 'Merchandiser' : 'Salesman' }} Name"
+            (changeSelected)="onColumnFilterOpen($event)" controlName="name" [selected]="selectedColumnFilter"
+            (close)="onColumnFilter($event)">
+            <input class="form-control form-control-sm" [formControl]="filterForm.get('name')" placeholder="Enter Name"
+              type="text">
+          </app-column-filter>
+
+        </th>
+        <td mat-cell *matCellDef="let element"> {{ element?.user?.firstname }} {{ element?.user?.lastname }}</td>
+      </ng-container>
+      <ng-container matColumnDef="supervisor_name">
+        <th mat-header-cell *matHeaderCellDef>
+
+          <app-column-filter title="Supervisor Name" (changeSelected)="onColumnFilterOpen($event)"
+            controlName="supervisor" [selected]="selectedColumnFilter" (close)="onColumnFilter($event)">
+            <input class="form-control form-control-sm" [formControl]="filterForm.get('supervisor')"
+              placeholder="Enter Name" type="text">
+          </app-column-filter>
+
+        </th>
+        <td mat-cell *matCellDef="let element"> {{ element?.supervisor_user?.firstname }} {{
+          element?.supervisor_user?.lastname }}</td>
+      </ng-container>
+      <ng-container matColumnDef="salesman_info.salesman_type">
+        <th mat-header-cell *matHeaderCellDef>
+
+          <app-column-filter
+            title="{{ domain == 'merchandising' || domain == 'nfpc' ? 'Merchandiser' :  'Salesman' }} Type"
+            (changeSelected)="onColumnFilterOpen($event)" controlName="type" [selected]="selectedColumnFilter"
+            (close)="onColumnFilter($event)">
+            <input class="form-control form-control-sm" [formControl]="filterForm.get('type')" placeholder="Enter Type"
+              type="text">
+          </app-column-filter>
+
+        </th>
+        <td mat-cell *matCellDef="let element"> {{ element?.salesman_type?.name }} </td>
+      </ng-container>
+      <ng-container matColumnDef="region">
+        <th mat-header-cell *matHeaderCellDef>
+
+          <app-column-filter
+            title="Region"
+            (changeSelected)="onColumnFilterOpen($event)" controlName="region" [selected]="selectedColumnFilter"
+            (close)="onColumnFilter($event)">
+            <input class="form-control form-control-sm" [formControl]="filterForm.get('region')" placeholder="Enter Type"
+              type="text">
+          </app-column-filter>
+
+        </th>
+        <td mat-cell *matCellDef="let element"> {{ element?.region?.region_name }} </td>
+      </ng-container>
+      <ng-container matColumnDef="salesman_category">
+        <th mat-header-cell *matHeaderCellDef>
+
+          <app-column-filter title="Salesman Category" (changeSelected)="onColumnFilterOpen($event)"
+            controlName="category" [selected]="selectedColumnFilter" (close)="onColumnFilter($event)">
+            <input class="form-control form-control-sm" [formControl]="filterForm.get('type')"
+              placeholder="Enter Category" type="text">
+          </app-column-filter>
+
+        </th>
+        <td mat-cell *matCellDef="let element">
+          <span [ngSwitch]=" element?.category_id">
+            <ng-container *ngSwitchCase="1">Salesman</ng-container>
+            <ng-container *ngSwitchCase="2">Salesman cum driver</ng-container>
+            <ng-container *ngSwitchCase="3">Helper</ng-container>
+            <ng-container *ngSwitchCase="4">Driver cum helper</ng-container>
+            <ng-container *ngSwitchDefault>{{element?.category_id}}</ng-container>
+
+          </span>
+        </td>
+      </ng-container>
+      <ng-container matColumnDef="role">
+        <th mat-header-cell *matHeaderCellDef>
+          <app-column-filter title="Role" (changeSelected)="onColumnFilterOpen($event)" controlName="category"
+            [selected]="selectedColumnFilter" (close)="onColumnFilter($event)">
+            <input class="form-control form-control-sm" [formControl]="filterForm.get('role')" placeholder="Enter Role"
+              type="text">
+          </app-column-filter>
+        </th>
+        <td mat-cell *matCellDef="let element"> {{
+          element?.salesman_role?.name }} </td>
+      </ng-container>
+      <ng-container matColumnDef="route">
+        <th mat-header-cell *matHeaderCellDef [hidden]="domain == 'merchandising' || domain == 'nfpc'">
+          <app-column-filter title="Route" (changeSelected)="onColumnFilterOpen($event)" controlName="category"
+            [selected]="selectedColumnFilter" (close)="onColumnFilter($event)">
+            <input class="form-control form-control-sm" [formControl]="filterForm.get('route')"
+              placeholder="Enter Route" type="text">
+          </app-column-filter>
+        </th>
+        <td mat-cell *matCellDef="let element" [hidden]="domain == 'merchandising' || domain == 'nfpc'"> {{
+          element?.route?.route_name }} </td>
+      </ng-container>
+      <ng-container matColumnDef="route_code">
+        <th mat-header-cell *matHeaderCellDef [hidden]="domain == 'merchandising' || domain == 'nfpc'">
+          <app-column-filter title="Route Code" (changeSelected)="onColumnFilterOpen($event)" controlName="category"
+            [selected]="selectedColumnFilter" (close)="onColumnFilter($event)">
+            <input class="form-control form-control-sm" [formControl]="filterForm.get('route_code')"
+              placeholder="Enter Route Code" type="text">
+          </app-column-filter>
+        </th>
+        <td mat-cell *matCellDef="let element" [hidden]="domain == 'merchandising' || domain == 'nfpc'"> {{
+          element?.route?.route_code }} </td>
+      </ng-container>
+      <ng-container matColumnDef="approval">
+        <th mat-header-cell *matHeaderCellDef>
+          <app-column-filter title="Approval" (changeSelected)="onColumnFilterOpen($event)" controlName="category"
+            [selected]="selectedColumnFilter" (close)="onColumnFilter($event)">
+            <input class="form-control form-control-sm" [formControl]="filterForm.get('approval')"
+              placeholder="Enter Approval" type="text">
+          </app-column-filter>
+        </th>
+        <td mat-cell *matCellDef="let element"> {{
+          element?.current_stage }} </td>
+      </ng-container>
+      <ng-container matColumnDef="status">
+        <th mat-header-cell *matHeaderCellDef>
+          <app-column-filter title="Status" (changeSelected)="onColumnFilterOpen($event)" controlName="status"
+            [selected]="selectedColumnFilter" (close)="onColumnFilter($event)">
+            <select class="form-control form-control-sm" [formControl]="filterForm.get('status')" placeholder="Status">
+              <option value="1">Active</option>
+              <option value="0">Inactive</option>
+            </select>
+          </app-column-filter>
+        </th>
+        <td mat-cell *matCellDef="let element"> {{ element?.status===1 ? 'Active' :'Inactive' }} </td>
+      </ng-container>
+      <!-- <ng-container matColumnDef="lob">
+        <th mat-header-cell *matHeaderCellDef> Lob </th>
+        <td mat-cell *matCellDef="let element; let i = index ;"> {{ element.salesmanlob[i]?.lob.name }} </td>
+      </ng-container> -->
+
+
+      <tr mat-header-row *matHeaderRowDef="getDisplayedColumns()"></tr>
+      <tr mat-row *matRowDef="let row; columns: getDisplayedColumns();" (click)="openDetailView(row)"></tr>
+    </table>
+    <div [ngClass]="{'hidden': !dataSource.data.length}">
+      <mat-paginator [hidden]="apiResponse.pagination?.total_records < 10" (page)="onPageFired($event)"
+        [length]="apiResponse.pagination?.total_records" [pageSize]="pageSize" [pageSizeOptions]="[10, 25, 50]">
+      </mat-paginator>
+    </div>
+  </div>
+</section>

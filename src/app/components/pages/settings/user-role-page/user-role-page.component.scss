@@ -1,0 +1,80 @@
+button:focus {
+  outline: none;
+}
+.fa-plus {
+  padding-bottom: 2px;
+}
+button.mat-menu-item {
+  height: 30px;
+  line-height: normal;
+}
+section {
+  //padding-top: 16px;
+}
+
+button:focus {
+  outline: none;
+}
+
+.fa-plus {
+  padding-bottom: 2px;
+}
+
+button.mat-menu-item {
+  height: 30px;
+  line-height: normal;
+}
+
+.table-box {
+  float: left;
+  transition: width 0.4s;
+  width: 100%;
+}
+
+
+
+.details-box {
+  float: left;
+  transition: width 0.4s, height 2s, visibility 0.4s;
+  width: 0;
+  height: calc(100vh - 68px);
+  visibility: hidden;
+}
+
+.collapsed {
+  transition: width 0.4s;
+  width: 25%;
+}
+
+.expanded {
+  height: calc(100vh - 50px);
+  transition: width 0.4s, visibility 0.4s;
+  width: 75%;
+  border-left: 2px solid lightgray;
+  visibility: visible;
+}
+.mat-button {
+  line-height: normal;
+  height: 27px;
+}
+
+.mat-tab-label {
+  min-width: 25px !important;
+  padding: 20px;
+  background-color: transparent;
+  font-weight: 700;
+}
+
+/* Styles for the active tab label */
+.mat-tab-label.mat-tab-label-active {
+  min-width: 25px !important;
+  padding:20px;
+  background-color: transparent;
+  font-weight: 700;
+}
+.invite-btn{
+  position: absolute;
+  top: 6px;
+  right: 30px;
+  z-index: 100;
+}

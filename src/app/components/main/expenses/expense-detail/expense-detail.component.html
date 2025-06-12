@@ -1,0 +1,83 @@
+<section *ngIf="expense">
+
+  <div class="heading-row">
+    <h2 class="d-md-inline">
+      <span class="order-number">{{ expense.customer?.firstname }}</span>
+    </h2>
+    <div class="d-md-inline float-md-right text-right">
+      <div class="btn-group btnrow mr-2">
+        <!-- <button class="btn" type="button" [autoClose]="'outside'" triggers="manual" #emailPopup="ngbPopover"
+          placement="bottom" (click)="email.open();" [ngbPopover]="emailPopContent" [popoverTitle]="emailPopTitle">
+          <i class="os-icon os-icon-mail"></i>
+        </button> -->
+        <button class="btn" type="button" (click)="openEditexpense()">
+          <i class="os-icon os-icon-edit-32"></i>
+        </button>
+        <button class="btn" type="button" (click)="getDocument('pdf')">
+          <mat-icon [inline]="true">picture_as_pdf</mat-icon>
+        </button>
+        <button class="btn" type="button" printSectionId="print-section" printTitle="Statement" [printStyle]="{
+            h1: { color: 'red' },
+            h2: { border: 'solid 1px' }
+          }" [useExistingCss]="true" ngxPrint>
+          <i class="os-icon os-icon-printer"></i>
+        </button>
+      </div>
+      <span>
+        <button mat-button class="btn btn-sm btn-white mr-2 dropdown-toggle" [matMenuTriggerFor]="menu2">
+          More
+        </button>
+        <mat-menu #menu2="matMenu" xPosition="before">
+          <button mat-menu-item class="height-40" appPermission [permissions]="userPermissions" [type]="'delete'"
+            (click)="openDeleteBox()">
+            Delete
+          </button>
+        </mat-menu>
+      </span>
+      <button class="btn" (click)="closeDetailView()">
+        <i class="os-icon os-icon-close"></i>
+      </button>
+    </div>
+  </div>
+  <div class="separator"></div>
+
+  <div class=" area-data">
+    <div class="row h-100">
+      <div class="col-12 border-left">
+        <mat-tab-group class="customertab" mat-align-tabs="start">
+          <mat-tab label="Overview">
+            <mat-list>
+              <mat-list-item> Date: {{ expense.expense_date }}</mat-list-item>
+              <mat-list-item>Customer:
+                {{ expense.customer?.firstname }}</mat-list-item>
+              <mat-list-item> Reference: {{ expense.reference }}</mat-list-item>
+              <mat-list-item>Amount: {{ numberFormatWithSymbol(expense.amount)  }}
+              </mat-list-item>
+              <mat-list-item>Expense category:
+                {{ expense.expense_category?.name }}</mat-list-item>
+              <mat-list-item>Note: {{ expense.description }}</mat-list-item>
+            </mat-list>
+          </mat-tab>
+          <mat-tab label="Sales">
+            <mat-list>
+              <mat-list-item>Sales 1</mat-list-item>
+              <mat-list-item>Sales 2</mat-list-item>
+              <mat-list-item>Sales 3</mat-list-item>
+              <mat-list-item>Sales 4</mat-list-item>
+            </mat-list>
+          </mat-tab>
+        </mat-tab-group>
+      </div>
+    </div>
+  </div>
+</section>
+<!-- <ng-template #emailPopTitle>
+  <span>Sent expense {{expense.expense_number}}</span>
+</ng-template>
+<ng-template #emailPopContent>
+  <app-send-email [data]="emailData" (close)="emailPopup.close()"></app-send-email>
+</ng-template> -->
+
+<div class="card border" id="print-section">
+  <div class="card-body" [innerHTML]="expenseTemplate"></div>
+</div>

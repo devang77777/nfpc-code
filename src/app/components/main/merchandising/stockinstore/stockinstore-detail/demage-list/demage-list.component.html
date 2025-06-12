@@ -1,0 +1,103 @@
+<div class="pl-3 row mb-4 mt-4" *ngIf="damageData">
+  <div class="col-md-1 col-form-label">Date</div>
+  <div class="col-md-3 mb-md-0 mb-2">
+    <input class="form-control form-control-sm" type="date" [formControl]="dateFilterControl">
+  </div>
+  <div class="col-md-3 item-add-btn">
+    <button type="button" (click)="getDamageItemList('date', true)" class="mr-2 btn btn-sm btn-primary">Filter</button>
+    <button type="button" (click)="getDamageItemList('all', true)" class="btn btn-sm btn-danger">All</button>
+  </div>
+</div>
+<div class="pl-3 items-table-box">
+  <div class="table-responsive">
+    <table mat-table [dataSource]="itemSource" class="mat-elevation-z8 table table-hover">
+      <ng-container matColumnDef="created_at">
+        <th mat-header-cell *matHeaderCellDef>
+          <app-column-filter title="Date" (changeSelected)="onColumnFilterOpen($event)"
+            [selected]="selectedColumnFilter" (close)="onColumnFilter($event)">
+            <input class="form-control form-control-sm" placeholder="Enter Date" type="date">
+          </app-column-filter>
+        </th>
+        <td mat-cell *matCellDef="let element"> {{ element.created_at | date :"d MMM y h:mm a"}} </td>
+      </ng-container>
+      <ng-container matColumnDef="salesman">
+        <th mat-header-cell *matHeaderCellDef>
+          <app-column-filter title="Merchandiser" (changeSelected)="onColumnFilterOpen($event)"
+            [selected]="selectedColumnFilter" (close)="onColumnFilter($event)">
+            <input class="form-control form-control-sm" placeholder="Enter Merchandiser" type="text">
+          </app-column-filter>
+        </th>
+        <td mat-cell *matCellDef="let element"> {{ element.salesman?.firstname }} {{ element.salesman?.lastname }}</td>
+      </ng-container>
+      <ng-container matColumnDef="customer">
+        <th mat-header-cell *matHeaderCellDef>
+
+          <app-column-filter title="Customer Name" (changeSelected)="onColumnFilterOpen($event)"
+            [selected]="selectedColumnFilter" (close)="onColumnFilter($event)">
+            <input class="form-control form-control-sm" placeholder="Enter Customer Name" type="text">
+          </app-column-filter>
+        </th>
+        <td mat-cell *matCellDef="let element"> {{ element.customer?.firstname }} {{ element.customer?.lastname }}</td>
+      </ng-container>
+      <ng-container matColumnDef="CustomerCode">
+        <th mat-header-cell *matHeaderCellDef>
+          <app-column-filter title=" Customer Code" (changeSelected)="onColumnFilterOpen($event)"
+            [selected]="selectedColumnFilter" (close)="onColumnFilter($event)">
+            <input class="form-control form-control-sm" placeholder="Enter  Customer Code" type="text">
+          </app-column-filter>
+        </th>
+        <td mat-cell *matCellDef="let element"> {{element.customer?.customer_info ?
+          element.customer?.customer_info?.customer_code :'N/A' }}</td>
+      </ng-container>
+      <ng-container matColumnDef="item">
+        <th mat-header-cell *matHeaderCellDef>
+          <app-column-filter title="  Item Name" (changeSelected)="onColumnFilterOpen($event)"
+            [selected]="selectedColumnFilter" (close)="onColumnFilter($event)">
+            <input class="form-control form-control-sm" placeholder="Enter   Item Name" type="text">
+          </app-column-filter>
+        </th>
+        <td mat-cell *matCellDef="let element"> {{ element.item?.item_name }} </td>
+      </ng-container>
+      <ng-container matColumnDef="itemCode">
+        <th mat-header-cell *matHeaderCellDef>
+          <app-column-filter title="Item Code" (changeSelected)="onColumnFilterOpen($event)"
+            [selected]="selectedColumnFilter" (close)="onColumnFilter($event)">
+            <input class="form-control form-control-sm" placeholder="Enter Item Code" type="text">
+          </app-column-filter>
+        </th>
+        <td mat-cell *matCellDef="let element"> {{ element.item?.item_code }} </td>
+      </ng-container>
+      <ng-container matColumnDef="damage_item_qty">
+        <th mat-header-cell *matHeaderCellDef>
+          <app-column-filter title=" Damage Item" (changeSelected)="onColumnFilterOpen($event)"
+            [selected]="selectedColumnFilter" (close)="onColumnFilter($event)">
+            <input class="form-control form-control-sm" placeholder="Enter  Damage Item" type="text">
+          </app-column-filter>
+        </th>
+        <td mat-cell *matCellDef="let element"> {{ element.damage_item_qty }} </td>
+      </ng-container>
+      <ng-container matColumnDef="expire_item_qty">
+        <th mat-header-cell *matHeaderCellDef>
+          <app-column-filter title=" Expired Item" (changeSelected)="onColumnFilterOpen($event)"
+            [selected]="selectedColumnFilter" (close)="onColumnFilter($event)">
+            <input class="form-control form-control-sm" placeholder="Enter  Expired Item" type="text">
+          </app-column-filter>
+        </th>
+        <td mat-cell *matCellDef="let element"> {{ element.expire_item_qty }} </td>
+      </ng-container>
+      <ng-container matColumnDef="saleable_item_qty">
+        <th mat-header-cell *matHeaderCellDef>
+          <app-column-filter title=" Saleable Item" (changeSelected)="onColumnFilterOpen($event)"
+            [selected]="selectedColumnFilter" (close)="onColumnFilter($event)">
+            <input class="form-control form-control-sm" placeholder="Enter  Saleable Item" type="text">
+          </app-column-filter>
+        </th>
+        <td mat-cell *matCellDef="let element"> {{ element.damage_item_qty }} </td>
+      </ng-container>
+      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+      <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+    </table>
+  </div>
+  <mat-paginator [hidden]="hidePaginator(itemSource.data.length)" pageSize="5" [pageSizeOptions]="[5,10]">
+  </mat-paginator>
+</div>

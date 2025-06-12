@@ -1,0 +1,103 @@
+.details {
+    display: flex;
+    flex-flow: row wrap;
+    align-items: stretch;
+    min-height: 100%;
+}
+.scroll-xy {
+    overflow-y: scroll;
+}
+.details .details-info {
+    border-right: 1px solid #eee;
+    background-color: #fbfbfb;
+    width: 32%;
+    vertical-align: top;
+    padding: 10px 20px 0;
+    word-wrap: break-word;
+}
+.details .details-info .group {
+    margin-left: -10px;
+    margin-bottom: 10px;
+    padding: 10px 0px 0px 0px;
+}
+.cp-pic {
+    width: 35px;
+    height: 35px;
+    border: 1px solid #ddd;
+    border-radius: 50%;
+    float: left;
+}
+svg.icon.icon-xs {
+    height: 12px;
+    width: 12px;
+}
+svg.icon {
+    width: 16px;
+    height: 16px;
+    fill: currentColor;
+}
+.line-seperator .coll:first-child {
+    padding-left: 0;
+}
+.line-seperator .coll {
+    padding-left: 3px;
+    padding-right: 6px;
+}
+.line-seperator .coll{
+    border-right: 1px solid #eee;
+}
+.details .details-info .toggle-header {
+    padding: 10px 0 5px;
+    border-bottom: 1px solid #eee;
+}
+.uppercase {
+    text-transform: uppercase;
+}
+.font-weight-light {
+    font-weight: 300!important;
+}
+.details .details-info .icon-up-open-big {
+    margin-top: 5px;
+    font-size: 9px;
+}
+svg.icon.icon-xsmall {
+    height: 10px;
+    width: 10px;
+}
+.float-right {
+    float: right!important;
+}
+svg.icon {
+    width: 16px;
+    height: 16px;
+    fill: currentColor;
+}
+.align-text-bottom {
+    vertical-align: text-bottom!important;
+}
+.collapse:not(.show) {
+    display: none;
+}
+.details .details-info .group {
+    margin-bottom: 10px;
+    padding: 3px 0 0;
+}
+.popovercontainer {
+    position: relative;
+}
+.text-muted {
+    color: #777!important;
+}
+.cursor-pointer {
+    cursor: pointer;
+}
+.popovercontainer{
+    position: relative;
+}
+p {
+    margin-top: 0;
+    margin-bottom: 1rem;
+}
+.font-xs {
+    font-size: 12px;
+}

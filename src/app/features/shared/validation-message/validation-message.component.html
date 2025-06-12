@@ -1,0 +1,13 @@
+<span *ngIf="control.errors && control.touched" class="error-msg">
+  <span class="text-danger" *ngIf="control.errors.required">Field is required.</span>
+  <span class="text-danger" *ngIf="control.errors.min">Positive value is required.</span>
+  <span class="text-danger" *ngIf="control.errors.email">Email must be valid.</span>
+  <span class="text-danger" *ngIf="control.errors.max">Value exceed.</span>
+  <span class="text-danger" *ngIf="control.errors.numbers_decimal_only">Numbers are required.</span>
+  <span class="text-danger" *ngIf="control.errors.dropdownRequired">Field is required.</span>
+  <span class="text-danger" *ngIf="control.errors.numbers_only">Numbers are allowed.</span>
+  <span class="text-danger" *ngIf="control.errors.maxlength ">Field required Length:
+        {{ control.errors.maxlength.requiredLength }}</span>
+  <span class="text-danger" *ngIf="control.errors.minlength">Field required Length:
+        {{ control.errors.minlength.requiredLength }}</span>
+</span>

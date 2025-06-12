@@ -1,0 +1,23 @@
+
+<div class="table-responsive">
+  <table class="table table-bordered">
+    <thead>
+      <tr>
+        <th *ngFor="let head of displayedColumns" scope="col">{{head}} </th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let el of ELEMENT_DATA">
+      <td>{{el.Difference}}</td>
+      <td>{{el.Variance}}</td>
+      <td>{{el.RouteCode}}</td>
+      <td>{{el.RouteName}}</td>
+      <td>{{el.TransferlocationCode}}</td>
+      <td>{{el.ActualItemCode}}</td>
+      <td>{{el.ItemshortDescription}}</td>
+      <td>{{el.Transoutqntotiy}}</td>
+      <td>{{el.Transoutamount}}</td>
+      </tr>
+    </tbody>
+  </table>
+</div>

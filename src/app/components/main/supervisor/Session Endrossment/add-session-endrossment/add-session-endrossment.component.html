@@ -1,0 +1,128 @@
+<section class="scrolly">
+  <div class="heading-row">
+    <h2>ADD SESSION ENDROSSMENT</h2>
+  </div>
+  <div class="separator">
+  </div>
+  <form [formGroup]="SessionFormGroup" class="order-form custom-mat square ">
+    <div class="card-body active-form overview">
+      <div class="row">
+        <div class="col-md-3">
+          <div class="form-group">
+            <label for="">Route</label>
+            <mat-form-field>
+              <mat-label>Select Route</mat-label>
+              <mat-select (selectionChange)="checkChange(routeFormControl)" [formControl]="routeFormControl"
+                class="form-control form-control-sm">
+                <mat-option *ngFor="let item of storeRoute" [value]="item.id">
+                  {{ item.route_name }}
+                </mat-option>
+              </mat-select>
+              <mat-error class="mt-1" *ngIf="routeFormControl.hasError('required')">Please select route</mat-error>
+            </mat-form-field>
+          </div>
+        </div>
+        <div class="col-md-3">
+          <div class="form-group">
+            <label for="" [ngClass]="{ 'inactive-form': routeFormControl.invalid }">DATE</label>
+            <p [ngClass]="{ 'inactive-form': routeFormControl.invalid }">
+              <input class="form-control fixWidthsame form-control-sm" (change)="checkChange(dateFormControl)"
+                type="date" [formControl]="dateFormControl" />
+              <!-- <mat-error
+                class="mt-0"
+                *ngIf="dateFormControl.hasError('required')"
+                >Please select Date</mat-error
+              > -->
+            </p>
+          </div>
+        </div>
+        <div class="col-md-3">
+          <div class="form-group">
+            <label for="" class="d-md-block d-none">&nbsp;</label>
+            <div *ngIf="dateFormControl.valid">
+              <button class="btn btn-primary radius" (click)="openStepper()">ENDO BY SUPERVISOR</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+  </form>
+  <div *ngIf="showStepper" class="">
+    <mat-vertical-stepper>
+      <mat-step>
+        <ng-template matStepLabel>INVOICE</ng-template>
+        <app-add-invoice-form></app-add-invoice-form>
+        <button class="btn btn-primary mt-3" mat-button matStepperNext>Next</button>
+      </mat-step>
+      <mat-step>
+        <ng-template matStepLabel>CALL</ng-template>
+        <app-add-call></app-add-call>
+        <button class="btn btn-secondary mr-2" mat-button matStepperPrevious>Back</button>
+        <button class="btn btn-primary mt-3" mat-button matStepperNext>Next</button>
+      </mat-step>
+      <mat-step>
+        <ng-template matStepLabel>FOC</ng-template>
+        <app-add-foc></app-add-foc>
+        <button class="btn btn-secondary mr-2" mat-button matStepperPrevious>Back</button>
+        <button class="btn btn-primary mt-3" mat-button matStepperNext>Next</button>
+      </mat-step>
+      <mat-step>
+        <ng-template matStepLabel>BYCHANNEL</ng-template>
+        <app-add-by-channel></app-add-by-channel>
+        <button class="btn btn-secondary mr-2" mat-button matStepperPrevious>Back</button>
+        <button class="btn btn-primary mt-3" mat-button matStepperNext>Next</button>
+      </mat-step>
+      <mat-step>
+        <ng-template matStepLabel>MISSED CALLS</ng-template>
+        <app-add-missedcall></app-add-missedcall>
+        <button class="btn btn-secondary mr-2" mat-button matStepperPrevious>Back</button>
+        <button class="btn btn-primary mt-3" mat-button matStepperNext>Next</button>
+      </mat-step>
+      <mat-step>
+        <ng-template matStepLabel>ITEM GROUP</ng-template>
+        <app-add-item-group></app-add-item-group>
+        <button class="btn btn-secondary mr-2" mat-button matStepperPrevious>Back</button>
+        <button class="btn btn-primary mt-3" mat-button matStepperNext>Next</button>
+      </mat-step>
+      <mat-step>
+        <ng-template matStepLabel>CARRY OVER</ng-template>
+        <app-add-carryover></app-add-carryover>
+        <button class="btn btn-secondary mr-2" mat-button matStepperPrevious>Back</button>
+        <button class="btn btn-primary mt-3" mat-button matStepperNext>Next</button>
+      </mat-step>
+      <mat-step>
+        <ng-template matStepLabel>PRE TRIP INSEPECTION</ng-template>
+        <app-add-pretripinspection></app-add-pretripinspection>
+        <button class="btn btn-secondary mr-2" mat-button matStepperPrevious>Back</button>
+        <button class="btn btn-primary mt-3" mat-button matStepperNext>Next</button>
+      </mat-step>
+      <mat-step>
+        <ng-template matStepLabel>ITEM WISE</ng-template>
+        <label>ITEM WISE</label>
+        <app-add-itemwise></app-add-itemwise>
+        <button class="btn btn-secondary mr-2" mat-button matStepperPrevious>Back</button>
+        <button class="btn btn-primary mt-3" mat-button matStepperNext>Next</button>
+      </mat-step>
+      <mat-step>
+        <ng-template matStepLabel>ROUTE TRANSFER</ng-template>
+        <app-add-routetransfer></app-add-routetransfer>
+        <button class="btn btn-secondary mr-2" mat-button matStepperPrevious>Back</button>
+        <button class="btn btn-primary mt-3" mat-button matStepperNext>Next</button>
+      </mat-step>
+      <mat-step>
+        <ng-template matStepLabel>PRE SALES ALLOCATION</ng-template>
+        <app-add-presales-allocation></app-add-presales-allocation>
+        <button class="btn btn-secondary mr-2" mat-button matStepperPrevious>Back</button>
+        <button class="btn btn-primary mt-3" mat-button matStepperNext>Next</button>
+      </mat-step>
+      <mat-step>
+        <ng-template matStepLabel>WASTAGE</ng-template>
+        <app-add-wastage></app-add-wastage>
+        <button class="btn btn-secondary" mat-button matStepperPrevious>Back</button>
+      </mat-step>
+
+    </mat-vertical-stepper>
+  </div>
+</section>

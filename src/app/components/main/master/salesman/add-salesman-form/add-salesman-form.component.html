@@ -1,0 +1,334 @@
+<div class="card" style="width: 550px;">
+  <div class="card-header pt-4">
+    <span class="h6 font-weight-bold text-secondary">{{ formType }}
+      {{ domain == "merchandising" || domain == 'nfpc' ? 'Merchandiser' : 'Salesman' }}</span>
+    <a (click)="close()" class="closeicon settingclose"><i class="os-icon os-icon-x text-secondary float-right"
+        aria-hidden="true"></i></a>
+  </div>
+  <div class="form-box">
+    <form [formGroup]="salesManFormGroup" [ngClass]="{'has-error': isSubmitted}">
+      <div class="card-body">
+        <div class="">
+
+          <div class="form-group">
+            <label>{{ domain == "merchandising" || domain == 'nfpc' ? 'Merchandiser' : 'Salesman' }} Code<i
+                class="text-red">* </i>:</label>
+            <div class="siconhol">
+              <input [formControl]="salesManCodeFormControl" (keypress)="restrictLength($event)"
+                class="form-control form-control-sm fixWidth" type="text">
+              <a [hidden]="formType == 'Edit'" (click)="open()" class="ml-2 settingIcon"><i
+                  class="os-icon os-icon-ui-46" aria-hidden="true"></i></a>
+            </div>
+          </div>
+          <div class="row mb-3">
+            <div class="col">
+              <label for="">Profile Image:</label>
+              <input class="form-control" #file type="file" (change)="fileChosen($event)"
+                accept="image/x-png,image/gif,image/jpeg" />
+              <br />
+              <div *ngFor='let url of selectedFiles' class="img-position">
+                <img [src]="url" height="150" width="150px">
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col">
+              <div class="form-group">
+                <label> First Name<i class="text-red">* </i>:</label>
+                <input [formControl]="salesManFirstNameFormControl" class="form-control form-control-sm" type="text">
+              </div>
+            </div>
+            <div class="col">
+              <div class="form-group">
+                <label> Last Name<i class="text-red">* </i>:</label>
+                <input [formControl]="salesManLastNameFormControl" class="form-control form-control-sm" type="text">
+
+              </div>
+            </div>
+          </div>
+          <div class="form-group">
+            <label>{{ domain == "merchandising" || domain == 'nfpc' ? 'Merchandiser' : 'Salesman' }} Type<i
+                class="text-red">* </i>:</label>
+            <!-- <input [formControl]="salesManRoleFormControl" class="form-control form-control-sm" type="text"> -->
+            <mat-select [formControl]="salesManTypeFormControl" (selectionChange)="onChangeSalesmanType($event.value)"
+              class="form-control">
+              <mat-option *ngFor="let item of customerID " [value]="item.id">{{item?.name}}
+              </mat-option>
+            </mat-select>
+          </div>
+          <div class="form-group">
+            <label>{{ domain == "merchandising" || domain == 'nfpc' ? 'Merchandiser' : 'Salesman' }} Role
+              <i class="text-red"> {{salesManTypeFormControl.value != 3 && '*' || ''}}</i></label>
+            <!-- <input [formControl]="salesManTypeFormControl" class="form-control form-control-sm" type="text">
+                       -->
+            <mat-select [formControl]="salesManRoleFormControl" class="form-control">
+              <mat-option *ngFor="let item of salesmanRolesByType" [value]="item.id">{{item?.name}}
+              </mat-option>
+            </mat-select>
+
+          </div>
+          <!--  Helper Drop Down Start -->
+          <div class="form-group" *ngIf="helperShow">
+            <label>Helper</label>
+            <mat-select [formControl]="HelperFormControl" class="form-control">
+              <mat-option *ngFor="let help of helper " [value]="help.user.id">
+                {{help?.user.firstname}} {{help?.user.lastname}}
+              </mat-option>
+            </mat-select>
+
+          </div>
+          <!--  Helper Drop Down End -->
+          <!-- <div class="form-group"
+            *ngIf="(domain !== 'merchandising' && domain !== 'nfpc') && salesManTypeFormControl.value !== 2">
+            <label> Route<i class="text-red"> {{salesManTypeFormControl.value != 3 && '*' || ''}}</i></label>
+            <mat-select [formControl]="salesManRouteIdFormControl" class="form-control">
+              <mat-option *ngFor="let item of areas" [value]="item.id">{{item?.route_name}}</mat-option>
+            </mat-select>
+
+          </div> -->
+
+          <div class="form-group row mb-3 m-0 p-0"
+            *ngIf="salesmanCreditLimit?.credit_limit_type && salesmanCreditLimit?.credit_limit_type == 2">
+            <label> Line Of Business</label>
+            <div class="col-11 p-0">
+              <app-multiautocomplete isSingle="false" [options]="lobs" [control]="salesmanlobFormControl" text="name"
+                id="id" placeholder="Select Lob" objectName="root" param1="name">
+              </app-multiautocomplete>
+            </div>
+            <div class="col-1 mt-1">
+              <a (click)="openSalesmanLob()" class="ml-2 settingIcon"><i class="os-icon os-icon-ui-46"
+                  aria-hidden="true"></i></a>
+            </div>
+          </div>
+
+
+
+          <!-- <div class="form-group">
+          <label for="">Salesman Lob:</label>
+          <app-tree-dropdown  class="salesorg-dropdown" [dataSource]="salesmanLobList"
+            [dataService]="salesmanLobProvider()" [buttonLabel]="'Manage Saleman Lob'"   
+            [selectFormControl]="salesmanlobFormControl" [placeHolder]="'Search a Customer Category'"
+            ngDefaultControl>
+          </app-tree-dropdown>
+        </div> 
+      -->
+
+          <!-- <div class="form-group">
+          <label for="">Customer Category:</label>
+          <app-tree-dropdown class="salesorg-dropdown" [dataSource]="customerCategoryList"
+            [dataService]="customerCategoryProvider()" [buttonLabel]="'Manage Customer Category'"
+            (manageClicked)="openCustomerCategory()" (whenItemSelected)="customerCategorySelected($event)"
+            [selectFormControl]="customerCategoryFormControl" [placeHolder]="'Search a Customer Category'"
+            ngDefaultControl>
+          </app-tree-dropdown>
+        </div> -->
+
+          <!-- <app-multiautocomplete isSingle="false" [options]="regionList"
+        (selectionchanged)="applyFilter()" [control]="filterForm.controls['region']"
+        text="region_name" id="id" placeholder="Search region">
+       </app-multiautocomplete> -->
+
+          <!-- <div class="form-group">
+            <label> Line Of Business</label>
+            <input [formControl]="salesManRouteIdFormControl" class="form-control form-control-sm" type="text">
+            <mat-select [formControl]="lineOfBusinessFormControl" class="form-control">
+              <mat-option *ngFor="let line of lobs" [value]="line.id">{{line?.name}}</mat-option>
+            </mat-select>
+
+          </div> -->
+
+          <!-- <div class="form-group">
+                    <div class="col-4">Salesman User Type</div>
+                    <div class="col-8">
+                      <input [formControl]="userTypeFormControl" class="form-control form-control-sm" type="text">
+                    </div>
+                </div>
+                <app-multiautocomplete isSingle="true" [options]="countries"
+[control]="signupForm.controls['country_id']" text="name" id="id">
+</app-multiautocomplete>
+                <div class="form-group">
+                    <div class="col-4">Salesman Parent Id</div>
+                    <div class="col-8">
+                      <input [formControl]="salesManParentIdFormControl" class="form-control form-control-sm" type="text">
+                    </div>
+                </div> -->
+          <div class="form-group">
+            <label> Email:</label>
+            <input [formControl]="salesManEmailFormControl" class="form-control form-control-sm" type="email">
+          </div>
+          <div class="form-group">
+            <label> Password<i class="text-red">* </i>:</label>
+            <div class="position-relative">
+              <input [formControl]="salesManPasswordFormControl" class="form-control form-control-sm"
+                [type]="togglePassword ? 'password' : 'text'">
+              <mat-icon matSuffix (click)="togglePassword = !togglePassword">
+                {{togglePassword ? 'visibility_off' : 'visibility'}}</mat-icon>
+            </div>
+          </div>
+          <!-- <div class="form-group">
+                    <div class="col-4">Salesman Country Id</div>
+                    <div class="col-8">
+                      <input [formControl]="salesManCountryIdFormControl" class="form-control form-control-sm" type="text">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-4">Is Approved By Admin</div>
+                    <div class="col-8">
+                      <input [formControl]="isApprovedByAdminFormControl" class="form-control form-control-sm" type="text">
+                    </div>
+                </div> -->
+          <!-- <div class="form-group">
+                    <div class="col-4">Role Id</div>
+                    <div class="col-8">
+                      <input [formControl]="roleIdFormControl" class="form-control form-control-sm" type="text">
+                    </div>
+                </div> -->
+
+          <div class="form-group">
+            <label for=""> {{ domain == "merchandising" ? 'Merchandiser' : 'Salesman' }} Supervisor</label>
+            <!-- <input [formControl]="salesManSupervisorFormControl" class="form-control form-control-sm" type="text"> -->
+            <app-multiautocomplete isSingle="true" [options]="supervisorList" [control]="salesManSupervisorFormControl"
+              text="salesman_supervisor" id="id" objectName="user-root" param1="firstname" param2="lastname"
+              placeholder="Search supervisor">
+            </app-multiautocomplete>
+          </div>
+          <div class="form-group">
+            <label for=""> Mobile</label>
+            <input [formControl]="salesManMobileFormControl" class="form-control form-control-sm" type="tel">
+          </div>
+          <div class="form-group">
+            <label for=""> Salesman Category</label>
+            <mat-select [formControl]="salesManCategoryFormControl" class="form-control form-control-sm">
+              <mat-option *ngFor="let cat of salesmanCategorise" [value]="cat">{{cat}}</mat-option>
+            </mat-select>
+          </div>
+          <!-- <div class="form-group">
+            <label for="">Salesman Supervisor Category</label>
+            <app-tree-dropdown class="salesorg-dropdown" [dataSource]="salesManCatrgoryList"
+              [dataService]="salesManCategoryProvider()" [buttonLabel]="'Manage Salesman Supervisor'"
+              (manageClicked)="openSalesOrganisation($event)" (whenItemSelected)="salesmanSupervisorSelected($event)"
+              [selectFormControl]="salesmanSupCatFormControl" [placeHolder]="'Select a Salesman Supervisor'"
+              ngDefaultControl>
+            </app-tree-dropdown>
+          </div> -->
+          <div class="form-group">
+            <label for="">Region:</label>
+            <app-autocomplete [data]="regionList" text="region_name" id="id" [control]="salesManRegionFormControl">
+            </app-autocomplete>
+          </div>
+          <div class="form-group">
+            <label for=""> Is Block &nbsp;&nbsp;</label>
+            <input [formControl]="isBlockFormControl" type="checkbox">
+          </div>
+          <div class="row " *ngIf="isBlockFormControl.value==true">
+            <div class="col">
+              <label for=""> Valid From:</label>
+              <input type="date" class="form-control form-control-sm" [formControl]="validFormControl">
+            </div>
+            <div class="col">
+              <label for="">Valid To:</label>
+              <input type="date" class="form-control form-control-sm" [formControl]="validToControl">
+            </div>
+          </div>
+          <br />
+          <div class="row-mb-4" *ngIf="salesManTypeFormControl.value == 2">
+            <mat-tab-group mat-align-tabs="start">
+              <mat-tab label="NUMBER RANGE">
+                <div class="">
+                  <div class="row mb-2 mt-3"
+                    *ngIf="salesManRoleFormControl.value == 2 || salesManRoleFormControl.value == 3">
+                    <div class="col">
+                      <label for=""> Customer From:</label>
+                      <input type="text" class="form-control form-control-sm" [formControl]="customerFromFormControl">
+                    </div>
+                    <div class="col">
+                      <label for="">Customer To:</label>
+                      <input type="text" class="form-control form-control-sm" [formControl]="customerToFormControl">
+                    </div>
+                  </div>
+                  <!-- <small
+                    *ngIf="!isCustomerRange && (salesManRoleFormControl.value == 2 || salesManRoleFormControl.value == 3)"
+                    class="text-danger">Please fill both form and to range</small> -->
+                  <div class="row mb-2 mt-3" *ngIf="salesManRoleFormControl.value !== 4">
+                    <div class="col">
+                      <label for=""> Order From:</label>
+                      <input type="text" class="form-control form-control-sm" [formControl]="oderFromFormControl">
+                    </div>
+                    <div class="col">
+                      <label for="">Order To:</label>
+                      <input type="text" class="form-control form-control-sm" [formControl]="orderToFormControl">
+                    </div>
+                  </div>
+                  <!-- <small *ngIf="!isOrderRange && salesManRoleFormControl.value !== 4" class="text-danger">Please fill
+                    both form and to range</small> -->
+                  <div class="row mb-2" *ngIf="salesManRoleFormControl.value !== 1">
+                    <div class="col">
+                      <label for="">Invoice from:</label>
+                      <input type="text" class="form-control form-control-sm" [formControl]="invoiceFromFormControl">
+                    </div>
+                    <div class="col">
+                      <label for="">Invoice To:</label>
+                      <input type="text" class="form-control form-control-sm" [formControl]="invoiceToFormControl">
+                    </div>
+                  </div>
+                  <!-- <small *ngIf="!isInvoiceRange && salesManRoleFormControl.value !== 1" class="text-danger">Please fill
+                    both form and to range</small> -->
+                  <div class="row mb-2">
+                    <div class="col">
+                      <label for="">Collection From:</label>
+                      <input type="text" class="form-control form-control-sm" [formControl]="collectionFromFormControl">
+                    </div>
+                    <div class="col">
+                      <label for="">Collection To:</label>
+                      <input type="text" class="form-control form-control-sm" [formControl]="collectionToFormControl">
+                    </div>
+                  </div>
+                  <!-- <small *ngIf="!isCollectionRange" class="text-danger">Please fill both form and to range</small> -->
+                  <div class="row mb-2">
+                    <div class="col">
+                      <label for="">Return From:</label>
+                      <input type="text" class="form-control form-control-sm" [formControl]="returnFromFormControl">
+                    </div>
+                    <div class="col">
+                      <label for="">Return To:</label>
+                      <input type="text" class="form-control form-control-sm" [formControl]="returnToFormControl">
+                    </div>
+                  </div>
+                  <!-- <small *ngIf="!isReturnRange" class="text-danger">Please fill both form and to range</small> -->
+                  <div class="row mb-2" *ngIf="salesManRoleFormControl.value !== 1">
+                    <div class="col">
+                      <label for="">Unload From:</label>
+                      <input type="text" class="form-control form-control-sm" [formControl]="unloadFromFormControl">
+                    </div>
+                    <div class="col">
+                      <label for="">Unload to:</label>
+                      <input type="text" class="form-control form-control-sm" [formControl]="unloadToFormControl">
+                    </div>
+                  </div>
+                  <!-- <small
+                    *ngIf="!isUnloadRange && (salesManRoleFormControl.value == 2 || salesManRoleFormControl.value == 3)"
+                    class="text-danger">Please fill both form and to range</small> -->
+                </div>
+              </mat-tab>
+            </mat-tab-group>
+          </div>
+
+        </div>
+        <div class="row">
+          <ng-container *ngIf="isCustomField">
+            <app-custom-field-form [editData]="editData" (change)="onCustomFieldUpdated($event)" [module]="moduleId">
+            </app-custom-field-form>
+          </ng-container>
+        </div>
+      </div>
+
+      <div class="card-footer">
+        <div class="d-inline float-right">
+          <button class="btn btn-sm btn-light mr-2" (click)="close()">Cancel</button>
+          <button class="btn btn-sm btn-p" (click)="saveSalesManData()">Save</button>
+        </div>
+      </div>
+    </form>
+  </div>
+
+</div>

@@ -1,0 +1,101 @@
+<form [formGroup]="form" novalidate>
+
+    <div class="row">
+        <div class="col-md-6">
+            <div class="form-group row">
+                <label class="col-sm-3 col-form-label">First Name</label>
+                <div class="col-sm-9">
+                    <input type="text" formControlName="firstname" class="form-control form-control-sm"
+                        placeholder="First Name">
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="form-group row">
+                <label class="col-sm-3 col-form-label">Last Name</label>
+                <div class="col-sm-9">
+                    <input type="text" formControlName="lastname" class="form-control form-control-sm"
+                        placeholder="Last Name">
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="form-group row">
+                <label class="col-sm-3 col-form-label">Customer Code</label>
+                <div class="col-sm-9">
+                    <input type="text" formControlName="customer_code" class="form-control form-control-sm"
+                        placeholder="Customer Code">
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="form-group row">
+                <label class="col-sm-3 col-form-label">Email</label>
+                <div class="col-sm-9">
+                    <input type="text" formControlName="email" class="form-control form-control-sm" placeholder="Email">
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="form-group row">
+                <label class="col-sm-3 col-form-label">Route</label>
+                <div class="col-sm-9">
+                    <mat-select class="form-control form-control-sm" formControlName="route">
+                        <mat-option *ngFor="let item of routes" [value]="item.id">
+                            {{ item.route_name }}
+                        </mat-option>
+                    </mat-select>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="form-group row">
+                <label class="col-sm-3 col-form-label">Region</label>
+                <div class="col-sm-9">
+                    <mat-select class="form-control form-control-sm" formControlName="region">
+                        <mat-option *ngFor="let item of regions" [value]="item.id">
+                            {{ item.region_name }}
+                        </mat-option>
+                    </mat-select>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="form-group row">
+                <label class="col-sm-3 col-form-label">Sales Organization</label>
+                <div class="col-sm-9">
+
+                    <app-tree-dropdown class="salesorg-dropdown" [dataSource]="organizations"
+                        [dataService]="salesOrganisationProvider()" [buttonLabel]="'Manage Sales Organisation'"
+                        (whenItemSelected)="salesOrganisationSelected($event)"
+                        [selectFormControl]="form.get('sales_organisation')" ngDefaultControl>
+                    </app-tree-dropdown>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="form-group row">
+                <label class="col-sm-3 col-form-label">Channel</label>
+                <div class="col-sm-9">
+                    <app-tree-dropdown class="channel-dropdown" [dataSource]="channels"
+                        [dataService]="channelProvider()" [buttonLabel]="'Manage Channels'"
+                        (whenItemSelected)="channelSelected($event)" [selectFormControl]="form.get('channel')"
+                        ngDefaultControl>
+                    </app-tree-dropdown>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="form-group row">
+                <label class="col-sm-3 col-form-label">Status</label>
+                <div class="col-sm-9">
+                    <mat-select class="form-control form-control-sm" formControlName="current_stage">
+                        <mat-option *ngFor="let item of statusList" [value]="item.id">
+                            {{ item.name }}
+                        </mat-option>
+                    </mat-select>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>

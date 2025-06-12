@@ -1,0 +1,26 @@
+<div class="folder-icon" *ngIf="nodeData.node_level === 0">
+  <i class="fa fa-folder-o" [ngClass]="{ 'fa-folder-open-o': isExpanded }"></i>
+</div>
+<div class="node-title" (click)="toggleExpansion()">
+  <span *ngIf="nodeData.name">{{ nodeData.name }}</span>
+  <span *ngIf="nodeData.area_name">{{nodeData.area_name}}</span>
+  <span *ngIf="nodeData.brand_name">{{nodeData.brand_name}}</span>
+  <span *ngIf="hasChildren" class="caret">
+    <i class="fa fa-chevron-right" [ngClass]="{ 'fa-chevron-down': isExpanded }"></i>
+  </span>
+  <span class="menu-items" (click)="$event.stopPropagation()">
+    <a class="item" (click)="applyNode()">Apply this item</a>
+    <a class="item" (click)="editNode()">Edit</a>
+    <a class="item" (click)="deleteNode()">Delete</a>
+  </span>
+</div>
+<ul class="expanding-ul" *ngIf="hasChildren" [ngClass]="{ 'expanded': isExpanded, 'collapsed': !isExpanded }">
+  <li *ngFor="let childNode of nodeData.children">
+    <app-tree-node-container
+      (applyData)="applyNode($event)"
+      (deleteData)="deleteNode($event)"
+      (editData)="editNode($event)"
+      [nodeData]="childNode">
+    </app-tree-node-container>
+  </li>
+</ul>

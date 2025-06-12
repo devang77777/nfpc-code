@@ -1,0 +1,37 @@
+a {
+  cursor: pointer;
+}
+.card {
+  position: relative;
+}
+.card-body {
+  height: calc(100vh - 170px);
+  overflow-y: scroll;
+}
+.card-footer {
+  position: fixed;
+  width: 550px;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.03);;
+}
+.settingIcon
+{
+  position: absolute;
+  top: 4px;
+  right: 0;
+    i{
+      font-size: 20px;
+    }
+}
+.area-dropdown {
+  height: 31px;
+}
+.number-range-header{
+  font-size: 18px;
+    font-weight: bold;
+}
+.text-red {
+  color: red;
+  font-size: 16px;
+  font-weight: 600;
+}

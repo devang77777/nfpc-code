@@ -1,0 +1,92 @@
+:host {
+    float: left;
+    width: 100%;
+  }
+  
+  table {
+    margin-top: 0;
+  }
+  
+  .mat-column-select,
+  .mat-column-vanCode,
+  .mat-column-vanPlate,
+  .mat-column-vanDescription,
+  .mat-column-actions {
+    word-wrap: break-word;
+    white-space: unset;
+    flex: 0 0 20%;
+    width: 20%;
+    overflow-wrap: break-word;
+    word-wrap: break-word;
+    word-break: break-word;
+    -ms-hyphens: auto;
+    -moz-hyphens: auto;
+    -webkit-hyphens: auto;
+    hyphens: auto;
+  }
+  
+  .cdk-column-select {
+    position: relative;
+  
+    .filter-btn {
+      position: absolute;
+      left: 0px;
+      top: 0;
+      height: 35px;
+      line-height: 35px;
+      width: 30px;
+      padding: 0;
+      margin: 0;
+      text-align: center;
+      display: block;
+    }
+  }
+  
+  button {
+    background-color: transparent;
+    border: none;
+  
+    i {
+      font-size: 16px;
+    }
+  }
+  
+  .trash-btn {
+    margin-left: 8px;
+  }
+  
+  .cdk-column-select {
+    width: 8%;
+  }
+  
+  .filter-btn {}
+  
+  .head-checkbox {
+    display: inline-block;
+    margin-left: 4px;
+    position: relative;
+    top: 0;
+  }
+  
+  .row-checkbox {
+    margin-left: 4px;
+    position: relative;
+    top: -2px;
+  }
+  
+  ::ng-deep .mat-paginator {
+  
+    // override material paginator page switch
+    .mat-paginator-range-label {
+      order: 2;
+    }
+  
+    .mat-paginator-navigation-previous {
+      order: 1;
+    }
+  
+    .mat-paginator-navigation-next {
+      order: 3;
+    }
+  }
+  

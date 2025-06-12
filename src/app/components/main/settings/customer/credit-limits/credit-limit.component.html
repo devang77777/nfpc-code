@@ -1,0 +1,103 @@
+<div class="card">
+<div class="container">
+
+    <h2 class="d-inline"> Credit Limits </h2>
+       
+    <form [formGroup]="creditform">
+
+        <div class = "col-xs-9 col-md-offset-3 top" > 
+           
+        <div class="form-group">    
+            <div>
+              <input id="credit_limit_type"
+               type="radio" 
+               value= 1
+                name="credit_limit_type" 
+              formControlName="credit_limit_type" 
+              (change)="changeCreditLimit($event)"
+               Class="formControl radioMarginRight" 
+               [checked] = "selected" />
+              <label for="credit_limit_type">Customer Based Limit</label>
+           </div>
+   
+           <div>
+              <input id="credit_limit_type1" 
+              type="radio"
+               value= 2
+               name="credit_limit_type" 
+              formControlName="credit_limit_type" 
+              (change)="changeCreditLimit($event)" 
+              Class=" formControl radioMarginRight"
+              [checked] ="selected1"/>
+              <label for="credit_limit_type1">Line Of Business</label>
+           </div>
+              
+            <div *ngIf="f.credit_limit_type.touched && f.credit_limit_type.invalid" class="alert alert-danger">
+                <div *ngIf="f.credit_limit_type.errors.required">creditLimits is required.</div>
+            </div>
+        </div>
+        
+        <button class="btn btn-primary" type="submit" [disabled]="!creditform.valid"  (click)="postCreditLimits()">Save</button>
+
+    </div>
+    </form>
+</div>
+</div>
+ <!---- Adding Lob  in credit limit -->
+  <div class="card" *ngIf="addlob">
+  <div class="form-box">
+    <form [formGroup]="addLobForm">
+      <div class="card-body">
+        <div class="container">
+            <div class="row mb-4">
+                <div class="col-xs-1" style="margin-top:5px;">Lob</div>
+                <div class="col-md-3">
+                    <div class="form-group">
+                        <input type="text" 
+                        class="form-control form-control-sm inp"
+                        placeholder="Enter Lob"
+                        name="name" 
+              formControlName="name">
+                    </div>
+                </div>
+            <div class="col-md-2">
+                <button class="btn-p" 
+                (click)="addLob()">
+                <i class="os-icon os-icon-plus"></i>Add</button>
+            </div>
+              </div>
+            </div>
+            </div>
+            </form>
+        </div>
+        </div>
+                  <!-- *ngIf="showLobs" -->
+              <div class="col-md-4">
+                    <div class="items-table-box">
+                        <table mat-table [dataSource]="dataSource" matSort  class="mat-elevation-z8">
+                        <ng-container matColumnDef="Name">
+                            <th mat-header-cell mat-sort-header *matHeaderCellDef> Name </th>
+                            <td mat-cell *matCellDef="let element"> {{ element.name }} </td>
+                        </ng-container>
+                        <ng-container matColumnDef="actions">
+                            <th mat-header-cell *matHeaderCellDef> Actions </th>
+                            <td mat-cell *matCellDef="let element; index as index">
+                            <button (click)="editItemCode(index, element)"><i class="fa fa-edit"></i></button>
+                            <button class="trash-btn"><i class="fa fa-trash"></i></button>
+                            </td>
+                        </ng-container>
+                        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                        <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+                        </table>
+                        <!-- <mat-paginator [pageSizeOptions]="[5,10,20]" showFirstLastButtons></mat-paginator> -->
+                        <mat-paginator #paginator [pageIndex]="0"  [pageSizeOptions]="[5, 10, 20]"></mat-paginator>
+                    </div>
+                </div>
+        
+
+        <!-- (click)="editItemCode(index, element)"
+            (click)="deleteItemCode(index)" class="trash-btn"
+
+             <mat-paginator [length]="course?.lessonsCount" [pageSize]="3"
+                   [pageSizeOptions]="[3, 5, 10]"></mat-paginator> 
+         -->

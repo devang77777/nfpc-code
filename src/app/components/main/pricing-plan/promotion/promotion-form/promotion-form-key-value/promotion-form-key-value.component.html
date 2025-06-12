@@ -1,0 +1,157 @@
+<section>
+  <div class="">
+    <div class="form-box">
+      <div class="">
+        <h4 *ngIf="showLocations()">Location</h4>
+        <div class="form-field-box" *ngIf="overviewFormGroup.value.keyCombination.locations.country">
+          <mat-form-field>
+            <mat-label>Country</mat-label>
+            <mat-select [(ngModel)]="selectedCountries" (selectionChange)="onCountryChange($event)" multiple>
+              <mat-option *ngFor="let country of countries" [value]="country.id">{{ country.name }}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+          <mat-error *ngIf="(!selectedCountries.length ) && showFormError">
+            <small>Please select atleast a country.</small>
+          </mat-error>
+        </div>
+        <div class="form-field-box" *ngIf="overviewFormGroup.value.keyCombination.locations.regions">
+          <mat-form-field>
+            <mat-label>Region</mat-label>
+            <mat-select [(ngModel)]="selectedRegions" (selectionChange)="onRegionChange($event)" multiple>
+              <mat-option *ngFor="let region of regions" [value]="region.id">{{ region.region_name }}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+          <mat-error *ngIf="(!selectedRegions.length ) && showFormError">
+            <small>Please select atleast a region.</small>
+          </mat-error>
+        </div>
+        <div class="form-field-box" *ngIf="overviewFormGroup.value.keyCombination.locations.area">
+          <mat-form-field>
+            <mat-label>Area</mat-label>
+            <mat-select [(ngModel)]="selectedAreas" (selectionChange)="onAreaChange($event)" multiple>
+              <mat-option *ngFor="let area of flatAreaData" [value]="area.id">
+                <span *ngFor="let i of counter(area.node_level)">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                </span>
+                • {{ area.area_name }}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+          <mat-error *ngIf="(!selectedAreas.length ) && showFormError">
+            <small>Please select atleast an area.</small>
+          </mat-error>
+        </div>
+        <div class="form-field-box" *ngIf="overviewFormGroup.value.keyCombination.locations.route">
+          <mat-form-field>
+            <mat-label>Route</mat-label>
+            <mat-select [(ngModel)]="selectedRoutes" (selectionChange)="onRouteChange($event)" multiple>
+              <mat-option *ngFor="let route of routes" [value]="route.id">{{ route.route_name }}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+          <mat-error *ngIf="(!selectedRoutes.length ) && showFormError">
+            <small>Please select atleast a route.</small>
+          </mat-error>
+        </div>
+
+      </div>
+
+      <div class="">
+        <h4 *ngIf="showCustomers()">Customer</h4>
+        <div class="form-field-box" *ngIf="overviewFormGroup.value.keyCombination.customers.salesOrganisation">
+          <mat-form-field>
+            <mat-label>Sales Organisation</mat-label>
+            <mat-select [(ngModel)]="selectedSalesOrganisations" (selectionChange)="onSalesOrganisationChange()"
+              multiple>
+              <mat-option *ngFor="let salesOrganisation of flatSalesOrganisationData" [value]="salesOrganisation.id">
+                <span *ngFor="let i of counter(salesOrganisation.node_level)">&nbsp;&nbsp;&nbsp;&nbsp;
+                </span>
+                • {{ salesOrganisation.name }}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+          <mat-error *ngIf="(!selectedSalesOrganisations.length ) && showFormError">
+            <small>Please select atleast a sales organisation.</small>
+          </mat-error>
+        </div>
+
+        <div class="form-field-box" *ngIf="overviewFormGroup.value.keyCombination.customers.channel">
+          <mat-form-field>
+            <mat-label>Channel</mat-label>
+            <mat-select [(ngModel)]="selectedChannels" (selectionChange)="onChannelChange()" multiple>
+              <mat-option *ngFor="let channel of flatChannelData" [value]="channel.id">
+                <span *ngFor="let i of counter(channel.node_level)">&nbsp;&nbsp;&nbsp;&nbsp;
+                </span>
+                • {{ channel.name }}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+          <mat-error *ngIf="(!selectedChannels.length ) && showFormError">
+            <small>Please select atleast a channel.</small>
+          </mat-error>
+        </div>
+
+        <div class="form-field-box" *ngIf="overviewFormGroup.value.keyCombination.customers.customerCategory">
+          <mat-form-field>
+            <mat-label>Customer Category</mat-label>
+            <mat-select [(ngModel)]="selectedCustomerCategories" (selectionChange)="onCustomerCategoryChange()"
+              multiple>
+              <mat-option *ngFor="let customerCategory of customerCategories" [value]="customerCategory.id">
+                {{ customerCategory.name }}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+          <mat-error *ngIf="(!selectedCustomerCategories.length ) && showFormError">
+            <small>Please select atleast a customer category.</small>
+          </mat-error>
+        </div>
+
+        <div class="form-field-box" *ngIf="overviewFormGroup.value.keyCombination.customers.customer">
+          <mat-form-field>
+            <mat-label>Customer</mat-label>
+            <mat-select [(ngModel)]="selectedCustomers" (selectionChange)="onCustomerChange()" multiple>
+              <mat-option *ngFor="let customer of customers" [value]="customer.id">
+                {{ customer.firstname }} {{ customer.lastname }}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+          <mat-error *ngIf="(!selectedCustomers.length ) && showFormError">
+            <small>Please select atleast a customer.</small>
+          </mat-error>
+        </div>
+
+      </div>
+      <div class="">
+        <h4 *ngIf="showItems()">Item</h4>
+        <div class="form-field-box" *ngIf="overviewFormGroup.value.keyCombination.items.majorCategory">
+          <mat-form-field>
+            <mat-label>Category</mat-label>
+            <mat-select [(ngModel)]="selectedCategories" (selectionChange)="onCategoryChange()" multiple>
+              <mat-option *ngFor="let majorCategory of flatCategoryData" [value]="majorCategory.id">
+                <span *ngFor="let i of counter(majorCategory.node_level)">&nbsp;&nbsp;&nbsp;&nbsp;
+                </span>
+                • {{ majorCategory.name }}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+          <mat-error *ngIf="(!selectedCategories.length ) && showFormError">
+            <small>Please select atleast a category.</small>
+          </mat-error>
+        </div>
+        <div class="form-field-box" *ngIf="overviewFormGroup.value.keyCombination.items.itemGroup">
+          <mat-form-field>
+            <mat-label>Item Group</mat-label>
+            <mat-select [(ngModel)]="selectedItemGroups" (selectionChange)="onItemGroupChange()" multiple>
+              <mat-option *ngFor="let itemGroup of itemGroups" [value]="itemGroup.id">{{ itemGroup.name }}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+          <mat-error *ngIf="(!selectedItemGroups.length ) && showFormError">
+            <small>Please select atleast an item group.</small>
+          </mat-error>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

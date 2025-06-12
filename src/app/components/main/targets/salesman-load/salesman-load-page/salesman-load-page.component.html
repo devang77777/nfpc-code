@@ -1,0 +1,21 @@
+<section>
+  <div class="table-box" [ngClass]="{ 'collapsed': isDetailVisible }">
+    <div class="heading-row">
+      <p class="h4 font-weight-light d-inline " *ngIf="!isDetailVisible">Salesman Load</p>
+
+      <div class="d-inline float-right ">
+        <button appPermission [permissions]="userPermissions" [type]="'create'" type="button"
+          class="btn btn-sm btn-p mr-2" (click)="openAddSalesmanLoad()"><i class="os-icon os-icon-plus mr-2"
+            aria-hidden="true"></i>New</button>
+      </div>
+    </div>
+    <app-salesman-load-dt [newSalesmanLoadData]="newSalesmanLoadData" (itemClicked)="itemClicked($event)"
+      (selectedRows)="selectedRows($event)">
+    </app-salesman-load-dt>
+  </div>
+  <div class="details-box" [ngClass]="{ 'expanded': isDetailVisible }">
+    <app-salesman-load-detail (updateTableData)="updateTableData($event)" (detailsClosed)="closeClicked()"
+      [isDetailVisible]="isDetailVisible" [salesmanLoad]="salesmanLoad">
+    </app-salesman-load-detail>
+  </div>
+</section>

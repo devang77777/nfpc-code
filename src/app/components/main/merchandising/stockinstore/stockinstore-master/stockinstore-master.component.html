@@ -1,0 +1,48 @@
+<mat-drawer-container class="formdrawer-container" hasBackdrop="false">
+  <mat-drawer id="formDrawer" mode="over" position="end" #formDrawer class="border">
+    <div style="min-width: 300px;">
+      <app-add-stockinstore (updateTableData)="updateTableData($event)"></app-add-stockinstore>
+    </div>
+  </mat-drawer>
+
+  <section class="">
+    <div class="table-box customerbox" [ngClass]="{ 'collapsed': isDetailVisible }">
+      <div class="heading-row clearfix">
+        <p class="h4 font-weight-light d-inline" *ngIf="!isDetailVisible">Stock In Store</p>
+        <div class="d-inline float-right ">
+          <button type="button" class="btn btn-sm btn-p mr-2" (click)="openAddStockInStore()" appPermission
+            [permissions]="userPermissions" [type]="'create'"><i class="os-icon os-icon-plus mr-2"
+              aria-hidden="true"></i>New</button>
+              <button *ngIf="checkedRows.length > 0" class="btn btn-sm btn-white dropdown-toggle ml-2" mat-button
+                [matMenuTriggerFor]="menu2">
+                Bulk Actions
+              </button>
+              <mat-menu #menu2="matMenu">
+                <button mat-menu-item (click)="bulkAction('active')">Mark as Active</button>
+                <button mat-menu-item (click)="bulkAction('inactive')" >Mark as Inactive</button>
+                <!-- <button mat-menu-item (click)="bulkAction('delete')" appPermission [permissions]="userPermissions" [type]="'delete'">
+                  Delete
+                </button> -->
+              </mat-menu>
+          <!-- impot /Export  -->
+          <button class="btn btn-sm btn-white ml-2 dropdown-toggle" [matMenuTriggerFor]="menu3">
+            <i class="fa fa-bars" aria-hidden="true"></i>
+          </button>
+          <mat-menu #menu3="matMenu">
+            <button mat-menu-item (click)="openImportStockstore()">Import Stock In Store</button>
+            <button mat-menu-item type="button" (click)="openExportStockstore()">Export Stock In Store</button>
+          </mat-menu>
+        </div>
+
+      </div>
+      <app-stockinstoredt (selectedRows)="selectedRows($event)" (itemClicked)="itemClicked($event)" [newStockInStoreData]="newStockInStoreData">
+      </app-stockinstoredt>
+    </div>
+    <div class="details-box" [ngClass]="{ 'expanded': isDetailVisible }">
+      <app-stockinstore-detail (updateTableData)="updateTableData($event)" (detailsClosed)="closeClicked()"
+        [isDetailVisible]="isDetailVisible" [stock]="stock">
+      </app-stockinstore-detail>
+
+    </div>
+  </section>
+</mat-drawer-container>

@@ -1,0 +1,31 @@
+<section class="">
+    <div class="row mb-4" *ngIf="customerIsApproved">
+        <div class="approval-holder">
+            <div class="approval-box">
+                <div class="approve-icon">
+                    <i class="fa fa-check-square-o"></i>
+                </div>
+                <div class="approve-content">
+                    <h2>Approve this Customer</h2>
+                    <p>This customer has been submitted for approval. Verify and approve the customer.</p>
+                </div>
+                <div class="approve-actions">
+                    <button mat-button class="approve" (click)="approve()">Approve</button>
+                    <button mat-button class="reject" (click)="reject()">Reject</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="pl-3">
+        <div class="row">
+            <div class="col-md-4 p-0 pr-lg-3  pr-md-0 pl-0">
+                <app-overview-left-pannel [customer]="customer" [lobInfo]="lobInfo"></app-overview-left-pannel>
+            </div>
+            <div class="col-md-8 p-0">
+                <app-overview-right-panel [customer]="customer" [lobInfo]="lobInfo"></app-overview-right-panel>
+            </div>
+        </div>
+    </div>
+
+</section>

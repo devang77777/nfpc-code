@@ -1,0 +1,104 @@
+.item-form {
+  width: 550px;
+}
+a {
+  cursor: pointer;
+}
+.card {
+  position: relative;
+}
+.customerHr {
+  margin-top: -2px !important;
+}
+.card-body {
+  height: calc(100vh - 170px);
+  overflow-y: scroll;
+}
+.noscroll {
+  overflow-y: unset !important;
+}
+.changePosition {
+  position: relative !important;
+  top: 0px !important;
+}
+label {
+  font-weight: normal;
+}
+
+.card-footer[_ngcontent-swv-c416] {
+  position: fixed;
+  width: 550px;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.03);
+  right: 0;
+}
+a {
+  cursor: pointer;
+}
+
+button:active {
+  outline: none !important;
+}
+.fixWidth {
+  // width: 95% !important;
+}
+
+.selection-label {
+  position: relative;
+
+  span {
+    position: absolute;
+    top: 10px;
+  }
+}
+
+.item-add-btn {
+  button {
+    font-size: 14px;
+    border: none;
+    background-color: #1abc9c;
+    color: white;
+
+    i {
+      margin-right: 8px;
+    }
+  }
+}
+
+.items-table-box {
+  mat-paginator,
+  .mat-table {
+    max-width: 90%;
+    margin: auto;
+  }
+
+  button {
+    background-color: transparent;
+    border: none;
+    font-size: 14px;
+
+    &:active {
+      outline: none;
+    }
+  }
+}
+.settingIcon {
+  position: absolute;
+  top: 1px;
+  right: 0;
+  i {
+    font-size: 20px;
+  }
+}
+.tree-dropdown {
+  height: 31px;
+}
+@media (max-width: 575px) {
+  .item-form {
+    width: 300px;
+  }
+  .settingIcon {
+    left: auto !important;
+    right: 3px;
+  }
+}

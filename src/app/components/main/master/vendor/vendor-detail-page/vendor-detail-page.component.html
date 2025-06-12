@@ -1,0 +1,68 @@
+<section *ngIf="vendor">
+  <div class="pl-3">
+    <div class="row">
+      <h2 class="page-title col-sm-6 font-weight-light">
+        {{ vendor.firstname }} {{ vendor.lastname }}
+      </h2>
+      <div class="actions col-sm-6">
+        <button (click)="openEditVendor()" class="iconbtn" appPermission [permissions]="userPermissions"
+          [type]="'edit'">
+          <i class="os-icon os-icon-edit" aria-hidden="true"></i></button>&nbsp;
+        <div>
+          <button class="btn btn-sm btn-white dropdown-toggle" mat-button [matMenuTriggerFor]="menu2">
+            More
+          </button>
+          <mat-menu #menu2="matMenu">
+            <button mat-menu-item (click)="toggleStatus()">
+              Mark as {{ vendor.status === 0 ? "Active" : "Inactive" }}
+            </button>
+            <button mat-menu-item (click)="openDeleteBox()" appPermission [permissions]="userPermissions"
+              [type]="'delete'">
+              Delete
+            </button>
+          </mat-menu>
+        </div>
+        <button *ngIf="isDetailVisible" class="btn" (click)="closeDetailView()">
+          <i class="os-icon os-icon-close"></i>
+        </button>
+      </div>
+    </div>
+  </div>
+  <div class="pl-3 salesMan-data">
+    <div class="row h-100">
+      <div class="col-12 border-left">
+        <mat-tab-group class="customertab" mat-align-tabs="start">
+          <mat-tab label="Overview">
+            <mat-list>
+              <mat-list-item>
+                Vendor Code: {{ vendor.vender_code }}
+              </mat-list-item>
+              <mat-list-item>
+                Name: {{ vendor.firstname }}
+                {{ vendor.lastname }}</mat-list-item>
+              <mat-list-item> Vendor Mobile: {{ vendor.mobile }}</mat-list-item>
+              <mat-list-item> Vendor Email: {{ vendor.email }}</mat-list-item>
+              <mat-list-item>
+                Vendor Company Name: {{ vendor.company_name }}</mat-list-item>
+              <mat-list-item>
+                Vendor Company Address: {{ vendor.address1 }}</mat-list-item>
+              <mat-list-item>
+                Vendor Home Address: {{ vendor.address2 }}</mat-list-item>
+              <mat-list-item> Vendor City: {{ vendor.city }}</mat-list-item>
+              <mat-list-item> Vendor State: {{ vendor.state }}</mat-list-item>
+              <mat-list-item> Vendor ZIP: {{ vendor.zip }}</mat-list-item>
+            </mat-list>
+          </mat-tab>
+          <!-- <mat-tab label="Sales">
+            <mat-list>
+              <mat-list-item>Sales 1</mat-list-item>
+              <mat-list-item>Sales 2</mat-list-item>
+              <mat-list-item>Sales 3</mat-list-item>
+              <mat-list-item>Sales 4</mat-list-item>
+            </mat-list>
+          </mat-tab> -->
+        </mat-tab-group>
+      </div>
+    </div>
+  </div>
+</section>

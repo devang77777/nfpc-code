@@ -1,0 +1,28 @@
+<section>
+  <div class="table-box" [ngClass]="{ collapsed: isDetailVisible }">
+    <div class="heading-row">
+      <p class="h4 font-weight-light d-inline" *ngIf="!isDetailVisible">
+        SESSION ENDROSSMENT
+      </p>
+      <div class="d-inline float-right">
+        <button
+          type="button"
+          class="btn btn-sm btn-p"
+          (click)="openAddBank()"
+          appPermission
+          [permissions]="userPermissions"
+          [type]="'create'"
+        >
+          <i class="os-icon os-icon-plus mr-2" aria-hidden="true"></i> NEW
+        </button>
+      </div>
+    </div>
+    <app-session-endrossmentdt
+      (itemClicked)="itemClicked($event)"
+    ></app-session-endrossmentdt>
+  </div>
+  <!-- <div class="details-box" [ngClass]="{ 'expanded': isDetailVisible }">
+    <app-bank-detail (detailsClosed)="closeClicked()" [isDetailVisible]="isDetailVisible" [bank]="bank">
+    </app-bank-detail>
+  </div> -->
+</section>

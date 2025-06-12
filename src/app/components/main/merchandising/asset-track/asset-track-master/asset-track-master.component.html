@@ -1,0 +1,47 @@
+<mat-drawer-container class="formdrawer-container" hasBackdrop="false">
+  <mat-drawer id="formDrawer" mode="over" position="end" #formDrawer class="border">
+    <div style="min-width: 340px;">
+      <app-add-asset-track (updateTableData)="updateTableData($event)"></app-add-asset-track>
+    </div>
+  </mat-drawer>
+
+  <section class="scrollxy">
+    <div class="table-box" [ngClass]="{ 'collapsed': isDetailVisible }">
+      <div class="heading-row clearfix">
+        <p class="h4 font-weight-light d-inline" *ngIf="!isDetailVisible">Asset Tracking</p>
+        <div class="d-inline float-right ">
+          <button type="button" class="btn btn-sm btn-p mr-2" (click)="openAddAssetTrack()" appPermission
+            [permissions]="userPermissions" [type]="'create'"><i class="os-icon os-icon-plus mr-2"
+              aria-hidden="true"></i>New</button>
+              <button *ngIf="checkedRows.length > 0" class="btn btn-sm btn-white dropdown-toggle ml-2" mat-button
+                [matMenuTriggerFor]="menu2">
+                Bulk Actions
+              </button>
+              <mat-menu #menu2="matMenu">
+                <button mat-menu-item (click)="bulkAction('active')">Mark as Active</button>
+                <button mat-menu-item (click)="bulkAction('inactive')" >Mark as Inactive</button>
+                <!-- <button mat-menu-item (click)="bulkAction('delete')" appPermission [permissions]="userPermissions" [type]="'delete'">
+                  Delete
+                </button> -->
+              </mat-menu>
+          <!-- impot /Export  -->
+          <button class="btn btn-sm btn-white ml-2 dropdown-toggle" [matMenuTriggerFor]="menu3">
+            <i class="fa fa-bars" aria-hidden="true"></i>
+
+          </button>
+          <mat-menu #menu3="matMenu">
+            <button mat-menu-item (click)="openImportAsset()">Import Assert Tracking</button>
+            <button mat-menu-item type="button" (click)="openExportAsset()">Export Assert Tracking</button>
+          </mat-menu>
+        </div>
+      </div>
+      <app-asset-track-dt (selectedRows)="selectedRows($event)" (itemClicked)="itemClicked($event)" [newAssetTrackData]="newAssetTrackData">
+      </app-asset-track-dt>
+    </div>
+    <div class="details-box" [ngClass]="{ 'expanded': isDetailVisible }">
+      <app-asset-track-detail (detailsClosed)="closeClicked()" (updateTableData)="updateTableData($event)"
+        [isDetailVisible]="isDetailVisible" [AssetTrack]="AssetTrack">
+      </app-asset-track-detail>
+    </div>
+  </section>
+</mat-drawer-container>

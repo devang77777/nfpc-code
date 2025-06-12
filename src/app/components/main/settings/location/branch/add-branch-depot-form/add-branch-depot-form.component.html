@@ -1,0 +1,79 @@
+<div class="card" style="width: 550px;">
+  <div class="card-header pt-4">
+    <span class="h6 font-weight-light">{{ formType }} Branch/Depot</span>
+    <a (click)="close()"><i class="fa fa-times fa-lg text-secondary float-right" aria-hidden="true"></i></a>
+  </div>
+  <div class="form-box">
+    <form [formGroup]="branchDepotFormGroup">
+      <div class="card-body">
+        <div class="">
+          <div class="row mb-md-4 mb-2">
+            <div class="col-md-4 ">Depot code*</div>
+            <div class="col-md-8">
+              <input (keypress)="restrictLength($event)" [formControl]="codeFormControl"
+                class="form-control form-control-sm" type="text" style="width: 95%;" />
+              <a [hidden]="formType == 'Edit'" (click)="open()" class="ml-2 settingIcon"><i
+                  class="os-icon os-icon-ui-46" aria-hidden="true"></i></a>
+              <app-validation-message [control]="codeFormControl"></app-validation-message>
+            </div>
+          </div>
+          <div class="row mb-md-4 mb-2">
+            <div class="col-md-4 ">Depot Name*</div>
+            <div class="col-md-8">
+              <input [formControl]="nameFormControl" class="form-control form-control-sm" type="text" />
+              <app-validation-message [control]="nameFormControl"></app-validation-message>
+            </div>
+          </div>
+          <div class="row mb-md-4 mb-2">
+            <div class="col-md-4 ">Depot Manager*</div>
+            <div class="col-md-8">
+              <input [formControl]="managerFormControl" class="form-control form-control-sm" type="text" />
+              <app-validation-message [control]="managerFormControl"></app-validation-message>
+            </div>
+          </div>
+          <div class="row mb-md-4 mb-2">
+            <div class="col-md-4">Manager Contact</div>
+            <div class="col-md-8">
+              <input [formControl]="contactFormControl" class="form-control form-control-sm" type="text" />
+            </div>
+          </div>
+          <div class="row mb-md-4 mb-2">
+            <div class="col-md-4 ">Region*</div>
+            <div class="col-md-8">
+              <select [formControl]="regionFormControl" class="form-control form-control-sm">
+                <option *ngFor="let region of regions" [value]="region.id">{{
+                  region.region_name
+                }}</option>
+              </select>
+              <app-validation-message [control]="regionFormControl"></app-validation-message>
+            </div>
+          </div>
+          <div class="row mb-md-4 mb-2">
+            <div class="col-md-4 ">Area*</div>
+            <div class="col-md-8">
+              <app-tree-dropdown class="area-dropdown" [dataSource]="areas" [dataService]="areaProvider()"
+                [buttonLabel]="'Manage Areas'" (manageClicked)="openArea()" (whenItemSelected)="areaSelected($event)"
+                [selectFormControl]="areaFormControl" [placeHolder]="'Search a area'" ngDefaultControl>
+              </app-tree-dropdown>
+              <app-validation-message [control]="areaFormControl"></app-validation-message>
+            </div>
+          </div>
+        </div>
+      </div>
+    </form>
+    <ng-container *ngIf="isCustomField">
+      <app-custom-field-form [editData]="editData" (change)="onCustomFieldUpdated($event)" [module]="moduleId">
+      </app-custom-field-form>
+    </ng-container>
+  </div>
+  <div class="card-footer">
+    <div class="d-inline float-right">
+      <button class="btn btn-sm btn-light mr-2" (click)="close()">
+        Cancel
+      </button>
+      <button class="btn btn-sm btn-p" (click)="saveBranchDepotData()">
+        Save
+      </button>
+    </div>
+  </div>
+</div>

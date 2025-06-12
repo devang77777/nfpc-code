@@ -1,0 +1,64 @@
+<div class="pl-3  items-table-box">
+    <div class="table-responsive">
+      <table mat-table [dataSource]="itemSource" class="mat-elevation-z8 table table-hover" matSort (matSortChange)="onSortData($event)">
+        <ng-container matColumnDef="date">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>
+            <app-column-filter title="Date" (changeSelected)="onColumnFilterOpen($event)"
+              [selected]="selectedColumnFilter" controlName="date" (close)="onColumnFilter($event)">
+              <input class="form-control form-control-sm" [formControl]="filterForm.get('date')" placeholder="Enter Date"
+                type="date">
+            </app-column-filter>
+  
+          </th>
+          <td mat-cell *matCellDef="let element"> {{ element.date | date :"d MMM y"}} </td>
+        </ng-container>
+        <ng-container matColumnDef="merchandiser_code">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>
+            <app-column-filter title="Merchandiser Code" controlName="salesman_code"
+              (changeSelected)="onColumnFilterOpen($event)" [selected]="selectedColumnFilter"
+              (close)="onColumnFilter($event)">
+              <input class="form-control form-control-sm" [formControl]="filterForm.get('salesman_code')"
+                placeholder="Enter Merchandiser Code" type="text">
+            </app-column-filter>
+          </th>
+          <td mat-cell *matCellDef="let element">
+            {{ element.merchandiser_code }}
+          </td>
+        </ng-container>
+        <ng-container matColumnDef="merchandiser_name">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>
+            <app-column-filter title="Merchandiser Name" controlName="salesman_name"
+              (changeSelected)="onColumnFilterOpen($event)" [selected]="selectedColumnFilter"
+              (close)="onColumnFilter($event)">
+              <input class="form-control form-control-sm" [formControl]="filterForm.get('salesman_name')"
+                placeholder="Enter Merchandiser Name" type="text">
+            </app-column-filter>
+          </th>
+          <td mat-cell *matCellDef="let element">
+            {{ element.merchandiser_name }}
+          </td>
+        </ng-container>
+        <ng-container matColumnDef="jp">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>
+            Journey Plan
+          </th>
+          <td mat-cell *matCellDef="let element">{{ element.jp }}</td>
+        </ng-container>
+        <ng-container matColumnDef="checkin">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>
+              CheckIn Time
+            </th>
+            <td mat-cell *matCellDef="let element">{{ element.checkin }}</td>
+          </ng-container>
+          <ng-container matColumnDef="checkout">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>
+                CheckOut Time
+            </th>
+            <td mat-cell *matCellDef="let element">{{ element.checkout }}</td>
+          </ng-container>
+        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+      </table>
+    </div>
+    <!-- <mat-paginator pageSize="50" [pageSizeOptions]="[5,10,15,25,50,100]"></mat-paginator> -->
+  </div>

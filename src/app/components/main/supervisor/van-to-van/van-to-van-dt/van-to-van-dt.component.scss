@@ -1,0 +1,128 @@
+:host {
+    float: left;
+    width: 100%;
+  }
+  
+  table {
+    margin-top: 0;
+  }
+  
+  .mat-column-select,
+  .mat-column-date,
+  .mat-column-from,
+  .mat-column-to,
+  .mat-column-status,
+  .mat-column-code {
+    word-wrap: break-word;
+    white-space: unset;
+    flex: 0 0 20%;
+    width: 15%;
+    overflow-wrap: break-word;
+    word-break: break-word;
+    -ms-hyphens: auto;
+    -moz-hyphens: auto;
+    -webkit-hyphens: auto;
+    hyphens: auto;
+  }
+  
+  .cdk-column-select {
+    position: relative;
+  
+    .filter-btn {
+      position: absolute;
+      left: 0px;
+      top: 0;
+      height: 35px;
+      line-height: 35px;
+      width: 30px;
+      padding: 0;
+      margin: 0;
+      text-align: center;
+      display: block;
+    }
+  }
+  
+  button {
+    background-color: transparent;
+    border: none;
+  
+    i {
+      font-size: 14px;
+    }
+  }
+  
+  .trash-btn {
+    margin-left: 8px;
+  }
+  
+  .cdk-column-select {
+    width: 4%;
+  }
+  
+  .filter-btn {
+  
+  
+    &:focus {
+      outline: none;
+      box-shadow: 0 0;
+    }
+  }
+  
+  .head-checkbox {
+    display: inline-block;
+    margin-left: 4px;
+    position: relative;
+    top: 0;
+  }
+  
+  .row-checkbox {
+    margin-left: 4px;
+    position: relative;
+    top: -2px;
+  }
+  
+  .misc-row {
+    height: 52px !important;
+  }
+  
+  .misc-cell {
+    position: relative;
+  }
+  
+  .col-name {
+    position: absolute;
+    top: 8px;
+  }
+  
+  .col-price {
+    position: absolute;
+    right: 16px;
+    top: 8px;
+    color: #181925;
+  }
+  
+  .col-date {
+    font-size: 10px;
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    color: #777777;
+  }
+  
+  .col-code {
+    font-size: 10px;
+    position: absolute;
+    right: 16px;
+    color: #777777;
+  }
+  
+  // New Styles
+  
+  td.mat-column-code {
+    color: #1b6ac4;
+  }
+  
+  [mat-header-row] {
+    background-color: #f3f3f3;
+  }
+  

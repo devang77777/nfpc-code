@@ -1,0 +1,258 @@
+<section>
+  <div class="heading-row">
+    <h2 class="d-md-inline">
+      <i class="os-icon os-icon-truck"></i> Delivery
+      <span class="order-number">#{{ deliveryData?.delivery_number }}</span>
+    </h2>
+    <div class="d-md-inline float-md-right text-right">
+
+      <div class="btn-group btnrow mr-2">
+        <button class="btn" type="button" [autoClose]="'outside'" triggers="manual" #email="ngbPopover"
+          placement="bottom" (click)="email.open();" [ngbPopover]="emailPopContent" [popoverTitle]="emailPopTitle">
+          <i class="os-icon os-icon-mail"></i>
+        </button>
+        <button class="btn" type="button" [routerLink]="['/transaction/delivery/edit', deliveryData?.uuid]"
+          [disabled]="(isPickingDeliveryData.length==deliveryData?.delivery_details.length || deliveryData?.approval_status=='Shipment') || checkPermission(currentRole)">
+          <i class="os-icon os-icon-edit-32"></i>
+        </button>
+        <!-- [disabled]="isPickingDeliveryData.length==deliveryData?.delivery_details.length" -->
+
+        <button class="btn" type="button" (click)="getDocument('pdf')">
+          <mat-icon [inline]="true">picture_as_pdf</mat-icon>
+        </button>
+        <button class="btn" type="button" printSectionId="print-section" printTitle="Statement" [printStyle]="{
+          h1: { color: 'red' },
+          h2: { border: 'solid 1px' }
+        }" [useExistingCss]="true" ngxPrint>
+          <i class="os-icon os-icon-printer"></i>
+        </button>
+
+        <!-- <button class="btn" type="button">
+          <mat-icon [inline]="true">attach_file</mat-icon>
+        </button> -->
+        <button (click)="onToggleHistory()" class="btn" type="button">
+          <mat-icon [inline]="true">textsms</mat-icon>
+        </button>
+      </div>
+
+      <span>
+        <button
+          *ngIf="(deliveryData?.approval_status=='Truck Allocated') && (currentRole=='org-admin'|| currentRole=='Warehouse')"
+          mat-button class="btn btn-sm btn-white mr-2 dropdown-toggle" [matMenuTriggerFor]="menu2">
+          More
+        </button>
+        <mat-menu #menu2="matMenu" xPosition="before">
+          <button *ngIf="showOrderStatusOptions" mat-menu-item class="height-40" (click)="confirmShipment()">
+            Confirm Shipment
+          </button>
+        </mat-menu>
+      </span>
+      <button class="btn" (click)="closeDetailView()">
+        <i class="os-icon os-icon-close"></i>
+      </button>
+    </div>
+  </div>
+  <div class="separator"></div>
+
+  <div class="approval-box" *ngIf="hasApprovalPending">
+    <div class="approve-icon">
+      <i class="fa fa-check-square-o"></i>
+    </div>
+    <div class="approve-content">
+      <h2>Approve this delivery</h2>
+      <p>
+        This delivery has been submitted for approval. Verify and approve the
+        delivery.
+      </p>
+    </div>
+    <div class="approve-actions">
+      <button mat-button class="approve" (click)="approve()">Approve</button>
+      <button mat-button class="reject" (click)="reject()">Reject</button>
+    </div>
+  </div>
+
+  <form class="order-form custom-mat square scrolly">
+    <div class="card-header active-form overview">
+      <div class="row w-100">
+        <div class="col-md-4">
+          <div class="form-group">
+            <label>Delivery Type</label>
+            <input type="text" class="form-control form-control-sm non-editable"
+              [value]="deliveryData?.delivery_type?.name" disabled />
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card-body overview">
+      <div class="row justify-content-between">
+        <div class="col-md-4">
+          <div class="form-group" *ngIf="!isDepotOrder">
+            <label>Customer</label>
+            <input type="text" class="form-control form-control-sm non-editable" [value]="getCustomer()" disabled />
+          </div>
+          <div class="form-group" *ngIf="!isDepotOrder">
+            <label>Customer Lob</label>
+            <input type="text" class="form-control form-control-sm non-editable" [value]="getCustomerLob()" disabled />
+          </div>
+          <div class="form-group" *ngIf="deliveryData?.storageocation?.code">
+            <label for="">Warehouse</label>
+            <input type="text" class="form-control form-control-sm non-editable" [value]="
+            deliveryData?.storageocation?.code +'-'+ deliveryData?.storageocation?.name || ''" disabled />
+          </div>
+          <div class="form-group" *ngIf="isDepotOrder">
+            <label>Depot</label>
+            <input type="text" class="form-control form-control-sm non-editable"
+              [value]="deliveryData?.depot?.depot_name" disabled />
+          </div>
+          <!-- <div class="form-group">
+            <label>Salesman</label>
+            <input type="text" class="form-control form-control-sm non-editable" [value]="
+                deliveryData?.salesman
+                  ? deliveryData?.salesman?.firstname +
+                    ' ' +
+                    deliveryData?.salesman?.lastname
+                  : ''
+              " disabled />
+          </div> -->
+        </div>
+        <div class="col-md-4">
+          <div class="form-group">
+            <label> Delivery Number</label>
+            <input type="text" class="form-control form-control-sm non-editable" [value]="deliveryData?.delivery_number"
+              disabled />
+          </div>
+          <div class="form-group">
+            <label> Delivery Date</label>
+            <input type="date" class="form-control form-control-sm non-editable" [value]="deliveryData?.delivery_date"
+              disabled />
+          </div>
+          <div class="form-group">
+            <label> Delivery Time</label>
+            <input type="time" class="form-control form-control-sm non-editable" [value]="deliveryData?.delivery_time"
+              disabled />
+          </div>
+          <!-- <div class="form-group">
+            <label> Payment Terms</label>
+            <input type="text" class="form-control form-control-sm non-editable"
+              [value]="deliveryData?.payment_term?.name" disabled />
+          </div>
+          <div class="form-group">
+            <label> Due Date</label>
+            <input type="date" class="form-control form-control-sm non-editable"
+              [value]="deliveryData?.delivery_due_date" disabled />
+          </div> -->
+        </div>
+      </div>
+    </div>
+    <div>
+      <div class="item-container custom-mat custom-mat-no-border" *ngIf="deliveryData?.delivery_details">
+        <div class="table-responsive">
+          <table class="item-table cardtable">
+            <thead>
+              <tr>
+                <ng-container *ngFor="let head of itemTableHeaders">
+                  <th class="head" *ngIf="head.show && head.key!='check'">
+                    {{ head.label }}
+                  </th>
+                </ng-container>
+              </tr>
+            </thead>
+            <tbody class="form-body">
+              <tr class="item-row" *ngFor="
+                  let item of deliveryData?.delivery_details;
+                  let i = index
+                " [ngClass]="item.is_picking == 1 ? 'disabled' : ''">
+                <td class="item-seq" data-th="#">{{ i + 1 }}</td>
+                <td class="item-name" style="width: 150px;" data-th="Item Code">
+                  <!-- <input type="text" class="form-control form-control-sm non-editable" [value]="item.item?.item_name"
+                    disabled /> -->
+                  <span style="word-break: break-word; font-size: 11px;">{{item?.item?.item_code}}</span>
+                </td>
+                <td data-th="Item Name" class="item-name" style="width: 150px;">
+                  <!-- <input type="text" class="form-control form-control-sm non-editable" [value]="item.item.item_name"
+                    disabled /> -->
+                  <span style="word-break: break-word; font-size: 11px;">{{item?.item?.item_name}}</span>
+                </td>
+
+                <td class="uom-td" data-th="UOM">
+                  <input type="text" class="form-control form-control-sm non-editable" [value]="getUomValue(item)"
+                    disabled />
+                </td>
+
+                <td data-th="Quantity">
+                  <input type="number" min="0" class="form-control non-editable" [value]="item.item_qty" disabled />
+                </td>
+                <td data-th="Reason">
+                  <input type="string" min="0" class="form-control non-editable" [value]="item?.reason?.name"
+                    disabled />
+                </td>
+                <td data-th="Price">
+                  <input type="text" class="form-control non-editable" [value]="numberFormat(item?.item_price)"
+                    disabled />
+                </td>
+                <td data-th="Excise">
+                  <input type="text" class="form-control non-editable" [value]="numberFormat(item?.item_excise)"
+                    disabled />
+                </td>
+                <td data-th="Discount">
+                  <input type="text" class="form-control non-editable"
+                    [value]="numberFormat(item?.item_discount_amount)" disabled />
+                </td>
+                <td data-th="Net">
+                  <input type="text" class="form-control non-editable" [value]="numberFormat(item?.item_net)"
+                    disabled />
+                </td>
+                <td data-th="Vat">
+                  <input type="text" class="form-control non-editable" [value]="numberFormat(item?.item_vat)"
+                    disabled />
+                </td>
+                <td data-th="Total">
+                  <input type="text" class="form-control non-editable" [value]="numberFormat(item?.item_grand_total)"
+                    disabled />
+                </td>
+                <td data-th="Driver Name">
+                  <input type="text" class="form-control non-editable" [value]="item?.template_driver_name" disabled />
+                </td>
+                <td data-th="Vehicle No">
+                  <input type="text" class="form-control non-editable" [value]="item?.template_vechicle" disabled />
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+      <div class="footer-overview-container">
+        <div class="row justify-content-end">
+          <div class="col-sm-4">
+            <div class="overall-stats-table">
+              <div *ngFor="let stat of orderStats.slice(0, orderStats.length - 1)">
+                <span class="stat-label">{{ stat.label }}</span>
+                <span class="stat-value">{{
+                  deliveryData && numberFormatWithSymbol(deliveryData[stat.key])
+
+                  }}</span>
+              </div>
+              <div>
+                <span class="stat-label final-total">Total</span>
+                <span class="stat-value final-total">{{
+                  numberFormatWithSymbol(deliveryData?.grand_total)
+                  }}</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </form>
+</section>
+
+<ng-template #emailPopTitle>
+  <span>Send Delivery {{deliveryData.delivery_number}}</span>
+</ng-template>
+<ng-template #emailPopContent>
+  <app-send-email [data]="emailData" (close)="email.close()"></app-send-email>
+</ng-template>
+<div class="card border" id="print-section">
+  <div class="card-body" [innerHTML]="deliveryTemplate"></div>
+</div>

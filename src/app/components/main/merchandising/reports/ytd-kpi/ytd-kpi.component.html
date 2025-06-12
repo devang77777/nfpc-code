@@ -1,0 +1,24 @@
+<div class="pl-3  items-table-box" *ngIf="showTable">
+    <div class="table-responsive">
+        <mat-table [dataSource]="itemSource" class="mat-elevation-z8 table table-hover">
+
+            <ng-container [matColumnDef]="column" *ngFor="let column of displayColumns">
+                <mat-header-cell *matHeaderCellDef>
+                    <!-- {{ column }} -->
+                </mat-header-cell>
+                <td mat-cell *matCellDef="let element" class="font-weight-bold"> {{
+                    element[column]?element[column]:'0' }}</td>
+                    
+            </ng-container>
+            <!-- <ng-container *ngFor="let second of secondRows" [matColumnDef]="second.columnDef">
+                <mat-header-cell *matHeaderCellDef>
+                    {{ second.title }}
+                </mat-header-cell>
+            </ng-container> -->
+            <!-- <mat-header-row *matHeaderRowDef="displayColumns"></mat-header-row> -->
+            <!-- <mat-header-row *matHeaderRowDef="displayedSecondColumns"></mat-header-row> -->
+            <mat-row *matRowDef="let row; columns: displayColumns;"></mat-row>
+        </mat-table>
+    </div>
+    <!-- <mat-paginator pageSize="50" [pageSizeOptions]="[5,10,15,25,50,100]"></mat-paginator> -->
+</div>

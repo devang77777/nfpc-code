@@ -1,0 +1,59 @@
+<mat-drawer-container class="formdrawer-container" hasBackdrop="false">
+  <mat-drawer
+    id="formDrawer"
+    mode="over"
+    position="end"
+    #formDrawer
+    class="border"
+  >
+    <div style="min-width: 320px;">
+      <app-outlet-product-form (updateTableData)="updateTableData($event)"></app-outlet-product-form>
+    </div>
+  </mat-drawer>
+  <section>
+    <div class="table-box" [ngClass]="{ collapsed: isDetailVisible }">
+      <div class="heading-row clearfix">
+        <h2 class="d-inline" [hidden]="isDetailVisible">Outlet Product Code</h2>
+        <div
+          class="d-inline float-right"
+          [ngClass]="{ 'expanded-action': isDetailVisible }"
+        >
+          <button
+            class="btn btn-sm btn-p"
+            appPermission
+            [permissions]="userPermissions"
+            [type]="'create'"
+            mat-button
+            (click)="openAddOutletProductForm()"
+          >
+            <i class="os-icon os-icon-plus mr-2" aria-hidden="true"></i>New
+          </button>
+          <button *ngIf="checkedRows.length > 0" class="btn btn-sm btn-white dropdown-toggle ml-2" mat-button
+            [matMenuTriggerFor]="menu2">
+            Bulk Actions
+          </button>
+          <mat-menu #menu2="matMenu">
+            <button mat-menu-item (click)="bulkAction('active')">Mark as Active</button>
+            <button mat-menu-item (click)="bulkAction('inactive')" >Mark as Inactive</button>
+            <!-- <button mat-menu-item (click)="bulkAction('delete')" appPermission [permissions]="userPermissions" [type]="'delete'">
+              Delete
+            </button> -->
+          </mat-menu>
+        </div>
+      </div>
+      <app-outlet-product-data-table
+      [newOpdData]="newOpdData"
+        (itemClicked)="itemClicked($event)"
+        (selectedRows)="selectedRows($event)"
+      ></app-outlet-product-data-table>
+    </div>
+    <div class="details-box" [ngClass]="{ expanded: isDetailVisible }">
+      <app-outlet-product-detail
+      (updateTableData)="updateTableData($event)"
+        (detailsClosed)="closeClicked()"
+        [isDetailVisible]="isDetailVisible"
+        [outletProductData]="outletProdData"
+      ></app-outlet-product-detail>
+    </div>
+  </section>
+</mat-drawer-container>

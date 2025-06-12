@@ -1,0 +1,352 @@
+<div  class="content-wrapper " style="margin-top:0px; height: 100%;">
+    <mat-progress-bar *ngIf="submitting" mode="indeterminate"></mat-progress-bar>
+    <div *ngIf="!submitting" class="card">
+        <div class="card-header">
+            <p class="h4 font-weight-light pt-2">Organization Profile <span *ngIf="id"
+                    class="h6 font-weight-light pl-3 border-left text-muted"> ID: {{id}} </span></p>
+        </div>
+
+        <form [formGroup]="organisationFormGroup" (ngSubmit)="onSubmit()" class="scrolly p-0">
+            <div class="card-body">
+
+                <div class="container">
+                    <div class="row mb-4">
+                        <div class="col-md-2">
+                            <p>Your Logo</p>
+                        </div>
+                        <div class="col-md-4">
+
+
+
+                                  <div class="input-group mb-3">
+                                    <div class="custom-file">
+                                        <input type="file" class="custom-file-input" accept="image/*" (change)="handleInputChange($event)" id="myinputfile" aria-describedby="inputaddons">
+                                      <label class="custom-file-label" for="inputGroupFile02" aria-describedby="inputGroupFileAddon02">{{choosenFileName}}</label>
+                                    </div>
+
+                                  </div>
+                        </div>
+                        <div class="col-md-2 image-container" >
+                            <a class="cancel-btn iconbtn" (click)="removeImg()"><i class="os-icon os-icon-x-circle" aria-hidden="true"></i>
+                            </a>
+                            <!-- <img [src]="imageSrc" style="max-width:100px;max-height:100px" /> -->
+                            <img [src]="orgLogoFormControl.value"  style="max-width:100px;max-height:100px" />
+                        </div>
+                        <div class="col-md-4">
+                            <span class="text-sm text-muted pb-0">
+                                This logo will appear on the documents (estimates, invoices, etc.) that are created.
+                                <br>
+                                <small class="text-secondary">Preferred Image Size: 240px x 240px @ 72 DPI Maximum size
+                                    of
+                                    1MB.</small>
+                            </span>
+
+                        </div>
+                    </div>
+                    <div class="row mb-2">
+                        <div class="col-md-2">
+                            <p class="">Organization Name*</p>
+                        </div>
+                        <div class="col-md-4">
+                            <input
+                                [ngClass]="{'invalid-input': orgNameFormControl.invalid && (orgNameFormControl.dirty || orgNameFormControl.touched)}"
+                                class="form-control form-control-sm" type="text" formControlName="org_name">
+                            <div *ngIf="orgNameFormControl.invalid && (orgNameFormControl.dirty || orgNameFormControl.touched)"
+                                class="text-danger">
+                                <div *ngIf="orgNameFormControl.errors.required">
+                                    <small>Organisation Name is required.</small>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- <div class="row mb-4">
+                        <div class="col-2">
+                            <p>Industry</p>
+                        </div>
+                        <div class="col-4">
+                            <input class="form-control form-control-sm" type="text">
+                        </div>
+                    </div> -->
+                    <div class="row mb-2">
+                        <div class="col-md-2">
+                            <p class="">Business Location*</p>
+                        </div>
+                        <div class="col-md-4">
+                            <select
+                                [ngClass]="{'invalid-input': countryFormControl.invalid && (countryFormControl.dirty || countryFormControl.touched)}"
+                                class="form-control form-control-sm" formControlName="org_country_id"
+                                placeholder="Country">
+                                <option value="" disabled selected>Select your Country</option>
+                                <option *ngFor="let country of countries" [value]="country.id" disabled>{{country.name}}
+                                </option>
+                            </select>
+                            <div *ngIf="countryFormControl.invalid && (countryFormControl.dirty || countryFormControl.touched)"
+                                class="text-danger">
+                                <div *ngIf="countryFormControl.errors.required">
+                                    <small>Country is required.</small>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row mb-2">
+                        <div class="col-md-2">
+                            <p class="">Company Address*</p>
+                        </div>
+                        <div class="col-md-9">
+                            <input
+                                [ngClass]="{'invalid-input': street1FormControl.invalid && (street1FormControl.dirty || street1FormControl.touched)}"
+                                class="form-control form-control-sm" type="text" placeholder="Address"
+                                formControlName="org_street1">
+                            <div *ngIf="street1FormControl.invalid && (street1FormControl.dirty || street1FormControl.touched)"
+                                class="text-danger">
+                                <div *ngIf="street1FormControl.errors.required">
+                                    <small>Address is required.</small>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row mb-2">
+                        <div class="col-md-2"> </div>
+                        <div class="col-md-9">
+                            <input class="form-control form-control-sm" type="text" formControlName="org_street2">
+                        </div>
+                    </div>
+                    <div class="row mb-2">
+                        <div class="col-md-2"> </div>
+                        <div class="col-md-3">
+                            <input
+                                [ngClass]="{'invalid-input': cityFormControl.invalid && (cityFormControl.dirty || cityFormControl.touched)}"
+                                class="form-control form-control-sm" type="text" placeholder="City"
+                                formControlName="org_city">
+                            <div *ngIf="cityFormControl.invalid && (cityFormControl.dirty || cityFormControl.touched)"
+                                class="text-danger">
+                                <div *ngIf="cityFormControl.errors.required">
+                                    <small>City is required.</small>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <input
+                                [ngClass]="{'invalid-input': stateFormControl.invalid && (stateFormControl.dirty || stateFormControl.touched)}"
+                                class="form-control form-control-sm" type="text" placeholder="State"
+                                formControlName="org_state">
+                            <div *ngIf="stateFormControl.invalid && (stateFormControl.dirty || stateFormControl.touched)"
+                                class="text-danger">
+                                <div *ngIf="stateFormControl.errors.required">
+                                    <small>State is required.</small>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <input
+                                [ngClass]="{'invalid-input': postalFormControl.invalid && (postalFormControl.dirty || postalFormControl.touched)}"
+                                class="form-control form-control-sm" type="text" placeholder="Zip/Postal Code"
+                                formControlName="org_postal">
+                            <div *ngIf="postalFormControl.invalid && (postalFormControl.dirty || postalFormControl.touched)"
+                                class="text-danger">
+                                <div *ngIf="postalFormControl.errors.required">
+                                    <small>Postal code is required.</small>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row mb-2">
+                        <div class="col-md-2"> </div>
+                        <div class="col-md-3">
+                            <input
+                                [ngClass]="{'invalid-input': phoneFormControl.invalid && (phoneFormControl.dirty || phoneFormControl.touched)}"
+                                class="form-control form-control-sm" type="text" placeholder="Phone"
+                                formControlName="org_phone">
+                            <div *ngIf="phoneFormControl.invalid && (phoneFormControl.dirty || phoneFormControl.touched)"
+                                class="text-danger">
+                                <div *ngIf="phoneFormControl.errors.required">
+                                    <small>Phone number is required.</small>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row mb-2">
+                        <div class="col-md-2"> </div>
+                        <div class="col-md-6 ml-3 form-check">
+                            <input type="checkbox" class="form-check-input" id="exampleCheck1">
+                            <label class="form-check-label" for="exampleCheck1">Would you like to add a separate address
+                                for
+                                receiving payments?</label>
+                        </div>
+                    </div>
+                    <!-- <div class="row mb-2">
+                        <div class="col-md-2">
+                            <p>Primary Contact</p>
+                        </div>
+                        <div class="col-md-3">
+                            <span class="text-secondary">SENDER</span><br>
+                            <span>{{firstname}} {{lastname}}</span><br>
+                            <span class="text-sm">({{email}})</span>
+                        </div>
+                        <div class="col-md-3 border-left">
+                            <span class="text-secondary">EMAILS ARE SENT THROUGH</span><br>
+                            <span>SFA-SAAS Invoice's email address</span><br>
+                            <span class="text-sm">(message-service@sfainvoice.com)</span>
+                        </div>
+                    </div> -->
+                    <!-- <div class="row mb-4">
+                        <div class="col-md-2"></div>
+                        <div class="col-md-6">
+                            <div class="alert alert-warning pl-4 position-relative" role="alert">
+                                <i class="fa fa-exclamation-circle text-warning position-absolute" aria-hidden="true"
+                                    style="left: 5px"></i>
+                                Your primary contact's email address belongs to an unauthenticated domain. So, emails
+                                will
+                                be
+                                sent from message-service@sender.zohoinvoice.in to prevent them from landing in the Spam
+                                folder.
+                                Authenticate the domain to send emails from your primary contact's email address.
+                                <a href="">Authenticate Now</a>
+                            </div>
+                            <a href="" class="btn btn-white">Configure Email Preferances <i class="os-icon os-icon-arrow-right6"
+                                    aria-hidden="true"></i></a>
+                        </div>
+                    </div> -->
+                    <div class="row mb-2">
+                        <div class="col-md-2">
+                            <p class="">Contact Person*</p>
+                        </div>
+                        <div class="col-md-4">
+                            <input
+                                [ngClass]="{'invalid-input': contactPersonFormControl.invalid && (contactPersonFormControl.dirty || contactPersonFormControl.touched)}"
+                                class="form-control form-control-sm" type="text" formControlName="org_contact_person">
+                            <div *ngIf="contactPersonFormControl.invalid && (contactPersonFormControl.dirty || contactPersonFormControl.touched)"
+                                class="text-danger">
+                                <div *ngIf="contactPersonFormControl.errors.required">
+                                    <small>Contact Person is required.</small>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- <div class="row mb-2">
+                        <div class="col-md-2">
+                            <p>Phone Number</p>
+                        </div>
+                        <div class="col-md-4">
+                            <input
+                                [ngClass]="{'invalid-input': contactPersonPhoneFormControl.invalid && (contactPersonPhoneFormControl.dirty || contactPersonPhoneFormControl.touched)}"
+                                class="form-control form-control-sm" type="text"
+                                formControlName="org_contact_person_number">
+                            <div *ngIf="contactPersonPhoneFormControl.invalid && (contactPersonPhoneFormControl.dirty || contactPersonPhoneFormControl.touched)"
+                                class="text-danger">
+                                <div *ngIf="contactPersonPhoneFormControl.errors.required">
+                                    <small>Contact Person's phone is required.</small>
+                                </div>
+                            </div>
+                        </div>
+                    </div> -->
+                    <div class="row mb-4">
+                        <div class="col-md-2">
+                            <p>Organisation Currency</p>
+                        </div>
+                        <div class="col-md-4">
+                            <input
+                                [ngClass]="{'invalid-input': CurrencyFormControl.invalid && (CurrencyFormControl.dirty || CurrencyFormControl.touched)}"
+                                class="form-control form-control-sm" type="text" formControlName="org_currency"
+                                disabled>
+                            <div *ngIf="CurrencyFormControl.invalid && (CurrencyFormControl.dirty || CurrencyFormControl.touched)"
+                                class="text-danger">
+                                <div *ngIf="CurrencyFormControl.errors.required">
+                                    <small>Currency is required.</small>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- <div class="col-1">
+                            <input class="form-control form-control-sm" type="text">
+                        </div> -->
+                    </div>
+                    <div class="row mb-4">
+                        <div class="col-md-2">
+                            <p>Fiscal Year</p>
+                        </div>
+                        <div class="col-md-4">
+                            <!-- <input class="form-control form-control-sm" type="text" formControlName="org_fasical_year"> -->
+                            <select class="form-control form-control-sm" formControlName="org_fasical_year"
+                                placeholder="Fiscal Year">
+                                <option *ngFor="let fiscalYear of fiscalYears" [value]="fiscalYear.fyear"><span
+                                        class="text-muted">{{fiscalYear.fyear}}</span></option>
+                            </select>
+                        </div>
+
+                    </div>
+                    <!-- <div class="row mb-2">
+                        <div class="col-md-2">
+                            <p class="text-danger">Company ID*</p>
+                        </div>
+                        <div class="col-md-4">
+                            <input
+                                [ngClass]="{'invalid-input': orgIdFormControl.invalid && (orgIdFormControl.dirty || orgIdFormControl.touched)}"
+                                class="form-control form-control-sm" type="text" formControlName="org_company_id">
+                            <div *ngIf="orgIdFormControl.invalid && (orgIdFormControl.dirty || orgIdFormControl.touched)"
+                                class="text-danger">
+                                <div *ngIf="orgIdFormControl.errors.required">
+                                    <small>Company id is required.</small>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-md-5 position-relative">
+                            <div class="alert alert-primary position-absolute text-secondary" role="alert">
+                                You can have Company ID, Tax ID and Additional Fields show up on your PDF by inserting
+                                the
+                                required placeholders in your 'Address Format' under <a href="#">Settings > Preferences
+                                    >
+                                    General</a>
+                            </div>
+                        </div>
+                    </div> -->
+                    <div class="row mb-4">
+                        <div class="col-md-2">
+                            <p>Tax ID</p>
+                        </div>
+                        <div class="col-md-4">
+                            <input class="form-control form-control-sm" type="text" formControlName="org_tax_id">
+                        </div>
+
+                    </div>
+                    <div class="row mb-4">
+                        <div class="col-md-2">
+                        </div>
+                        <div class="col-md-4">
+                            <a href="">Add additional field</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="card-footer">
+                <div class="row mb-4">
+                    <div class="col-2-md">
+                    </div>
+
+                    <div class="col-md-8 d-flex justify-content-between">
+                        <button
+                         type="submit"
+                         class="btn btn-primary btn-sm"
+                         *ngIf="!isLoggedIn"
+                         appPermission
+                         [permissions]="userPermissions"
+                         [type]="'create'"
+
+                         >Save</button>
+                        <button
+                         type="submit"
+                         class="btn btn-primary btn-sm"
+                         *ngIf="isLoggedIn"
+                         appPermission
+                         [permissions]="userPermissions"
+                         [type]="'edit'"
+                         [disabled]="organisationFormGroup.invalid"
+                         >Update</button>
+                        <a href="" class="btn-link">Privacy Policy</a>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+<!-- <pre>{{orgLogoFormControl.value | json}}</pre> -->

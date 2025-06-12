@@ -1,0 +1,69 @@
+<div class="column content-column">
+    <h3>Workflow Rules</h3>
+    <button class="btn btn-primary changebtn" (click)="open()">
+        <i class="os-icon os-icon-plus" aria-hidden="true"></i> New Workflow Rule</button>
+    <div>
+        <div class="fill-container">
+            <div class="action-header">
+                <div id="ember542" class="ember-view">
+                    <mat-select class="form-control form-control-sm" [(ngModel)]="workFlowSelected">
+                        <mat-option *ngFor="let work of workFlowModuleList" [value]="work.id">
+                            {{work.name}}
+                        </mat-option>
+                    </mat-select>
+
+                </div>
+
+            </div>
+            <table id="ember563" class="norow-action table zi-table table-hover ember-view">
+                <thead>
+                    <tr>
+                        <th id="ember565" class="  sortable text-left ember-view">
+                            <div class="position-relative ">
+                                <div class="float-left over-flow" title="Name">Name
+                                </div>
+                            </div>
+                        </th>
+                        <th id="ember567" class="  text-left ember-view">
+                            <div class="position-relative ">
+                                <div class="float-left over-flow" title="Module">Module
+                                </div>
+                            </div>
+                        </th>
+                        <th id="ember569" class="  text-left ember-view">
+                            <div class="position-relative ">
+                                <div class="float-left over-flow" title="Description">Description
+                                </div>
+                            </div>
+                        </th>
+                        <th id="ember571" class="  text-left ember-view">
+                            <div class="position-relative ">
+                                <div class="float-left over-flow">
+                                </div>
+                            </div>
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr (click)="setWorkDetail(work)" *ngFor="let work of workFlowList; let i = index">
+                        <td><a id="ember573" class="ember-view">{{ work.work_flow_rule_name }}</a></td>
+                        <td>{{ work.work_flow_rule_module.name }}</td>
+                        <td>{{ work.description }}</td>
+                        <td style='white-space: nowrap'>
+                            <div class="row-action">
+                                <small style="cursor: pointer;" (click)="editworkflow(work)"
+                                    click-stop-propagation>Edit</small> | <i style="cursor: pointer;"
+                                    class="fa fa-trash-o" (click)="deleteWorkFlowItems(work)" aria-hidden="true"
+                                    click-stop-propagation></i>
+                            </div>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+            <div class="ember-view">
+                <div class="pagination clearfix d-print-none">
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,115 @@
+<section class="scrolly">
+  <ng-container *ngIf="advanceSearchRequest.length>0">
+    <app-search-criteria [data]="advanceSearchRequest" (change)="onChangeCriteria()" (close)="onCloseCriteria()">
+    </app-search-criteria>
+  </ng-container>
+
+  <div class="table-responsive">
+    <table class="table  table-hover" mat-table [dataSource]="dataSource" matSort (matSortChange)="onSortData($event)">
+      <!---->
+      <ng-container matColumnDef="select">
+        <th class="position-relative" mat-header-cell *matHeaderCellDef>
+          <mat-checkbox class="head-checkbox" (change)="$event ? toggleSelection() : null" (change)="getSelectedRows()"
+            [checked]="selections.hasValue() && isAllSelected()"
+            [indeterminate]="selections.hasValue() && !isAllSelected()" [aria-label]="checkboxLabel()">
+          </mat-checkbox>
+          <a class="filter-btn btn btn-sm" *ngIf="!isDetailVisible" [matMenuTriggerFor]="menu" style="height: 35px;">
+            <i class="fa fa-table" aria-hidden="true"></i>
+          </a>
+          <mat-menu #menu="matMenu">
+            <div class="card-body p-2" style="min-width: 200px;">
+              <ul style="list-style:none; padding-left: 7px;">
+                <li *ngFor="let column of filterColumns">
+                  <input type="checkbox" [(ngModel)]="column.show" class="m-2" (click)="$event.stopPropagation()">
+                  {{column.title}}
+                </li>
+              </ul>
+              <div class="float-right mb-2">
+                <button class="btn btn-p bg-secondary">Cancel</button>
+              </div>
+            </div>
+          </mat-menu>
+        </th>
+        <td mat-cell *matCellDef="let row">
+          <mat-checkbox class="row-checkbox" (click)="$event.stopPropagation()"
+            (change)="$event ? selections.toggle(row) : null" (change)="getSelectedRows()"
+            [checked]="selections.isSelected(row)" [aria-label]="checkboxLabel(row)">
+          </mat-checkbox>
+        </td>
+      </ng-container>
+      <ng-container matColumnDef="code">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>
+          <app-column-filter title="Code" (changeSelected)="onColumnFilterOpen($event)"
+            [selected]="selectedColumnFilter" controlName="customer_code" (close)="onColumnFilter($event)">
+            <input class="form-control form-control-sm" [formControl]="filterForm.get('customer_code')" placeholder="Enter Code" type="text">
+          </app-column-filter>
+        </th>
+        <td mat-cell *matCellDef="let element"> {{element.customer_code}} </td>
+      </ng-container>
+      <ng-container matColumnDef="name">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>
+          <app-column-filter title="Name" (changeSelected)="onColumnFilterOpen($event)"
+            [selected]="selectedColumnFilter" controlName="name" (close)="onColumnFilter($event)">
+            <input class="form-control form-control-sm" [formControl]="filterForm.get('name')" placeholder="Enter Name" type="text">
+          </app-column-filter>
+        </th>
+        <td mat-cell *matCellDef="let element"> {{element.user?.firstname}} {{element.user?.lastname}}</td>
+      </ng-container>
+      <ng-container matColumnDef="email">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>
+          <app-column-filter title="Email" (changeSelected)="onColumnFilterOpen($event)"
+            [selected]="selectedColumnFilter" controlName="email" (close)="onColumnFilter($event)">
+            <input class="form-control form-control-sm" [formControl]="filterForm.get('email')" placeholder="Enter Email" type="text">
+          </app-column-filter>
+        </th>
+        <td mat-cell *matCellDef="let element"> {{element.user?.email}} </td>
+      </ng-container>
+      <ng-container matColumnDef="mobile">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>
+          <app-column-filter title="Mobile" (changeSelected)="onColumnFilterOpen($event)"
+            [selected]="selectedColumnFilter" controlName="customer_phone" (close)="onColumnFilter($event)">
+            <input class="form-control form-control-sm" [formControl]="filterForm.get('customer_phone')" placeholder="Enter Mobile" type="text">
+          </app-column-filter>
+        </th>
+        <td mat-cell *matCellDef="let element"> {{element.user?.mobile}} </td>
+      </ng-container>
+      <ng-container matColumnDef="customer_code">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header> CODE </th>
+        <td mat-cell *matCellDef="let element"> {{element.customer_code}}</td>
+      </ng-container>
+      <ng-container matColumnDef="grand_channel">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header> 
+          <app-column-filter title="Service Channel" (changeSelected)="onColumnFilterOpen($event)"
+      [selected]="selectedColumnFilter" controlName="channel_name" (close)="onColumnFilter($event)">
+      <mat-select multiple class="form-control form-control-sm" [formControl]="filterForm.get('channel_name')">
+        <mat-option *ngFor="let item of channelList" [value]="item.id">
+          {{ item?.name }}
+        </mat-option>
+      </mat-select>
+    </app-column-filter>
+        </th>
+        <td mat-cell *matCellDef="let element"> {{element.customer_category?.customer_category_name}}</td>
+      </ng-container>
+      <ng-container matColumnDef="parent_channel">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header> 
+          <app-column-filter title="Parent Channel" (changeSelected)="onColumnFilterOpen($event)"
+            [selected]="selectedColumnFilter" controlName="channel" (close)="onColumnFilter($event)">
+            <input class="form-control form-control-sm" [formControl]="filterForm.get('channel')" placeholder="Enter Parent Channel" type="text">
+          </app-column-filter>
+        </th>
+        <td mat-cell *matCellDef="let element"> {{element.channel?.name}}</td>
+      </ng-container>
+
+      <tr mat-header-row *matHeaderRowDef="getDisplayedColumns()"></tr>
+      <tr mat-row *matRowDef="let row; columns: getDisplayedColumns();" (click)="openDetailView(row)"></tr>
+    </table>
+    <div>
+      <mat-paginator [hidden]="apiResponse.pagination?.total_records < 10" (page)="onPageFired($event)"
+        [length]="apiResponse.pagination?.total_records" [pageSize]="pageSize" [pageSizeOptions]="[10, 25, 50]">
+      </mat-paginator>
+    </div>
+  </div>
+
+  
+
+</section>

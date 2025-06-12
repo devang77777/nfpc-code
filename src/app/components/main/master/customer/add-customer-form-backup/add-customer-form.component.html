@@ -1,0 +1,282 @@
+<div class="item-form">
+  <div class="card">
+    <div class="card-header pt-4">
+      <span class="h6 font-weight-bold">{{ formType }} Customer</span>
+      <a (click)="close()" class="closeicon settingclose"><i class="os-icon os-icon-x"></i></a>
+    </div>
+    <div class="card-body">
+      <form [formGroup]="customerFormGroup">
+        <div class="row mb-3">
+          <div class="col">
+            <label for="">Customer Code*:</label>
+            <div class="siconhol">
+              <input type="text" class="form-control form-control-sm" [formControl]="customerCodeFormControl"
+                (keypress)="restrictLength($event)" />
+              <a [hidden]="formType == 'Edit'" (click)="open()" class="ml-2 settingIcon"><i
+                  class="os-icon os-icon-settings" aria-hidden="true"></i></a>
+            </div>
+          </div>
+        </div>
+        <div class="row mb-3">
+          <div class="col">
+            <label for="">Profile Image:</label>
+            <input class="form-control" #file type="file" (change)="fileChosen($event)"
+              accept="image/x-png,image/gif,image/jpeg" />
+            <br />
+            <div *ngFor='let url of selectedFiles' class="img-position">
+              <img [src]="url" height="150" width="150px">
+            </div>
+          </div>
+        </div>
+        <div class="row mb-3">
+          <div class="col">
+            <label for="">First Name*:</label>
+            <input type="text" class="form-control form-control-sm" [formControl]="firstnameFormControl" />
+          </div>
+          <div class="col">
+            <label for="">Last Name*:</label>
+            <input type="text" class="form-control form-control-sm" [formControl]="lastnameFormControl" />
+          </div>
+        </div>
+        <div class="row mb-3">
+          <div class="col">
+            <label for="">Email:</label>
+            <input type="text" class="form-control form-control-sm" [formControl]="emailFormControl" />
+          </div>
+          <div class="col" *ngIf="domain == 'vansales' || domain == 'presales'">
+            <label for="">Route*:</label>
+            <mat-select class="form-control form-control-sm" [formControl]="roleIdFormControl">
+              <mat-option *ngFor="let item of areas" [value]="item.id">
+                {{ item.route_name }}
+              </mat-option>
+            </mat-select>
+
+          </div>
+        </div>
+        <div class="row mb-3">
+          <div class="col">
+            <label>Channel*</label>
+            <app-tree-dropdown class="channel-dropdown" [dataSource]="channels" [dataService]="channelProvider()"
+              [buttonLabel]="'Manage Channels'" (manageClicked)="openChannel()"
+              (whenItemSelected)="channelSelected($event)" [selectFormControl]="channelFormControl"
+              [placeHolder]="'Search a channel'" ngDefaultControl>
+            </app-tree-dropdown>
+          </div>
+          <div class="col">
+            <label for="">Customer Type:</label>
+            <mat-select class="form-control form-control-sm" [formControl]="customertypeFormControl">
+              <mat-option *ngFor="let country of customer" [value]="country.id">
+                {{ country.customer_type_name }}
+              </mat-option>
+            </mat-select>
+          </div>
+        </div>
+        <div class="row mb-3">
+          <div class="col-md-6 mb-md-0 mb-3">
+            <label for="">Sales Organisation:</label>
+            <app-tree-dropdown class="salesorg-dropdown" [dataSource]="salesOrganisationsList"
+              [dataService]="salesOrganisationProvider()" [buttonLabel]="'Manage Sales Organisation'"
+              (manageClicked)="openSalesOrganisation()" (whenItemSelected)="salesOrganisationSelected($event)"
+              [selectFormControl]="salesOrganizationIdFormControl" [placeHolder]="'Search a Sales Organisation'"
+              ngDefaultControl>
+            </app-tree-dropdown>
+          </div>
+          <div class="col-md-6 mb-md-0 mb-3">
+            <label for="">Customer Category:</label>
+            <app-tree-dropdown class="salesorg-dropdown" [dataSource]="customerCategoryList"
+              [dataService]="customerCategoryProvider()" [buttonLabel]="'Manage Customer Category'"
+              (manageClicked)="openCustomerCategory()" (whenItemSelected)="customerCategorySelected($event)"
+              [selectFormControl]="customerCategoryFormControl" [placeHolder]="'Search a Customer Category'"
+              ngDefaultControl>
+            </app-tree-dropdown>
+          </div>
+          <!-- <div class="col-md-6 mb-md-0 mb-3">
+            <label for="">Customer Category:</label>
+            <mat-select class="form-control form-control-sm" [formControl]="customerCategoryFormControl">
+              <mat-option *ngFor="let customerCategory of customerCategoryList" [value]="customerCategory.id">
+                {{ customerCategory.customer_category_name }}
+              </mat-option>
+            </mat-select>
+          </div> -->
+        </div>
+        <div class="row mb-3">
+          <div class="col">
+            <label for="">Country:</label>
+            <app-autocomplete [data]="countryList" text="name" id="id" [control]="countryIdFormControl">
+            </app-autocomplete>
+
+          </div>
+          <div class="col">
+            <label for="">Region*:</label>
+            <app-autocomplete [data]="regionList" text="region_name" id="id" [control]="regionIdFormControl">
+            </app-autocomplete>
+
+          </div>
+        </div>
+        <div class="row mb-3">
+          <div class="col">
+            <label for="">Office Address*:</label>
+            <input type="text" class="form-control form-control-sm" #officeSrch
+              [formControl]="officeAddressFormControl" />
+          </div>
+          <div class="col">
+            <label for="">Home Address*:</label>
+            <input type="text" class="form-control form-control-sm" #homeSrch [formControl]="homeAddressFormControl" />
+          </div>
+        </div>
+        <div class="row mb-3">
+          <div class="col">
+            <label for="">State:</label>
+            <input type="text" class="form-control form-control-sm" [formControl]="customerStateFormControl" />
+          </div>
+          <div class="col">
+            <label for="">City:</label>
+            <input type="text" class="form-control form-control-sm" [formControl]="customerCityFormControl" />
+          </div>
+        </div>
+        <div class="row mb-3">
+          <div class="col">
+            <label for="">Zipcode:</label>
+            <input type="text" class="form-control form-control-sm" [formControl]="customerZipCodeFormControl" />
+          </div>
+          <div class="col">
+            <label for="">Phone Number*:</label>
+            <input type="text" class="form-control form-control-sm" [formControl]="customerPhoneFormControl" />
+          </div>
+        </div>
+        <div class="row mb-3">
+
+          <div class="col-md-6">
+            <label for="">ERP Code:</label>
+            <input type="text" class="form-control form-control-sm" [formControl]="erpCodeFormControl" />
+          </div>
+        </div>
+        <div class="row mb-3" *ngIf="domain == 'merchandising' || domain == 'nfpc'">
+          <div class="col">
+            <label for="">Merchandiser:</label>
+            <app-multiautocomplete [options]="merchandiserList"
+                [control]="merchandiserFormControl" text="" id="user_id"
+                objectName="user" param1="firstname" param2="lastname">
+            </app-multiautocomplete>
+            <!-- <mat-select class="form-control form-control-sm" multiple [formControl]="merchandiserFormControl">
+              <mat-option *ngFor="let item of merchandiserList" [value]="item.user_id">
+                {{ item.user?.firstname }} {{ item.user?.lastname }}
+              </mat-option>
+            </mat-select> -->
+          </div>
+        </div>
+        <hr />
+        <div class="row mb-3">
+          <mat-tab-group mat-align-tabs="start" [selectedIndex]="selectedIndex.value">
+            <mat-tab label="CREDIT" *ngIf="customertypeFormControl.value == 1 || customertypeFormControl.value == 3">
+              <div class="col mt-2">
+                <label for="">Credit Limit:</label>
+                <input (change)="getthevalue()" type="text" class="form-control form-control-sm"
+                  [formControl]="creditLimitFormControl" />
+              </div>
+              <div class="col mt-2">
+                <label for="">PAYMENT OPTION:</label>
+                <mat-select (selectionChange)="getthevalue()" class="form-control form-control-sm"
+                  [formControl]="creditdaysFormControl">
+                  <mat-option *ngFor="let options of paymentOptions" [value]="options.id">
+                    {{ options.name }}
+                  </mat-option>
+                  <mat-option>
+                    <button mat-button (click)="openDialog()">
+                      <mat-icon>add</mat-icon>Configure Payment Term
+                    </button>
+                  </mat-option>
+                </mat-select>
+              </div>
+            </mat-tab>
+            <mat-tab label="PATNER FUNCTION">
+              <div class="col">
+                <mat-form-field class="example-full-width">
+                  <label for="">SHIP TO PARTY*:</label>
+                  <input matInput [matAutocomplete]="companies" [formControl]="shipToPartyFormControl"
+                    [(ngModel)]="shipToParty" (keyup)="getSearchData()" />
+                </mat-form-field>
+                <mat-autocomplete #companies="matAutocomplete">
+                  <mat-option *ngFor="let item of filterCustomerId" [value]="item.customer_code">
+                    {{ item.customer_code }}
+                  </mat-option>
+                  <mat-option *ngIf="!isEdit" [value]="customerCodeFormControl.value">
+                    same customer
+                  </mat-option>
+                </mat-autocomplete>
+              </div>
+              <div class="col">
+                <mat-form-field class="example-full-width">
+                  <label for="">SOLD TO PARTY*:</label>
+                  <input matInput [matAutocomplete]="sold" [formControl]="soldToPartyFormControl"
+                    [(ngModel)]="soldToParty" (keyup)="getSearchData()" />
+                </mat-form-field>
+                <mat-autocomplete #sold="matAutocomplete">
+                  <mat-option *ngFor="let item of filterCustomerId" [value]="item.customer_code">
+                    <span [hidden]="true">{{ item.id }}</span>
+                    {{ item.customer_code }}
+                  </mat-option>
+                  <mat-option *ngIf="!isEdit" [value]="customerCodeFormControl.value">
+                    same customer
+                  </mat-option>
+                </mat-autocomplete>
+              </div>
+              <div class="col">
+                <mat-form-field class="example-full-width">
+                  <label for="">PAYER* :</label>
+                  <input matInput [matAutocomplete]="payer" [formControl]="payerFormControl" [(ngModel)]="payers"
+                    (keyup)="getSearchData()" />
+                </mat-form-field>
+                <mat-autocomplete #payer="matAutocomplete">
+                  <mat-option *ngFor="let item of filterCustomerId" [value]="item.customer_code">
+                    <span [hidden]="true">{{ item.id }}</span>
+                    {{ item.customer_code }}
+                  </mat-option>
+                  <mat-option *ngIf="!isEdit" [value]="customerCodeFormControl.value">
+                    same customer
+                  </mat-option>
+                </mat-autocomplete>
+              </div>
+              <div class="col">
+                <mat-form-field class="example-full-width">
+                  <label for="">BILL TO PARTY*:</label>
+                  <input matInput [matAutocomplete]="billtoParty" [formControl]="billToPartyFormControl"
+                    [(ngModel)]="bill" (keyup)="getSearchData()" />
+                </mat-form-field>
+                <mat-autocomplete #billtoParty="matAutocomplete">
+                  <mat-option *ngFor="let item of filterCustomerId" [value]="item.customer_code">
+                    <span [hidden]="true">{{ item.id }}</span>
+                    {{ item.customer_code }}
+                  </mat-option>
+                  <mat-option *ngIf="!isEdit" [value]="customerCodeFormControl.value">
+                    same customer
+                  </mat-option>
+                </mat-autocomplete>
+              </div>
+            </mat-tab>
+          </mat-tab-group>
+        </div>
+      </form>
+      <ng-container *ngIf="isCustomField">
+        <app-custom-field-form [editData]="editData" (change)="onCustomFieldUpdated($event)" [module]="moduleId">
+        </app-custom-field-form>
+      </ng-container>
+    </div>
+    <br /><br />
+    <div class="card-footer">
+      <div class="d-inline float-right">
+        <button class="btn btn-sm btn-light mr-2" (click)="close()">
+          Cancel
+        </button>
+        <button class="btn btn-sm btn-p" (click)="saveCustomerData()" *ngIf="!isEdit" appPermission
+          [permissions]="userPermissions" [type]="'create'">
+          Save
+        </button>
+        <button class="btn btn-sm btn-p" (click)="saveCustomerData()" *ngIf="isEdit" appPermission
+          [permissions]="userPermissions" [type]="'edit'">
+          Save
+        </button>
+      </div>
+    </div>
+  </div>
+</div>

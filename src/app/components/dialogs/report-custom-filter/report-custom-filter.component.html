@@ -1,0 +1,51 @@
+<section class="makeScrollable">
+    <div id="ember612" class="modal-header ember-view mb-4">
+        <h4>{{ customersData.title }}</h4>
+        <button class="close no-outline" (click)="close()" type="button">
+          &times;
+        </button>
+      </div>
+      <div class="scrolly-dailog container">
+        <form [formGroup]="custom_report_filter" (ngSubmit)="applyCustomFilter()">
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="form-group row">
+                        <label class="col-sm-3 col-form-label">Date Range</label>
+                        <div class="col-sm-9" >
+                            <div class="row mb-4">
+                                <div class="col">
+                                    <input readonly type="date" (change)="setDatePickerDate($event.target.value, 'startdate')" formControlName="startdate" class="form-control form-control-sm" placeholder="Start Date">
+                                </div>
+                                <div class="col-1 p-0">
+                                    &nbsp; &nbsp;<span>_</span>&nbsp;
+                                </div>
+                                <div class="col">
+                                    <input readonly type="date" (change)="setDatePickerDate($event.target.value, 'enddate')" formControlName="enddate" class="form-control form-control-sm" placeholder="End Date">
+                                </div>
+                            </div>
+                            <ngx-daterangepicker-material 
+                                (choosedDate)="choosedDate($event)" 
+                                [autoApply]="true" 
+                                [linkedCalendars]="true"
+                                [startDate]="selectedDate?.startdate"
+                                [endDate]="selectedDate?.enddate"
+                                [locale]="{applyLabel: 'Done', firstDay: 1}"
+                            >
+                            </ngx-daterangepicker-material>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        <div class="">
+        <div class="mb-4 d-inline float-right" style="display: flex;">
+            <button [disabled]="custom_report_filter.invalid" style="width:60px;color:white;border-radius: 2px;" type="submit"
+            class="btn btn-primary">Apply</button>
+            &nbsp;
+            <button style="width:60px;border-radius: 2px;" type="button" class="btn btn-white"
+            (click)="close()">Close
+            </button>
+        </div>
+        </div>
+    </form>
+    </div>
+</section>

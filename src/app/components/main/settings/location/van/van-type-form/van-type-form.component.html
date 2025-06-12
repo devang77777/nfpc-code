@@ -1,0 +1,70 @@
+<section>
+  <div class="card-header">
+    <span class="h6">Manage Van Type</span>
+    <button class="dialog-close-btn" mat-dialog-close>
+      <i class="fa fa-times fa-lg" aria-hidden="true"></i>
+    </button>
+  </div>
+  <div class="form-container" *ngIf="showForm">
+    <form [formGroup]="vtFormGroup">
+      <div class="card-body">
+        <div class="container">
+          <div class="row mb-4">
+            <div class="col-4 ">Name*</div>
+            <div class="col-8">
+              <input [formControl]="vtNameFormControl" class="form-control form-control-sm" type="text" />
+            </div>
+          </div>
+          <div class="row mb-4">
+            <div class="col-4 ">Parent*</div>
+            <div class="col-8">
+              <app-tree-dropdown class="salesorg-dropdown" [dataSource]="typeList" [isManageable]="false"
+                [dataService]="getAllVanTypes()" (whenItemSelected)="vanTypeSelected($event)"
+                [selectFormControl]="parentFormControl" [placeHolder]="'Search a Parent'" ngDefaultControl>
+              </app-tree-dropdown>
+            </div>
+          </div>
+        </div>
+        <div class="cancel-btn">
+          <button type="button" [disabled]="!vtNameFormControl.value"
+            (click)="saveVanTypeData()" class=" btn btn-primary height-40">
+            Save
+          </button> &nbsp;&nbsp;
+          <button mat-button class="mat-inherit-line-height height-40" (click)="reset()">
+            Reset
+          </button>
+        </div>
+      </div>
+    </form>
+  </div>
+
+  <div class="categories-title">
+    <h4>
+      Van Type
+      <span class="add-new-label"><button (click)="addNewVanType()" *ngIf="typeList.length > 0"
+          >
+          <i class="fa fa-plus-circle"></i>Add New Van Type
+        </button></span>
+    </h4>
+  </div>
+  <div class="empty-list text-center mt-4" *ngIf="isLoaded">
+    <p class="text-muted" *ngIf="typeList.length == 0">
+      No Van Type available
+    </p>
+    <button mat-button class="add-new-btn"
+      *ngIf="typeList.length == 0 && !showForm" (click)="addNewVanType()">
+      Add New Van Type
+    </button>
+  </div>
+  <div class="sales-org-holder">
+    <app-tree-container [treeData]="typeList" (deleteData)="delete($event)"
+      (applyData)="applySalesOrganisation($event)" (editData)="edit($event)">
+    </app-tree-container>
+  </div>
+
+  <div class="cancel-btn">
+    <button mat-button class="mat-inherit-line-height height-40" mat-dialog-close>
+      Cancel
+    </button>
+  </div>
+</section>

@@ -1,0 +1,278 @@
+.content-column {
+  left: 200px;
+  right: 0;
+  background-color: #fff;
+  padding-top: 1rem;
+  padding-left: 50px;
+}
+.column .zerotop {
+  top: 0;
+  padding-top: 10px;
+}
+.column .header {
+  border-bottom: 1px solid #eee;
+  height: 65px;
+  overflow: visible;
+}
+
+.column .fill {
+  left: 0;
+  right: 0;
+  position: absolute;
+}
+.zb-txn-form {
+  max-width: 1040px;
+  margin-right: 32px;
+}
+.form-text {
+  color: #999;
+}
+.form-text {
+  display: block;
+  margin-top: .25rem;
+}
+.required {
+  color: #e54643;
+}
+.col-form-label {
+  padding-top: calc(.375rem + 1px);
+  padding-bottom: calc(.375rem + 1px);
+  margin-bottom: 0;
+  font-size: inherit;
+  line-height: 1.42857;
+}
+.required:after {
+  content: "*";
+  color: #e54643;
+}
+.col-form-label {
+  padding-top: calc(.375rem + 1px);
+  padding-bottom: calc(.375rem + 1px);
+  margin-bottom: 0;
+  font-size: inherit;
+  line-height: 1.42857;
+}
+.ac-box {
+  position: relative;
+  display: block;
+  zoom: 1;
+  vertical-align: middle;
+}
+.zf-ac-toggler {
+  right: 10px;
+  display: inline-block;
+  position: absolute;
+  fill: currentColor;
+  color: #999;
+}
+.zb-txn-form, form.zb-txn-form {
+  margin-top: 25px;
+}
+.zb-txn-form {
+  max-width: 1040px;
+  margin-right: 32px;
+}
+.form-text {
+  display: block;
+  margin-top: .25rem;
+}
+
+.col-form-label {
+  padding-top: calc(.375rem + 1px);
+  padding-bottom: calc(.375rem + 1px);
+  margin-bottom: 0;
+  font-size: inherit;
+  line-height: 1.42857;
+}
+.ac-box {
+  position: relative;
+  display: block;
+  zoom: 1;
+  vertical-align: middle;
+}
+
+.ac-box .ac-selected {
+  height: 30px;
+  margin-bottom: 2px;
+}
+.ac-box .ac-selected {
+  cursor: pointer;
+  text-align: left;
+  height: 33px;
+  padding: 1px 12px;
+  overflow: hidden;
+  display: block;
+  white-space: nowrap;
+  line-height: 28px;
+  color: #444;
+  text-decoration: none;
+  border-radius: 2px;
+  background-clip: padding-box;
+  user-select: none;
+}
+.row {
+  display: flex;
+  flex-wrap: wrap;
+  margin-right: -15px;
+  margin-left: -15px;
+}
+.content-column>.header {
+  padding: 0 20px;
+}
+.column .zerotop {
+  top: 0;
+  padding-top: 10px;
+}
+.column .header {
+  border-bottom: 1px solid #eee;
+  height: 65px;
+  overflow: visible;
+}
+
+.column .fill {
+  left: 0;
+  right: 0;
+  position: absolute;
+}
+.modal-content {
+  position: relative;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+  flex-direction: column;
+  width: 100%;
+  max-width: 400px;
+  overflow-y: auto;
+  pointer-events: auto;
+  background-color: #fff;
+  background-clip: padding-box;
+  border: 1px solid rgba(0, 0, 0, 0.2);
+  border-radius: 0.3rem;
+  outline: 0;
+}
+.c-padding {
+  padding: 1.5625rem;
+}
+.nodecor {
+  text-decoration: none !important;
+  color: red !important;
+}
+#hello{
+  position: absolute;
+  left: 340px;
+}
+.modal-header {
+  display: flex;
+  -ms-flex-align: start;
+  align-items: flex-start;
+  -webkit-box-pack: justify;
+  justify-content: space-between;
+  border-bottom: 1px solid #e9ecef;
+  border-top-left-radius: 0.3rem;
+  border-top-right-radius: 0.3rem;
+}
+
+h4.profile_heading {
+  font-size: 18px;
+  font-weight: 600;
+  color: #222;
+}
+.label {
+  display: inline-block;
+  margin-bottom: 0.5rem;
+}
+.profile-title label {
+  margin-top: 5px;
+  position: relative;
+  color: #c6c6c6;
+  font-size: 12px;
+  float: right;
+}
+.border-c {
+  width: 100%;
+  height: 1px;
+  background-color: #efefef;
+}
+
+.textarea .btm-char-count {
+  position: relative;
+  color: #c6c6c6;
+  font-size: 12px;
+  float: right;
+  margin-top: -15px;
+}
+.t-modal-700 .modal-footer {
+  padding: 25px;
+}
+.float-right {
+  float: right !important;
+}
+input.qty-input {
+  width: 122px;
+  height: 40px;
+  display: inline-block;
+  margin: 0 15px;
+  text-align: center;
+  border: 1px solid #222;
+  background-color: #fff;
+  outline: none;
+  font-size: 16px;
+}
+.textarea .text-area {
+  border: solid 1px #e0e0e0;
+  width: 100%;
+  padding: 10px;
+  outline: none;
+}
+// For close button start
+.modal-header .close {
+  padding: 1rem;
+  margin: -1rem -1rem -1rem auto;
+}
+.close:not(:disabled):not(.disabled) {
+  cursor: pointer;
+}
+button.close {
+  background-color: transparent;
+  border: 0;
+}
+.close {
+  float: right;
+  font-size: 1.5rem;
+  font-weight: 700;
+  line-height: 1;
+  color: #000;
+  text-shadow: 0 1px 0 #fff;
+  opacity: 0.5;
+}
+// For close button End
+
+.hideit {
+  visibility: hidden;
+  color: red;
+}
+.showOnHover:hover .hideit {
+  visibility: visible;
+}
+.linebelow
+{
+  border-bottom: 1px solid black;
+  padding-top: 4px;
+  padding-bottom: 3px;
+  width: 100%;
+}
+.btn-disable {
+  background-color: #007bffad !important;
+}
+.btn-danger {
+  height: 30px !important;
+  i {
+    position: relative !important;
+    bottom: 4px !important;
+  }
+}
+.example-radio-group {
+  display: flex;
+  flex-direction: column;
+  margin: 15px 0;
+}

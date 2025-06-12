@@ -1,0 +1,110 @@
+<section *ngIf="depotData" [ngClass]="{ 'detail-visible': isDetailVisible }">
+  <div class="pl-3">
+    <div class="row">
+      <h2 class="page-title col-sm-6 font-weight-light">
+        {{ depotData.depot_name }}
+      </h2>
+      <div class="actions col-sm-6">
+        <button
+          (click)="openEditDepot()"
+          appPermission
+          [permissions]="userPermissions"
+          [type]="'edit'"
+          class="iconbtn"
+        >
+          <i class="os-icon os-icon-edit" aria-hidden="true"></i>
+        </button>
+        <div>
+          <button
+            class="btn btn-sm border"
+            mat-button
+            [matMenuTriggerFor]="menu2"
+          >
+            More
+          </button>
+          <mat-menu #menu2="matMenu">
+            <button mat-menu-item (click)="toggleStatus()">
+              Mark as {{ depotData.status === 0 ? "Active" : "Inactive" }}
+            </button>
+            <button
+              mat-menu-item
+              (click)="openDeleteBox()"
+              appPermission
+              [permissions]="userPermissions"
+              [type]="'delete'"
+            >
+              Delete
+            </button>
+          </mat-menu>
+        </div>
+        <button *ngIf="isDetailVisible" class="btn" (click)="closeDetailView()">
+          <i class="os-icon os-icon-close"></i>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <div class="pl-3">
+    <div class="row h-100">
+      <div class="col-12 border-left">
+        <mat-tab-group class="customertab" mat-align-tabs="start">
+          <mat-tab label="Overview">
+            <mat-list>
+              <mat-list-item
+                >Depot code: {{ depotData.depot_code }}</mat-list-item
+              >
+              <mat-list-item>Name: {{ depotData.depot_name }}</mat-list-item>
+              <mat-list-item
+                >Manager: {{ depotData.depot_manager }}</mat-list-item
+              >
+              <mat-list-item
+                >Manager Contact:
+                {{ depotData.depot_manager_contact }}</mat-list-item
+              >
+              <mat-list-item>Region: {{ depotData.region_id }}</mat-list-item>
+              <mat-list-item
+                >Status:
+                {{
+                  depotData.status === 0 ? "Inactive" : "Active"
+                }}</mat-list-item
+              >
+              <ng-container
+                *ngIf="depotData.custom_field_value_save.length > 0"
+              >
+                <mat-list-item><strong>Custom Fields</strong></mat-list-item>
+                <mat-list-item
+                  *ngFor="let item of depotData.custom_field_value_save"
+                >
+                  <span
+                    *ngIf="
+                      item.custom_field &&
+                        item.custom_field.field_type === 'check_box';
+                      else others
+                    "
+                    >{{ item.custom_field.field_label }} :
+                    {{ item.custom_field_value == "1" ? "Yes" : "No" }}</span
+                  >
+
+                  <ng-template #others>
+                    <span *ngIf="item.custom_field"
+                      >{{ item.custom_field?.field_label }} :
+                      {{ item.custom_field_value }}</span
+                    >
+                  </ng-template>
+                </mat-list-item>
+              </ng-container>
+            </mat-list>
+          </mat-tab>
+          <mat-tab label="Sales">
+            <mat-list>
+              <mat-list-item>Sales 1</mat-list-item>
+              <mat-list-item>Sales 2</mat-list-item>
+              <mat-list-item>Sales 3</mat-list-item>
+              <mat-list-item>Sales 4</mat-list-item>
+            </mat-list>
+          </mat-tab>
+        </mat-tab-group>
+      </div>
+    </div>
+  </div>
+</section>

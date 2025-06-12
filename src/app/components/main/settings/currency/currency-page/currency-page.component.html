@@ -1,0 +1,43 @@
+<mat-drawer-container class="formdrawer-container" hasBackdrop="false">
+  <mat-drawer
+    id="formDrawer"
+    mode="over"
+    position="end"
+    #formDrawer
+    class="border"
+    [ngClass]="{'hideDrawer' : showDrawer == false}"
+  >
+    <div style="min-width: 300px;">
+      <app-currency-form (updateTableData)="updateTableData($event)"></app-currency-form>
+    </div>
+  </mat-drawer>
+  <section>
+    <div
+      class="table-box customerbox"
+      [ngClass]="{ collapsed: isDetailVisible }"
+    >
+      <div class="heading-row clearfix">
+        <p class="h4 font-weight-light d-inline" *ngIf="!isDetailVisible">
+          <i aria-hidden="true" class="fa fa-university mr-2"></i> Currencies
+        </p>
+        <div class="d-inline float-right">
+          <button type="button" class="btn btn-sm btn-p mr-2" (click)="openAddCurrency()"><i class="fa fa-plus mr-2"
+            aria-hidden="true"></i>New</button>
+        <button type="button" class="btn btn-sm btn-light mr-2">Enable Exchange Rate Feeds</button>
+        <button *ngIf="checkedRows.length > 0" class="btn btn-sm btn-white dropdown-toggle ml-2" mat-button
+          [matMenuTriggerFor]="menu2">
+          Bulk Actions
+        </button>
+        <mat-menu #menu2="matMenu">
+          <button mat-menu-item (click)="bulkAction('active')">Mark as Active</button>
+          <button mat-menu-item (click)="bulkAction('inactive')" >Mark as Inactive</button>
+          <!-- <button mat-menu-item (click)="bulkAction('delete')" appPermission [permissions]="userPermissions" [type]="'delete'">
+            Delete
+          </button> -->
+        </mat-menu>
+        </div>
+      </div>
+      <app-currency-dt [newCurrencyData]="newCurrencyData"  (selectedRows)="selectedRows($event)"></app-currency-dt>
+    </div>
+  </section>
+</mat-drawer-container>

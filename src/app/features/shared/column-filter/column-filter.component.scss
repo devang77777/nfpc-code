@@ -1,0 +1,105 @@
+.search{
+    position: relative; top:4px; margin-left: 2px;
+font-size: 16px;
+cursor: pointer;
+}
+
+.selected{
+    color: red;
+    font-size: 20;
+    top: 1;
+}
+
+.s008 {
+    display: -ms-flexbox;
+    display: flex;
+    -ms-flex-pack: center;
+    justify-content: flex-start;
+    -ms-flex-align: center;
+    align-items: center;
+    position: relative;
+    z-index: 999;
+    // background: url("../images/Searchs_008.png");
+    background-size: cover;
+    // padding: 15px;
+    // font-family: 'Roboto', sans-serif;
+}
+
+.s008 form {
+    width: 100%;
+    // max-width: 790px;
+    margin: 0;
+}
+
+.s008 form .inner-form {
+    width: 100%;
+}
+
+.action{
+  padding: 5px 1px;
+}
+.btn-action{
+    color: black;
+    background: #80808040;
+    border-radius: 3px;
+    margin-right: 5px;
+    cursor: pointer;
+}
+.s008 form .inner-form .advance-search {
+    // background: #fffefe;
+    // padding: 16px 21px 0px 21px;
+    border-radius: 2px;
+    position: absolute;
+    top: 14px;
+    width: 240px;
+    padding: 5px;
+}
+
+.s008 form .inner-form .advance-search .desc {
+    font-size: 15px;
+    color: #999;
+    display: block;
+    margin-bottom: 26px;
+}
+
+.s008 form .inner-form .advance-search .row {
+    display: -ms-flexbox;
+    display: flex;
+    -ms-flex-pack: justify;
+    justify-content: space-between;
+    -ms-flex-align: center;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+.s008 form .inner-form .advance-search .row.second {
+    margin-bottom: 46px;
+}
+
+.s008 form .inner-form .advance-search .row.third {
+    margin-bottom: 0;
+}
+
+.s008 form .inner-form .advance-search .row.third .input-field {
+    width: 100%;
+    display: -ms-flexbox;
+    display: flex;
+    -ms-flex-pack: justify;
+    justify-content: space-between;
+    -ms-flex-align: center;
+    align-items: center;
+}
+
+.s008 form .inner-form .advance-search .row.third .input-field .result-count {
+    display: -ms-flexbox;
+    display: flex;
+    -ms-flex-pack: start;
+    justify-content: flex-end;
+    -ms-flex-align: center;
+    align-items: center;
+    width: 110px;
+    font-weight: bold;
+    color: #fff;
+    font-size: 14px;
+}
+

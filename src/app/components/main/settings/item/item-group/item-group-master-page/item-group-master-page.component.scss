@@ -1,0 +1,40 @@
+section {
+  //padding-top: 16px;
+}
+
+button:focus {
+  outline: none;
+}
+
+
+button.mat-menu-item {
+  height: 30px;
+  line-height: normal;
+}
+
+.table-box {
+  float: left;
+  transition: width 0.4s;
+  width: 100%;
+}
+
+.details-box {
+  float: left;
+  transition: width 0.4s, height 2s, visibility 0.4s;
+  width: 0;
+  height: calc(100vh - 68px);
+  visibility: hidden;
+}
+
+.collapsed {
+  transition:width 0.4s;
+  width: 25%;
+}
+
+.expanded {
+  height: calc(100vh - 50px);
+  transition: width 0.4s, visibility 0.4s;
+  width: 75%;
+  border-left: 2px solid lightgray;
+  visibility: visible;
+}

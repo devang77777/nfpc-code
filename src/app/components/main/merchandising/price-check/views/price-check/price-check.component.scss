@@ -1,0 +1,105 @@
+.table {
+    width: 100%;
+  }
+  
+  .items-table-box {
+    overflow-y: scroll !important;
+    min-width: 45%;
+    display: inline-block !important;
+  
+    mat-paginator,
+    .mat-table {
+      max-width: 100%;
+    }
+  }
+  
+  div.hscroll {
+    overflow-x: auto;
+    white-space: nowrap;
+  }
+  
+  tr.detail-row {
+    height: 0 !important;
+  }
+  
+  tr.element-row:not(.expanded-row):hover {
+    background: whitesmoke;
+  }
+  
+  tr.element-row:not(.expanded-row):active {
+    background: #efefef;
+  }
+  
+  .element-row td {
+    background: #f7f7f7;
+    word-wrap: break-word !important;
+    white-space: unset !important;
+    flex: 0 0 25% !important;
+    width: 25% !important;
+    overflow-wrap: break-word;
+    word-wrap: break-word;
+  
+    word-break: break-word;
+  
+    -ms-hyphens: auto;
+    -moz-hyphens: auto;
+    -webkit-hyphens: auto;
+    hyphens: auto;
+  
+    td {
+      border-bottom-width: 0;
+    }
+  }
+  
+  .element-detail {
+    overflow: hidden;
+    display: flex;
+  
+  }
+  
+  .w-100 {
+    width: 100%;
+  }
+  
+  .table thead,
+  .table thead tr,
+  .mat-header-row {
+    background-color: black !important;
+  
+    th {
+      background: black;
+      color: #fff;
+    }
+  }
+  
+  ::ng-deep .mat-paginator {
+  
+    // override material paginator page switch
+    .mat-paginator-range-label {
+      order: 2;
+    }
+  
+    .mat-paginator-navigation-previous {
+      order: 1;
+    }
+  
+    .mat-paginator-navigation-next {
+      order: 3;
+    }
+  }
+  
+  .heading-row {
+    border-bottom: 1px solid #e4e3e4;
+  
+    h2 {
+      margin: 0;
+    }
+  }
+  
+  .expandable-row {
+    border-bottom: 1px solid rgba(0, 0, 0, .1);
+    background-color: #fafafa;
+    min-height: 0;
+    overflow: hidden;
+}
+.width-100 { width: 100%; }

@@ -1,0 +1,175 @@
+.item-card,
+.customer-card {
+  padding: 12px !important;
+  border-radius: 10px;
+  background-color: #d3d3d352;
+  margin-right: 12px;
+  margin-bottom: 12px;
+
+  h4,
+  p {
+    margin: 0;
+  }
+}
+
+.items-table-box {
+  margin-bottom: 50px;
+  padding-bottom: 50px;
+  overflow-y: scroll !important;
+  min-width: 45%;
+
+  mat-paginator,
+  .mat-table {
+    max-width: 100%;
+    margin: auto;
+  }
+
+  button {
+    background-color: transparent;
+    border: none;
+    font-size: 15px;
+
+    &:active {
+      outline: none;
+    }
+  }
+}
+
+.items-intentory-table-box {
+  margin-bottom: 50px;
+  padding-bottom: 50px;
+  overflow-y: scroll !important;
+  min-width: 98%;
+
+  mat-paginator,
+  .mat-table {
+    max-width: 100%;
+    margin: auto;
+  }
+
+  button {
+    background-color: transparent;
+    border: none;
+    font-size: 15px;
+
+    &:active {
+      outline: none;
+    }
+  }
+}
+
+.items-intentory-detail-table-box {
+  padding-bottom: 50px;
+  overflow-y: scroll !important;
+  min-width: 98%;
+
+  mat-paginator,
+  .mat-table {
+    max-width: 100%;
+    margin: auto;
+  }
+
+  button {
+    background-color: transparent;
+    border: none;
+    font-size: 15px;
+
+    &:active {
+      outline: none;
+    }
+  }
+}
+
+@media (max-width: 575px) {
+  .items-table-box {
+    margin-bottom: 50px;
+    overflow-y: scroll !important;
+    min-width: 100%;
+    width: 100%;
+    padding: 10px 10px 50px;
+  }
+}
+
+.table {
+  width: 100%;
+}
+
+.items-table-box {
+  overflow-y: scroll !important;
+  min-width: 45%;
+
+  mat-paginator,
+  .mat-table {
+    max-width: 100%;
+  }
+}
+
+.table thead,
+.table thead tr,
+.mat-header-row {
+  background-color: black !important;
+
+  th {
+    background: black;
+    color: #fff;
+  }
+}
+
+tr.detail-row {
+  height: 0 !important;
+}
+
+tr.element-row:not(.expanded-row):hover {
+  background: whitesmoke;
+}
+
+tr.element-row:not(.expanded-row):active {
+  background: #efefef;
+}
+
+.element-row td {
+  background: #f7f7f7;
+  word-wrap: break-word !important;
+  white-space: unset !important;
+  flex: 0 0 25% !important;
+  width: 25% !important;
+  overflow-wrap: break-word;
+  word-wrap: break-word;
+
+  word-break: break-word;
+
+  -ms-hyphens: auto;
+  -moz-hyphens: auto;
+  -webkit-hyphens: auto;
+  hyphens: auto;
+
+  td {
+    border-bottom-width: 0;
+  }
+}
+
+.element-detail {
+  overflow: hidden;
+  display: flex;
+
+}
+
+.w-100 {
+  width: 100%;
+}
+
+::ng-deep .mat-paginator {
+
+  // override material paginator page switch
+  .mat-paginator-range-label {
+    order: 2;
+  }
+
+  .mat-paginator-navigation-previous {
+    order: 1;
+  }
+
+  .mat-paginator-navigation-next {
+    order: 3;
+  }
+}

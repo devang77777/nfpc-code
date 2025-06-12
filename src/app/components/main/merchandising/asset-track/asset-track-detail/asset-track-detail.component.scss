@@ -1,0 +1,18 @@
+@media (max-width: 575px) {
+  .smhlist {
+    li {
+      display: block;
+      padding: 8px 8px 4px 8px;
+
+      span,
+      strong {
+        display: block;
+        text-align: left;
+      }
+    }
+  }
+}
+
+.smhlist li {
+  padding: 10px 15px;
+}

@@ -1,0 +1,176 @@
+<section *ngIf="pallet">
+    <div class="heading-row clearfix">
+        <h2 class="h4 font-weight-light d-md-inline">
+            <i class="fa fa-file-text-o mr-2"></i> Salesman No.
+            <span class="order-number">#{{ pallet?.salesman_code }}</span>
+        </h2>
+        <div class="d-inline float-right">
+            <!-- <button style="margin-left:-11px;" class="btn" type="button" (click)="getDocument()">
+                <mat-icon [inline]="true">picture_as_pdf</mat-icon>
+            </button>
+            <button style="margin-left:-11px;" [disabled]="!(salesmanUnload?.current_stage === 'Pending')"
+                [ngStyle]="{'background':isEdit?'lightgray':''}" class="btn" type="button" (click)="enableEdit()">
+                <mat-icon [inline]="true">edit</mat-icon>
+            </button> -->
+            <button style="margin-left:-11px;" *ngIf="selectedIndex==1 && palletItemReturnList.length >0"
+                [ngStyle]="{'background':isEdit?'lightgray':''}" class="btn" type="button"
+                [ngStyle]="{'background':isEdit?'lightgray':''}" class="btn" type="button" (click)="enableEdit()">
+                <mat-icon [inline]="true">edit</mat-icon>
+            </button>
+            <button class="btn" (click)="closeDetailView()">
+                <i class="os-icon os-icon-close"></i>
+            </button>
+        </div>
+    </div>
+    <!-- <div class="separator"></div>
+    <div class="approval-holder" *ngIf="salesmanUnload?.need_to_approve ==='yes' && salesmanUnload?.current_stage=== 'Pending'">
+        <div class="approval-box">
+            <div class="approve-icon">
+                <i class="fa fa-check-square-o"></i>
+            </div>
+            <div class="approve-content">
+                <h2>Approve this order</h2>
+                <p>
+                    This order has been submitted for approval. Verify and approve the order.
+                </p>
+            </div>
+            <div class="approve-actions">
+                <button mat-button class="approve" (click)="approve()">Approve</button>
+                <button mat-button class="reject" (click)="reject()">Reject</button>
+            </div>
+        </div>
+    </div> -->
+
+    <div class="pl-3 region-data">
+        <div class="row h-100">
+            <div class="col-12 border-left">
+                <mat-tab-group class="customertab" mat-align-tabs="start"
+                    (selectedTabChange)="selectedTabChange($event.index)">
+                    <mat-tab label="Overview">
+                        <!-- <div class="row">
+                            <div class="col-xl-4 col-lg-5 col-md-8">
+                                <ul class="smhlist mt-2">
+                                    <li>
+                                        <span>Date</span>
+                                        <strong>2022-10-13</strong>
+                                    </li>
+                                    <li>
+                                        <span>Total Allocated</span>
+                                        <strong>10</strong>
+                                    </li>
+                                    <li>
+                                        <span>Total Return</span>
+                                        <strong>5</strong>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div> -->
+                        <div class="details-container">
+                            <div class="item-container custom-mat custom-mat-no-border">
+                                <div class="table-responsive">
+                                    <table>
+                                        <thead>
+                                            <tr>
+                                                <th class="head" *ngFor="let head of itemTableHeaders1">{{ head }}</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody class="form-body">
+                                            <tr class="item-row" *ngFor="let item of itemLists; let i = index;">
+                                                <ng-container>
+                                                    <td>
+                                                        {{item.date}}
+                                                    </td>
+                                                    <td>
+                                                        {{item.item?.item_code}}
+                                                    </td>
+                                                    <td>
+                                                        {{item.item?.item_name}}
+                                                    </td>
+                                                    <td>
+                                                        {{item.qty}}
+                                                    </td>
+                                                    <td>
+                                                        {{item.type=='add'?'Allocated':'Return'}}
+                                                    </td>
+                                                </ng-container>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </mat-tab>
+                    <mat-tab label="Return Request">
+                        <ng-container>
+                            <hr />
+
+                            <div>
+                                <div class="item-container custom-mat custom-mat-no-border">
+                                    <div class="table-responsive">
+                                        <table *ngIf="palletItemReturnList.length >0">
+                                            <thead>
+                                                <tr>
+                                                    <th class="head" *ngFor="let head of itemTableHeaders">
+                                                        {{ head.label }}
+                                                    </th>
+                                                </tr>
+                                            </thead>
+                                            <tbody class="form-body">
+                                                <tr class="item-row"
+                                                    *ngFor="let item of palletItemReturnList; let i = index">
+                                                    <td data-th="Date" class="uom-td">{{item.date}}</td>
+                                                    <td data-th="Request No" class="uom-td">
+                                                        <input type="text"
+                                                            class="form-control form-control-sm non-editable"
+                                                            [value]="item?.request_number" disabled />
+                                                    </td>
+                                                    <td data-th="Item Code" class="item-name">
+                                                        <input type="text"
+                                                            class="form-control form-control-sm non-editable"
+                                                            [value]="item.item?.item_code" disabled />
+                                                    </td>
+                                                    <td data-th="Item Name" class="item-name">
+                                                        <input type="text"
+                                                            class="form-control form-control-sm non-editable"
+                                                            [value]="item.item?.item_name" disabled />
+                                                    </td>
+
+                                                    <td data-th="Quantity">
+                                                        <input type="number" max="item.original_item_qty"
+                                                            class="form-control non-editable" [disabled]="!isEdit"
+                                                            [value]="item.qty"
+                                                            (input)="changeQty($event.target.value,i)" />
+                                                    </td>
+
+                                                    <td data-th="reason" style="width: 280px;"
+                                                        [ngStyle]="{'border':item?.isQtyChange?'1px solid red':'none'}">
+                                                        <angular2-multiselect [data]="itemList" [settings]="settings"
+                                                            (onSelect)="onItemSelect($event,i)"
+                                                            (onDeSelect)="OnItemDeSelect($event)"
+                                                            (onSelectAll)="onSelectAll($event)"
+                                                            (onDeSelectAll)="onDeSelectAll($event,i)"
+                                                            [(ngModel)]="item.reason">
+                                                        </angular2-multiselect>
+
+                                                    </td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                                <div class="row  mb-4" *ngIf="isEdit && palletItemReturnList.length >0">
+                                    <div class="col-md-12 mt-4" style="display: flex; justify-content: flex-end;">
+                                        <!-- <button class="btn btn-sm btn-light mr-2"
+                                            (click)="closeDetailView()">Cancel</button> -->
+                                        <button class="btn btn-sm btn-p" (click)="savePallet()"
+                                            [disabled]="!isDisableSave">Approve</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </ng-container>
+                    </mat-tab>
+                </mat-tab-group>
+            </div>
+        </div>
+    </div>
+</section>

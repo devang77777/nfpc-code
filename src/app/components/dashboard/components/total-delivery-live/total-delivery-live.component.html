@@ -1,0 +1,178 @@
+<div style="padding:30px 50px">
+    <header>
+        <div class="container mt-3">
+            <div class="row">
+                <div class="col-md-12">
+                    <form [formGroup]="filterForm" (ngSubmit)="applyFilterOnClick()">
+                        <div class="form-group row" style="padding: 5px;">
+                            <div class="col-sm-12">
+                                <div class="row">
+                                    <div class="col">
+                                      <label for="">Start Date</label>
+
+                                        <input type="date" formControlName="startdate" (change)="applyFilter()"
+                                            class="form-control form-control-sm" placeholder="Start Date">
+                                    </div>
+                                    <div class="">
+                                        <span>_</span>
+                                    </div>
+                                    <div class="col">
+                                      <label for="">End Date</label>
+
+                                        <input type="date" formControlName="enddate" (change)="applyFilter()"
+                                            class="form-control form-control-sm" placeholder="End Date">
+                                    </div>
+
+                                    <div class="col">
+                                        <!-- <app-multiautocomplete isSingle="false" [options]="regionList"
+                                            (selectionchanged)="applyFilter()" [control]="filterForm.controls['region']"
+                                            text="region_name" id="id" placeholder="Search region">
+                                        </app-multiautocomplete> -->
+                                        <div class="mb-4" >
+                                          <label for="">Warehouse</label>
+                                          <app-multiautocomplete isSingle="false" [options]="warehouseList"
+
+                                              [control]="filterForm.controls['region']" text="name" id="id"
+                                              param1="code" param2="name" objectName="code-root" placeholder="Select Warehouse">
+                                          </app-multiautocomplete>
+                                      </div>
+
+
+
+                                        <!-- <app-multiautocomplete isSingle="false" [options]="zoneList"
+                                            [control]="filterForm.controls['zone_id']" text="name" id="id"
+                                            (selectionchanged)="applyFilter()" placeholder="Search zone">
+                                        </app-multiautocomplete> -->
+                                    </div>
+                                    <div class="col">
+                                      <!-- <app-multiautocomplete isSingle="false" [options]="regionList"
+                                          (selectionchanged)="applyFilter()" [control]="filterForm.controls['region']"
+                                          text="region_name" id="id" placeholder="Search region">
+                                      </app-multiautocomplete> -->
+                                      <div class="mb-4" >
+                                        <label for="">Driver</label>
+                                        <angular2-multiselect style="width: 280px;" isSingle="false" [data]="salesmen" [formControl]="filterForm.controls['salesman']" [settings]="settings2"
+                                         >
+                                    </angular2-multiselect>
+                                    </div>
+                                    </div>
+
+                                    <div class="col-1">
+                                        <button type="submit" class="btn btn-sm btn-info mr-1">
+                                            <i class="fa fa-arrow-right" style="height: 27px;font-size: 26px;"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </header>
+    <hr>
+    <div class="container-fluid" >
+      <div class="pl-3  ">
+        <div class="table-responsive">
+            <table mat-table [dataSource]="itemSource" >
+
+                <ng-container matColumnDef="driver_name">
+                    <th mat-header-cell *matHeaderCellDef>
+                      Driver Name
+                        <!-- <app-column-filter title="Delivery Number" (changeSelected)="onColumnFilterOpen($event)"
+                            [selected]="selectedColumnFilter" (close)="onColumnFilter($event)">
+                            <input class="form-control form-control-sm" placeholder="Enter Delivery Number" type="text">
+                        </app-column-filter> -->
+                    </th>
+                    <td mat-cell *matCellDef="let element"> {{ element?.driver_name }} </td>
+                </ng-container>
+                <ng-container matColumnDef="driver_code">
+                    <th mat-header-cell *matHeaderCellDef>
+                      Driver code
+                        <!-- <app-column-filter title="Order Number" (changeSelected)="onColumnFilterOpen($event)"
+                            [selected]="selectedColumnFilter" (close)="onColumnFilter($event)">
+                            <input class="form-control form-control-sm" placeholder="order number" type="text">
+                        </app-column-filter> -->
+                    </th>
+                    <td mat-cell *matCellDef="let element"> {{ element?.driver_code }} </td>
+                </ng-container>
+                <ng-container matColumnDef="branch_plant">
+                    <th mat-header-cell *matHeaderCellDef>
+                      Branch Plant
+                        <!-- <app-column-filter title="Product Price" (changeSelected)="onColumnFilterOpen($event)"
+                            [selected]="selectedColumnFilter" (close)="onColumnFilter($event)">
+                            <input class="form-control form-control-sm" placeholder="Enter Product Price" type="text">
+                        </app-column-filter> -->
+                    </th>
+                    <td mat-cell *matCellDef="let element"> {{ element?.region_code }} </td>
+                </ng-container>
+                <ng-container matColumnDef="total_order">
+                    <th mat-header-cell *matHeaderCellDef>
+                      Total Order
+                        <!-- <app-column-filter title="Customer Code" (changeSelected)="onColumnFilterOpen($event)"
+                            [selected]="selectedColumnFilter" (close)="onColumnFilter($event)">
+                            <input class="form-control form-control-sm" placeholder="Enter customer code" type="text">
+                        </app-column-filter> -->
+                    </th>
+                    <td mat-cell *matCellDef="let element"> {{ element?.total_order }} </td>
+                </ng-container>
+
+                <ng-container matColumnDef="delivered_order">
+                  <th mat-header-cell *matHeaderCellDef>
+                    Delivered
+                      <!-- <app-column-filter title="Customer Name" (changeSelected)="onColumnFilterOpen($event)"
+                          [selected]="selectedColumnFilter" (close)="onColumnFilter($event)">
+                          <input class="form-control form-control-sm" placeholder="Enter customer name" type="text">
+                      </app-column-filter> -->
+                  </th>
+                  <td mat-cell *matCellDef="let element"> {{ element?.delivered_order }} </td>
+              </ng-container>
+              <ng-container matColumnDef="cancel_order">
+                <th mat-header-cell *matHeaderCellDef>
+                  Cancel
+                    <!-- <app-column-filter title="Order Date" (changeSelected)="onColumnFilterOpen($event)"
+                        [selected]="selectedColumnFilter" (close)="onColumnFilter($event)">
+                        <input class="form-control form-control-sm" placeholder="order date" type="text">
+                    </app-column-filter> -->
+                </th>
+                <td mat-cell *matCellDef="let element"> {{ element?.cancel_order }} </td>
+            </ng-container>
+            <ng-container matColumnDef="pending_order">
+              <th mat-header-cell *matHeaderCellDef>
+                Pending
+                  <!-- <app-column-filter title="Delivery Date" (changeSelected)="onColumnFilterOpen($event)"
+                      [selected]="selectedColumnFilter" (close)="onColumnFilter($event)">
+                      <input class="form-control form-control-sm" placeholder="delivery date" type="text">
+                  </app-column-filter> -->
+              </th>
+              <td mat-cell *matCellDef="let element"> {{ element?.pending_order }} </td>
+          </ng-container>
+          <ng-container matColumnDef="total_qty">
+            <th mat-header-cell *matHeaderCellDef>
+              Total Qty
+                <!-- <app-column-filter title="Total Qty" (changeSelected)="onColumnFilterOpen($event)"
+                    [selected]="selectedColumnFilter" (close)="onColumnFilter($event)">
+                    <input class="form-control form-control-sm" placeholder="total qty" type="text">
+                </app-column-filter> -->
+            </th>
+            <td mat-cell *matCellDef="let element"> {{ element.total_qty }} </td>
+        </ng-container>
+        <ng-container matColumnDef="status">
+          <th mat-header-cell *matHeaderCellDef>
+            Status
+              <!-- <app-column-filter title="Status " (changeSelected)="onColumnFilterOpen($event)"
+                  [selected]="selectedColumnFilter" (close)="onColumnFilter($event)">
+                  <input class="form-control form-control-sm" placeholder="Status" type="text">
+              </app-column-filter> -->
+          </th>
+          <td mat-cell *matCellDef="let element"> {{ element.status }} </td>
+      </ng-container>
+                <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+            </table>
+        </div>
+        <!-- <mat-paginator pageSize="50" [pageSizeOptions]="[5,10,15,25,50,100]"></mat-paginator> -->
+      </div>
+
+    </div>
+</div>

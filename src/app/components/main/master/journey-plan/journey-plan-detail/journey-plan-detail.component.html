@@ -1,0 +1,100 @@
+<section [hidden]="viewtype !== 0" [ngClass]="{ 'detail-visible': isDetailVisible, 'detail-hidden': !isDetailVisible }">
+  <ng-container *ngIf="isDetailVisible">
+    <div class="">
+      <div class="row m-0">
+        <h2 class="page-title col-sm-10 font-weight-light">{{ journeyPlanData.name }}</h2>
+        <div class="actions col-sm-2">
+          <button (click)="openEditJourneyPlan()" appPermission [permissions]="userPermissions" [type]="'edit'"
+            class="iconbtn"><i class="os-icon os-icon-edit" aria-hidden="true"></i></button>
+          <div>
+            <button class="btn btn-sm btn-white dropdown-toggle" mat-button [matMenuTriggerFor]="menu2">More</button>
+            <mat-menu #menu2="matMenu">
+              <button appPermission [permissions]="userPermissions" [type]="'delete'" mat-menu-item
+                (click)="openDeleteBox()">Delete</button>
+            
+            </mat-menu>
+          </div>
+          <button *ngIf="isDetailVisible" class="btn" (click)="closeDetailView()"><i
+              class="os-icon os-icon-close"></i></button>
+        </div>
+      </div>
+    </div>
+    <div class="approval-holder" *ngIf="journeyPlanData.need_to_approve=='yes'">
+      <div class="approval-box">
+        <div class="approve-icon">
+          <i class="fa fa-check-square-o"></i>
+        </div>
+        <div class="approve-content">
+          <h2>Approve this Journey Plan</h2>
+          <p>This Journey Plan has been submitted for approval. Verify and approve the Journey Plan.</p>
+        </div>
+        <div class="approve-actions">
+          <button mat-button class="approve" (click)="approve()">Approve</button>
+          <button mat-button class="reject" (click)="reject()">Reject</button>
+        </div>
+      </div>
+    </div>
+
+    <mat-tab-group class="customertab" [(selectedIndex)]="selectedTab" mat-align-tabs="start"
+      (selectedTabChange)="selectedTabChange($event.index)">
+      <mat-tab label="Overview">
+        <div class="row m-0">
+          <div class="col-xl-5 col-lg-5 col-md-8">
+
+            <ul class="smhlist mt-2">
+              <li>
+                <span> Description:</span>
+                <strong>{{ journeyPlanData.description }}</strong>
+              </li>
+              <li>
+                <span> Start Date:</span>
+                <strong>{{ journeyPlanData.start_date }}</strong>
+              </li>
+              <li>
+                <span> End Date:</span>
+                <strong>{{ journeyPlanData.end_date ? journeyPlanData.end_date : 'Has no End Date' }}</strong>
+              </li>
+              <li>
+                <span> Route:</span>
+                <strong>{{ journeyPlanData.route ? journeyPlanData.route.route_name : journeyPlanData.route_id  }}</strong>
+              </li>
+              <li>
+                <span>Plan Type: </span>
+                <strong>{{ journeyPlanData.plan_type == 1 ? 'Day' : 'Week' }}</strong>
+              </li>
+              <li>
+                <span> Start day of week:</span>
+                <strong>{{ journeyPlanData.start_day_name }}</strong>
+              </li>
+
+            </ul>
+          </div>
+        </div>
+
+        <app-jp-detail-customer-table [customersData]="customers" [journeyId]="journeyPlanData.id"
+          [isWeekly]="journeyPlanData.plan_type === '2'"></app-jp-detail-customer-table>
+      </mat-tab>
+      <mat-tab label="Customer Vist">
+        <app-customer-visit-list (jpListHandler)="jpListHandler($event)" [listData]="listData"
+          [journeyId]="journeyPlanData.id"></app-customer-visit-list>
+      </mat-tab>
+    </mat-tab-group>
+
+  </ng-container>
+</section>
+<section *ngIf="selectedData && viewtype == 1">
+  <div class="pl-3">
+    <div class="row">
+      <h2 class="page-title col-sm-6 font-weight-light"> {{ selectedData.customer?.firstname }}
+        {{ selectedData.customer?.lastname }}</h2>
+      <div class="actions col-sm-6">
+        <div class="pr_10">
+          <button class="btn btn-sm btn-p mr-2" (click)="setViewType(0)">Cancel</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="pl-3 mt-4 area-data">
+    <app-customer-activity-list [visitId]="selectedData.id" [listData]="activityListData"></app-customer-activity-list>
+  </div>
+</section>

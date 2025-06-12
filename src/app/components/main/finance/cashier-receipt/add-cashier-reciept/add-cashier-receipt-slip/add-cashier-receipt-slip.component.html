@@ -1,0 +1,38 @@
+<form class="mt-4 mb-5 pb-5 fixPosition" [formGroup]="receiptFormGroup">
+    <div class="card-body">
+        <div class="container">
+            <div class="row mb-4">
+                <div class="col">
+                    <div class="row mt-3">
+                        <div class="col-md-2">
+                            <label>Slip Number</label>
+                        </div>
+                        <div class="col-md-3">
+                            <input class="form-control form-control-sm" type="text" [formControl]="slipnoFormControl">
+                        </div>
+                    </div>
+                    <div class="row mt-3">
+                        <div class="col-md-2">
+                            <label>Bank</label>
+                        </div>
+                        <div class="col-md-3">
+                            <mat-select [formControl]="bankFormControl" class="form-control form-control-sm">
+                                <mat-option *ngFor="let item of bankList" [value]="item.id">
+                                    {{ item.bank_name }}
+                                </mat-option>
+                            </mat-select>
+                        </div>
+                    </div>
+                    <div class="row mt-3">
+                        <div class="col-md-2">
+                            <label>Date</label>
+                        </div>
+                        <div class="col-md-3">
+                            <input class="form-control form-control-sm" type="date" [formControl]="dateReceiptFormControl">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>

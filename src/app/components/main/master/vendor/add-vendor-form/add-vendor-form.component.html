@@ -1,0 +1,99 @@
+<div class="item-form">
+    <div class="card">
+        <div class="card-header pt-4">
+            <span class="h6 font-weight-bold text-secondary ">{{formType}} Vendor</span>
+            <a (click)="close()" class="closeicon settingclose"><i class="os-icon os-icon-x text-secondary float-right"
+                    aria-hidden="true"></i></a>
+        </div>
+        <div class="card-body">
+            <form [formGroup]="vendorFormGroup">
+                <div class="row mb-2">
+                    <div class="col">
+                        <label class="" for="">Vendor Code:</label>
+                        <input type="text" class="form-control fixWidth form-control-sm"
+                            (keypress)="restrictLength($event)" [formControl]="vendorCodeFormControl">
+                        <a [hidden]="formType == 'Edit'" (click)="open()" class="ml-2 settingIcon"><i
+                                class="os-icon os-icon-ui-46" aria-hidden="true"></i></a>
+                    </div>
+                </div>
+                <div class="row mb-2">
+                    <div class="col">
+                        <label class="" for="">First Name:</label>
+                        <input type="text" class="form-control form-control-sm" [formControl]="firstNameFormControl">
+                    </div>
+                    <div class="col">
+                        <label class="" for="">Last Name:</label>
+                        <input type="text" class="form-control form-control-sm" [formControl]="lastNameFormControl">
+                    </div>
+                </div>
+                <div class="row mb-2">
+                    <div class="col">
+                        <label class="" for="">Email:</label>
+                        <input type="text" class="form-control form-control-sm" [formControl]="emailFormControl">
+                    </div>
+                </div>
+                <div class="row mb-2">
+                    <div class="col">
+                        <label class="" for="">Company Name:</label>
+                        <input type="text" class="form-control form-control-sm" [formControl]="companyNameFormControl">
+                    </div>
+                </div>
+                <div class="row mb-2">
+                    <div class="col">
+                        <label class="" for="">Mobile:</label>
+                        <input type="text" class="form-control form-control-sm" [formControl]="mobileFormControl">
+                    </div>
+                    <div class="col">
+
+                    </div>
+                </div>
+                <div class="row mb-2">
+                    <div class="col">
+                        <label for="">Website:</label>
+                        <input type="text" class="form-control form-control-sm" [formControl]="websiteFormControl">
+                    </div>
+                </div>
+                <div class="row mb-3 mt-3 fixing"> Billing Address: </div>
+                <div class="row mb-2">
+                    <div class="col">
+                        <label class="" for="">Address1:</label>
+                        <input type="text" class="form-control form-control-sm" [formControl]="address1FormControl">
+                    </div>
+                </div>
+                <div class="row mb-2">
+                    <div class="col">
+                        <label for="">Address2:</label>
+                        <input type="text" class="form-control form-control-sm" [formControl]="address2FormControl">
+                    </div>
+                </div>
+                <div class="row mb-2">
+                    <div class="col">
+                        <label class="" for="">City:</label>
+                        <input type="text" class="form-control form-control-sm" [formControl]="cityFormControl">
+                    </div>
+                    <div class="col">
+                        <label class="" for="">State:</label>
+                        <input type="text" class="form-control form-control-sm" [formControl]="stateFormControl">
+                    </div>
+                </div>
+                <div class="row mb-2">
+                    <div class="col">
+                        <label for="">Zip Code:</label>
+                        <input type="text" class="form-control form-control-sm" [formControl]="zipcodeFormControl">
+                    </div>
+                    <div class="col">
+
+                    </div>
+                </div>
+            </form>
+        </div><br /><br />
+        <div class="card-footer">
+            <div class="d-inline float-right">
+                <button class="btn btn-sm btn-light mr-2" (click)="close()">Cancel</button>
+                <button class="btn btn-sm btn-p" (click)="saveVendorData()"
+                    [ngClass]="vendorFormGroup.invalid ? 'btn-disable' : ''"
+                    [disabled]="vendorFormGroup.invalid">Save</button>
+            </div>
+        </div>
+    </div>
+</div>

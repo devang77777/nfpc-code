@@ -1,0 +1,340 @@
+<section>
+  <div class="heading-row">
+    <h2 class="d-inline">{{ pageTitle }}</h2>
+    <div class="d-inline float-right">
+      <button [routerLink]="['/transaction/collection']" class="btn-sm btn btn-white float-right">Back</button>
+
+    </div>
+  </div>
+  <div class="separator"></div>
+  <form [formGroup]="collectionForm" class="order-form custom-mat square scrolly">
+    <div class="card-header active-form overview">
+      <div class="row">
+        <div class="col-md-4">
+          <label for="">Customer</label>
+          <div class="form-group ">
+            <mat-form-field class="example-full-width" id="customerField">
+              <input type="text" placeholder="Search Customer" matInput required [formControl]="customerFormControl"
+                [matAutocomplete]="auto" (keyup)="keyUp.next($event)">
+              <mat-autocomplete appOptionScroll (optionsScroll)="onScroll()" #auto="matAutocomplete"
+                (optionSelected)="customerSelected()" [displayWith]="customerControlDisplayValue">
+                <mat-option *ngFor="let customer of filteredCustomers" [value]="customer"
+                  style="height: unset;padding-bottom: 3px!important;padding-top: 5px;">
+                  <span class="mat-option-text">{{customer.user.firstname.trim() }}
+                    {{ customer.user.lastname }} - {{ customer.customer_code }} </span>
+                </mat-option>
+                <mat-option *ngIf="isLoading && (filteredCustomers.length >= 10 || !filteredCustomers.length)">
+                  <div class="select-placeholder-container">
+                    <!-- <span>Loading...</span> -->
+                    <mat-spinner class="spinner" diameter="20"></mat-spinner>
+                  </div>
+                </mat-option>
+                <mat-option id="custBtn" class="in-opt-btn"><button (click)="addCustomer()"><i
+                      class="os-icon os-icon-plus"></i>
+                    Add Customer</button></mat-option>
+              </mat-autocomplete>
+              <mat-error *ngIf="customerFormControl.hasError('required')">Please select a customer</mat-error>
+            </mat-form-field>
+          </div>
+        </div>
+      </div>
+    </div>
+
+
+    <div [ngClass]="{ 'inactive-form': customerFormControl.invalid }">
+      <div class="card-body overview custom-mat" [ngClass]="{ 'disable-box': customerFormControl.invalid }">
+        <div class="row mt-3" *ngIf="creditLimit?.credit_limit_type && creditLimit?.credit_limit_type == 2">
+          <div class="col-md-4">
+            <div class="form-group row mb-3 m-0 p-0" *ngIf="isShow">
+              <label> Customer Lob:</label>
+              <div class="col-11 p-0">
+                <app-multiautocomplete isSingle="true" [options]="customerLobList" [control]="customerLobFormControl"
+                  text="name" id="lob_id" placeholder="Select Lob" objectName="lob" param1="name" param2=""
+                  (selectionchanged)="customerLobSelected()">
+                </app-multiautocomplete>
+              </div>
+              <!-- <div class="col-1 p-2 mt-2">
+                      <a (click)="openItemLob()" class="ml-2 settingIcon"><i
+                          class="os-icon os-icon-ui-46" aria-hidden="true"></i></a>
+                  </div> -->
+            </div>
+          </div>
+        </div>
+        <div class="row justify-content-between">
+          <div class="col-md-4">
+            <div class="form-group">
+              <label for="">Payment Mode</label>
+              <mat-form-field>
+                <mat-label>Select Payment Mode</mat-label>
+                <mat-select class="no-disabled-text" id="modeField" [formControl]="collectionTypeFormControl" required>
+                  <mat-option *ngFor="let mode of payModes" [value]="mode.id">{{ mode.name }}</mat-option>
+                  <!--<mat-option id="typeBtn" class="in-opt-btn"><button (click)="addOrderType()"><i class="os-icon os-icon-plus"></i> Add Type</button></mat-option>-->
+                </mat-select>
+                <mat-error *ngIf="collectionTypeFormControl.hasError('required')">Please select a payment mode
+                </mat-error>
+              </mat-form-field>
+            </div>
+            <div class="form-group">
+              <label for="">Amount Received</label>
+              <input type="number" placeholder="Enter amount to pay" [formControl]="invoiceAmountFormControl"
+                class="form-control form-control-sm">
+              <app-validation-message [control]="invoiceAmountFormControl"></app-validation-message>
+            </div>
+            <div class="form-group">
+              <label for="">Allocated Amount</label>
+              <input type="number" [formControl]="allocatedAmountFormControl" class="form-control form-control-sm"
+                disabled>
+            </div>
+            <div class="form-group">
+              <label for="">Cleared Amount</label>
+              <input type="number" [formControl]="clearedAmountFormControl" class="form-control form-control-sm"
+                disabled>
+            </div>
+            <div class="form-group">
+              <label for="">Shelf Amount</label>
+              <input type="number" class="form-control form-control-sm" [formControl]="shelfRentFormControl" disabled>
+            </div>
+            <!-- <div class="form-group">
+              <label for="">Discount</label>
+              <input type="number" placeholder="Enter amount to discount" [formControl]="discountFormControl"
+                class="form-control form-control-sm">
+              <app-validation-message [control]="discountFormControl"></app-validation-message>
+            </div> -->
+          </div>
+          <div class="col-md-4">
+            <div class="form-group">
+              <label for="">Collection Number</label>
+              <div class="position-relative">
+                <input type="text" class="form-control form-control-sm" (keypress)="restrictLength($event)"
+                  [formControl]="numberFormControl" id="numberField">
+                <span class="setting-btn"><button (click)="openNumberSettings()"><i
+                      class="os-icon os-icon-settings"></i></button></span>
+              </div>
+            </div>
+            <div class="form-group">
+              <label for="">Collection Date</label>
+              <input type="date" class="form-control form-control-sm" required [formControl]="dateFormControl"
+                id="collectionDate">
+              <app-validation-message [control]="dateFormControl"></app-validation-message>
+            </div>
+            <div class="form-group">
+              <label for="">Payment Priority</label>
+              <ul class="list-inline mt-2">
+                <li class="list-inline-item">
+                  <app-radio-button [isMatStyle]="true"
+                    [config]="{ label: 'FIFO', value: 1, name: 'priority', control: paymentTypeFormControl }">
+                  </app-radio-button>
+                </li>
+                <li class="list-inline-item">
+                  <app-radio-button [isMatStyle]="true"
+                    [config]="{ label: 'LIFO', value: 2, name: 'priority', control: paymentTypeFormControl }">
+                  </app-radio-button>
+
+                </li>
+                <li class="list-inline-item">
+                  <app-radio-button [isMatStyle]="true"
+                    [config]="{ label: 'Manual', value: 3, name: 'priority', control: paymentTypeFormControl }">
+                  </app-radio-button>
+
+                </li>
+              </ul>
+
+
+            </div>
+            <div class="form-group">
+              <label for="">Rebate</label>
+              <input type="number" class="form-control form-control-sm" required [formControl]="rebateFormControl"
+                disabled>
+            </div>
+
+            <div class="form-group">
+              <label for="">Rebate VAT</label>
+              <input type="number" class="form-control form-control-sm" required [formControl]="rebateVATFormControl"
+                disabled>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="card-body custom-mat check-detail-box" [ngClass]="{ 'disable-box': customerFormControl.invalid }"
+        *ngIf="collectionTypeFormControl.value === 2">
+        <div class="d-flex overview-container">
+          <table class="check-form-col d-inline">
+            <tr>
+              <td>Check Number</td>
+              <td><input type="text" formControlName="cheque_number" class="form-control form-control-sm">
+                <app-validation-message [control]="collectionForm.get('cheque_number')"></app-validation-message>
+              </td>
+            </tr>
+          </table>
+          <table class="check-form-col d-inline">
+            <tr>
+              <td>Bank Name</td>
+              <td><input type="text" formControlName="bank_info" class="form-control form-control-sm">
+                <app-validation-message [control]="collectionForm.get('bank_info')"></app-validation-message>
+              </td>
+            </tr>
+          </table>
+          <table class="check-form-col d-inline">
+            <tr>
+              <td>Check Date</td>
+              <td><input type="date" formControlName="cheque_date" class="form-control form-control-sm">
+                <app-validation-message [control]="collectionForm.get('cheque_date')"></app-validation-message>
+              </td>
+            </tr>
+          </table>
+        </div>
+      </div>
+
+      <div class="invoices-form">
+        <div class="filter-box row">
+          <div class="col-lg-2 label">Invoices From Date</div>
+          <div class="col-lg-3"><input type="date" placeholder="from" [formControl]="fromDateControl"
+              class="form-control form-control-sm"></div>
+          <div class="col-lg-2 label">to Date</div>
+          <div class="col-lg-3"><input type="date" placeholder="to" [formControl]="toDateControl"
+              class="form-control form-control-sm"></div>
+          <div class="col-sm-2"><button class="mat-inherit-line-height" color="primary" mat-raised-button
+              (click)="customerFormControl.value.customer_group_id != null ? getGroupFilterecInvocies() :getFilteredInvoices()">Apply</button>
+          </div>
+        </div>
+
+        <div class="item-container custom-mat custom-mat-no-border">
+          <div class="table-responsive">
+            <table class="invoice-table cardtable table">
+              <thead>
+                <tr>
+                  <!-- <th class="head">#</th> -->
+                  <th class="head">
+
+                    <app-column-filter title="Customer Code" (changeSelected)="onColumnFilterOpen($event)"
+                      [selected]="selectedColumnFilter" (close)="onColumnFilter($event)" controlName="customer_code">
+
+                      <input class="form-control form-control-sm" placeholder="Enter Customer Code"
+                        (keyup)="applyFilter($event.target.value)" type="text">
+                    </app-column-filter>
+                  </th>
+                  <th class="head">
+                    <app-column-filter title="Customer Name" (changeSelected)="onColumnFilterOpen($event)"
+                      [selected]="selectedColumnFilter" (close)="onColumnFilter($event)" controlName="customer_name">
+
+                      <input class="form-control form-control-sm" placeholder="Enter Customer Name"
+                        (keyup)="applyFilter($event.target.value)" type="text">
+                    </app-column-filter>
+                  </th>
+                  <th class="head">Invoice Date</th>
+                  <th class="head">
+                    <app-column-filter title="Invoice Number" (changeSelected)="onColumnFilterOpen($event)"
+                      [selected]="selectedColumnFilter" (close)="onColumnFilter($event)" controlName="invoice_number">
+
+                      <input class="form-control form-control-sm" placeholder="Enter Invoice Number"
+                        (keyup)="applyFilter($event.target.value)" type="text">
+                    </app-column-filter>
+                  </th>
+                  <th class="head">
+
+                    <app-column-filter title="Type" (changeSelected)="onColumnFilterOpen($event)"
+                      [selected]="selectedColumnFilter" (close)="onColumnFilter($event)" controlName="itype">
+                      <input class="form-control form-control-sm" placeholder="Enter Type"
+                        (keyup)="applyFilter($event.target.value)" type="text">
+                    </app-column-filter>
+                  </th>
+                  <th class="head">Total Amount</th>
+                  <th class="head">Pending Amount</th>
+                  <th class="head">Paid Amount</th>
+                  <th>Action</th>
+                </tr>
+              </thead>
+              <tbody class="form-body">
+                <ng-container
+                  *ngFor="let invoice of checkAvailability() | slice:customPagging.startNumber:customPagging.endNumber; let i = index;">
+                  <tr class="item-row" [formGroup]="invoice">
+                    <!-- <td data-th="#" class="center"><span>{{ i + 1 }}</span> </td> -->
+                    <td data-th="Customer Code" class="center"><input type="text" class="form-control-sm"
+                        formControlName="customer_code"></td>
+                    <td data-th="Customer Name" class="center"><input type="text" class="form-control-sm"
+                        formControlName="customer_name"></td>
+                    <td data-th="Invoice Date" class="center"><input type="text" class="form-control-sm"
+                        formControlName="invoice_date"></td>
+                    <td data-th="Invoice Number" class="center"><input type="text" class="form-control-sm"
+                        formControlName="invoice_number"></td>
+                    <td data-th="itype" class="center"><input type="text" class="form-control-sm"
+                        formControlName="itype">
+                      <input type="hidden" class="form-control-sm" formControlName="debittype">
+                      <input type="hidden" class="form-control-sm" formControlName="netamount">
+                      <input type="hidden" class="form-control-sm" formControlName="vatamount">
+                    </td>
+                    <td data-th="Total Amount" class="center"><input type="text" class="form-control-sm"
+                        formControlName="total_amount"></td>
+                    <td data-th="Pending Amount" class="center"><input type="text" class="form-control-sm"
+                        formControlName="pending_amount"></td>
+                    <td data-th="PAID AMOUNT" class="center"><input type="number" class="form-control-sm paid-amount"
+                        (change)="checkPaidAmount(invoice)" [ngClass]="{ 'editable': enableManual }"
+                        formControlName="paid_amount"></td>
+                    <td data-th="Action"> <button [disabled]="invoiceForms.length <= 1" class="trash-btn"
+                        (click)="clearInvoice(i)"><i class="fa fa-close"></i></button></td>
+                  </tr>
+                </ng-container>
+
+              </tbody>
+            </table>
+            <app-custom-pagging #customPagging [length]="invoiceFormsLength"></app-custom-pagging>
+            <!-- <div>
+              <div class="mat-paginator" style="display: block;">
+                <div class="mat-paginator-outer-container" style="display: flex;">
+                  <div class="mat-paginator-container"
+                    style="display: flex;align-items: center;justify-content: flex-end;min-height: 56px;padding: 0 8px;flex-wrap: wrap-reverse;width: 100%;">
+                    <div class="mat-paginator-range-actions" style="display: flex;align-items: center;">
+                      <div class="mat-paginator-range-label" style="margin: 0 32px 0 24px;order: 2;"> {{startInvoice+1}}
+                        –
+                        {{endInvoice}} of {{invoiceForms.length}}
+                      </div>
+                      <button (click)="previousInvoices()" type="button" ng-reflect-message="Previous page"
+                        aria-label="Previous page"
+                        class="mat-focus-indicator mat-paginator-navigation-previous mat-icon-button mat-button-base"
+                        style="order: 1;">
+                        <span class="mat-button-wrapper">
+                          <span class="mat-button-wrapper">
+                            <svg viewBox="0 0 24 24" focusable="false" class="mat-paginator-icon">
+                              <path d="M15.41 7.41L14 6l-6 6 6 6 1.41-1.41L10.83 12z"></path>
+                            </svg>
+                          </span>
+                          <div matripple="" class="mat-ripple mat-button-ripple mat-button-ripple-round"></div>
+                          <div class="mat-button-focus-overlay"></div>
+                        </span>
+                        <div matripple="" class="mat-ripple mat-button-ripple mat-button-ripple-round"
+                          ng-reflect-centered="true" ng-reflect-trigger="[object HTMLButtonElement]"></div>
+                        <div class="mat-button-focus-overlay"></div>
+                      </button>
+                      <button (click)="nextInvoices()" type="button"
+                        class="mat-focus-indicator mat-paginator-navigation-next mat-icon-button mat-button-base"
+                        style="order: 3;">
+                        <span class="mat-button-wrapper">
+                          <span class="mat-button-wrapper">
+                            <svg viewBox="0 0 24 24" focusable="false" class="mat-paginator-icon">
+                              <path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"></path>
+                            </svg>
+                          </span>
+                          <div matripple="" class="mat-ripple mat-button-ripple mat-button-ripple-round"></div>
+                          <div class="mat-button-focus-overlay"></div>
+                        </span>
+                        <div matripple="" class="mat-ripple mat-button-ripple mat-button-ripple-round"
+                          ng-reflect-disabled="false" ng-reflect-centered="true"
+                          ng-reflect-trigger="[object HTMLButtonElement]"></div>
+                        <div class="mat-button-focus-overlay"></div>
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div> -->
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="actions">
+      <button class="btn btn-primary" [disabled]="collectionForm.invalid || invoiceForms.length < 1"
+        (click)="saveCollection()">Save & Submit</button>
+    </div>
+  </form>
+</section>

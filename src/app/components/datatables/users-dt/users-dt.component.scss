@@ -1,0 +1,87 @@
+:host {
+    float: left;
+    width: 100%;
+}
+// .mat-cell{
+//     height: 30px;
+// }
+
+table {
+    margin-top: 0;
+}
+
+.cdk-column-select {
+    position: relative;
+
+    .filter-btn {
+        position: absolute;
+        left: 0px;
+        top: 5px;
+    }
+}
+
+button {
+    background-color: transparent;
+    border: none;
+
+    i {
+        font-size: 16px;
+    }
+}
+
+.trash-btn {
+    margin-left: 8px;
+}
+
+.cdk-column-select {
+    width: 8%;
+}
+
+.filter-btn {
+    // padding: 4px 8px 4px 2px;
+    padding: 0px;
+    margin-left: 8px;
+    cursor: pointer;
+}
+filter-btn:focus {
+    outline: none;
+}
+
+.head-checkbox {
+    display: inline-block;
+    margin-left: 4px;
+    position: relative;
+    top: 2px;
+    margin-right: 20px;
+}
+
+.row-checkbox {
+    margin-left: 4px;
+    position: relative;
+    top: 4px;
+    margin-right: 20px;
+}
+
+.hidden {
+    visibility: hidden;
+}
+::ng-deep .mat-paginator {
+    .mat-paginator-container {
+        // justify-content: center;
+    }
+
+    // override material paginator page switch
+    .mat-paginator-range-label {
+        order: 2;
+    }
+
+    .mat-paginator-navigation-previous {
+        order: 1;
+    }
+    .mat-paginator-navigation-next {
+        order: 3;
+    }
+}
+.mat-column-user_details{
+    width: 30%;
+}

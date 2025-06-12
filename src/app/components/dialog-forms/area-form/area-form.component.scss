@@ -1,0 +1,95 @@
+.form-container {
+    margin: 20px 0;
+    padding: 12px 12px 0;
+  }
+  
+  button {
+    &:focus {
+      outline: 0;
+    }
+  }
+  
+  .dialog-close-btn {
+    float: right;
+    border: 0;
+    background-color: transparent;
+  
+    &:focus {
+      outline: 0;
+    }
+  }
+  
+  .area-dropdown {
+    height: 31px;
+  }
+  
+  .save-btn {
+    display: flex;
+    flex-direction: row-reverse;
+    padding: 14px;
+  
+    button {
+      height: 36px;
+      border: 1px solid #cccccc;
+    }
+  
+    .btn-green {
+      background-color: #1abc9c;
+      color: white;
+      margin-left: 12px;
+      border: 0;
+    }
+  }
+  
+  .categories-title {
+    padding: 0 20px;
+    margin-top: 20px;
+  
+    h4 {
+      margin: 0;
+    }
+  
+    .add-new-label {
+      float: right;
+  
+      button {
+        background-color: transparent;
+        border: 0;
+        font-size: 12px;
+        color: #1abc9c;
+      }
+  
+      i {
+        margin-right: 4px;
+      }
+    }
+  }
+  
+  .area-holder {
+    padding: 12px;
+  }
+  
+  .cancel-btn {
+    padding: 0 20px;
+    margin-bottom: 28px;
+    display: flex;
+    flex-direction: row-reverse;
+  
+    button {
+      height: 36px;
+      border: 1px solid #cccccc;
+    }
+  }
+  .empty-list{
+    p{
+      font-size: small;
+    }
+  }
+  .add-new-btn {
+    height: 36px;
+    border: 1px solid #cccccc;
+    background-color: #1abc9c;
+    color: white;
+    border: 0;
+  }
+  

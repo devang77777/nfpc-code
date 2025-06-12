@@ -1,0 +1,26 @@
+<div class=" scrolly container-fluid ">
+    <div class="row h-100 ">
+        <div class="col-md-3 p-0 lrow">
+            <div class="heading-row">
+                <h2><strong>Taxes</strong></h2>
+            </div>
+            <div class="rowm">
+                <div class="scrollable">
+                    <div class="lpane-grp">
+                        <ul class="nav nav-pills flex-column">
+                            <li class="nav-item" *ngFor="let navOption of taxNavOptions; let i = index;">
+                                <a id="ember2314" [ngClass]="isActive(navOption.routeTo)  ? 'active' : ''"
+                                    (click)="routeTo(navOption.routeTo,i)" class="nav-link ember-view">
+                                    {{ navOption.label }}
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-9 pl-0">
+            <router-outlet></router-outlet>
+        </div>
+    </div>
+</div>

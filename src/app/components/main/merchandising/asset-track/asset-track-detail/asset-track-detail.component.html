@@ -1,0 +1,244 @@
+<section *ngIf="AssetTrack && view == 1">
+    <div class="pl-3">
+        <div class="row">
+            <h2 class="page-title col-sm-6 font-weight-light">
+                {{ AssetTrack.title }}
+            </h2>
+            <div class="actions col-sm-6">
+                <button class="btn btn-sm btn-p mr-2" (click)="addSurvey(2, 'add')">Add Survey</button>
+                <div *ngIf="selectedTab == 0">
+                    <button class="btn btn-sm btn-white mr-2 dropdown-toggle" mat-button [matMenuTriggerFor]="menu2">More</button>
+                    <mat-menu #menu2="matMenu">
+                        <button mat-menu-item (click)="openEditAssetTrack()" appPermission
+                            [permissions]="userPermissions" [type]="'edit'">Edit</button>
+                        <button mat-menu-item (click)="openDeleteBox()" appPermission [permissions]="userPermissions"
+                            [type]="'delete'">Delete</button>
+                    </mat-menu>
+                </div>
+                <button *ngIf="isDetailVisible" class="btn" (click)="closeDetailView()"><i
+                        class="os-icon os-icon-close"></i></button>
+            </div>
+        </div>
+    </div>
+
+    <div class="pl-3 area-data scrolly">
+        <div class="row h-100">
+            <div class="col-12">
+                <mat-tab-group class="customertab" [(selectedIndex)]="selectedTab" mat-align-tabs="start"
+                    (selectedTabChange)="selectedTabChange($event.index)" mat-align-tabs="start">
+                    <mat-tab label="Overview">
+                        <div class="row">
+                            <div class="col-xl-5 col-lg-5 col-md-8">
+                                <ul class="smhlist mt-2">
+                                    <li>
+                                        <span> Date: </span>
+                                        <strong> {{ AssetTrack.created_at | date: "d MMM y h:mm a" }}</strong>
+                                    </li>
+                                    <li>
+                                        <span> Asset Name: </span>
+                                        <strong> {{ AssetTrack.title }} </strong>
+                                    </li>
+                                    <li>
+                                        <span> Description: </span>
+                                        <strong> {{ AssetTrack.description }}</strong>
+                                    </li>
+                                    <li>
+                                        <span> Customer: </span>
+                                        <strong> {{ AssetTrack.customer?.firstname }}
+                                            {{ AssetTrack.customer?.lastname }}</strong>
+                                    </li>
+                                    <li>
+                                        <span> Asset Code:</span>
+                                        <strong>{{ AssetTrack?.code }} </strong>
+                                    </li>
+                                    <li>
+                                        <span>Bar Code: </span>
+                                        <strong>{{ AssetTrack.barcode }} </strong>
+                                    </li>
+                                    <li>
+                                        <span> Model Namae: </span>
+                                        <strong> {{ AssetTrack.model_name }}</strong>
+                                    </li>
+                                    <li>
+                                        <span> Category: </span>
+                                        <strong> {{ AssetTrack.category }}</strong>
+                                    </li>
+                                    <li>
+                                        <span> Location: </span>
+                                        <strong> {{ AssetTrack.location }}</strong>
+                                    </li>
+                                    <li>
+                                        <span> Lat: </span>
+                                        <strong> {{ AssetTrack.lat }}</strong>
+                                    </li>
+                                    <li>
+                                        <span> Lng: </span>
+                                        <strong>{{ AssetTrack.lng }} </strong>
+                                    </li>
+                                    <li>
+                                        <span>Area: </span>
+                                        <strong>{{ AssetTrack.area }} </strong>
+                                    </li>
+                                    <li>
+                                        <span> Wroker: </span>
+                                        <strong> {{ AssetTrack.wroker }}</strong>
+                                    </li>
+                                    <li>
+                                        <span> Additional Wroker:</span>
+                                        <strong>{{ AssetTrack.additional_wroker }} </strong>
+                                    </li>
+                                    <li>
+                                        <span> Team: </span>
+                                        <strong> {{ AssetTrack.team }}</strong>
+                                    </li>
+                                    <li>
+                                        <span> Purchase Date: </span>
+                                        <strong> {{ AssetTrack.purchase_date }}</strong>
+                                    </li>
+                                    <li>
+                                        <span> Placed In Service: </span>
+                                        <strong>{{ AssetTrack.placed_in_service }} </strong>
+                                    </li>
+                                    <li>
+                                        <span> Purchase Price: </span>
+                                        <strong> {{ AssetTrack.purchase_price }}</strong>
+                                    </li>
+                                    <li>
+                                        <span> Warranty Expiration: </span>
+                                        <strong>{{ AssetTrack.warranty_expiration }} </strong>
+                                    </li>
+                                    <li>
+                                        <span>Residual Price: </span>
+                                        <strong> {{ AssetTrack.residual_price }}</strong>
+                                    </li>
+                                    <li>
+                                        <span> Additional Information: </span>
+                                        <strong>{{ AssetTrack.additional_information }} </strong>
+                                    </li>
+                                    <li>
+                                        <span>Useful Life: </span>
+                                        <strong>{{ AssetTrack.useful_life }} </strong>
+                                    </li>
+
+
+                                </ul>
+                            </div>
+                        </div>
+
+                        <ng-container *ngIf="AssetTrack !== null">
+                            <hr />
+                            <div class="col-sm-12 data-block">
+                                <div class="row">
+                                    <div class="col-sm-3">
+                                        <mat-card class="item-card" *ngIf="AssetTrack.image !== null">
+                                            <img height="150" mat-card-image src="{{ AssetTrack.image }}"
+                                                alt="Asset Track Image" (click)="open(0)" />
+                                        </mat-card>
+                                    </div>
+                                </div>
+                            </div>
+                        </ng-container>
+                    </mat-tab>
+                    <mat-tab label="Asset Post">
+                        <br />
+                        <app-view-post-list [postList]="postList" [AssetTrack_id]="AssetTrack.id"></app-view-post-list>
+                    </mat-tab>
+                    <mat-tab label="Survey">
+                        <br />
+                        <app-survey-list (surveyHandler)="surveyHandler($event)" [surveyData]="surveyData"
+                            [AssetTrack_id]="AssetTrack.id"></app-survey-list>
+                    </mat-tab>
+                    <mat-tab label="Files">
+                        <br />
+                    </mat-tab>
+                    <mat-tab label="Work Orders">
+                        <br />
+                    </mat-tab>
+                    <mat-tab label="Updates">
+                        <br />
+                    </mat-tab>
+                    <mat-tab label="Parts">
+                        <br />
+                    </mat-tab>
+                    <mat-tab label="Assets">
+                        <br />
+                    </mat-tab>
+                    <mat-tab label="Meters">
+                        <br />
+                    </mat-tab>
+                    <mat-tab label="Depreciation">
+                        <br />
+                    </mat-tab>
+                    <mat-tab label="Downtime">
+                        <br />
+                    </mat-tab>
+                </mat-tab-group>
+            </div>
+        </div>
+    </div>
+</section>
+<section *ngIf="view == 2">
+    <div class="pl-3 pr-3">
+        <div class="row">
+            <h2 class="page-title col-sm-6 font-weight-light">{{editSurveyData?.name || 'Add survey'}}</h2>
+            <div class="actions col-sm-6">
+                <div class="pr_10">
+                    <button class="btn" (click)="addSurvey(1)">
+                        <i class="os-icon os-icon-close"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="pl-3 area-data scrolly">
+        <app-add-survey-wizard [editSurveyData]="editSurveyData" (closeSurveyWizard)="addSurvey()"
+            [AssetTrack_id]="AssetTrack.id">
+        </app-add-survey-wizard>
+    </div>
+</section>
+<section *ngIf="selectedSurvey && view == 3">
+    <div class="pl-3">
+        <div class="row">
+            <h2 class="page-title col-sm-6 font-weight-light">{{selectedSurvey.name}}</h2>
+            <div class="actions col-sm-6">
+                <div class="pr_10">
+                    <button class="btn btn-sm btn-p mr-2" (click)="addSurvey(1)">Cancel</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="pl-3 area-data scrolly">
+        <app-survey-post-list (surveyHandler)="surveyHandler($event)" [surveyPostData]="surveyPostData"
+            [survey_id]="selectedSurvey.id"></app-survey-post-list>
+    </div>
+</section>
+<section *ngIf="selectedSurvey && view == 4">
+    <div class="pl-3">
+        <div class="row">
+            <h2 class="page-title col-sm-6 font-weight-light">{{selectedSurvey.name}}</h2>
+            <div class="actions col-sm-6">
+                <div class="pr_10">
+                    <button class="btn btn-sm btn-p mr-2" (click)="addSurvey(1)">Cancel</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="pl-3 area-data scrolly">
+        <app-survey-preview [surveyQAs]="surveyQAs"></app-survey-preview>
+    </div>
+</section>
+<section *ngIf="selectedSurvey && view == 5">
+    <div class="pl-3">
+        <div class="row">
+            <h2 class="page-title col-sm-6 font-weight-light">{{selectedSurvey.name}}</h2>
+            <div class="actions col-sm-6">
+                <div class="pr_10">
+                    <button class="btn btn-sm btn-p mr-2" (click)="addSurvey(1)">Cancel</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="pl-3 area-data scrolly">
+        <app-survey-qa-preview [surveyQAs]="surveyQAs"></app-survey-qa-preview>
+    </div>
+</section>

@@ -1,0 +1,96 @@
+:host {
+  float: left;
+  width: 100%;
+}
+
+table {
+  margin-top: 0;
+}
+
+.mat-column-select,
+.mat-column-name,
+.mat-column-sdate,
+.mat-column-edate,
+.mat-column-status {
+  word-wrap: break-word;
+  white-space: unset;
+  flex: 0 0 20%;
+  width: 20%;
+  overflow-wrap: break-word;
+  word-break: break-word;
+  -ms-hyphens: auto;
+  -moz-hyphens: auto;
+  -webkit-hyphens: auto;
+  hyphens: auto;
+}
+
+.cdk-column-select {
+  position: relative;
+
+  .filter-btn {
+    position: absolute;
+    left: 0px;
+    top: 0;
+    height: 35px;
+    line-height: 35px;
+    width: 30px;
+    padding: 0;
+    margin: 0;
+    text-align: center;
+    display: block;
+  }
+}
+
+button {
+  background-color: transparent;
+  border: none;
+
+  i {
+    font-size: 14px;
+  }
+}
+
+.trash-btn {
+  margin-left: 8px;
+}
+
+.cdk-column-select {
+  width: 4%;
+}
+
+.filter-btn {
+
+  &:focus {
+    outline: none;
+    box-shadow: 0 0;
+  }
+}
+
+.head-checkbox {
+  display: inline-block;
+  margin-left: 4px;
+  position: relative;
+  top: 2px;
+}
+
+.row-checkbox {
+  margin-left: 4px;
+  position: relative;
+  top: 4px;
+}
+
+::ng-deep .mat-paginator {
+
+  // override material paginator page switch
+  .mat-paginator-range-label {
+    order: 2;
+  }
+
+  .mat-paginator-navigation-previous {
+    order: 1;
+  }
+
+  .mat-paginator-navigation-next {
+    order: 3;
+  }
+}

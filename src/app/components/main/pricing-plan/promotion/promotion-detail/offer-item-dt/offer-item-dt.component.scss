@@ -1,0 +1,54 @@
+
+  .preview {
+    box-sizing: border-box;
+    border-radius: 4px;
+    box-shadow: 0 5px 5px -3px rgba(0, 0, 0, 0.2), 0 8px 10px 1px rgba(0, 0, 0, 0.14), 0 3px 14px 2px rgba(0, 0, 0, 0.12);
+  
+    .head-col,
+    .data-col {
+      padding: 0.75rem;
+      vertical-align: top;
+    }
+  }
+  
+  .list-row:last-child {
+    border: none;
+  }
+  
+  mat-table {
+    overflow: scroll;
+  }
+  
+  mat-header-row {
+    background-color: #181824 !important;
+    border-radius: 4px;
+    min-height: 40px;
+  
+    .mat-header-cell {
+      color: white;
+    }
+  }
+  
+  mat-row {
+    min-height: 40px;
+  }
+  .mat-column-itemName {
+    word-wrap: break-word !important;
+    white-space: unset !important;
+    flex: 0 0 30% !important;
+    width: 30% !important;
+    overflow-wrap: break-word;
+    word-wrap: break-word;
+  
+    word-break: break-word;
+  
+    -ms-hyphens: auto;
+    -moz-hyphens: auto;
+    -webkit-hyphens: auto;
+    hyphens: auto;
+  }
+  .mat-option {
+    height: 24px;
+    font-size: small;
+  }
+  

@@ -1,0 +1,74 @@
+<section>
+  <form [formGroup]="discountSlabFormGroup">
+    <mat-table [dataSource]="dataSource" formArrayName="orderItemFormArray">
+      <mat-header-row *matHeaderRowDef="displayColumns; sticky: true"></mat-header-row>
+      <mat-row class="list-row" *matRowDef="let row; let i = index; columns: displayColumns"></mat-row>
+      <!-- Column definitions -->
+      <ng-container matColumnDef="min_slab">
+        <mat-header-cell *matHeaderCellDef> Min Slab</mat-header-cell>
+        <mat-cell *matCellDef="let row; let index = index" [formGroupName]="index">
+          <input type="number" class="input-control" formControlName="min_slab" placeholder="" disabled />
+        </mat-cell>
+      </ng-container>
+
+      <ng-container matColumnDef="max_slab">
+        <mat-header-cell *matHeaderCellDef> Max Slab </mat-header-cell>
+        <mat-cell *matCellDef="let row; let index = index" [formGroupName]="index">
+          <input type="number" class="input-control" formControlName="max_slab" placeholder="" />
+        </mat-cell>
+      </ng-container>
+      <ng-container matColumnDef="value">
+        <mat-header-cell *matHeaderCellDef> Value </mat-header-cell>
+        <mat-cell *matCellDef="let row; let index = index" [formGroupName]="index">
+          <input type="number" class="input-control" formControlName="value" placeholder="" />
+        </mat-cell>
+      </ng-container>
+      <!-- <ng-container matColumnDef="percentage">
+          <mat-header-cell *matHeaderCellDef> UOM </mat-header-cell>
+          <mat-cell *matCellDef="let row; let index = index" [formGroupName]="index">
+            <select class="form-control form-control-sm input-control" formControlName="uom">
+              <option *ngFor="let uom of uoms" [value]="uom.id">{{uom.name}}</option>
+            </select>
+          </mat-cell>
+        </ng-container> -->
+      <ng-container matColumnDef="percentage">
+        <mat-header-cell *matHeaderCellDef> Percentage </mat-header-cell>
+        <mat-cell *matCellDef="let row; let index = index" [formGroupName]="index">
+          <input type="number" class="input-control" formControlName="percentage" placeholder="" />
+        </mat-cell>
+      </ng-container>
+      <ng-container matColumnDef="action">
+        <mat-header-cell *matHeaderCellDef> </mat-header-cell>
+        <mat-cell *matCellDef="let row; let index = index">
+          <!-- <div *ngIf="isFirstRow(index); else showDelete">
+            <button class="add-btn" [disabled]="addRowInvalid()" (click)="addRow()">
+              <i class="fa fa-plus-circle" aria-hidden="true"></i> Add
+            </button>
+          </div>
+          <ng-template #showDelete>
+            <div *ngIf="index == rows.length - 1">
+              <button class="delete-btn" (click)="deleteItem(index)">
+                <i class="fa fa-trash"></i> Delete
+              </button>
+            </div>
+          </ng-template> -->
+          <!-- <div  class="delete-btn-container"> -->
+            <button *ngIf="index == rows.length - 1" class="delete-btn" [disabled]="deleteRowInvalid()" (click)="deleteItem(index)">
+              <i class="fa fa-close"></i>
+            </button>
+            <!-- <button mat-mini-fab (click)="deleteItem(index)">
+              <mat-icon>close</mat-icon>
+            </button> -->
+          <!-- </div> -->
+        </mat-cell>
+      </ng-container>
+    </mat-table>
+    <!-- <button [disabled]="addRowInvalid()" (click)="addRow()">
+      <i class="fa fa-plus-circle" aria-hidden="true"></i> Add
+    </button> -->
+    <button mat-button class="mat-inherit-line-height btn add-item-btn" [disabled]="addRowInvalid()" (click)="addRow()">
+      Add
+    </button>
+  </form>
+  <!-- <small class="text-danger" *ngIf="addRowInvalid()">Invalid Slab Range!</small> -->
+</section>

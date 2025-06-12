@@ -1,0 +1,130 @@
+<div class="pl-3  items-table-box">
+    <div class="table-responsive">
+        <table mat-table [dataSource]="itemSource" class="mat-elevation-z8 table table-hover">
+            <ng-container matColumnDef="created_at">
+                <th mat-header-cell *matHeaderCellDef>
+                    <app-column-filter title="Date" (changeSelected)="onColumnFilterOpen($event)"
+                        [selected]="selectedColumnFilter" controlName="date" (close)="onColumnFilter($event)">
+                        <input class="form-control form-control-sm" [formControl]="filterForm.get('date')" placeholder="Enter Date" type="date">
+                    </app-column-filter>
+                </th>
+                <td mat-cell *matCellDef="let element"> {{ element.created_at | date :"d MMM y h:mm a"}} </td>
+            </ng-container>
+            <ng-container matColumnDef="name">
+                <th mat-header-cell *matHeaderCellDef>
+                    <app-column-filter title="Name" (changeSelected)="onColumnFilterOpen($event)"
+                        [selected]="selectedColumnFilter" controlName="name" (close)="onColumnFilter($event)">
+                        <input class="form-control form-control-sm" [formControl]="filterForm.get('name')" placeholder="Enter Me" type="text">
+                    </app-column-filter>
+                </th>
+                <td mat-cell *matCellDef="let element">
+                    <ng-container *ngIf="element.user?.firstname; else na">
+                        {{ element.user?.firstname }}
+                    </ng-container>
+                </td>
+            </ng-container>
+            <ng-container matColumnDef="merchandiser">
+                <th mat-header-cell *matHeaderCellDef>
+                    <app-column-filter title="Merchandiser" (changeSelected)="onColumnFilterOpen($event)"
+                        [selected]="selectedColumnFilter" controlName="salesman_name" (close)="onColumnFilter($event)">
+                        <input class="form-control form-control-sm" [formControl]="filterForm.get('salesman_name')" placeholder="Enter Merchandiser" type="text">
+                    </app-column-filter>
+                </th>
+                <td mat-cell *matCellDef="let element">
+                    <ng-container *ngIf="element.merchandiser?.firstname; else na">
+                        {{ element.merchandiser?.firstname }}
+                    </ng-container>
+                </td>
+            </ng-container>
+            <ng-container matColumnDef="customer_state">
+                <th mat-header-cell *matHeaderCellDef>
+                    <app-column-filter title="State" (changeSelected)="onColumnFilterOpen($event)"
+                        [selected]="selectedColumnFilter" controlName="state" (close)="onColumnFilter($event)">
+                        <input class="form-control form-control-sm" [formControl]="filterForm.get('state')" placeholder="Enter State" type="text">
+                    </app-column-filter>
+                </th>
+                <td mat-cell *matCellDef="let element">
+                    <ng-container *ngIf="element.customer_state; else na">
+                        {{ element.customer_state }}
+                    </ng-container>
+                </td>
+            </ng-container>
+            <ng-container matColumnDef="customer_city">
+                <th mat-header-cell *matHeaderCellDef>
+                    <app-column-filter title="City" (changeSelected)="onColumnFilterOpen($event)"
+                        [selected]="selectedColumnFilter" controlName="city" (close)="onColumnFilter($event)">
+                        <input class="form-control form-control-sm" [formControl]="filterForm.get('city')" placeholder="Enter City" type="text">
+                    </app-column-filter>
+                </th>
+                <td mat-cell *matCellDef="let element">
+                    <ng-container *ngIf="element.customer_city; else na">
+                        {{ element.customer_city }}
+                    </ng-container>
+                </td>
+            </ng-container>
+            <ng-container matColumnDef="address1">
+                <th mat-header-cell *matHeaderCellDef>
+                    <app-column-filter title="Address" (changeSelected)="onColumnFilterOpen($event)"
+                        [selected]="selectedColumnFilter" controlName="address" (close)="onColumnFilter($event)">
+                        <input class="form-control form-control-sm" [formControl]="filterForm.get('address')" placeholder="Enter Address" type="text">
+                    </app-column-filter>
+                </th>
+                <td mat-cell *matCellDef="let element">
+                    <ng-container *ngIf="element.customer_address_1; else na">
+                        {{ element.customer_address_1 }}
+                    </ng-container>
+                </td>
+
+            </ng-container>
+            <ng-container matColumnDef="customer_address_1_lang">
+                <th mat-header-cell *matHeaderCellDef>Latitude
+                    <!-- <app-column-filter title="Latitude" (changeSelected)="onColumnFilterOpen($event)"
+                        [selected]="selectedColumnFilter" (close)="onColumnFilter($event)">
+                        <input class="form-control form-control-sm" placeholder="Enter Latitude" type="text">
+                    </app-column-filter> -->
+                </th>
+                <td mat-cell *matCellDef="let element">
+                    <ng-container *ngIf="element.customer_address_1_lat; else na">
+                        {{ element.customer_address_1_lat }}
+                    </ng-container>
+                </td>
+
+            </ng-container>
+            <ng-container matColumnDef="customer_address_1_lng">
+                <th mat-header-cell *matHeaderCellDef>Longitude
+                    <!-- <app-column-filter title="Longitude" (changeSelected)="onColumnFilterOpen($event)"
+                        [selected]="selectedColumnFilter" (close)="onColumnFilter($event)">
+                        <input class="form-control form-control-sm" placeholder="Enter Longitude" type="text">
+                    </app-column-filter> -->
+                </th>
+                <td mat-cell *matCellDef="let element">
+                    <ng-container *ngIf="element.customer_address_1_lang; else na">
+                        {{ element.customer_address_1_lang }}
+                    </ng-container>
+                </td>
+            </ng-container>
+            <ng-container matColumnDef="current_stage">
+                <th mat-header-cell *matHeaderCellDef>Status
+                    <!-- <app-column-filter title="Status" (changeSelected)="onColumnFilterOpen($event)"
+                        [selected]="selectedColumnFilter" (close)="onColumnFilter($event)">
+                        <mat-select class="form-control form-control-sm">
+                            <mat-option value="1">Pending</mat-option>
+                            <mat-option value="0">Active</mat-option>
+                        </mat-select>
+                    </app-column-filter> -->
+                </th>
+                <td mat-cell *matCellDef="let element">
+                    <ng-container *ngIf="element.current_stage; else na">
+                        {{ element.current_stage }}
+                    </ng-container>
+                </td>
+            </ng-container>
+
+            <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+            <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+        </table>
+    </div>
+    <!-- <mat-paginator pageSize="15" [pageSizeOptions]="[5,10,15]"></mat-paginator> -->
+</div>
+
+<ng-template #na>N/A</ng-template>

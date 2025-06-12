@@ -1,0 +1,257 @@
+<section class="scrolly">
+  <div class="table-responsive">
+    <table class="table table-hover" mat-table [dataSource]="dataSource">
+      <ng-container matColumnDef="select">
+        <th mat-header-cell *matHeaderCellDef>
+          <button class="btn btn-sm filter-btn" *ngIf="!isDetailVisible" [matMenuTriggerFor]="menu"
+            style="height: 30px;">
+            <i class="fa fa-table" aria-hidden="true"></i>
+          </button>
+          <mat-menu #menu="matMenu">
+            <div class="card-body p-2" style="min-width: 200px;">
+              <ul style="list-style: none; padding-left: 7px;">
+                <li *ngFor="let column of filterColumns">
+                  <input type="checkbox" [(ngModel)]="column.show" class="m-2" (click)="$event.stopPropagation()" />
+                  {{ column.title }}
+                </li>
+              </ul>
+              <div class="float-right mb-2">
+                <button class="btn btn-p bg-secondary">Cancel</button>
+              </div>
+            </div>
+          </mat-menu>
+          <mat-checkbox class="head-checkbox" (change)="$event ? toggleSelection() : null" (change)="getSelectedRows()"
+            [checked]="selections.hasValue() && isAllSelected()"
+            [indeterminate]="selections.hasValue() && !isAllSelected()" [aria-label]="checkboxLabel()">
+          </mat-checkbox>
+        </th>
+        <td mat-cell *matCellDef="let row">
+          <mat-checkbox class="row-checkbox" (click)="$event.stopPropagation()"
+            (change)="$event ? selections.toggle(row) : null" (change)="getSelectedRows()"
+            [checked]="selections.isSelected(row)" [aria-label]="checkboxLabel(row)">
+          </mat-checkbox>
+        </td>
+      </ng-container>
+      <ng-container matColumnDef="date">
+        <th mat-header-cell *matHeaderCellDef>
+          <app-column-filter title="Date" (changeSelected)="onColumnFilterOpen($event)"
+            [selected]="selectedColumnFilter" (close)="onColumnFilter($event)" controlName="date">
+            <input class="form-control form-control-sm" [formControl]="filterForm.get('date')" placeholder="Enter Date"
+              type="date">
+          </app-column-filter>
+        </th>
+        <td mat-cell *matCellDef="let element">{{ element.created_at | date :"d MMM y h:mm a" }}</td>
+      </ng-container>
+      <ng-container matColumnDef="code">
+        <th mat-header-cell *matHeaderCellDef>
+          <app-column-filter title="Refrence Number" (changeSelected)="onColumnFilterOpen($event)"
+            [selected]="selectedColumnFilter" (close)="onColumnFilter($event)" controlName="collection_code">
+            <input class="form-control form-control-sm" [formControl]="filterForm.get('collection_code')"
+              placeholder="Enter Collection Number" type="text">
+          </app-column-filter>
+        </th>
+        <td mat-cell *matCellDef="let element">
+          {{ element.collection_number }}
+        </td>
+      </ng-container>
+      <ng-container matColumnDef="name">
+        <th mat-header-cell *matHeaderCellDef>
+          <app-column-filter title="Customer Name" (changeSelected)="onColumnFilterOpen($event)"
+            [selected]="selectedColumnFilter" (close)="onColumnFilter($event)" controlName="customer_name">
+            <input class="form-control form-control-sm" [formControl]="filterForm.get('customer_name')"
+              placeholder="Enter Customer Name" type="text">
+          </app-column-filter>
+        </th>
+        <td mat-cell *matCellDef="let element">
+          {{
+          element.customer
+          ? element.customer.firstname + "" + element.customer.lastname
+          : ""
+          }}
+        </td>
+      </ng-container>
+      <ng-container matColumnDef="customerCode">
+        <th mat-header-cell *matHeaderCellDef>
+          <app-column-filter title="Customer Code" (changeSelected)="onColumnFilterOpen($event)"
+            [selected]="selectedColumnFilter" (close)="onColumnFilter($event)" controlName="customer_code">
+            <input class="form-control form-control-sm" [formControl]="filterForm.get('customer_code')"
+              placeholder="Enter Customer Code" type="text">
+          </app-column-filter>
+        </th>
+        <td mat-cell *matCellDef="let element">
+          {{element.customer?.customer_info ? element.customer?.customer_info?.customer_code :'' }}
+        </td>
+      </ng-container>
+      <!--  Route Code-->
+      <ng-container matColumnDef="route_code">
+        <th mat-header-cell *matHeaderCellDef>
+
+          <app-column-filter title="Route Code" (changeSelected)="onColumnFilterOpen($event)"
+            [selected]="selectedColumnFilter" controlName="route_code" (close)="onColumnFilter($event)">
+            <input class="form-control form-control-sm" [formControl]="filterForm.get('route_code')"
+              placeholder="Enter Route Code" type="text">
+          </app-column-filter>
+
+        </th>
+        <td mat-cell *matCellDef="let element">
+          {{ element.route?.route_code }}</td>
+      </ng-container>
+      <!--  End Route code -->
+      <!-- Route Name -->
+      <ng-container matColumnDef="route_name">
+        <th mat-header-cell *matHeaderCellDef>
+
+          <app-column-filter title="Route Name" (changeSelected)="onColumnFilterOpen($event)"
+            [selected]="selectedColumnFilter" controlName="route_name" (close)="onColumnFilter($event)">
+            <input class="form-control form-control-sm" [formControl]="filterForm.get('route_name')"
+              placeholder="Enter Route Name" type="text">
+          </app-column-filter>
+
+        </th>
+        <td mat-cell *matCellDef="let element">
+          {{ element.route?.route_name }}</td>
+      </ng-container>
+      <!-- End Route Name -->
+      <!-- Salesman Code -->
+      <ng-container matColumnDef="salesman_code">
+        <th mat-header-cell *matHeaderCellDef>
+
+          <app-column-filter title="Salesman Code" (changeSelected)="onColumnFilterOpen($event)"
+            [selected]="selectedColumnFilter" controlName="salesman_code" (close)="onColumnFilter($event)">
+            <input class="form-control form-control-sm" [formControl]="filterForm.get('salesman_code')"
+              placeholder="Enter Salesman Code" type="text">
+          </app-column-filter>
+
+        </th>
+        <td mat-cell *matCellDef="let element">
+          {{ element.salesman?.salesman_info?.salesman_code }}</td>
+      </ng-container>
+      <!-- End Salesman Code   -->
+      <!-- Salesman Name -->
+      <ng-container matColumnDef="salesman_name">
+        <th mat-header-cell *matHeaderCellDef>
+          <app-column-filter title="Salesman Name" (changeSelected)="onColumnFilterOpen($event)"
+            [selected]="selectedColumnFilter" controlName="salesman_name" (close)="onColumnFilter($event)">
+            <input class="form-control form-control-sm" [formControl]="filterForm.get('salesman_name')"
+              placeholder="Enter Salesman Name" type="text">
+          </app-column-filter>
+
+        </th>
+        <td mat-cell *matCellDef="let element">
+          <ng-container>
+            {{
+            element?.salesman == null ? '' :
+            element.salesman?.firstname + " " + element.salesman?.lastname
+            }}
+          </ng-container>
+        </td>
+      </ng-container>
+      <!-- End Salesman Name -->
+      <ng-container matColumnDef="mode">
+        <th mat-header-cell *matHeaderCellDef>
+          <app-column-filter title="Payment Mode" (changeSelected)="onColumnFilterOpen($event)"
+            [selected]="selectedColumnFilter" (close)="onColumnFilter($event)" controlName="payemnt_type">
+            <mat-select class="form-control form-control-sm" [formControl]="filterForm.get('payemnt_type')">
+              <mat-option value="1">Cash</mat-option>
+              <mat-option value="2">Cheque</mat-option>
+              <mat-option value="3">Advance Payment</mat-option>
+            </mat-select>
+          </app-column-filter>
+        </th>
+        <td mat-cell *matCellDef="let element">
+          {{
+          element.payemnt_type
+          ? getPaymentType(element.payemnt_type)
+          : "Unknown"
+          }}
+        </td>
+      </ng-container>
+      <ng-container matColumnDef="current_stage">
+        <th mat-header-cell *matHeaderCellDef>
+          <app-column-filter title="Approval" (changeSelected)="onColumnFilterOpen($event)"
+            [selected]="selectedColumnFilter" controlName="current_stage" (close)="onColumnFilter($event)">
+            <input class="form-control form-control-sm" [formControl]="filterForm.get('current_stage')"
+              placeholder="Enter Approval" type="text">
+          </app-column-filter>
+        </th>
+        <td mat-cell *matCellDef="let element">
+          {{ element.current_stage}}
+        </td>
+      </ng-container>
+      <ng-container matColumnDef="approval_status">
+        <th mat-header-cell *matHeaderCellDef>Status
+        </th>
+        <td mat-cell *matCellDef="let element">
+          {{ element?.collection_status}}
+        </td>
+      </ng-container>
+      <ng-container matColumnDef="amount">
+        <th mat-header-cell *matHeaderCellDef>Amount
+        </th>
+        <td mat-cell *matCellDef="let element">
+          {{ numberFormatWithSymbol(element.invoice_amount) }}
+        </td>
+      </ng-container>
+
+      <ng-container matColumnDef="expand">
+        <th mat-header-cell *matHeaderCellDef style="display: none;">Detail</th>
+        <td mat-cell *matCellDef="let element">
+          <div style="display: flex; justify-content: space-between;">
+            <strong>{{
+              element.customer
+              ? element.customer.firstname + "" + element.customer.lastname
+              : "N/A"
+              }}</strong>
+            <span>
+              {{ numberFormatWithSymbol(element.invoice_amount) }}</span>
+          </div>
+          <div style="display: flex; justify-content: space-between;">
+            <span style="color: #2485e8;">{{ element.collection_number }}</span>
+            <span style="color: #2485e8;">
+              {{ element.payment_date | date }}</span>
+          </div>
+        </td>
+      </ng-container>
+      <ng-container matColumnDef="ERP_status">
+        <th class="erp-status" mat-header-cell *matHeaderCellDef>
+
+          <app-column-filter title="ERP Status" (changeSelected)="onColumnFilterOpen($event)"
+            [selected]="selectedColumnFilter" controlName="erp_status" (close)="onColumnFilter($event)">
+            <input class="form-control form-control-sm" [formControl]="filterForm.get('erp_status')"
+              placeholder="Enter ERP Status" type="text">
+          </app-column-filter>
+        </th>
+        <td mat-cell *matCellDef="let element">
+          {{ element.oddo_collection_id==null && element.odoo_failed_response==null? 'Not Posted': ''}}
+          {{ element.oddo_collection_id && element.odoo_failed_response==null ? 'Posted': ''}}
+          {{ element.odoo_failed_response ? 'Failed': ''}}
+
+          <i *ngIf="element.odoo_failed_response" class="fa fa-info-circle" aria-hidden="true"
+            (click)="filterOdooMessageData(element.odoo_failed_response);isOdooMessageOpen=true">
+          </i>
+          <i class="fa fa-refresh" style="margin-left: 4px;"
+            *ngIf="element.oddo_collection_id==null && element.current_stage =='Approved'"
+            (click)="postOdoo(element);isOdooMessageOpen=true"></i>
+        </td>
+      </ng-container>
+      <tr mat-header-row *matHeaderRowDef="getDisplayedColumns()"></tr>
+      <tr mat-row *matRowDef="let row; columns: getDisplayedColumns()"
+        (click)="openDetailView(row);isOdooMessageOpen=false"></tr>
+    </table>
+  </div>
+  <mat-paginator [hidden]="apiResponse.pagination?.total_records < 10" (page)="onPageFired($event)"
+    [length]="apiResponse.pagination?.total_records" [pageSize]="pageSize" [pageSizeOptions]="[10, 25, 50]">
+  </mat-paginator>
+
+</section>
+<ng-template #dialogRef let-data>
+  <div class="card">
+    <div class="card-header pt-4">
+      <span class="h6 font-weight-bold">Odoo Failed</span>
+      <a [mat-dialog-close]="true" class="closeicon settingclose"><i class="os-icon os-icon-x"></i></a>
+    </div>
+    <div class="card-body">
+      <p>{{data}}</p>
+    </div>
+  </div>
+</ng-template>

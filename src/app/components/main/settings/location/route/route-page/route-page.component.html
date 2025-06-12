@@ -1,0 +1,48 @@
+<mat-drawer-container class="formdrawer-container" hasBackdrop="false">
+  <mat-drawer id="formDrawer" mode="over" position="end" #formDrawer class="border">
+    <div style="min-width: 400px;">
+      <app-add-route-form (updateTableData)="updateTableData($event)"></app-add-route-form>
+    </div>
+  </mat-drawer>
+  <section>
+    <div class="table-box" [ngClass]="{ collapsed: isDetailVisible }">
+      <div class="heading-row clearfix">
+        <h2 class="d-inline" [hidden]="isDetailVisible">Route Master</h2>
+        <div class="d-inline float-right" [ngClass]="{ 'expanded-action': isDetailVisible }">
+          <button  [type]="'create'" class="btn btn-sm btn-p" mat-button
+            (click)="openAddRoute()">
+            <i class="fa fa-plus mr-2" aria-hidden="true"></i>New
+          </button>
+          <button *ngIf="checkedRows.length > 0" class="btn btn-sm btn-white dropdown-toggle ml-2" mat-button
+            [matMenuTriggerFor]="menu2">
+            Bulk Actions
+          </button>
+          <mat-menu #menu2="matMenu">
+            <button mat-menu-item (click)="bulkAction('active')">Mark as Active</button>
+            <button mat-menu-item (click)="bulkAction('inactive')">Mark as Inactive</button>
+            <!-- <button mat-menu-item (click)="bulkAction('delete')" appPermission [permissions]="userPermissions" [type]="'delete'">
+              Delete
+            </button> -->
+          </mat-menu>
+          <!-- impot /Export  -->
+          <button class="btn btn-sm btn-white ml-2 dropdown-toggle" [matMenuTriggerFor]="menu3">
+            <i class="fa fa-bars" aria-hidden="true"></i>
+          </button>
+          <mat-menu #menu3="matMenu">
+            <button mat-menu-item (click)="openImportRoute()">Import Route</button>
+            <button mat-menu-item type="button" (click)="openExportRoute()">Export Route</button>
+            <button mat-menu-item type="button" (click)="downloadRoute()">Download</button>
+          </mat-menu>
+        </div>
+      </div>
+      <app-route-master-dt [newRouteData]="newRouteData" (itemClicked)="itemClicked($event)"
+        (selectedRows)="selectedRows($event)">
+      </app-route-master-dt>
+    </div>
+    <div class="details-box" [ngClass]="{ expanded: isDetailVisible }">
+      <app-route-detail (updateTableData)="updateTableData($event)" (detailsClosed)="closeClicked()"
+        [isDetailVisible]="isDetailVisible" [routeData]="routeData">
+      </app-route-detail>
+    </div>
+  </section>
+</mat-drawer-container>

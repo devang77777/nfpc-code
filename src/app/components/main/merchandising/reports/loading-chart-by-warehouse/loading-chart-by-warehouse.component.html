@@ -1,0 +1,64 @@
+<div class="pl-3  items-table-box">
+    <div class="table-responsive">
+        <table mat-table [dataSource]="itemSource" class="mat-elevation-z8 table table-hover">
+            <ng-container matColumnDef="prod_code">
+                <th mat-header-cell *matHeaderCellDef>
+                    Prod Code
+                </th>
+                <td mat-cell *matCellDef="let element"> {{ element?.prod_code }} </td>
+            </ng-container>
+            <ng-container matColumnDef="prod_desc">
+                <th mat-header-cell *matHeaderCellDef>
+                    Prod Desc
+                </th>
+                <td mat-cell *matCellDef="let element"> {{ element?.prod_desc }} </td>
+            </ng-container>
+            <ng-container matColumnDef="dmd_lower_upc">
+                <th mat-header-cell *matHeaderCellDef>
+                    Converse
+                </th>
+                <td mat-cell *matCellDef="let element"> {{ element?.dmd_lower_upc}} </td>
+            </ng-container>
+            <ng-container matColumnDef="prv_rt_ctn">
+                <th mat-header-cell *matHeaderCellDef>
+                    Prv-Rt-CTN
+                </th>
+                <td mat-cell *matCellDef="let element"> {{ element?.prev_rt_ctn }} </td>
+            </ng-container>
+            <ng-container matColumnDef="prv_rt_pcs">
+                <th mat-header-cell *matHeaderCellDef>
+                    Prv-Rt-Pcs
+                </th>
+                <td mat-cell *matCellDef="let element"> {{ element?.prev_rt_pcs }} </td>
+            </ng-container>
+
+            <ng-container matColumnDef="dmd_ctn">
+                <th mat-header-cell *matHeaderCellDef>
+                    DMD-CTN
+                </th>
+                <td mat-cell *matCellDef="let element"> {{ element?.dmd_ctn }} </td>
+            </ng-container>
+            <ng-container matColumnDef="dmd_pcs">
+                <th mat-header-cell *matHeaderCellDef>
+                    DMD-Psc
+                </th>
+                <td mat-cell *matCellDef="let element"> {{ element?.dmd_pcs }} </td>
+            </ng-container>
+            <ng-container matColumnDef="net_lss_ctn">
+                <th mat-header-cell *matHeaderCellDef>
+                    Net-lss-CTN
+                </th>
+                <td mat-cell *matCellDef="let element"> {{ element?.net_ctn }} </td>
+            </ng-container>
+            <ng-container matColumnDef="net_lss_pcs">
+                <th mat-header-cell *matHeaderCellDef>
+                    Net-lss-Pcs
+                </th>
+                <td mat-cell *matCellDef="let element"> {{ element?.net_pcs }} </td>
+            </ng-container>
+            <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+            <tr mat-row *matRowDef="let row; columns: displayedColumns; let i = index"></tr>
+        </table>
+    </div>
+    <!-- <mat-paginator pageSize="50" [pageSizeOptions]="[5,10,15,25,50,100]"></mat-paginator> -->
+</div>

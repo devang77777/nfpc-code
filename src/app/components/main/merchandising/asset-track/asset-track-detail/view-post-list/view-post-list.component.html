@@ -1,0 +1,75 @@
+<div class="pl-3 row mb-4 mt-4" *ngIf="postList">
+    <div class="col-md-1 col-form-label">Date</div>
+    <div class="col-md-3 mb-2 mb-md-0">
+        <input class="form-control form-control-sm" type="date" [formControl]="dateFilterControl">
+    </div>
+    <div class="col-md-3 item-add-btn">
+        <button type="button" (click)="getAssetTrackPostList('date', true)"
+            class="mr-2 btn btn-sm btn-primary">Filter</button>
+        <button type="button" (click)="getAssetTrackPostList('all', true)" class="btn btn-sm btn-danger">All</button>
+    </div>
+</div>
+<div class="pl-3 items-table-box">
+    <div class="table-responsive">
+        <table mat-table [dataSource]="itemSource" class="mat-elevation-z8 table table-hover" multiTemplateDataRows>
+            <ng-container matColumnDef="created_at">
+                <th mat-header-cell *matHeaderCellDef>
+                    <app-column-filter title="Date" (changeSelected)="onColumnFilterOpen($event)"
+                        [selected]="selectedColumnFilter" controlName="date" (close)="onColumnFilter($event)">
+                        <input class="form-control form-control-sm" [formControl]="filterForm.get('date')" placeholder="Enter Date" type="date">
+                    </app-column-filter>
+                </th>
+                <td mat-cell *matCellDef="let element"> {{ element.created_at | date :"d MMM y h:mm a"}} </td>
+            </ng-container>
+            <!-- <ng-container matColumnDef="name">
+                <th mat-header-cell *matHeaderCellDef> Name </th>
+                <td mat-cell *matCellDef="let element"> {{ element?.name }} </td>
+            </ng-container> -->
+            <ng-container matColumnDef="salesman">
+                <th mat-header-cell *matHeaderCellDef>
+                    <app-column-filter title="Merchandiser" (changeSelected)="onColumnFilterOpen($event)"
+                        [selected]="selectedColumnFilter" controlName="salesman_name" (close)="onColumnFilter($event)">
+                        <input class="form-control form-control-sm" [formControl]="filterForm.get('salesman_name')" placeholder="Enter Merchandiser Name" type="text">
+                    </app-column-filter>
+                </th>
+                <td mat-cell *matCellDef="let element"> {{ element.salesman?.firstname }}
+                    {{ element.salesman?.lastname }}</td>
+            </ng-container>
+            <ng-container matColumnDef="feedback">
+                <th mat-header-cell *matHeaderCellDef>FeedBack
+                    <!-- <app-column-filter title="FeedBack" (changeSelected)="onColumnFilterOpen($event)"
+                        [selected]="selectedColumnFilter" (close)="onColumnFilter($event)">
+                        <input class="form-control form-control-sm" placeholder="Enter FeedBack" type="text">
+                    </app-column-filter> -->
+                </th>
+                <td mat-cell *matCellDef="let element"> {{ element?.feedback }} </td>
+            </ng-container>
+            <ng-container matColumnDef="expandedDetail">
+                <td mat-cell *matCellDef="let element" [attr.colspan]="displayedColumns.length">
+                    <div class="element-detail show-images"
+                        [@detailExpand]="element == expandedElement ? 'expanded' : 'collapsed'">
+                        <div *ngFor='let url of element.asset_tracking_post_image; let i=index;'
+                            class="img-position imageCard">
+
+                            <img [src]="url.image_string" height="150" width="150px">
+                            <div class="iconsbar">
+                                <a href="javascript:;" (click)="downloadFile(url.image_string)"><i
+                                        class="fa fa-download"></i></a>
+                                <a href="{{url.image_string}}" target="_blank"><i class="fa fa-external-link"></i></a>
+                                <a href="javascript:;" (click)="open(element.asset_tracking_post_image, i)"><i
+                                        class="fa fa-eye"></i></a>
+                            </div>
+                        </div>
+                        <br />
+                    </div>
+                </td>
+            </ng-container>
+            <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+            <tr mat-row *matRowDef="let row; columns: displayedColumns;" (click)="expandList(row)" class="element-row"
+                [class.expanded-row]="expandedElement === row"></tr>
+            <tr mat-row *matRowDef="let row;let i = index; columns: ['expandedDetail']" class="detail-row"></tr>
+        </table>
+    </div>
+    <mat-paginator [hidden]="hidePaginator(itemSource.data.length)" pageSize="10" [pageSizeOptions]="[5,10]">
+    </mat-paginator>
+</div>

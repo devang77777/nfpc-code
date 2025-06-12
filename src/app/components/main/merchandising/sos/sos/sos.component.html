@@ -1,0 +1,172 @@
+<ng-container *ngIf="advanceSearchRequest.length>0">
+  <app-search-criteria [data]="advanceSearchRequest" (change)="onChangeCriteria()" (close)="onCloseCriteria()">
+  </app-search-criteria>
+</ng-container>
+
+<div class="pl-3 items-table-box w-100">
+  <div class="table-responsive">
+    <table mat-table [dataSource]="itemSource" class="mat-elevation-z8 table table-hover" multiTemplateDataRows style="width: 100% !important;">
+      <ng-container matColumnDef="date">
+        <th mat-header-cell *matHeaderCellDef>
+          <app-column-filter title="Date" (changeSelected)="onColumnFilterOpen($event)"
+            [selected]="selectedColumnFilter" controlName="date" (close)="onColumnFilter($event)">
+            <input class="form-control form-control-sm" [formControl]="filterForm.get('date')" placeholder="Enter Date" type="date">
+          </app-column-filter>
+        </th>
+        <td mat-cell *matCellDef="let element"> {{ element.added_on }}</td>
+      </ng-container>
+      <ng-container matColumnDef="customer">
+        <th mat-header-cell *matHeaderCellDef>
+          <app-column-filter title="Customer" (changeSelected)="onColumnFilterOpen($event)"
+            [selected]="selectedColumnFilter" controlName="customer_name" (close)="onColumnFilter($event)">
+            <input class="form-control form-control-sm" [formControl]="filterForm.get('customer_name')" placeholder="Enter Customer" type="text">
+          </app-column-filter>
+        </th>
+        <td mat-cell *matCellDef="let element"> {{ element.customer?.firstname }} {{ element.customer?.lastname }}</td>
+      </ng-container>
+      <ng-container matColumnDef="customerCode">
+        <th mat-header-cell *matHeaderCellDef>
+          <app-column-filter title="Customer Code" (changeSelected)="onColumnFilterOpen($event)"
+            [selected]="selectedColumnFilter" controlName="customer_code" (close)="onColumnFilter($event)">
+            <input class="form-control form-control-sm" [formControl]="filterForm.get('customer_code')" placeholder="Enter Customer Code" type="text">
+          </app-column-filter>
+        </th>
+        <td mat-cell *matCellDef="let element"> {{element.customer?.customer_info ?
+          element.customer?.customer_info?.customer_code :'N/A' }}</td>
+      </ng-container>
+      <ng-container matColumnDef="merchandiser">
+        <th mat-header-cell *matHeaderCellDef>
+          <app-column-filter title="Merchandiser" (changeSelected)="onColumnFilterOpen($event)"
+            [selected]="selectedColumnFilter" controlName="salesman_name" (close)="onColumnFilter($event)">
+            <input class="form-control form-control-sm" [formControl]="filterForm.get('salesman_name')" placeholder="Enter Merchandiser" type="text">
+          </app-column-filter>
+        </th>
+        <td mat-cell *matCellDef="let element"> {{ element.salesman?.firstname }} {{ element.salesman?.lastname }}</td>
+      </ng-container>
+      <ng-container matColumnDef="no_of_Shelves">
+        <th mat-header-cell *matHeaderCellDef>No of Shelves
+          <!-- <app-column-filter title="No of Shelves" (changeSelected)="onColumnFilterOpen($event)"
+            [selected]="selectedColumnFilter" (close)="onColumnFilter($event)">
+            <input class="form-control form-control-sm" placeholder="Enter No of Shelves" type="text"> 
+          </app-column-filter>-->
+        </th>
+        <td mat-cell *matCellDef="let element"> {{ element.no_of_Shelves }}</td>
+      </ng-container>
+      <ng-container matColumnDef="block_store">
+        <th mat-header-cell *matHeaderCellDef>Block Store
+          <!-- <app-column-filter title="Block Store" (changeSelected)="onColumnFilterOpen($event)"
+            [selected]="selectedColumnFilter" (close)="onColumnFilter($event)">
+            <input class="form-control form-control-sm" placeholder="Enter Block Store" type="text">
+          </app-column-filter> -->
+        </th>
+        <td mat-cell *matCellDef="let element"> {{ element.block_store }}</td>
+      </ng-container>
+      <ng-container matColumnDef="expandedDetail">
+        <td mat-cell *matCellDef="let element" [attr.colspan]="displayedColumns.length">
+          <div class="element-detail w-100" [@detailExpand]="element == expandedElement ? 'expanded' : 'collapsed'">
+            <div *ngIf='element' class="w-100">
+              <div class="hscroll">
+                <div *ngFor="let brand of element.sos_our_brand; let oi = index;" class="items-table-box pl-2 pr-2">
+                  <p class="text-center font-weight-bold">Our Brand {{oi+1}}</p>
+                  <div class="table-responsive">
+                    <table class="mat-elevation-z8 table table-hover">
+                      <tr>
+                        <th>Brand
+                          <!-- <app-column-filter title="Brand" (changeSelected)="onColumnFilterOpen($event)"
+                            [selected]="selectedColumnFilter" (close)="onColumnFilter($event)">
+                            <input class="form-control form-control-sm" placeholder="Enter Brand" type="text">
+                          </app-column-filter> -->
+                        </th>
+                        <th>Category
+                          <!-- <app-column-filter title="Category" (changeSelected)="onColumnFilterOpen($event)"
+                            [selected]="selectedColumnFilter" (close)="onColumnFilter($event)">
+                            <input class="form-control form-control-sm" placeholder="Enter Category" type="text">
+                          </app-column-filter> -->
+                        </th>
+                        <th>Captured Block
+                          <!-- <app-column-filter title="Captured Block" (changeSelected)="onColumnFilterOpen($event)"
+                            [selected]="selectedColumnFilter" (close)="onColumnFilter($event)">
+                            <input class="form-control form-control-sm" placeholder="Enter Captured Block" type="text">
+                          </app-column-filter> -->
+                        </th>
+                        <th>Captured Shelves
+                          <!-- <app-column-filter title="Captured Shelves" (changeSelected)="onColumnFilterOpen($event)"
+                            [selected]="selectedColumnFilter" (close)="onColumnFilter($event)">
+                            <input class="form-control form-control-sm" placeholder="Enter Captured Shelves"
+                              type="text">
+                          </app-column-filter> -->
+                        </th>
+                        <th>Brand Share
+                          <!-- <app-column-filter title="Brand Share" (changeSelected)="onColumnFilterOpen($event)"
+                            [selected]="selectedColumnFilter" (close)="onColumnFilter($event)">
+                            <input class="form-control form-control-sm" placeholder="Enter Brand Share" type="text">
+                          </app-column-filter> -->
+                        </th>
+                      </tr>
+                      <tr>
+                        <td>{{brand.brand?.brand_name}}</td>
+                        <td>{{brand.item_major_category?.name}}</td>
+                        <td>{{brand.catured_block}}</td>
+                        <td>{{brand.catured_shelves}}</td>
+                        <td>{{brand.brand_share}}</td>
+                      </tr>
+                    </table>
+                  </div>
+                </div>
+                <div *ngFor="let brand of element.sos_competitor; let ci = index;" class="items-table-box pr-2">
+                  <p class="text-center font-weight-bold">Competitor Brand {{ci+1}}</p>
+                  <div class="table-responsive">
+                    <table class="mat-elevation-z8 table table-hover">
+                      <tr>
+                        <th>Brand
+                          <!-- <app-column-filter title="Brand" (changeSelected)="onColumnFilterOpen($event)"
+                            [selected]="selectedColumnFilter" (close)="onColumnFilter($event)">
+                            <input class="form-control form-control-sm" placeholder="Enter Brand" type="text">
+                          </app-column-filter> -->
+                        </th>
+                        <th>Captured Block
+                          <!-- <app-column-filter title="Captured Block" (changeSelected)="onColumnFilterOpen($event)"
+                            [selected]="selectedColumnFilter" (close)="onColumnFilter($event)">
+                            <input class="form-control form-control-sm" placeholder="Enter Captured Block" type="text">
+                          </app-column-filter> -->
+                        </th>
+                        <th>Captured Shelves
+                          <!-- <app-column-filter title="Captured Shelves" (changeSelected)="onColumnFilterOpen($event)"
+                            [selected]="selectedColumnFilter" (close)="onColumnFilter($event)">
+                            <input class="form-control form-control-sm" placeholder="Enter Captured Shelves"
+                              type="text">
+                          </app-column-filter> -->
+                        </th>
+                        <th>Brand Share
+                          <!-- <app-column-filter title="Brand Share" (changeSelected)="onColumnFilterOpen($event)"
+                            [selected]="selectedColumnFilter" (close)="onColumnFilter($event)">
+                            <input class="form-control form-control-sm" placeholder="Enter Brand Share"
+                              type="text">
+                          </app-column-filter> -->
+                        </th>
+                      </tr>
+                      <tr>
+                        <td>{{brand.brand?.brand}}</td>
+                        <td>{{brand.competitor_catured_block}}</td>
+                        <td>{{brand.competitor_catured_shelves}}</td>
+                        <td>{{brand.competitor_brand_share}}</td>
+                      </tr>
+                    </table>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <br />
+          </div>
+        </td>
+      </ng-container>
+      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+      <tr mat-row *matRowDef="let row; columns: displayedColumns; let i = index" (click)="expandList(row)"
+        class="element-row" [class.expanded-row]="row === expandedElement ? true : false"></tr>
+      <tr mat-row *matRowDef="let row;let i = index; columns: ['expandedDetail']" class="detail-row"></tr>
+    </table>
+  </div>
+</div>
+<mat-paginator [hidden]="apiResponse.pagination?.total_records < 5" (page)="onPageFired($event)"
+        [length]="apiResponse.pagination?.total_records" [pageSize]="pageSize" [pageSizeOptions]="[10, 25, 50]">
+        </mat-paginator>

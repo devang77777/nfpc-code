@@ -1,0 +1,41 @@
+a {
+  cursor: pointer;
+}
+
+.card-footer {
+  position: fixed;
+  width: 550px;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.03);
+  ;
+}
+
+.markred {
+  color: red;
+}
+
+.settingIcon {
+  position: absolute;
+  top: 4px;
+  right: 0 !important;
+
+  i {
+    font-size: 20px;
+  }
+}
+
+.area-dropdown {
+  height: 31px;
+}
+
+@media (max-width: 575px) {
+
+  .card,
+  .card-footer {
+    width: 320px !important;
+  }
+
+  .container {
+    padding: 0;
+  }
+}

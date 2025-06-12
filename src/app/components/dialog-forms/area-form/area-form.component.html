@@ -1,0 +1,121 @@
+<section>
+  <div class="card-header">
+    <span class="h6">Manage Area</span>
+    <button class="dialog-close-btn" mat-dialog-close>
+      <i class="fa fa-times fa-lg" aria-hidden="true"></i>
+    </button>
+  </div>
+  <div class="form-container" *ngIf="showForm">
+    <form [formGroup]="areaForm">
+      <div class="">
+        <div class="row mb-2">
+          <div class="col-md-4">Area Name</div>
+          <div class="col-md-8">
+            <input
+              [ngClass]="{
+                'invalid-input':
+                  areaFormControl.invalid &&
+                  (areaFormControl.dirty || areaFormControl.touched)
+              }"
+              class="form-control form-control-sm"
+              type="text"
+              [formControl]="areaFormControl"
+            />
+            <div
+              *ngIf="
+                areaFormControl.invalid &&
+                (areaFormControl.dirty || areaFormControl.touched)
+              "
+              class="text-danger"
+            >
+              <div><small>Area name is required.</small></div>
+            </div>
+          </div>
+        </div>
+        <div class="row mb-2">
+          <div class="col-md-4">Parent Area</div>
+          <div class="col-md-8">
+            <app-tree-dropdown
+              class="area-dropdown"
+              [isManageable]="false"
+              [dataSource]="areaData"
+              [dataService]="areaProvider()"
+              (whenItemSelected)="areaSelected($event)"
+              [selectFormControl]="parentFormControl"
+              [placeHolder]="'Search a parent area'"
+              ngDefaultControl
+            >
+            </app-tree-dropdown>
+          </div>
+        </div>
+      </div>
+
+      <div class="save-btn">
+        <button
+          mat-button
+          class="mat-inherit-line-height btn-green"
+          (click)="saveAreaData()"
+        >
+          Save
+        </button>
+        <button
+          mat-button
+          class="mat-inherit-line-height"
+          (click)="showForm = false"
+        >
+          Cancel
+        </button>
+      </div>
+    </form>
+  </div>
+
+  <div class="categories-title">
+    <h4>
+      Areas
+      <span class="add-new-label"
+        ><button
+          *ngIf="areaData.length > 0"
+          appPermission
+          [permissions]="userPermissions"
+          [type]="'create'"
+          (click)="addNewArea()"
+        >
+          <i class="fa fa-plus-circle"></i>Add New Area
+        </button></span
+      >
+    </h4>
+  </div>
+  <div class="empty-list text-center mt-4" *ngIf="isLoaded">
+    <p class="text-muted" *ngIf="areaData.length == 0">No Area available</p>
+    <button
+      mat-button
+      class="add-new-btn"
+      *ngIf="areaData.length == 0 && !showForm"
+      appPermission
+      [permissions]="userPermissions"
+      [type]="'create'"
+      (click)="addNewArea()"
+    >
+      Add New Area
+    </button>
+  </div>
+  <div class="area-holder">
+    <app-tree-container
+      (applyData)="applyArea($event)"
+      (editData)="editArea($event)"
+      (deleteData)="deleteArea($event)"
+      [treeData]="areaData"
+    >
+    </app-tree-container>
+  </div>
+
+  <div class="cancel-btn">
+    <button
+      mat-button
+      class="mat-inherit-line-height height-40"
+      mat-dialog-close
+    >
+      Cancel
+    </button>
+  </div>
+</section>

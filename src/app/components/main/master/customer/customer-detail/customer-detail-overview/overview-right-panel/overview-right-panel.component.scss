@@ -1,0 +1,87 @@
+.topHr {
+  box-sizing: content-box;
+  height: 0;
+  margin-top: 10px;
+  margin-bottom: 10px;
+  border: 0;
+  border-top: 1px solid rgba(0,0,0,.1);
+}
+.arapdetails {
+  padding: 10px 0;
+  margin-bottom: 0;
+}
+.row {
+  display: flex;
+  flex-wrap: wrap;
+  margin-right: -15px;
+  margin-left: -15px;
+}
+.arapdetails li:first-child {
+  border-right: 1px solid #ddd;
+  margin-left: -4px;
+  width: 44%;
+}
+.text-left {
+  text-align: left!important;
+}
+.arapdetails li {
+  // display: grid;
+  display: inline-block;
+}
+.arapdetails li h6 {
+  margin-bottom: 0;
+  margin-top: 0;
+}
+.font-xlarge {
+  font-size: 18px;
+}
+.text-overdue {
+  color: #ff660f;
+  padding-bottom: 10px;
+}
+.mx-n5 {
+  margin-left: -1rem !important;
+}
+.arapdetails li .outstanding-arap {
+  font-size: 20px;
+  font-weight: 600;
+  padding-top: 12px;
+}
+.arapdetails li div.right-pane {
+  font-weight: 400;
+  font-size: 14px;
+  padding: 0 0 10px 0;
+}
+.arapdetails li div.right-pane .section-width {
+  display: inline-block;
+  width: 165px;
+}
+.text-muted {
+  color: #777!important;
+}
+.outstanding {
+  font-size: 14px;
+  margin-left: -10px;
+}
+.arapdetails li .right-pane-semibold {
+  font-weight: 600;
+}
+.tooltip-container {
+  position: relative;
+}
+.myalert {
+  margin: 15px 0;
+
+}
+@media (max-width: 767px){
+  .chartoverview{
+    width: 300px;
+     canvas{
+      width: 300px !important;
+     }
+  }
+}
+
+.chartoverview{
+  padding-right: 42px;
+}

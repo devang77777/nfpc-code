@@ -1,0 +1,58 @@
+
+    <div class="modal-header c-padding">
+      <h4 class="mb-0 profile_heading">Configure SalesMan</h4>
+      <button type="button" class="close" (click)="close()">
+        <img src="assets/images/close.png" />
+      </button>
+    </div>
+    <div class="modal-body c-padding">
+      <div class="form-group">
+        <form [formGroup]="addPaymentTermsForm">
+          <div formArrayName="paymentTerms">
+            <div class="row mb-2">
+              <div class="col">
+                  <label for="">Salesman name*</label>
+              </div>
+              <div class="col">
+                  <label for="">Salesman Email*</label>
+              </div>
+              <div class="col">
+                <label for=""></label>
+              </div>
+            </div>
+            <div class="row mb-2" *ngFor="let item of f.paymentTerms['controls']; let i = index" [formGroupName]="i">
+              <div class="col">
+                <input type="hidden" formControlName="id" value="i" class="form-control form-control-sm">
+                <input type="text" formControlName="name" class="form-control form-control-sm">
+              </div>
+              <div class="col">
+                <input type="text" formControlName="number_of_days" class="form-control form-control-sm">
+              </div>
+              <!-- <div class="col showOnHover">
+                <span style="cursor: pointer;" (click)="deleteitem(i)"class="hideit">*Mark as Default &times;</span>
+              </div> -->
+            </div>
+            <div class="row mb-2">
+              <button (click)="addnewrow()" class="btn btn-link nodecor">+ Add New</button>
+            </div>
+        </div>
+        </form>
+      </div>
+    </div>
+    <div class="footer w-100">
+      <div class="footer-align float-right">
+        <button
+          type="button"
+          class="btn btn-danger mr-3"
+          (click)="onSubmit()"
+        >Save
+        </button>
+        <button
+          type="button"
+          class="btn btn-light"
+          (click)="close()"
+        >Cancel
+        </button>
+      </div>
+    </div>
+

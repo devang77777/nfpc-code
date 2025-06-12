@@ -1,0 +1,53 @@
+section {
+  transition: visibility 0.4s, opacity 0.4s;
+  visibility: visible;
+}
+
+.detail-hidden {
+  transition: opacity 0.2s;
+  opacity: 0;
+}
+
+.detail-visible {
+  opacity: 1;
+}
+
+button:active {
+  outline: none;
+}
+
+button.mat-menu-item {
+  height: 30px;
+  line-height: normal;
+
+  &:focus {
+    outline: none;
+  }
+}
+
+
+.details-holder {
+  padding: 12px 8px 0;
+  background-color: #eeeeee;
+  border-radius: 8px;
+  margin-top: 20px;
+}
+
+
+.detail-row {
+  padding: 8px 12px;
+  display: flex;
+  font-size: 14px;
+}
+
+.detail-label {
+  width: 16%;
+  color: #777777;
+  margin: 0;
+}
+
+.detail-value {
+  width: 84%;
+  color: #181824;
+  margin: 0;
+}

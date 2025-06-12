@@ -1,0 +1,89 @@
+<section class="makeScrollable">
+    <div id="ember612" class="modal-header ember-view mb-4">
+        <h2 class="modal-title">{{ scheduleData.title }}</h2>
+        <h4>{{ scheduleData.subtitle }}</h4>
+        <button class="close no-outline" (click)="close()" type="button">
+          &times;
+        </button>
+      </div>
+      <div class="scrolly-dailog container">
+        <form [formGroup]="scheduleForm" (ngSubmit)="onSchedule()">
+    <div class="form-group row">
+      <label for="inputEmail3" class="col-sm-3 col-form-label">Frequency*:</label>
+      <div class="col-sm-9">
+        <mat-select style="width: 80% !important;" class="form-control form-control-sm" formControlName="frequency">
+            <mat-option *ngFor="let item of intervals" [value]="item.id">
+                {{item.name}}
+            </mat-option>
+        </mat-select>
+        <app-validation-message [control]="scheduleForm.controls['frequency']"></app-validation-message>
+      </div>
+    </div>
+    <div class="form-group row">
+      <label for="inputPassword3" class="col-sm-3 col-form-label">Start Date & Time*:</label>
+      <div class="col-sm-3">
+        <input type="date" formControlName="date" class="form-control">
+      </div>
+      <div class="col-sm-3">
+        <mat-select style="width: 80% !important;" class="form-control form-control-sm" formControlName="hours">
+            <mat-option *ngFor="let item of hours" [value]="item">
+                {{item}}
+            </mat-option>
+        </mat-select>
+      </div>
+      <div class="col-sm-3">
+        <mat-select style="width: 80% !important;" class="form-control form-control-sm" formControlName="minutes">
+            <mat-option *ngFor="let item of minutes" [value]="item">
+                {{item}}
+            </mat-option>
+        </mat-select>
+      </div>
+    </div>
+    <div class="form-group row">
+      <h2 class="col-sm-3 col-form-label">Recipient Details</h2>
+    </div>
+    <div class="form-group row">
+      <label for="inputPassword3" class="col-sm-3 col-form-label">Email Recipients*</label>
+      <div class="col-sm-9">
+        <textarea formControlName="emailRecipients" class="form-control" cols="30" rows="4"></textarea>
+      </div>
+    </div>
+    <div class="form-group row">
+        <label for="inputPassword3" class="col-sm-3 col-form-label">Additional Recipients</label>
+        <div class="col-sm-9">
+          <textarea formControlName="additionalRecipients" class="form-control" cols="30" rows="4"></textarea>
+        </div>
+    </div>
+    
+    <div class="form-group row">
+        <label for="inputPassword3" class="col-sm-3 col-form-label">Attach Report As*</label>
+        <div class="col-sm-9">
+            <input type="radio" class="" id="pdf"
+            name="reportAs" formControlName="reportAs" value="pdf" />
+            &nbsp;
+            <label for="pdf">PDF</label><br>
+            <input type="radio" class="" id="csv"
+            name="reportAs" formControlName="reportAs" value="csv" />
+            &nbsp;
+            <label for="csv">CSV (Comma Separated Value)</label><br>
+            <input type="radio" class="" id="xls"
+            name="reportAs" formControlName="reportAs" value="xls" />
+            &nbsp;
+            <label for="xls">XLS (Microsoft Excel 1997-2004 Compatible)</label>
+          
+        </div>
+    </div>
+    
+    <div class="">
+      <div class="d-inline float-right" style="display: flex;">
+        <button [disabled]="scheduleForm.invalid" style="width:60px;color:white;border-radius: 2px;" type="submit"
+          class="btn btn-primary">Save</button>
+        &nbsp;
+        <button style="width:60px;border-radius: 2px;" type="button" class="btn btn-warning"
+          (click)="close()">Close
+        </button>
+      </div>
+    </div>
+    </form>
+    </div>
+</section>

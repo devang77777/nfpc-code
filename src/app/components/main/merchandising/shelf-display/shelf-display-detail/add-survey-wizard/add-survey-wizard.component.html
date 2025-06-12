@@ -1,0 +1,121 @@
+<mat-drawer-container class="formdrawer-container" hasBackdrop="false">
+    <mat-drawer id="formDrawerQA" mode="over" position="end" #formDrawerQA class="border">
+        <div style="min-width: 300px;">
+            <app-sruvey-qa (updateSurveyQAList)="updateSurveyQAList($event)" [distribution_id]="distribution_id"
+                [survey_id]="survey_id" [question_type]="question_type"></app-sruvey-qa>
+        </div>
+    </mat-drawer>
+    <mat-horizontal-stepper class="scrolly" [linear]="true" #stepper>
+        <mat-step [stepControl]="surveyFormGroup" [editable]="false">
+            <div class="row">
+
+                <div class="col-md-6">
+                    <form class="mt-30" [formGroup]="surveyFormGroup" (ngSubmit)="saveSurveyForm(stepper)">
+                        <ng-template matStepLabel>Add Survey</ng-template>
+                        <div class="row mb-4">
+                            <div class="col-md-4">Survey Name*</div>
+                            <div class="col-md-8">
+                                <input class="form-control form-control-sm" type="text" formControlName="surveyName">
+                                <app-validation-message [control]="surveyFormGroup.controls['surveyName']">
+                                </app-validation-message>
+                            </div>
+                        </div>
+                        <div class="row mb-4">
+                            <div class="col-md-4">Form Date*</div>
+                            <div class="col-md-8">
+                                <input class="form-control form-control-sm" type="date" formControlName="fromDate">
+                                <app-validation-message [control]="surveyFormGroup.controls['fromDate']">
+                                </app-validation-message>
+                            </div>
+                        </div>
+                        <div class="row mb-4">
+                            <div class="col-md-4">to Date*</div>
+                            <div class="col-md-8">
+                                <input class="form-control form-control-sm" type="date" formControlName="toDate">
+                                <app-validation-message [control]="surveyFormGroup.controls['toDate']">
+                                </app-validation-message>
+                            </div>
+                        </div>
+                        <div class="d-inline float-right">
+                            <button type="button" class="btn btn-sm btn-white mr-2" (click)="close()">Cancel</button>
+                            <button type="submit" class="btn btn-sm btn-p" [disabled]="!surveyFormGroup.valid"
+                                mat-button>Save &
+                                Next</button>
+                        </div>
+                    </form>
+                </div>
+                <div class="col-md-6"></div>
+            </div>
+        </mat-step>
+        <mat-step [stepControl]="" label="Survey Questions">
+            <div class="row mb-4">
+                <div class="col-md-4 nav-main-div p-0">
+                    <div id="sidebar">
+                        <h2 class="toolbarheader">Survey Questions</h2>
+                        <ul class="snav mainMenu">
+                            <li *ngFor="let item of optionList" (click)="openAddSurveyQA(item.action)" [draggable]
+                                [dragData]="item" [dragScope]="'survey'" [dragEnabled]="true">
+                                <img src="assets/icons/textfiels.svg" alt=""> {{item.name}}
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="col-md-8">
+
+                    <div class="dmain">
+                        <div class="dropheader">
+                            Header
+                        </div>
+                        <div class="scrolly darea" id="content" droppable [dragOverClass]="'drag-target-border'"
+                            [dropScope]="'survey'" [dragHintClass]="'drag-hint'" (onDrop)="surveyDrop($event)"
+                            [dropEnabled]="true">
+                            <p class="tooltiptext">Drag and drop a question here</p>
+
+                            <mat-card class="example-card qcard" *ngFor="let qa of surveyQAs; let i = index">
+                                <span class="float-right  trash-btn" (click)="removeQA(qa, i)"><i
+                                        class="os-icon os-icon-trash-2"></i></span>
+                                <mat-card-header>
+                                    <mat-card-title> {{qa.question}} </mat-card-title>
+                                </mat-card-header>
+                                <mat-card-content>
+                                    <p *ngIf="qa.question_type == 'text'">
+                                        <input class="form-control form-control-sm" />
+                                    </p>
+                                    <p *ngIf="qa.question_type == 'textarea'">
+                                        <textarea class="form-control form-control-sm"></textarea>
+                                    </p>
+                                    <div *ngIf="qa.question_type == 'checkbox'">
+                                        <p *ngFor="let val of qa.survey_question_value">
+                                            <input type="checkbox" class="form-control form-control-sm card-input"
+                                                id="qa_{{i}}" name="qa_{{i}}" />
+                                            <label for="qa_{{i}}">{{val.question_value || val}}</label>
+                                        </p>
+                                    </div>
+                                    <div *ngIf="qa.question_type == 'radio'">
+                                        <p *ngFor="let val of qa.survey_question_value">
+                                            <input type="radio" class="form-control form-control-sm card-input"
+                                                id="qa_{{i}}" name="qa_{{i}}" />
+                                            <label for="qa_{{i}}">{{val.question_value || val}}</label>
+                                        </p>
+                                    </div>
+                                    <p *ngIf="qa.question_type == 'select'">
+                                        <select class="form-control form-control-sm">
+                                            <option *ngFor="let val of qa.survey_question_value">
+                                                {{val.question_value || val}}
+                                            </option>
+                                        </select>
+                                    </p>
+                                </mat-card-content>
+                            </mat-card>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="card-footer">
+                <div class="d-inline float-right">
+                    <button type="button" class="btn btn-sm btn-p mr-2" (click)="close()">Save</button>
+                </div>
+            </div>
+        </mat-step>
+    </mat-horizontal-stepper>
+</mat-drawer-container>
