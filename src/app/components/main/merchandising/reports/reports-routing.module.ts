@@ -47,7 +47,7 @@ import { DailyOperationReportComponent } from './daily-operation-report/daily-op
 import { DeliveryReport } from './delivery-report/delivery-report.component';
 import { GeoApprovalsComponent } from './geo-approvals/geo-approvals.component';
 import { DeliveryReportsComponent } from './delivery-reports/delivery-reports.component';
-
+import { PalletReportComponent } from './pallet-report/pallet-report.component';
 const routes: Routes = [
   // { path: '', redirectTo: 'planogram-compliance', pathMatch: 'full' },
   {
@@ -98,7 +98,8 @@ const routes: Routes = [
       { path: 'ytd-kpi', component: YtdKpiComponent },
       { path: 'salesman-performance', component: SalesmanPerformanceComponent },
       { path: 'geo-approvals', component: GeoApprovalsComponent },
-      { path: 'delivery-export-report', component: DeliveryReportsComponent }
+      { path: 'delivery-export-report', component: DeliveryReportsComponent },
+      { path: 'pallet-report', component: PalletReportComponent },
     ],
   },
 ];

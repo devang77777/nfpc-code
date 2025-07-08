@@ -57,6 +57,7 @@ export class TotalDeliveryLive implements OnInit, AfterViewInit {
     "Merchandiser",
     'Salesman'
   ];
+  allChannelList: any = [];
   channelList = [];
   nsmList = [];
   asmList = [];
@@ -135,6 +136,7 @@ settings2 = {
   position: 'bottom',
 }
   public ngOnInit(): void {
+    this.getChannelList();
     this.filterForm = this.fb.group({
       startdate: [''],
       enddate: [''],
@@ -147,7 +149,8 @@ settings2 = {
       regionalManager: [[]],
       areaManager: [[]],
       salesman: [[]],
-      zone_id: [[]]
+      zone_id: [[]],
+      channel_code:[[]],
     });
 
 
@@ -257,7 +260,8 @@ settings2 = {
       start_date: form.startdate,
       end_date: form.enddate,
       branch_plant_code:codes,
-      salesman_id:form?.salesman.map((ids:any)=>ids.id)
+      salesman_id:form?.salesman.map((ids:any)=>ids.id),
+      channel_id: form.channel_code.length > 0 ? form.channel_code.map(i => i.id) : [],
     };
     // let salesman = [];
 
@@ -278,5 +282,11 @@ settings2 = {
 
 
    })
+  }
+
+   getChannelList(){
+    this.apiService.getAllCustomerCategory().subscribe((res: any) => {
+      this.allChannelList = res.data;
+    });
   }
 }

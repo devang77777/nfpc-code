@@ -38,7 +38,7 @@ import { CommonToasterService } from 'src/app/services/common-toaster.service';
 import { BaseComponent } from 'src/app/features/shared/base/base.component';
 import { DomSanitizer } from '@angular/platform-browser';
 import { OrderService } from '../../orders/order.service';
-
+import { FormDrawerService } from 'src/app/services/form-drawer.service';
 import { CreditNoteImagesComponent } from '../credit-note-images/credit-note-images.component';
 import { AllocatedGrvComponent } from 'src/app/components/dialogs/allocated-grv/allocated-grv.component';
 
@@ -104,7 +104,8 @@ export class CreditNoteDetailComponent extends BaseComponent
     route: ActivatedRoute,
     sanitizer: DomSanitizer,
     private orderService: OrderService,
-    private commonToasterService: CommonToasterService
+    private commonToasterService: CommonToasterService,
+    private fds: FormDrawerService
   ) {
     super('Credit Note');
     Object.assign(this, {
@@ -116,11 +117,13 @@ export class CreditNoteDetailComponent extends BaseComponent
       route,
       sanitizer,
       apiService,
+      fds
     });
     this.currentRole = localStorage.getItem('roleName');
   }
 
   public ngOnInit(): void {
+    this.currentRole = localStorage.getItem('roleName');
     this.itemTableHeaders = ITEM_CREDIT_NOTE_TABLE_HEADS;
 
   }
@@ -164,6 +167,8 @@ export class CreditNoteDetailComponent extends BaseComponent
         this.getDocument('print');
       }
     }
+
+    // this.closeDetailView();
   };
 
   getCreditStatus(status: any) {
@@ -257,9 +262,12 @@ export class CreditNoteDetailComponent extends BaseComponent
     this.router.navigate(['transaction/credit-note/edit', this.uuid]);
   }
   public closeDetailView(): void {
+    // this.fds.close();
+    // this.router.navigate(['transaction/credit-note']);
     this.isDetailVisible = false;
     this.detailsClosed.emit();
     this.dataService.sendData({ type: CompDataServiceType.CLOSE_DETAIL_PAGE });
+    // window.location.reload();
   }
   public openDeleteBox(): void {
     this.dialogRef

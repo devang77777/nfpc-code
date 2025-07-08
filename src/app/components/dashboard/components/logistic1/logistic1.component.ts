@@ -45,6 +45,7 @@ export class Logistic1Component implements OnInit, AfterViewInit {
     "Merchandiser",
     "Salesman",
   ];
+  allChannelList: any = [];
   channelList = [];
   nsmList = [];
   asmList = [];
@@ -68,7 +69,7 @@ export class Logistic1Component implements OnInit, AfterViewInit {
     throw new Error('Method not implemented.');
   }
   public ngOnInit(): void {
-
+    this.getChannelList();
     this.filterForm = this.fb.group({
       startdate: [''],
       enddate: [''],
@@ -77,6 +78,7 @@ export class Logistic1Component implements OnInit, AfterViewInit {
       nsm: [[]],
       asm: [[]],
       region: [[]],
+      channel_code:[[]],
       supervisor: [[]],
       regionalManager: [[]],
       areaManager: [[]],
@@ -147,7 +149,9 @@ export class Logistic1Component implements OnInit, AfterViewInit {
       start_date: form.startdate,
       end_date: form.enddate,
       branch_plant_code:codes,
-      salesman_id:form?.salesman_id.map((ids:any)=>ids.id)
+      salesman_id:form?.salesman_id.map((ids:any)=>ids.id),
+      // channel_id: form.channel.map((ids:any)=>ids.id),
+      channel_id: form.channel_code.length > 0 ? form.channel_code.map(i => i.id) : [],
     }
     console.log(filterObj,"kl")
     this.apiService.newDashboardLogistic(filterObj).subscribe((res:any)=>{
@@ -347,4 +351,9 @@ console.log("daaaa",pendingQtyData,deliveredQtyData,cancelQtyData)
   });
 }
 
+ getChannelList(){
+    this.apiService.getAllCustomerCategory().subscribe((res: any) => {
+      this.allChannelList = res.data;
+    });
+  }
 }

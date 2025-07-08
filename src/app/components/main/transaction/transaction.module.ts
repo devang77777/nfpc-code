@@ -7,6 +7,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { TransactionRoutingModule } from './transaction-routing.module';
 import { OrdersModule } from './orders/orders.module';
 
+
 @NgModule({
   imports: [
     CommonModule,
@@ -18,7 +19,7 @@ import { OrdersModule } from './orders/orders.module';
 
   ],
   declarations: [
-  ],
+ ],
   providers: [
 
   ]

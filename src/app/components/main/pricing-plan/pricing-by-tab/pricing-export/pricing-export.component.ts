@@ -26,6 +26,7 @@ export class PricingExportComponent implements OnInit {
 
   ngOnInit(): void {
     this.exportForm = new FormGroup({
+      
       type: new FormControl(''),
       fileType: new FormControl(''),
       channelBy: new FormControl(''),
@@ -63,7 +64,7 @@ export class PricingExportComponent implements OnInit {
     this.apiService
       .exportCustomers({
         module: 'item-based-price',
-        criteria: this.export.type,
+        criteria: 'all',
         start_date: '',
         end_date: '',
         file_type: this.export.fileType,

@@ -48,8 +48,7 @@
           </app-column-filter>
 
         </th>
-        <td mat-cell *matCellDef="let element" (click)="openDetailView(element)">{{ element.created_at | date :"d MMM y
-          h:mm a" }}</td>
+        <td mat-cell *matCellDef="let element" (click)="openDetailView(element)">{{ element.created_at | date :"d MMM y h:mm a" }}</td>
       </ng-container>
       <ng-container matColumnDef="code">
         <th mat-header-cell *matHeaderCellDef>

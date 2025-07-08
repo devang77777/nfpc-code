@@ -1,0 +1,99 @@
+<div class="pl-3  items-table-box">
+    <div class="table-responsive">
+        <table mat-table  [dataSource]="itemSource" class="mat-elevation-z8 table table-hover">
+            <ng-container matColumnDef="salesman_code">
+                <th mat-header-cell *matHeaderCellDef>
+                    Salesman Code
+                </th>
+                <td mat-cell *matCellDef="let element"> {{ element?.salesman_code }} </td>
+            </ng-container>
+            <ng-container matColumnDef="salesman">
+                <th mat-header-cell *matHeaderCellDef>
+                    Salesman 
+                </th>
+                <td mat-cell *matCellDef="let element"> {{ element?.salesman }} </td>
+            </ng-container>
+            <ng-container matColumnDef="total_pallet_allocated">
+                <th mat-header-cell *matHeaderCellDef>
+                    Total Pallet Allocated
+                </th>
+                <td mat-cell *matCellDef="let element"> {{ element?.total_allocated }} </td>
+            </ng-container>
+            <ng-container matColumnDef="total_return">
+                <th mat-header-cell *matHeaderCellDef>
+                    Total Return
+                </th>
+                <td mat-cell *matCellDef="let element"> {{ element?.total_return }} </td>
+            </ng-container>
+            <ng-container matColumnDef="pending">
+                <th mat-header-cell *matHeaderCellDef>
+                   Pending
+                </th>
+                <td mat-cell *matCellDef="let element"> {{ element?.pending }} </td>
+            </ng-container>
+
+
+
+            <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+            <tr mat-row *matRowDef="let row; columns: displayedColumns; let i = index"></tr>
+        </table>
+        <table mat-table *ngIf="!checkIsTrue"  [dataSource]="itemSource" class="mat-elevation-z8 table table-hover">
+
+          <ng-container matColumnDef="driver_code">
+              <th mat-header-cell *matHeaderCellDef>
+                  Driver Code
+              </th>
+              <td mat-cell *matCellDef="let element"> {{ element?.driver_code }} </td>
+          </ng-container>
+          <ng-container matColumnDef="driver_name">
+              <th mat-header-cell *matHeaderCellDef>
+                  Driver Name
+              </th>
+              <td mat-cell *matCellDef="let element"> {{ element?.driver_name }} </td>
+          </ng-container>
+          <ng-container matColumnDef="load_qty_sum">
+              <th mat-header-cell *matHeaderCellDef>
+                  Load Qty Sum
+              </th>
+              <td mat-cell *matCellDef="let element"> {{ element?.load_qty_sum }} </td>
+          </ng-container>
+
+      <ng-container matColumnDef="invoiced">
+              <th mat-header-cell *matHeaderCellDef>
+                  Invoice
+              </th>
+              <td mat-cell *matCellDef="let element"> {{ element?.invoiced }} </td>
+          </ng-container>
+          <ng-container matColumnDef="unload_qty_sum">
+              <th mat-header-cell *matHeaderCellDef>
+                  Unload Qty Sum
+              </th>
+              <td mat-cell *matCellDef="let element"> {{ element?.unload_qty_sum }} </td>
+          </ng-container>
+          <ng-container matColumnDef="variance_qty">
+            <th mat-header-cell *matHeaderCellDef>
+              Variance Qty
+            </th>
+            <td mat-cell *matCellDef="let element"> {{ element?.variance_qty }} </td>
+        </ng-container>
+        <ng-container matColumnDef="difference">
+          <th mat-header-cell *matHeaderCellDef>
+            Difference
+          </th>
+          <td mat-cell *matCellDef="let element"> {{ element?.difference }} </td>
+      </ng-container>
+
+
+
+          <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+          <tr mat-row *matRowDef="let row; columns: displayedColumns; let i = index"></tr>
+      </table>
+    </div>
+    <!-- <mat-paginator
+  [length]="totalItems"
+  [pageSize]="pageSize"
+  [pageSizeOptions]="[5, 10, 20]"
+  (page)="onPaginateChange($event)">
+</mat-paginator> -->
+ <mat-paginator #palletReportPaginator pageSize="10" [pageSizeOptions]="[5,10,15,25,50,100]"></mat-paginator>
+</div>

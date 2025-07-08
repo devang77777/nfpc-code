@@ -9,9 +9,10 @@
         <section class="full-w">
           <mat-radio-group formControlName="type" name="type" [(ngModel)]="export.type">
             <mat-radio-button class="example-margin full-w" value="0">All Pricing</mat-radio-button>
-            <mat-radio-button class="example-margin full-w" value="1" (onchange)="onRadioChange()">Specified Pricing</mat-radio-button>
+            <mat-radio-button class="example-margin full-w" value="1" (change)="onRadioChange()">Specified Pricing</mat-radio-button>
           </mat-radio-group>
             <div class="col-12" *ngIf="export.type === '0' || export.type === '1' ">
+              <label for="status" ><b>Status:</b></label>
                     <mat-radio-group formControlName="spci_price" name="spci_price"
                       [(ngModel)]="export.spci_price">
                       <mat-radio-button class="example-margin full-w" value="2">Active</mat-radio-button>

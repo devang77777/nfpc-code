@@ -34,12 +34,20 @@
                           </app-multiautocomplete>
                       </div>
 
-
-
+                    
                         <!-- <app-multiautocomplete isSingle="false" [options]="zoneList"
                             [control]="filterForm.controls['zone_id']" text="name" id="id"
                             (selectionchanged)="applyFilter()" placeholder="Search zone">
                         </app-multiautocomplete> -->
+                    </div>
+                    <div class="col">
+                                <div class="mb-4">
+                                    <label for="">Service Channel</label>
+                                    <app-multiautocomplete isSingle="false" [options]="allChannelList"
+                                        [control]="filterForm.controls['channel_code']" text="name" id="id"
+                                        param1="id" param2="name" objectName="code-root" placeholder="Select Service Channel">
+                                    </app-multiautocomplete>
+                                </div>
                     </div>
                     <div class="col">
                       <!-- <app-multiautocomplete isSingle="false" [options]="regionList"

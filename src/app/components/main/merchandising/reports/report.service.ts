@@ -152,6 +152,14 @@ export class ReportService {
     return this.network.post(endpoints.apiendpoint.reports.ReportdeliveryData('delivery/report '),
       body);
   }
+  exportReportPalletData(body) {
+    return this.network.post(endpoints.apiendpoint.reports.ReportPalletData('palette/palette-report'),
+      body);
+  }
+  ReportPalletData(body) {
+    return this.network.post(endpoints.apiendpoint.reports.ReportPalletData('palette/palette-report'),
+      body);
+  }
 
   driverLoadedReportsData(body) {
     return this.network.post(endpoints.apiendpoint.reports.ReportData('driver_commission'),

@@ -85,6 +85,8 @@ export class ApiService {
     const url = `${this.baseUrl}/org-roles/list`;
     return this.http.get(url);
   }
+
+ 
   deleteOrganisationRole(uuid: string): Observable<any> {
     return this.http.get(`${this.baseUrl}/org-roles/delete/${uuid}`);
   }
@@ -113,8 +115,8 @@ export class ApiService {
   getAllInviteUser(filters?: { name?: string, role?: string }): Observable<any> {
      let params = new HttpParams();
 
-  if (filters.name) params = params.set('name', filters.name);
-  if (filters.role) params = params.set('role', filters.role);
+  if (filters?.name) params = params.set('name', filters.name);
+  if (filters?.role) params = params.set('role', filters.role);
 
     const url = `${this.baseUrl}/invite-user/list`;
     return this.http.get(url,{params});
@@ -144,6 +146,37 @@ export class ApiService {
     const url = `${this.baseUrl}/customer-based-price-mapping/activelist`;
     return this.http.post(url, body);
   }
+  getJdePushStatus(body): Observable<any> {
+    const url = `${this.baseUrl}/date-wise-total-invoice`;
+    return this.http.post(url, body);
+  }
+  exportJdePushStatus(body): Observable<any> {
+    const url = `${this.baseUrl}/date-wise-total-invoice`;
+    return this.http.post(url, body);
+  }
+  getJdePushStatusByDate(body): Observable<any> {
+    const url = `${this.baseUrl}/salesman-date-wise-total-invoice`;
+    return this.http.post(url, body);
+  }
+  getJdePushStatusFailedOrder(body): Observable<any> {
+    const url = `${this.baseUrl}/failed-date-wise-total-invoice`;
+    return this.http.post(url, body);
+  }
+  exportJdePushStatusByDate(body): Observable<any> {
+    const url = `${this.baseUrl}/salesman-date-wise-total-invoice`;
+    return this.http.post(url, body);
+  }
+  getJdePushStatusBySalesman(body): Observable<any> {
+    const url = `${this.baseUrl}/salesman-and-date-wise-total-invoice`;
+    return this.http.post(url, body);
+  }
+  exportJdePushStatusBySalesman(body): Observable<any> {
+    const url = `${this.baseUrl}/salesman-and-date-wise-total-invoice`;
+    return this.http.post(url, body);
+  }
+
+
+  
   getPricingByCustomer(body): Observable<any> {
     const url = `${this.baseUrl}/customer-based-price-mapping/list`;
     return this.http.post(url, body);
@@ -206,6 +239,11 @@ export class ApiService {
 
   deleteBranchPlant(uuid: string): Observable<any> {
     const url = `${this.baseUrl}/customer-warehouse-mapping-delete/${uuid}`;
+    return this.http.post(url,uuid);
+  }
+
+  deleteCustomerSupervisor(uuid: string): Observable<any> {
+    const url = `${this.baseUrl}/customer-supervisor-mapping/delete/${uuid}`;
     return this.http.post(url,uuid);
   }
 
@@ -468,6 +506,9 @@ export class ApiService {
   // Customer Category Manager
   public getAllCustomerCategory(): Observable<any> {
     return this.http.get(`${this.baseUrl}/customer-category/list`);
+  }
+  public getAllCustomerSupervisor(body:any): Observable<any> {
+    return this.http.post(`${this.baseUrl}/customer-supervisor-mapping/get-supervisor`,body);
   }
 
   public getAllCreatedByUserList(name?:string): Observable<any> {
@@ -2044,5 +2085,13 @@ export class ApiService {
   }
   public getHelperData(): Observable<any> {
     return this.http.get(`${this.baseUrl}/v1/helper/list`);
+  }
+  public  getUserHistory(body): Observable<any> {
+    const url = `${this.baseUrl}/invite-user/get-user-history`;
+    return this.http.post(url,body);
+  }
+  public  exportPalletReport(body): Observable<any> {
+    const url = `${this.baseUrl}/palette/palette-report`;
+    return this.http.post(url,body);
   }
 }

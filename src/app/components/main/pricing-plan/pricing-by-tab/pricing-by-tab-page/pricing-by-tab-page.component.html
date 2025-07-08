@@ -7,7 +7,7 @@
                     <i class="fa fa-bars" aria-hidden="true"></i>
                 </button>
                 <mat-menu #menu3="matMenu">
-                    <button mat-menu-item (click)="openImportPricing()" *ngIf="selectedIndex!==2">Import
+                    <button mat-menu-item (click)="openImportPricing()" >Import
                         Pricing</button>
                     <button mat-menu-item type="button" (click)="copyPricing()" *ngIf="selectedIndex===1">Copy
                         Pricing</button>
@@ -145,10 +145,11 @@
                             <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
                         </mat-table>
                     </div>
-                    <mat-paginator #paginator [pageSize]="pageSize"
+                     <mat-paginator #basePricePaginator pageSize="10" [pageSizeOptions]="[5,10,15,25,50,100]"></mat-paginator>
+                    <!-- <mat-paginator #basePricePaginator [pageSize]="pageSize"
                         [hidden]="apiResponse.pagination?.total_records < 10" [pageSizeOptions]="[10, 25, 50]"
                         [length]="apiResponse.pagination?.total_records" (page)="onPageFired($event)">
-                    </mat-paginator>
+                    </mat-paginator> -->
 
                 </div>
             </mat-tab>
@@ -327,11 +328,11 @@
                         <mat-row *matRowDef="let row; columns: customerDisplayedColumns;"></mat-row>
                     </mat-table>
                 </div>
-                <!-- <mat-paginator #customerPaginator pageSize="10" [pageSizeOptions]="[5,10,15,25,50,100]"></mat-paginator> -->
-                <mat-paginator #paginator [pageSize]="pageSize" [hidden]="apiResponse.pagination?.total_records < 10"
+                <mat-paginator #customerPaginator pageSize="10" [pageSizeOptions]="[5,10,15,25,50,100]"></mat-paginator>
+                <!-- <mat-paginator #paginator [pageSize]="pageSize" [hidden]="apiResponse.pagination?.total_records < 10"
                     [pageSizeOptions]="[10, 25, 50]" [length]="customerDataSource?.filteredData?.length"
                     (page)="onPageFired($event)">
-                </mat-paginator>
+                </mat-paginator> -->
             </mat-tab>
             <mat-tab label="Active Customer Price">
                 <div class="card">
@@ -465,6 +466,8 @@
   objectName="code-root"
   placeholder="Select Status">
 </app-multiautocomplete>
+ <!-- <mat-error *ngIf="statusFormControl.hasError('required')">Please select status
+                                        </mat-error> -->
 
                                     
                                 </div>
@@ -534,12 +537,12 @@
                             <mat-cell *matCellDef="let element"> {{(element?.itembaseprice -
                                 element?.customerprice).toFixed(2)}} </mat-cell>
                         </ng-container>
-                         <!-- <ng-container matColumnDef="itemExcise">
+                         <ng-container matColumnDef="exciseTax">
                             <mat-header-cell *matHeaderCellDef>Excise Price</mat-header-cell>
                             <mat-cell *matCellDef="let element"> {{element?.itemexcise }} </mat-cell>
-                        </ng-container> -->
+                        </ng-container>
                         <ng-container matColumnDef="customerPrice">
-                            <mat-header-cell *matHeaderCellDef>Customer Price </mat-header-cell>
+                            <mat-header-cell *matHeaderCellDef >Customer Price </mat-header-cell>
                             <mat-cell *matCellDef="let element"> {{element?.customerprice}} </mat-cell>
                         </ng-container>
                         <ng-container matColumnDef="startDate">
@@ -549,60 +552,37 @@
                         <ng-container matColumnDef="endDate">
                             <mat-header-cell *matHeaderCellDef> End Date </mat-header-cell>
                             <mat-cell *matCellDef="let element"> {{element?.end_date}} </mat-cell>
-                             <!-- <mat-cell *matCellDef="let element">
-  <ng-container *ngIf="editingElement !== element; else editMode">
-    <span (click)="startEdit(element)">{{ element?.end_date }}</span>
-  </ng-container>
-  <ng-template #editMode>
-    <input
-      type="date"
-      [value]="element.end_date"
-      (blur)="stopEdit()"
-      (change)="onEndDateChange($event.target.value, element)"
-      class="form-control"
-    />
-  </ng-template>
-</mat-cell> -->
-<!-- <mat-cell *matCellDef="let element">
-  <ng-container *ngIf="editingElement !== element; else editMode">
-    <span (click)="startEdit(element)">
-      {{ element?.end_date || 'Click to edit' }}
-    </span>
-  </ng-container>
-  <ng-template #editMode>
-    <input
-      type="date"
-      [value]="element.end_date"
-      (blur)="stopEdit()"
-      (change)="onEndDateChange($event.target.value, element)"
-      class="form-control"
-    />
-  </ng-template>
-</mat-cell> -->
-
 
                         </ng-container>
-                         <!-- <ng-container matColumnDef="modifiedDate">
+                         <ng-container matColumnDef="modifiedDate">
                             <mat-header-cell *matHeaderCellDef> Modified Date </mat-header-cell>
-                            <mat-cell *matCellDef="let element"> {{element?.start_date}} </mat-cell>
-                        </ng-container> -->
+                            <mat-cell *matCellDef="let element"> {{element?.modifieddate}} </mat-cell>
+                        </ng-container>
+                        <ng-container matColumnDef="modifyBy">
+                            <mat-header-cell *matHeaderCellDef> Modified By </mat-header-cell>
+                            <mat-cell *matCellDef="let element"> {{element?.modifiedby}} </mat-cell>
+                        </ng-container>
                         <ng-container matColumnDef="primaryKey">
                             <mat-header-cell *matHeaderCellDef> Price Key </mat-header-cell>
                             <mat-cell *matCellDef="let element"> {{element?.key}} </mat-cell>
                         </ng-container>
-                        <mat-header-row *matHeaderRowDef="customerDisplayedColumns; sticky: true"></mat-header-row>
-                        <mat-row *matRowDef="let row; columns: customerDisplayedColumns;"></mat-row>
+                         <ng-container matColumnDef="status">
+                            <mat-header-cell *matHeaderCellDef> Status </mat-header-cell>
+                            <mat-cell *matCellDef="let element"> {{ element?.price_status ? (element.price_status.charAt(0).toUpperCase() + element.price_status.slice(1)) : '' }} </mat-cell>
+                        </ng-container>
+                        <mat-header-row *matHeaderRowDef="customerDisplayedColumns2; sticky: true"></mat-header-row>
+                        <mat-row *matRowDef="let row; columns: customerDisplayedColumns2;"></mat-row>
                     </mat-table>
                 </div>
-                <!-- <mat-paginator #customerPaginator pageSize="10" [pageSizeOptions]="[5,10,15,25,50,100]"></mat-paginator> -->
-                <mat-paginator #paginator [pageSize]="pageSize" [hidden]="apiResponse.pagination?.total_records < 10"
+                <mat-paginator #activePriceCustomerPaginator pageSize="10" [pageSizeOptions]="[5,10,15,25,50,100]"></mat-paginator>
+                <!-- <mat-paginator #activePriceCustomerPaginator [pageSize]="pageSize" [hidden]="apiResponse.pagination?.total_records < 10"
                     [pageSizeOptions]="[10, 25, 50]" [length]="activeCustomerPriceDataSource?.filteredData?.length"
                     (page)="onPageFired($event)">
-                </mat-paginator>
+                </mat-paginator> -->
             </mat-tab>
              <mat-tab label="Update End Date">
                 <div class="card">
-                    <form [formGroup]="activeCustomerPriceForm" class="custom-mat">
+                    <form [formGroup]="activeCustomerUpdateEndDatePriceForm" class="custom-mat">
                         <div class="card-body">
                             <div class="row">
                                 <div class="col-md-3">
@@ -635,7 +615,14 @@
                                         <option *ngFor="let cl of customerList" [value]="cl.customer_code">{{cl.name}}</option>
                                     </select> -->
                                 </div>
-                                <div class="col-md-3">
+                                   <div class="col-md-3">
+                                    <label for="">Service Channel</label>
+                                    <app-multiautocomplete isSingle="false" [options]="channelList"
+                                        [control]="sideFiltersForm.controls['channel_code']" text="name" id="id"
+                                        param1="id" param2="name" objectName="code-root" placeholder="Select Service Channel">
+                                    </app-multiautocomplete>
+                                </div>
+                                <!-- <div class="col-md-3">
                                     <label for="">Item</label>
                                     <angular2-multiselect [data]="items"
                                         [formControl]="activeCustomerPriceForm.controls['item_code']"
@@ -655,7 +642,28 @@
                                             </ng-template>
                                         </c-item>
                                     </angular2-multiselect>
+                                </div> -->
+                                 <div class="col-md-3">
+                                    <label for="">Item</label>
+                                    <angular2-multiselect [data]="items"
+                                        [formControl]="sideFiltersForm.controls['item_code']" [settings]="settings"
+                                        (onSelect)="onItemSelect($event)" (onDeSelect)="OnItemDeSelect($event)"
+                                        (onSelectAll)="onSelectAll($event)" (onDeSelectAll)="onDeSelectAll($event)">
+                                        <c-search>
+                                            <ng-template>
+                                                <input type="text" (input)="onSearch($event)" placeholder="Search Items"
+                                                    style="border: none;widmat-header-cell: 100%; height: 100%;outline: none;" />
+                                            </ng-template>
+                                        </c-search>
+                                        <c-item>
+                                            <ng-template let-item="item">
+                                                <label
+                                                    style="font-weight: 100 !important;margin-bottom:0 !important">{{item.itemName}}</label>
+                                            </ng-template>
+                                        </c-item>
+                                    </angular2-multiselect>
                                 </div>
+
 
                                 <div class="col-md-2">
                                     <div class="form-group smmatinput">
@@ -675,7 +683,7 @@
                                         <label for="">End Date</label>
                                         <input type="date" class="form-control form-control-sm"
                                             formControlName="end_date"
-                                            [min]="activeCustomerPriceForm.controls.start_date.value">
+                                            [min]="activeCustomerUpdateEndDatePriceForm.controls.start_date.value">
                                     </div>
                                 </div>
                                 <div class="col-md-2">
@@ -685,10 +693,25 @@
                                             formControlName="created_date">
                                     </div>
                                 </div>
+                                 <div class="col-md-2">
+                                    <label for="">Pricing Status</label>
+<app-multiautocomplete
+  isSingle="true"
+  [options]="statusOptions"
+  [control]="sideFiltersForm.controls['price_status']"
+  id="id"
+  param1="id"
+  param2="name"
+  objectName="code-root"
+  placeholder="Select Status">
+</app-multiautocomplete>
+
+                                    
+                                </div>
                                 <div class="col-md-2" style="margin-top: 25px;">
                                     <div class="form-group smmatinput">
                                         <button type="button" class="btn btn-sm btn-p"
-                                            (click)="showCustomerActiveList()">Submit</button>
+                                            (click)="showUpdateEndDate()">Submit</button>
                                     </div>
                                 </div>
                             </div>
@@ -696,14 +719,14 @@
                     </form>
                 </div>
                 <div class="form-group smmatinput" style="float: right;margin: 5px;"
-                    *ngIf="activeCustomerPriceDataSource">
+                    *ngIf="updateEndDatePriceDataSource">
                     <button type="button" class="btn btn-sm btn-p mr-3" (click)="openPopUp()">Update End Date</button>
                     <button type="button" class="btn btn-sm btn-p mr-3" (click)="resetFilter()">Reset</button>
                     <button type="button" class="btn btn-sm btn-p" (click)="exportActiveCustomerPricing('csv')">Export
                         CSV</button>
                 </div>
                 <div class="table-responsive">
-                    <mat-table [dataSource]="activeCustomerPriceDataSource"
+                    <mat-table [dataSource]="updateEndDatePriceDataSource"
                         class="mat-elevation-z8 table-hover table-scroll ">
                         <ng-container matColumnDef="itemCode">
                             <mat-header-cell *matHeaderCellDef> Item Code </mat-header-cell>
@@ -737,6 +760,10 @@
                             <mat-cell *matCellDef="let element"> {{(element?.itembaseprice -
                                 element?.customerprice).toFixed(2)}} </mat-cell>
                         </ng-container>
+                          <ng-container matColumnDef="exciseTax">
+                            <mat-header-cell *matHeaderCellDef>Excise Price</mat-header-cell>
+                            <mat-cell *matCellDef="let element"> {{element?.itemexcise }} </mat-cell>
+                        </ng-container>
                         <ng-container matColumnDef="customerPrice">
                             <mat-header-cell *matHeaderCellDef>Customer Price </mat-header-cell>
                             <mat-cell *matCellDef="let element"> {{element?.customerprice}} </mat-cell>
@@ -749,24 +776,39 @@
                             <mat-header-cell *matHeaderCellDef> End Date </mat-header-cell>
                             <mat-cell *matCellDef="let element"> {{element?.end_date}} </mat-cell>
                         </ng-container>
+                         <ng-container matColumnDef="modifiedDate">
+                            <mat-header-cell *matHeaderCellDef> Modified Date </mat-header-cell>
+                            <mat-cell *matCellDef="let element"> {{element?.modifieddate}} </mat-cell>
+                        </ng-container>
+                        <ng-container matColumnDef="modifyBy">
+                            <mat-header-cell *matHeaderCellDef> Modified By </mat-header-cell>
+                            <mat-cell *matCellDef="let element"> {{element?.modifiedby}} </mat-cell>
+                        </ng-container>
                         <ng-container matColumnDef="primaryKey">
                             <mat-header-cell *matHeaderCellDef> Price Key </mat-header-cell>
                             <mat-cell *matCellDef="let element"> {{element?.key}} </mat-cell>
                         </ng-container>
-                        <mat-header-row *matHeaderRowDef="customerDisplayedColumns; sticky: true"></mat-header-row>
-                        <mat-row *matRowDef="let row; columns: customerDisplayedColumns;"></mat-row>
+                        <ng-container matColumnDef="status">
+                            <mat-header-cell *matHeaderCellDef> Status </mat-header-cell>
+                            <mat-cell *matCellDef="let element">      {{ element?.price_status ? (element.price_status.charAt(0).toUpperCase() + element.price_status.slice(1)) : '' }} </mat-cell>
+                        </ng-container>
+                        <mat-header-row *matHeaderRowDef="customerDisplayedColumns3; sticky: true"></mat-header-row>
+                        <mat-row *matRowDef="let row; columns: customerDisplayedColumns3;"></mat-row>
                     </mat-table>
                 </div>
-                <!-- <mat-paginator #customerPaginator pageSize="10" [pageSizeOptions]="[5,10,15,25,50,100]"></mat-paginator> -->
-                <mat-paginator #paginator [pageSize]="pageSize" [hidden]="apiResponse.pagination?.total_records < 10"
-                    [pageSizeOptions]="[10, 25, 50]" [length]="activeCustomerPriceDataSource?.filteredData?.length"
+                  <mat-paginator #updateEndDateCustomerPaginator pageSize="10" [pageSizeOptions]="[5,10,15,25,50,100]"></mat-paginator>
+               <!-- <mat-paginator #updateEndDateCustomerPaginator [pageSize]="pageSize" [hidden]="apiResponse.pagination?.total_records < 10"
+                    [pageSizeOptions]="[10, 25, 50]" [length]="updateEndDatePriceDataSource?.filteredData?.length"
                     (page)="onPageFired($event)">
-                </mat-paginator>
+                </mat-paginator> -->
+                <!-- <mat-paginator [hidden]="apiResponse.pagination?.total_records < 10" (page)="onPageFired($event)"
+        [length]="apiResponse.pagination?.total_records" [pageSize]="pageSize" [pageSizeOptions]="[10, 25, 50]">
+      </mat-paginator> -->
 
                 <div *ngIf="showPopUp"  style="position:absolute;background:#0007;width:100%;height:100%;position:fixed;left:0;top:0;display:flex;justify-content:center;align-items:center;">
                    <div style="background:white;width:300px;height:330px;position:relative;">
                        <div style="border-bottom:1px solid silver;padding:10px;">Update Customer End Date</div>
-                       <div ><input type="date" class="form-control form-control-sm"
+                       <div ><input type="date" class="form-control form-control-sm" [min]="today"
                                            [(ngModel)]="updated_date"></div>
 
                        <div style="position:absolute; bottom:0;display:flex;border-top:1px solid silver;padding:10px; justify-content:flex-end;width:100%;">   <button type="button" class="btn btn-sm btn-p mr-3" (click)="updateDate()">Update</button>

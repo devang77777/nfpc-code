@@ -51,7 +51,16 @@ const routes: Routes = [
       import('./collection/collection.module').then(
         (module) => module.CollectionModule
       )
-  }
+  },
+   {
+    path: 'jde-push-status',
+    canActivate: [AuthGuard],
+    loadChildren: () =>
+      import('./jde-push-status/jde-push-status.module').then(
+        (module) => module.JdePushStatusModule
+      )
+  },
+   
 ];
 
 @NgModule({

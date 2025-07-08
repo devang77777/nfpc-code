@@ -1156,6 +1156,9 @@ export const endpoints = {
       ReportGeoData(report) {
         return `${endpoints.site.apiurl}/report/${report}`;
       },
+       ReportPalletData(body) {
+        return `${endpoints.site.apiurl}/palette/palette-report`;
+      },
       ReportdeliveryData(report) {
         return `${endpoints.site.apiurl}/${report}`;
       },

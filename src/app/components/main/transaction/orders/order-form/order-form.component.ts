@@ -1782,7 +1782,7 @@ export class OrderFormComponent implements OnInit, OnDestroy, AfterViewChecked {
       item_net: result && result.total_net ? this.checkIsCommaValue(result.total_net) : 0,
       total_net: result && result.net_gross ? this.checkIsCommaValue(result.net_gross) - this.checkIsCommaValue(result.discount) : 0,
       item_excise:
-        result && result.total_excise ? this.checkIsCommaValue(result.total_excise) : 0,
+        result && result.net_excise ? this.checkIsCommaValue(result.net_excise) : 0,
       total_excise:
         result && result.net_excise ? this.checkIsCommaValue(result.net_excise) : 0,
       item_grand_total: result && result.total ? this.checkIsCommaValue(result.total) : 0,
@@ -2159,7 +2159,20 @@ export class OrderFormComponent implements OnInit, OnDestroy, AfterViewChecked {
     this.changeDetectorRef.detectChanges();
   }
   
+  numberFormatString(value: any): string {
+  const num = this.checkIsCommaValue(value);
 
+  // ✅ Truncate to 3 decimal places (no rounding)
+  const truncated = Math.trunc(num * 1000) / 1000;
+
+  // ✅ Always return 3 digits after decimal
+  return truncated.toFixed(3);
+}
+
+numberFormatWithSymbolExcise(value: any): string {
+  const formatted = this.numberFormat(value); // get 3-decimal truncated value
+  return `${this.currencyCode} ${formatted}`; // or use Intl.NumberFormat if needed
+}
 }
 
 export const ITEM_ADD_FORM_TABLE_HEADS: ItemAddTableHeader[] = [

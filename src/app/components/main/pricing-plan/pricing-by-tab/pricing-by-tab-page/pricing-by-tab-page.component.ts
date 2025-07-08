@@ -18,6 +18,7 @@ import { id } from 'date-fns/locale';
 import { ColumnConfig } from 'src/app/interfaces/interfaces';
 import { SelectionModel } from '@angular/cdk/collections';
 import { OrderModel} from 'src/app/components/main/transaction/orders/order-models'
+import { ActiveCustomerPricingImportComponent } from '../active-customer-pricing-import/active-customer-pricing-import.component';
 @Component({
   selector: 'app-pricing-by-tab-page',
   templateUrl: './pricing-by-tab-page.component.html',
@@ -25,12 +26,15 @@ import { OrderModel} from 'src/app/components/main/transaction/orders/order-mode
 })
 
 export class PricingByTabPageComponent implements OnInit {
+  today: string = new Date().toISOString().split('T')[0];
+  list:any = []
+   showPopUp = false
   statusOptions = [
   { id: '1', name: 'Active' },
   { id: '2', name: 'In-Active' },
   { id: '3', name: 'Both' }
 ];
-
+  cus_id: any= [];
    @Output() public selectedRows: EventEmitter<any> = new EventEmitter<any>();
     public selections = new SelectionModel(true, []);
   editingElement: any = null;
@@ -38,27 +42,22 @@ export class PricingByTabPageComponent implements OnInit {
   filterForm: FormGroup;
   isColumnFilter = false;
 //   public filterColumns: ColumnConfig[] = [];
-// private allColumns: ColumnConfig[] = [
-//     { def: 'select', title: 'Select', show: true },
-//     { def: 'date', title: 'Order Date', show: true },
-//     { def: 'code', title: 'Order Number', show: true },
-//     { def: 'branch_plant_code', title: 'Branch Plant', show: true },
-//     { def: 'customer_code', title: 'Customer Code', show: true },
-//     { def: 'customer_lpo', title: 'Customer LPO', show: true },
-//     { def: 'name', title: 'Customer Name', show: true },
-//     { def: 'channel_name', title: 'Service Channel', show: true },
+// public customerDisplayedColumns: ColumnConfig[] = [
+//     { def: 'customerCode', title: 'Customer Code', show: true },
+//     { def: 'customerName', title: 'Customer Name', show: true },
+//     { def: 'itemCode', title: 'Item Code', show: true },
+//     { def: 'itemDesc', title: 'Item Desc', show: true },
+//     { def: 'uom', title: 'Uom', show: true },
+//     { def: 'basePrice', title: 'Base Price', show: true },
+//     { def: 'discountPrice', title: 'Discount Price', show: true },
+//     { def: 'modifiedDate', title: 'Modified Date', show: true },
 
-//     // { def: 'salesman_code', title: 'Salesman Code', show: true },
-//     // { def: 'salesman_name', title: 'Salesman Name', show: true },
-//     { def: 'delivery_date', title: 'Delivery Date', show: true },
-//     // { def: 'due', title: 'Due Date', show: true },
-//     { def: 'invoice', title: 'Invoice', show: true },
-//     { def: 'amount', title: 'Amount', show: true },
-//     { def: 'approval', title: 'Approval', show: true },
-//     { def: 'created', title: 'Created By', show: true },
-//     { def: 'status', title: 'Status', show: true, showInfo: true },
+//     { def: 'customerPrice', title: 'Customer Price', show: true },
+//     { def: 'startDate', title: 'Start Date', show: true },
+//     { def: 'endDate', title: 'End Date', show: true },
+//     { def: 'primaryKey', title: 'Primary Key', show: true },
 //   ];
-
+// public displayedColumnDefs: string[] = this.customerDisplayedColumns.map(c => c.def);
 
   warehouseList: any = [];
   channelList: any = [];
@@ -67,6 +66,7 @@ export class PricingByTabPageComponent implements OnInit {
   sideFiltersForm;
   customerForm;
   activeCustomerPriceForm;
+  activeCustomerUpdateEndDatePriceForm;
   selectedItems = [];
   settings = {};
   activeCustomerSettings = {};
@@ -77,7 +77,9 @@ export class PricingByTabPageComponent implements OnInit {
   public dataSource: MatTableDataSource<any>;
   public customerDataSource: MatTableDataSource<any>;
   public activeCustomerPriceDataSource: MatTableDataSource<any>;
+  public updateEndDatePriceDataSource: MatTableDataSource<any>;
   public customerFormControl: FormControl;
+  public statusFormControl: FormControl;
   public channelFormControl: FormControl;
   keyUp = new Subject<string>();
   channelKeyUp = new Subject<string>();
@@ -106,8 +108,11 @@ export class PricingByTabPageComponent implements OnInit {
   pageSize = PAGE_SIZE_10;
   // @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator;
   // @ViewChild(MatPaginator, { static: true }) customerPaginator: MatPaginator;
-  @ViewChild('paginator') paginator: MatPaginator;
+  // @ViewChild('paginator') paginator: MatPaginator;
   @ViewChild('customerPaginator') customerPaginator: MatPaginator;
+  @ViewChild('basePricePaginator') basePricePaginator: MatPaginator;
+  @ViewChild('activePriceCustomerPaginator') activePriceCustomerPaginator: MatPaginator;
+  @ViewChild('updateEndDateCustomerPaginator') updateEndDateCustomerPaginator: MatPaginator;
 
   // public columns: any[] = [
   //   { field: 'Item', value: 'item' },
@@ -115,15 +120,18 @@ export class PricingByTabPageComponent implements OnInit {
   //   { field: 'UOM', value: 'uom' },
   //   { field: 'Price', value: 'price' },
   //   { field: 'Start Date', value: 'start_date' },
-  //   { field: 'End Date', value: 'end_date' },'modifiedDate', 'exciseTax', 'itemExcise',
+  //   { field: 'End Date', value: 'end_date' },  'exciseTax','modifiedDate',
   // ];
   displayedColumns: string[] = ['item', 'branchplant', 'uom','channel', 'price', 'startDate', 'endDate'];
   customerDisplayedColumns: string[] = ['customerCode','customerName','itemCode','itemDesc','uom', 'basePrice', 'discountPrice','customerPrice', 'startDate', 'endDate','primaryKey']
+   customerDisplayedColumns2: string[] = ['customerCode','customerName','itemCode','itemDesc','uom', 'basePrice', 'discountPrice','exciseTax','customerPrice', 'startDate', 'endDate','primaryKey','modifiedDate','modifyBy','status']
+   customerDisplayedColumns3: string[] = ['customerCode','customerName','itemCode','itemDesc','uom', 'basePrice', 'discountPrice','exciseTax','customerPrice', 'startDate', 'endDate','primaryKey','modifiedDate','modifyBy','status']
   constructor(  public fb: FormBuilder,private api: ApiService, private detChange: ChangeDetectorRef, private masterService: MasterService, private router: Router, private dialog: MatDialog
   ) {
    }
 
   ngOnInit(): void {
+    // this.customerDisplayedColumns = [...this.customerDisplayedColumns];
     // this.displayedColumns = this.allColumns;
     // this.filterColumns = [...[...this.allColumns].splice(2)];
     this.filterForm = this.fb.group({
@@ -178,15 +186,28 @@ export class PricingByTabPageComponent implements OnInit {
       channel_code: new FormControl(),
       page: new FormControl(this.page),
       page_size: new FormControl(this.pageSize),
-      price_status: new FormControl([{ id: '3', name: 'Both' }]) 
+      price_status: new FormControl([{ id: '1', name: 'Active' }],Validators.required) 
 
     });
     this.customerForm = new FormGroup({
+      channel_code: new FormControl(),
       key: new FormControl(),
       page: new FormControl(this.page),
       page_size: new FormControl(this.pageSize)
     });
     this.activeCustomerPriceForm = new FormGroup({
+      channel_code: new FormControl(),
+      item_code: new FormControl([]),
+      uom_code: new FormControl(),
+      key: new FormControl(),
+      page: new FormControl(this.page),
+      page_size: new FormControl(this.pageSize),
+      start_date: new FormControl(),
+      end_date: new FormControl(),
+      created_date: new FormControl(),
+    });
+    this.activeCustomerUpdateEndDatePriceForm = new FormGroup({
+      channel_code: new FormControl(),
       item_code: new FormControl([]),
       uom_code: new FormControl(),
       key: new FormControl(),
@@ -198,6 +219,7 @@ export class PricingByTabPageComponent implements OnInit {
     });
     this.customerFormControl = new FormControl('', [Validators.required]);
     this.channelFormControl = new FormControl('', [Validators.required]);
+    this.statusFormControl = new FormControl('', [Validators.required]);
     this.api.getMasterDataLists().subscribe((result: any) => {
       this.filterItem = [...result.data.items];
       this.items = result.data.items.map(i => {
@@ -321,7 +343,7 @@ export class PricingByTabPageComponent implements OnInit {
     this.api.getPricingByItem(body).subscribe(res => {
       this.apiResponse = res;
       this.dataSource = new MatTableDataSource<any>(res.data);
-      // this.dataSource.paginator = this.paginator;
+      this.dataSource.paginator = this.basePricePaginator;
     });
   }
 
@@ -343,7 +365,7 @@ export class PricingByTabPageComponent implements OnInit {
     this.api.getPricingByCustomer(body).subscribe(res => {
       this.apiResponse = res;
       this.customerDataSource = new MatTableDataSource<any>(res.data);
-      // this.customerDataSource.paginator = this.customerPaginator;
+      this.customerDataSource.paginator = this.customerPaginator;
     });
   }
  
@@ -359,7 +381,7 @@ export class PricingByTabPageComponent implements OnInit {
   };
 
   const selectedStatusObj = sideFilterValue.price_status?.[0];
-  const statusLabel = selectedStatusObj?.id ? statusMap[selectedStatusObj.id] : 'both';
+  const statusLabel = selectedStatusObj?.id ? statusMap[selectedStatusObj.id] : 'active';
     // this.status_list = this.statusOptions
     let body = {
       uom_code: value.uom_code,
@@ -386,9 +408,55 @@ export class PricingByTabPageComponent implements OnInit {
     };
     // pricing_status: this.sideFiltersForm.get('price_status').value
     this.api.getActiveCustomer(body).subscribe(res => {
+        
       this.apiResponse = res;
       this.activeCustomerPriceDataSource = new MatTableDataSource<any>(res.data);
-      // this.activeCustomerPriceDataSource.paginator = this.paginator;
+      this.activeCustomerPriceDataSource.paginator = this.activePriceCustomerPaginator;
+    });
+  }
+
+   showUpdateEndDate() {
+    let value = this.activeCustomerUpdateEndDatePriceForm.value;
+     const sideFilterValue = this.sideFiltersForm.value;
+
+  const statusMap = {
+    '1': 'active',
+    '2': 'inactive',
+    '3': 'both'
+  };
+
+  const selectedStatusObj = sideFilterValue.price_status?.[0];
+  const statusLabel = selectedStatusObj?.id ? statusMap[selectedStatusObj.id] : 'active';
+    // this.status_list = this.statusOptions
+    let body = {
+      uom_code: value.uom_code,
+    //  item_code: this.sideFiltersForm.value.item_code?.length > 0 ? this.sideFiltersForm.value?.item_code[0]?.id : [],
+    item_code: this.sideFiltersForm.value.item_code?.length > 0 
+  ? [this.sideFiltersForm.value.item_code[0]?.id] 
+  : [],
+
+    //  item_code: [138],
+      // channel_id: this.sideFiltersForm.value.channel_code[0]?.id,
+      channel_id: this.sideFiltersForm.value.channel_code.length > 0 ? this.sideFiltersForm.value.channel_code.map(i => i.id) : [],
+      customer_name: this.customerFormControl.value?.name,
+      customer_code: this.customerFormControl.value?.customer_code,
+      customer_id: this.customerFormControl.value?.id,
+      key: this.activeCustomerUpdateEndDatePriceForm.value.key,
+      page: value.page,
+      page_size: value.page_size,
+      start_date: value.start_date,
+      end_date: value.end_date,
+      created_date: value.created_date,
+      //  price_status: this.sideFiltersForm.value.price_status,
+      price_status: statusLabel,  
+       export: 1
+    };
+    // pricing_status: this.sideFiltersForm.get('price_status').value
+    this.api.getActiveCustomer(body).subscribe(res => {
+        
+      this.apiResponse = res;
+      this.updateEndDatePriceDataSource = new MatTableDataSource<any>(res.data);
+      this.updateEndDatePriceDataSource.paginator = this.updateEndDateCustomerPaginator;
     });
   }
   onPageFired(data) {
@@ -411,7 +479,15 @@ export class PricingByTabPageComponent implements OnInit {
         page: this.page,
         page_size: this.pageSize
       });
-      this.showCustomerActiveList();
+       this.showCustomerActiveList();
+    }else if (this.selectedIndex === 3) {
+      this.activeCustomerUpdateEndDatePriceForm.patchValue({
+        page: this.page,
+        page_size: this.pageSize
+      });
+       this.showUpdateEndDate();
+      
+     
     }
 
   }
@@ -513,7 +589,7 @@ export class PricingByTabPageComponent implements OnInit {
   };
 
   const selectedStatusObj = sideFilterValue.price_status?.[0];
-  const statusLabel = selectedStatusObj?.id ? statusMap[selectedStatusObj.id] : 'both';
+  const statusLabel = selectedStatusObj?.id ? statusMap[selectedStatusObj.id] : 'active';
     if (type === 'csv') {
       type = 'file.csv';
     } else {
@@ -649,6 +725,14 @@ export class PricingByTabPageComponent implements OnInit {
       this.router.navigate(['pricing-plan/pricing', 'import']).then();
     } else if (this.selectedIndex === 0) {
       this.router.navigate(['pricing-plan/pricing', 'item-import']).then();
+    }else if (this.selectedIndex === 2) {
+      // this.router.navigate(['pricing-plan/pricing', 'item-import']).then();
+       const dialogRef = this.dialog.open(ActiveCustomerPricingImportComponent, {
+        data: {
+          module: 'customer-warehouse-mapping',
+          title: 'Customer Branch Plant'
+        }
+      });
     }
   }
   resetFilter() {
@@ -708,7 +792,7 @@ onEndDateChange(newValue: string, element: any) {
   this.api.getActiveCustomer(body).subscribe(
     (res) => {
       this.apiResponse = res;
-      this.activeCustomerPriceDataSource = new MatTableDataSource<any>(res.data);
+      this.updateEndDatePriceDataSource = new MatTableDataSource<any>(res.data);
       this.stopEdit(); // exit edit mode
     },
     (err) => {
@@ -739,26 +823,34 @@ public getSelectedRows() {
       ? this.selections.clear()
       : this.dataSource.data.forEach((row) => this.selections.select(row));
   }
-   showPopUp = false
+  
    openPopUp()
   {
     this.showPopUp = true
+    
   }
   closePopUp()
 {
   this.showPopUp = false
 }
-list:any = []
+
 updateDate()
 {
   this.api.updateCustomerDate({
-    "id":[this.list.map((dt:any)=>dt.id)],
-   "end_date":[this.updated_date]
+    // "id":this.list.map((dt:any)=>dt.id),
+    "id":(this.apiResponse as any)?.data?.map((dt:any)=>dt.id) || [],
+    // "id": [486792],
+   "end_date":this.updated_date
   }).subscribe((res)=>{
-    this.showCustomerActiveList()
+    this.showUpdateEndDate()
   this.showPopUp = false
+  this.showCustomerActiveList();
 
   })
 }
+
+  importActiveCustomerPricing(){
+    this.showPopUp = true
+  }
   updated_date:any
 }

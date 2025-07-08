@@ -1,0 +1,223 @@
+<section>
+    <div class="table-box">
+        <mat-tab-group class="bg-light mb-3 border custom1 cs2a" [(selectedIndex)]="selectedIndex"
+            >
+            <mat-tab label="JDE Push Status">
+                <div class="card">
+                    <form [formGroup]="activeCustomerPriceForm" class="custom-mat">
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-md-3">
+                                    <div class="form-group smmatinput">
+                                        <label for="">Start Date</label>
+                                        <input type="date" class="form-control form-control-sm"
+                                            formControlName="start_date">
+                                    </div>
+                                </div>
+                                <div class="col-md-3">
+                                    <div class="form-group smmatinput">
+                                        <label for="">End Date</label>
+                                        <input type="date" class="form-control form-control-sm"
+                                            formControlName="end_date"
+                                            [min]="activeCustomerPriceForm.controls.start_date.value">
+                                    </div>
+                                </div>
+                                 <div class="col-md-3" >
+                                <label for="">Salesman</label>
+                                <app-multiautocomplete isSingle="true" [options]="salesmanList"
+                                    [control]="sideFiltersForm.controls['salesman']" text="salesman_name" id="id"
+                                    placeholder="Search Salesman">
+                                </app-multiautocomplete>
+                            </div>
+                                 
+                                 <div class="col-md-3">
+                                <label for="">Division</label>
+                                <app-multiautocomplete isSingle="true" [options]="divisionList"
+                                    (selectionchanged)="filterWarehouse()"
+                                    [control]="sideFiltersForm.controls['division']" text="name" id="id"
+                                    placeholder="Select Division">
+                                </app-multiautocomplete>
+                               
+                            </div>
+                            <div class="col-md-3">
+                                <label for="">Warehouse</label>
+                                <app-multiautocomplete isSingle="false" [options]="warehouseList"
+                                    (selectionchanged)="filterVehicles()"
+                                    [control]="sideFiltersForm.controls['warehouse']" text="name" id="id"
+                                    param1="code" param2="name" objectName="code-root" placeholder="Select Warehouse">
+                                </app-multiautocomplete>
+                           
+                            </div>
+
+
+                                <div class="col-md-3">
+                                    <label for="">Service Channel</label>
+                                    <app-multiautocomplete isSingle="false" [options]="channelList"
+                                        [control]="sideFiltersForm.controls['channel_code']" text="name" id="id"
+                                        param1="id" param2="name" objectName="code-root" placeholder="Select Service Channel">
+                                    </app-multiautocomplete>
+                                </div>
+ 
+                                <div class="col-md-3" style="margin-top: 25px;">
+                                    <div class="form-group smmatinput">
+                                        <button type="button" class="btn btn-sm btn-p"
+                                            (click)="showCustomerActiveList()">Submit</button>
+                                             <button  *ngIf="showExportButton == true" type="button" class="btn btn-sm btn-p" style="margin-left: 10px;"
+                                            (click)="exportDateWiseTotalInvoice()">Export</button>
+                                    </div>
+                                </div>
+<!--                                 
+                                   <div class="col-md-4" style="margin-top: 25px;">
+                                    <div class="form-group smmatinput">
+                                        <button type="button" class="btn btn-sm btn-p"
+                                            (click)="showCustomerActiveList()">Submit</button>
+                                    </div>
+                                </div> -->
+
+                            </div>
+                        </div>
+                    </form>
+                </div>
+              
+                <div class="table-responsive">
+                    <mat-table [dataSource]="activeCustomerPriceDataSource" multiTemplateDataRows
+                        class="mat-elevation-z8 table-hover table-scroll ">
+                   
+                        <ng-container matColumnDef="customerCode">
+                            <mat-header-cell *matHeaderCellDef> Trx Date </mat-header-cell>
+                            <mat-cell *matCellDef="let element"  (click)="toggleRow(element)"> {{element?.date}}</mat-cell>
+                        </ng-container>
+                        <ng-container matColumnDef="customerName">
+                            <mat-header-cell *matHeaderCellDef> Total Orders  </mat-header-cell>
+                            <mat-cell *matCellDef="let element"  (click)="toggleRow(element)"> {{element?.total_orders}}
+                            </mat-cell>
+                        </ng-container>
+                        <ng-container matColumnDef="itemCode">
+                            <mat-header-cell *matHeaderCellDef> Pushed </mat-header-cell>
+                            <mat-cell *matCellDef="let element"  (click)="toggleRow(element)"> {{element?.pushed_orders}}
+                            </mat-cell>
+                        </ng-container>
+                        <ng-container matColumnDef="itemDesc">
+                            <mat-header-cell *matHeaderCellDef> In Queue </mat-header-cell>
+                            <mat-cell *matCellDef="let element"  (click)="toggleRow(element)"> {{element?.queued_orders}} </mat-cell>
+                        </ng-container>
+                        <ng-container matColumnDef="uom">
+                            <mat-header-cell *matHeaderCellDef> Failed </mat-header-cell>
+                            <mat-cell *matCellDef="let element" (click)="onStatusFailed(element)"> {{element?.failed_orders}}
+                            </mat-cell>
+                        </ng-container>
+
+                        <mat-header-row *matHeaderRowDef="customerDisplayedColumns2; sticky: true"></mat-header-row>
+                        <mat-row *matRowDef="let row; columns: customerDisplayedColumns2  "></mat-row>
+                         
+                        <ng-container matColumnDef="expandedDetail" >
+    <mat-cell *matCellDef="let element" [attr.colspan]="mainDisplayedColumns.length">
+      <div *ngIf="expandedElement === element" class="expanded-row-content">
+           <div class="d-flex justify-content-end">
+  <button *ngIf="showExportButton == true" type="button" class="btn btn-sm btn-p" (click)='exportSalesmanDateWiseTotalInvoice(element)'>
+    Export
+  </button>
+</div>
+        <mat-table [dataSource]="jdePushStatusDataSource" class="mat-elevation-z1 inner-table">
+
+          <ng-container matColumnDef="trxDate">
+            <mat-header-cell *matHeaderCellDef> Trx Date </mat-header-cell>
+            <mat-cell *matCellDef="let detail"> {{ detail.date }} </mat-cell>
+          </ng-container>
+
+          <ng-container matColumnDef="driverCode">
+            <mat-header-cell *matHeaderCellDef> Driver Code </mat-header-cell>
+            <mat-cell *matCellDef="let detail" (click)="toggleFunction(element,detail)"> {{ detail.salesman_code }} </mat-cell>
+          </ng-container>
+
+          <ng-container matColumnDef="totalOrders">
+            <mat-header-cell *matHeaderCellDef> Total Orders </mat-header-cell>
+            <mat-cell *matCellDef="let detail"> {{ detail.total_orders }} </mat-cell>
+          </ng-container>
+          <ng-container matColumnDef="pushed">
+            <mat-header-cell *matHeaderCellDef> Pushed </mat-header-cell>
+            <mat-cell *matCellDef="let detail"> {{ detail.pushed_orders }} </mat-cell>
+          </ng-container>
+          <ng-container matColumnDef="inQueue">
+            <mat-header-cell *matHeaderCellDef> In Queue </mat-header-cell>
+            <mat-cell *matCellDef="let detail"> {{ detail.queued_orders }} </mat-cell>
+          </ng-container>
+          <ng-container matColumnDef="failed">
+            <mat-header-cell *matHeaderCellDef> Failed </mat-header-cell>
+            <mat-cell *matCellDef="let detail"> {{ detail.failed_orders }} </mat-cell>
+          </ng-container>
+
+          <mat-header-row *matHeaderRowDef="detailDisplayedColumns"></mat-header-row>
+          <mat-row *matRowDef="let row; columns: detailDisplayedColumns" (click)="toggleFunction(element,row)"></mat-row>
+        </mat-table>
+              
+        <!-- <mat-paginator #jdePushStatusDatePaginator pageSize="5" [pageSizeOptions]="[5,10,15,25,50,100]"></mat-paginator> -->
+      </div>
+    </mat-cell>
+</ng-container>
+        <mat-row *matRowDef="let row; columns: ['expandedDetail'] " class="detail-row"  [ngClass]="{'hidden': expandedElement !== row}"></mat-row>
+
+             <ng-container matColumnDef="salesOrgDetails" >
+              
+    <mat-cell *matCellDef="let element" [attr.colspan]="mainDisplayedColumns.length">
+      <div *ngIf="openDriverElement === element" class="expanded-row-content">
+          <div class="d-flex justify-content-end">
+  <button *ngIf="showExportButton == true" type="button" class="btn btn-sm btn-p" (click)="exportSalesmanAndDateWiseTotalInvoice(element)">
+    Export
+  </button>
+</div>
+
+        <mat-table [dataSource]="jdePushStatusSalesmanDataSource" class="mat-elevation-z1 inner-table">
+
+          <ng-container matColumnDef="trxDate">
+            <mat-header-cell *matHeaderCellDef> Trx Date </mat-header-cell>
+            <mat-cell *matCellDef="let detail"> {{ detail.date }} </mat-cell>
+          </ng-container>
+
+          <ng-container matColumnDef="driverCode">
+            <mat-header-cell *matHeaderCellDef> Driver Code </mat-header-cell>
+            <mat-cell *matCellDef="let detail" > {{ detail.salesman_code }} </mat-cell>
+          </ng-container>
+
+          <ng-container matColumnDef="invoiceNumber">
+            <mat-header-cell *matHeaderCellDef > Invoice Number </mat-header-cell>
+            <mat-cell *matCellDef="let detail"> {{ detail.invoice_number }} </mat-cell>
+          </ng-container>
+
+          <ng-container matColumnDef="invoiceType">
+            <mat-header-cell *matHeaderCellDef> Invoice Type </mat-header-cell>
+            <mat-cell *matCellDef="let detail"> {{ detail.invoice_type }} </mat-cell>
+          </ng-container>
+          <ng-container matColumnDef="status">
+            <mat-header-cell *matHeaderCellDef> Status </mat-header-cell>
+            <mat-cell *matCellDef="let detail"> {{ detail.status }} </mat-cell>
+          </ng-container>
+
+          <mat-header-row *matHeaderRowDef="expandedColumns"></mat-header-row>
+          <mat-row *matRowDef="let row; columns: expandedColumns"></mat-row>
+        </mat-table>
+                
+         <!-- <mat-paginator #jdePushStatusSalesmanPaginator pageSize="5" [pageSizeOptions]="[5,10,15,25,50,100]"></mat-paginator> -->
+      </div>
+    </mat-cell>
+</ng-container>
+
+     <mat-row *matRowDef="let row; columns: ['salesOrgDetails'] " class="detail-row"  [ngClass]="{'hidden': openDriverElement !== row}"></mat-row>
+
+                    </mat-table>
+                </div>
+               
+                
+            </mat-tab>
+            
+          </mat-tab-group>
+         <!-- <div class="d-flex justify-content-end mt-2">
+  <button *ngIf="showExportButton == true" type="button" class="btn btn-sm btn-p">
+    Export
+  </button>
+</div> -->
+        <mat-paginator [hidden]="apiResponse.pagination?.total_records < 10" (page)="onPageFired($event)"
+            [length]="apiResponse.pagination?.total_records" [pageSize]="pageSize" [pageSizeOptions]="[10, 25, 50]">
+          </mat-paginator>
+    </div>
+</section> 

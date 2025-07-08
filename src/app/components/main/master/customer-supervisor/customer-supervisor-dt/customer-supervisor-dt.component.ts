@@ -13,6 +13,7 @@ import { CommonToasterService } from 'src/app/services/common-toaster.service';
 import { DeleteConfirmModalComponent } from 'src/app/components/shared/delete-confirmation-modal/delete-confirmation-modal.component';
 import { DataEditor } from 'src/app/services/data-editor.service';
 import { CompDataServiceType } from 'src/app/services/constants';
+import { startWith, map } from 'rxjs/operators';
 @Component({
   selector: 'app-customer-supervisor-dt',
   templateUrl: './customer-supervisor-dt.component.html',
@@ -24,10 +25,9 @@ export class CustomerSupervisorDtComponent implements OnInit {
     @Output() public updateTableData: EventEmitter<any> = new EventEmitter<any>();
    public selectedTab = 0;
     @Input() public isDetailVisible: boolean;
-private commonToasterService: CommonToasterService;
-private apiService: ApiService;
   branchPlantsList: any = [];
   supervisor: any = [];
+  supervisorList: any = [];
   public dataSource: MatTableDataSource<any>;
   tempDataSource: any = [];
   @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator;
@@ -51,9 +51,12 @@ private apiService: ApiService;
     { def: 'delete', title: ' ', show: true },
   ];
   filterForm: FormGroup;
-
+  filteredSupervisors: string[] = [];
   constructor(
  private dialogRef: MatDialog,
+private apiService: ApiService,
+private commonToasterService: CommonToasterService,
+
     private customerService: CustomerService,
     private dataService: DataEditor,
     public fb: FormBuilder,
@@ -62,17 +65,23 @@ private apiService: ApiService;
   }
 
   ngOnInit(): void {
+    this.getAllSupervisorList();
     // this.getSupervisorData()
     this.filterForm = this.fb.group({
       customer_code: [''],
       customer_name: [''],
-      supervisor_name: [''],
+      supervisor_id: [''],
       page: [this.apiResponse.pagination.page],
       page_size: [this.apiResponse.pagination.pageSize],
     });
     this.displayedColumns = this.allColumns;
     this.filterColumns = [...this.allColumns].splice(1);
     this.getAllBranchPlants();
+    this.filterForm.get('supervisor_id')!.valueChanges.pipe(startWith(''),map(value => this._filterSupervisor(value || ''))
+      )
+      .subscribe(filtered => {
+        this.filteredSupervisors = filtered;
+      });
   }
   getAllBranchPlants() {
 
@@ -121,14 +130,14 @@ private apiService: ApiService;
         data: { title: `Are you sure want to delete Customer Supervisor` }
       }).afterClosed().subscribe(data => {
         if (data.hasConfirmed) {
-          this.deletePlant(uuid);
+          this.supervisorDelete(uuid);
         }
       });
     }
   
-    public deletePlant(uuid: string): void {
+    public supervisorDelete(uuid: string): void {
       let delObj = { uuid, delete: true };
-      this.apiService.deleteBranchPlant(uuid).subscribe(result => {
+      this.apiService.deleteCustomerSupervisor(uuid).subscribe(result => {
         this.commonToasterService.showInfo("Deleted", "Customer Supervisor deleted sucessfully");
         this.updateTableData.emit(delObj);
         this.getAllBranchPlants();
@@ -141,6 +150,19 @@ private apiService: ApiService;
           this.detailsClosed.emit();
           this.dataService.sendData({ type: CompDataServiceType.CLOSE_DETAIL_PAGE });
         }
+
+  public getAllSupervisorList(){
+    this.apiService.getAllCustomerSupervisor('').subscribe((res: any) => {
+        this.supervisorList = res.data;
+    });
+  }
+ private _filterSupervisor(value: string): any[] {
+  const filterValue = value.toLowerCase();
+  return this.supervisorList.filter(supervisor =>
+    (`${supervisor.firstname} ${supervisor.lastname}`.toLowerCase().includes(filterValue))
+  );
+}
+
 }
 
 export interface BranchPlant {

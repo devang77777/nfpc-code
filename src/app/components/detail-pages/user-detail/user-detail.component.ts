@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, Output, EventEmitter, SimpleChanges } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter, SimpleChanges,ViewChild } from '@angular/core';
 import { CompDataServiceType } from 'src/app/services/constants';
 import { Users } from '../../datatables/users-dt/users-dt.component';
 import { DataEditor } from 'src/app/services/data-editor.service';
@@ -7,16 +7,26 @@ import { MatDialog } from '@angular/material/dialog';
 import { ApiService } from 'src/app/services/api.service';
 import { DeleteConfirmModalComponent } from '../../shared/delete-confirmation-modal/delete-confirmation-modal.component';
 import { CommonToasterService } from 'src/app/services/common-toaster.service';
+import { last } from '@amcharts/amcharts4/.internal/core/utils/Array';
+import { ColumnConfig } from 'src/app/interfaces/interfaces';
+import { MatTableDataSource } from '@angular/material/table';
+import { MatPaginator } from '@angular/material/paginator';
+import { Subscription } from 'rxjs';
 @Component({
   selector: 'app-user-detail',
   templateUrl: './user-detail.component.html',
   styleUrls: ['./user-detail.component.scss']
 })
 export class UserDetailComponent implements OnInit {
+  @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator;
+  private subscriptions: Subscription[] = [];
+  public dataSource: MatTableDataSource<any>;
+  public displayedColumns: ColumnConfig[] = [];
   @Output() public detailsClosed: EventEmitter<any> = new EventEmitter<any>();
   @Input() public user: Users | any;
   @Input() public isDetailVisible: boolean;
   @Output() public updateTableData: EventEmitter<any> = new EventEmitter<any>();
+  userList: any = [];
   public loginData = [];
   public selectedTab = 0;
   private dataService: DataEditor;
@@ -24,11 +34,25 @@ export class UserDetailComponent implements OnInit {
   private deleteDialog: MatDialog;
   private apiService: ApiService;
 
+  
+  private allColumns: ColumnConfig[] = [
+    { def: 'date', title: 'Date', show: true },
+    { def: 'user', title: 'User', show: true },
+    { def: 'status', title: 'Status', show: true }
+  ]
+
   constructor(apiService: ApiService, deleteDialog: MatDialog, dataService: DataEditor, formDrawer: FormDrawerService,public cts: CommonToasterService) {
     Object.assign(this, { apiService, deleteDialog, dataService, formDrawer ,cts});
+    this.dataSource = new MatTableDataSource<Users>();
   }
 
   ngOnInit(): void {
+    this.displayedColumns = this.allColumns;
+    let body = {
+      user_id: this.user?.user_id
+    };
+    this.getHistory();
+    
   }
 
   ngOnChanges(changes: SimpleChanges) {
@@ -61,6 +85,11 @@ export class UserDetailComponent implements OnInit {
     let ids = [];
     ids.push(this.user.uuid);
     let body = {
+      firstname: this.user.user.firstname,
+      lastname: this.user.user.lastname,
+      mobile: this.user.user.mobile,
+      role_id: this.user.role_id,
+      parent_id: this.user.user.parent_id,
       uuid: this.user.uuid,
       status: this.user.user_status,
     };
@@ -70,7 +99,7 @@ export class UserDetailComponent implements OnInit {
           this.cts.showSuccess('Success', 'Action Successfull');
           body['edit'] = true;
           this.user.status = this.user.status === 0 ? 1 : 0 || this.user.status === 1 ? 0 : 1;
-          
+         
         } else {
           this.cts.showError('Error', 'Action Un-successfull');
         }
@@ -81,12 +110,17 @@ export class UserDetailComponent implements OnInit {
     )
   }
   selectedTabChange(index) {
-
     switch (index) {
       case 2:
+        this.getHistory();
+        break;
+    }
+    switch (index) {
+      case 3:
         this.getUseroginInfo();
         break;
     }
+    
   }
 
   getUseroginInfo() {
@@ -112,4 +146,17 @@ export class UserDetailComponent implements OnInit {
       window.location.reload();
     });
   }
+
+   public getDisplayedColumns(): string[] {
+    return this.displayedColumns.filter(column => column.show).map(column => column.def);
+  }
+
+  getHistory(){
+    this.apiService.getUserHistory({ user_id: this.user?.user_id 
+}).subscribe((res) => {
+      this.dataSource = new MatTableDataSource<Users>(res.data);
+      this.dataSource.paginator = this.paginator;
+    })
+  }
 }
+// user_id: this.user?.user_id 

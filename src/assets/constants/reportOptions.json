@@ -103,5 +103,10 @@
         "label": "Delivery Export Report",
         "routeTo": "reports/delivery-export-report",
         "domain": "presales-prodmobiato"
+    },
+    {
+        "label": "Pallet Report",
+        "routeTo": "reports/pallet-report",
+        "domain": "presales-prodmobiato"
     }
 ]

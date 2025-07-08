@@ -1,10 +1,12 @@
 import { Component, OnInit, ViewChild, ElementRef, ChangeDetectorRef } from '@angular/core';
 import { FormGroup, Validators, FormControl, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { DatePipe } from '@angular/common';
+import { MatRadioChange } from '@angular/material/radio';
 import {CommonToasterService} from 'src/app/services/common-toaster.service';
 import { ApiService } from 'src/app/services/api.service';
 import { Router } from '@angular/router';
 import * as XLSX from 'xlsx';
+import { FormBuilder } from '@angular/forms';
 type AOA = any[][];
 @Component({
   selector: 'app-active-customer-pricing-export',
@@ -25,6 +27,7 @@ export class ActiveCustomerPricingExportComponent implements OnInit {
   private datePipe: DatePipe
   public data: any = [];
   constructor(datePipe: DatePipe,
+    private fb: FormBuilder,
     private apiService: ApiService,
     private cd: ChangeDetectorRef,
     private commonToasterService: CommonToasterService,) {
@@ -33,14 +36,29 @@ export class ActiveCustomerPricingExportComponent implements OnInit {
 
   ngOnInit(): void {
     // this.onRadioChange();
-    this.exportForm = new FormGroup({
+
+    this.exportForm = this.fb.group({
+    type: [this.export.type, Validators.required],
+    spci_price: [this.export?.spci_price || '2'],
+    customer_file: [null, Validators.required]
+  });
+
+  // Watch for form value changes and sync to export object
+  this.exportForm.get('type')?.valueChanges.subscribe(value => {
+    this.export.type = value;
+  });
+
+  this.exportForm.get('spci_price')?.valueChanges.subscribe(value => {
+    this.export.spci_price = value;
+  });
+    // this.exportForm = new FormGroup({
       
-      type: new FormControl(''),
-      fileType: new FormControl(''),
-      spci_price: new FormControl(''),
-      // startDate: new FormControl(''),
-      // endDate: new FormControl('')
-    })
+    //   type: new FormControl(''),
+    //   fileType: new FormControl(''),
+    //   spci_price: new FormControl(''),
+    //   // startDate: new FormControl(''),
+    //   // endDate: new FormControl('')
+    // })
 
   }
 
@@ -122,7 +140,7 @@ export class ActiveCustomerPricingExportComponent implements OnInit {
       this.selected = this.data[0][0];
       //console.log(this.selected);
     };
-
+   this.cd.detectChanges();
     reader.readAsBinaryString(target.files[0]);
   }
 // remove(filesList): void {
@@ -178,8 +196,14 @@ remove(file: File): void {
     // console.log(importdata);
   }
 
+
+  
 onRadioChange() {
   // Manually mark for check to force Angular to update the view
+  // this.exportForm.patchValue({
+  //   type: this.export.type,
+  //   spci_price: this.export.spci_price
+  // })
   this.cd.detectChanges();
 }
 

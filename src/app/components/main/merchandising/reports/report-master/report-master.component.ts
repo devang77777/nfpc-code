@@ -152,6 +152,9 @@ export class ReportMasterComponent extends BaseComponent implements OnInit, OnCh
     else if (this.activeRoute === 'delivery-export-report') {
       this.getDeliveryExportOperation();
     }
+    else if (this.activeRoute === 'pallet-report') {
+      this.getPalletReport();
+    }
     else if (this.activeRoute === 'geo-approvals') {
       this.getGeoApproval();
     }
@@ -207,6 +210,7 @@ export class ReportMasterComponent extends BaseComponent implements OnInit, OnCh
     let del_end_date = sideFilter.del_end_date ? sideFilter.del_end_date : null;
     const body = {
       "warehouse_id": sideFilter?.warehouse_id ? sideFilter?.warehouse_id?.length > 0 ? sideFilter.warehouse_id.map(i => i.id) : [] : [],
+      // "warehouse_id": [9],
       "order_number": sideFilter.order_number ? sideFilter.order_number : '',
       "customer_lpo": sideFilter.customer_lp ? sideFilter.customer_lp : '',
       "channel_id": sideFilter.channel_code.length > 0 ? sideFilter.channel_code.map(i => i.id) : [],
@@ -295,6 +299,44 @@ export class ReportMasterComponent extends BaseComponent implements OnInit, OnCh
         // const filetype = '.file' + body.export_type.toUpperCase();
         // this.apiService.downloadFile(res.data.file_url, filetype);
       }
+    });
+  }
+  getPalletReport() {
+    const sideFilter = this.sideFiltersForm.value;
+    let del_start_date = sideFilter.start_date ? sideFilter.start_date : null;
+    let del_end_date = sideFilter.end_date ? sideFilter.end_date : null;
+    console.log(sideFilter?.warehouse_id,"sideFilter?.warehouse_id")
+    let codes = []
+    sideFilter.warehouse_id.map(i => {
+
+       codes.push(i.itemName.split(" ")[0])
+    })
+    const body = {
+      "branch_plant_code": sideFilter?.warehouse_id ? sideFilter?.warehouse_id?.length > 0 ? codes : [] : [],
+      "start_date": del_start_date,
+      "end_date": del_end_date,
+      "export": 0,
+      "salesman_id": this.sideFiltersForm.value.salesman ? this.sideFiltersForm.value.salesman.lngth > 0 ? this.sideFiltersForm.value.salesman[0].id : '' : '',
+      "region_id": this.sideFiltersForm.value?.zone_id ? this.sideFiltersForm.value?.zone_id.length > 0 ? this.sideFiltersForm.value?.zone_id[0]?.id : [] : [],
+      "divison_id":this.sideFiltersForm.get('division').value.length > 0 ? this.sideFiltersForm.get('division').value.map(x => x.id) : [],
+     
+
+
+
+    };
+    this.ReportService.ReportPalletData(body).subscribe((res) => {
+      if (res?.status == true) {
+      console.log(res)
+      this.close();
+      this.dataEditor.sendData({
+        type: CompDataServiceType.REPORT_DATA,
+        request: body,
+        data: res.data,
+      });
+        // const filetype = '.file' + body.export_type.toUpperCase();
+        // this.apiService.downloadFile(res.data.file_url, 'csv');
+      }
+     
     });
   }
 
@@ -409,9 +451,10 @@ export class ReportMasterComponent extends BaseComponent implements OnInit, OnCh
     });
     
     this.apiService.getAllInviteUser().subscribe(res => {
-      const filterData = res.data.filter(i => i.user?.role?.name === 'ASM');
+      const filterData = res.data.filter(i => i.user?.role?.name === 'ASM' || []);
       const userData = [];
       filterData?.forEach(user => {
+        
         user.user.username = user?.user?.firstname + ' ' + user?.user?.lastname;
         userData.push(user.user);
       });
@@ -454,7 +497,7 @@ export class ReportMasterComponent extends BaseComponent implements OnInit, OnCh
 
     if (!this.reportNavOptions) {
       this.apiService.getReportNavOptions().subscribe((res: any[]) => {
-
+        // this.reportNavOptions = res.filter(i => i.domain == 'presales-prodmobiato' || i.domain == '');
         if (this.domain.split('.')[0] == 'presales-prodmobiato') {
           this.reportNavOptions = res.filter(i => i.domain == 'presales-prodmobiato' || i.domain == '');
         } else if (this.domain.split('.')[0] == 'prodmobiato') {
@@ -467,6 +510,7 @@ export class ReportMasterComponent extends BaseComponent implements OnInit, OnCh
           this.reportNavOptions = res;
         }
         this.mapReportOptions();
+        this.detChange.detectChanges();
         localStorage.setItem('reportbar', JSON.stringify(res));
       });
     } else {
@@ -1377,6 +1421,24 @@ export class ReportMasterComponent extends BaseComponent implements OnInit, OnCh
 
     }
   }
+  else if (this.activeRoute == 'pallet-report') {
+    let del_start_date1 = sideFilter.del_start_date ? sideFilter.del_start_date : null;
+    let del_end_date2 = sideFilter.del_end_date ? sideFilter.del_end_date : null;
+    let codes = []
+    sideFilter.warehouse_id.map(i => {
+     console.log(i,"in")
+       codes.push(i.itemName.split(" ")[0])
+    })
+     body = {
+      "start_date": del_start_date1,
+      "end_date": del_end_date2,
+      export: 1,
+      "branch_plant_code": sideFilter?.warehouse_id ? sideFilter?.warehouse_id?.length > 0 ? codes : [] : [],
+      "salesman_id": this.sideFiltersForm.value.salesman ? this.sideFiltersForm.value.salesman.lngth > 0 ? this.sideFiltersForm.value.salesman[0].id : '' : '',
+      "region_id": this.sideFiltersForm.value?.zone_id ? this.sideFiltersForm.value?.zone_id.length > 0 ? this.sideFiltersForm.value?.zone_id[0]?.id : [] : [],
+      "divison_id":this.sideFiltersForm.get('division').value.length > 0 ? this.sideFiltersForm.get('division').value.map(x => x.id) : [],
+    }
+  }
   else if (this.activeRoute == 'geo-approvals') {
     let del_start_date1 = sideFilter.start_date ? sideFilter.start_date : null;
     let del_end_date2 = sideFilter.end_date ? sideFilter.end_date : null;
@@ -1625,6 +1687,13 @@ export class ReportMasterComponent extends BaseComponent implements OnInit, OnCh
     }
     else if (this.activeRoute == 'delivery-export-report') {
       this.ReportService.ReportdeliveryData(body).subscribe((res) => {
+        if (res?.status == true) {
+          this.apiService.downloadFile(res.data.file_url, filetype);
+        }
+      });
+    }
+    else if (this.activeRoute == 'pallet-report') {
+      this.ReportService.ReportPalletData(body).subscribe((res) => {
         if (res?.status == true) {
           this.apiService.downloadFile(res.data.file_url, filetype);
         }
@@ -1919,7 +1988,7 @@ export class ReportMasterComponent extends BaseComponent implements OnInit, OnCh
     return true;
   }
   checkIsActiveRoute() {
-    if (this.activeRoute == 'consolidated-load' || this.activeRoute == 'consolidated-return-load' || this.activeRoute == 'loading-chart-by-warehouse' || this.activeRoute == 'order-details' || this.activeRoute == 'daily-operation' ||this.activeRoute == 'delivery-report'||this.activeRoute == 'delivery-export-report'  ||this.activeRoute == 'geo-approvals' || this.activeRoute == 'sales-quantity' || this.activeRoute == 'sales-vs-grv' || this.activeRoute == 'loading-chart-final-by-route') {
+    if (this.activeRoute == 'consolidated-load' || this.activeRoute == 'consolidated-return-load' || this.activeRoute == 'loading-chart-by-warehouse' || this.activeRoute == 'order-details' || this.activeRoute == 'daily-operation' ||this.activeRoute == 'delivery-report'||this.activeRoute == 'delivery-export-report' || this.activeRoute == 'pallet-report'  ||this.activeRoute == 'geo-approvals' || this.activeRoute == 'sales-quantity' || this.activeRoute == 'sales-vs-grv' || this.activeRoute == 'loading-chart-final-by-route') {
       return 1;
     } else {
       if (this.activeRoute == 'truck-utilisation' || this.activeRoute == 'monthly-kpi' || this.activeRoute == 'ytd-kpi' || this.activeRoute == 'daily-crf' || this.activeRoute == 'difot' || this.activeRoute == 'daily-grv' || this.activeRoute == 'daily-spot-return' || this.activeRoute == 'daily-cancel-order' || this.activeRoute == 'timesheets' || this.activeRoute == 'salesman-performance' || this.activeRoute == 'driver-loaded-qty') {

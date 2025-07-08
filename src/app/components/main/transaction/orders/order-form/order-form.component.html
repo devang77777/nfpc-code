@@ -341,7 +341,9 @@
                           [value]="numberFormat(payloadItems[i]?.item_price)" disabled></td>
                       <td data-th="Excise" *ngIf="itemTableHeaders[7]?.show" class="stats-cell item-code"><input
                           type="text" class="form-control non-editable"
-                          [value]="numberFormat(payloadItems[i]?.item_excise)" disabled></td>
+                          [value]="numberFormatString(payloadItems[i]?.item_excise)" disabled></td>
+                       
+
                       <td data-th="Discount" *ngIf="itemTableHeaders[8]?.show" class="stats-cell item-code"><input
                           type="text" class="form-control non-editable"
                           [value]="numberFormat(payloadItems[i]?.item_discount_amount)" disabled>
@@ -399,7 +401,10 @@
                   <span class="stat-label">{{ stat.label }}</span>
                   <!-- <span
                     class="stat-value">{{ number_format(stat.value) | currency: currencyCode:"symbol" }}</span> -->
-                  <span class="stat-value">{{ numberFormatWithSymbol(stat.value) }}</span>
+                  <!-- <span class="stat-value">{{ numberFormatWithSymbol(stat.value) }}</span> -->
+                   <span class="stat-value" >
+ {{ stat.label === 'Excise' ? ('AED' + numberFormatString(stat.value)) : numberFormatWithSymbol(stat.value) }}
+</span>
                 </div>
                 <div>
                   <span class="stat-label final-total">{{ orderFinalStats?.grand_total.label }}</span>

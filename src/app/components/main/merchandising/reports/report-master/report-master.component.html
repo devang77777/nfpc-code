@@ -309,7 +309,7 @@
 
                           </ng-container>
                             <div class="mb-4"
-                                *ngIf="vehiclesList.length>0 && (activeRoute=='sales-quantity'  || activeRoute=='loading-chart-by-warehouse' || activeRoute=='loading-chart-final-by-route' || activeRoute==='truck-utilisation') || (activeRoute!=='sales-vs-grv' && activeRoute!='daily-operation' && activeRoute!='delivery-report' && activeRoute != 'delivery-export-report')">
+                                *ngIf="vehiclesList.length>0 && (activeRoute=='sales-quantity'  || activeRoute=='loading-chart-by-warehouse' || activeRoute=='loading-chart-final-by-route' || activeRoute==='truck-utilisation') || (activeRoute!=='sales-vs-grv' && activeRoute!='daily-operation' && activeRoute!='delivery-report' && activeRoute != 'delivery-export-report'  && activeRoute != 'pallet-report')">
                                 <label for="">Vehicle</label>
                                 <app-multiautocomplete isSingle="true" [options]="vehiclesList"
                                     [control]="sideFiltersForm.controls['van_id']" text="name" id="id"
@@ -322,7 +322,7 @@
                                 </app-multiautocomplete> -->
                                 
                             </div>
-                            <div class="mb-4" *ngIf="(activeRoute=='loading-chart-by-warehouse' || activeRoute=='loading-chart-final-by-route' || activeRoute=='sales-quantity') || (activeRoute!=='order-details' && activeRoute!=='geo-approval' && activeRoute!=='delivery-export-report' && activeRoute!=='sales-vs-grv' &&  activeRoute!='delivery-report' )">
+                            <div class="mb-4" *ngIf="(activeRoute=='loading-chart-by-warehouse' || activeRoute=='loading-chart-final-by-route' || activeRoute=='sales-quantity') || (activeRoute!=='order-details' && activeRoute!=='geo-approval' && activeRoute!=='delivery-export-report' && activeRoute!=='sales-vs-grv' &&  activeRoute!='delivery-report'  && activeRoute != 'pallet-report')">
                                 <label for="">Service Channel</label>
                                 <app-multiautocomplete isSingle="false" [options]="channelList"
                                     [control]="sideFiltersForm.controls['channel_code']" text="name" id="id"
@@ -699,7 +699,7 @@
                                 {{item.firstname}} {{item.lastname}}
                             </mat-option>
                         </mat-select>
-                        <a class="" *ngIf="intervalSelected.value == 'custom'"
+                        <a class="" *ngIf="intervalSelected?.value === 'custom'"
                             (click)="onChangeInterval(intervalSelected.value)"><i class="fa fa-cog"></i> Change Custom
                             Filter</a>
                         <!-- <mat-form-field style="width: 40% !important;" appearance="fill">

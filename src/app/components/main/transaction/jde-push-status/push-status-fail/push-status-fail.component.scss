@@ -1,0 +1,73 @@
+.customer-details-table{
+    width:100%;
+    float: left;
+    overflow: auto;
+    height: auto;
+    max-height: 85vh;
+    table {
+        border: unset !important;
+    }
+}
+.footer {
+    position: fixed;
+    width: 550px;
+    bottom: 0;
+    background-color: #00000008;
+    margin-bottom: 37px;
+    margin-left: 82%;
+  }
+button {
+    &:focus {
+        outline: 0;
+    }
+}
+  
+.dialog-close-btn {
+    float: right;
+    border: 0;
+    background-color: transparent;
+    margin-right: 20px;
+    color: #fff;
+
+    &:focus {
+        outline: 0;
+    }
+  }
+.heading {
+    background-color: var(--primary);
+    color: #fff;
+}
+
+::ng-deep tr.mat-mdc-header-row.mdc-data-table__header-row.cdk-header-row.ng-star-inserted {
+    th {
+        // color: black !important;
+        background:var(--primary);
+        height: 40px;
+        font-size: 13px;
+        color: #fff;
+        font-weight: 500;
+    }
+}
+
+::ng-deep .mat-mdc-tab-body-content {
+    height: 100%;
+    overflow-x: hidden;
+}
+
+::ng-deep .mat-mdc-dialog-surface.mdc-dialog__surface {
+    overflow-x: hidden;
+}
+
+::ng-deep .mat-mdc-dialog-surface.mdc-dialog__surface {
+    overflow: hidden;
+}
+
+.noData {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+}
+
+.d-flex{
+    padding: 10px;
+}

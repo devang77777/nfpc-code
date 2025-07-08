@@ -265,7 +265,7 @@
                                             </mat-form-field>
                                         </td>
                                         <td data-th="Price" class="stats-cell"><input type="text" class="form-control non-editable" [value]="payloadItems[i]?.item_price" disabled></td>
-                                        <td data-th="Excise" class="stats-cell"><input type="text" class="form-control non-editable" [value]="numberFormat(payloadItems[i]?.item_excise)" disabled>
+                                        <td data-th="Excise" class="stats-cell"><input type="text" class="form-control non-editable" [value]="numberFormatString(payloadItems[i]?.item_excise)" disabled>
                                         </td>
 
                                         <td data-th="Discount" class="stats-cell"><input type="text" class="form-control non-editable" [value]="numberFormat(payloadItems[i]?.item_discount_amount)" disabled></td>
@@ -312,7 +312,9 @@
                             <div class="overall-stats-table">
                                 <div *ngFor="let stat of objectValues(orderFinalStats)">
                                     <span class="stat-label">{{ stat.label }}</span>
-                                    <span class="stat-value">{{ numberFormatWithSymbol(stat.value) }}</span>
+                                    <!-- <span class="stat-value">{{ numberFormatWithSymbol(stat.value) }}</span> -->
+                                     {{ stat.label === 'Excise' ? ('AED' + numberFormatString(stat.value)) : numberFormatWithSymbol(stat.value) }}
+
                                 </div>
                                 <div>
                                     <span class="stat-label final-total">{{ orderFinalStats.grand_total.label }}</span>

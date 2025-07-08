@@ -91,7 +91,12 @@
         "active": "/debit-note",
         "icon": "fa fa-credit-card-alt"
     },
-   
+    {
+        "label": "JDE Push Status",
+        "routeTo": "transaction/jde-push-status",
+        "active": "/jde-push-status",
+        "icon": "os-icon os-icon-layers"
+    },
     {
         "label": "Route Item Grouping",
         "routeTo": "grouping/route-item-group",
