@@ -21,9 +21,22 @@
 
       <input placeholder="Search" style="border: none; width: 100%;" />
     </div>
+    <!-- <button
+  *ngFor="let menu of advanceSearchConfig"
+  mat-menu-item
+  (click)="check(menu.routeTo)"
+>
+  <i
+    class="os-icon os-icon-check mr-2"
+    aria-hidden="true"
+    [style.visibility]="routeService.isRouteActive(menu.routeTo) ? 'visible' : 'hidden'"
+  ></i>
+  {{ menu.label }}
+</button> -->
+
     <div class="ml-auto">
       <span *ngIf="is_trial == 1" class="trial-msg">You are currently in Free Plan.</span>
-      <a  (click)="openDrawer('profile')" class="orgname"><small><span>{{ org_name }}</span>
+      <a  (click)="openDrawer('profile')" class="orgname"><small><span style="color: #e0e0e0;">{{ org_name }}</span>
           <i class="fa fa-angle-down" aria-hidden="true"></i></small></a>
       <a (click)="openDrawer('settings')" class="mr-4"><i class="os-icon os-icon-ui-46"></i>
       </a>

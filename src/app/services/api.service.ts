@@ -117,6 +117,7 @@ export class ApiService {
 
   if (filters?.name) params = params.set('name', filters.name);
   if (filters?.role) params = params.set('role', filters.role);
+  // if (filters?.email) params = params.set('email', filters.email);
 
     const url = `${this.baseUrl}/invite-user/list`;
     return this.http.get(url,{params});
@@ -1244,6 +1245,13 @@ export class ApiService {
   {
     return this.http.post(
       `${this.baseUrl}/load-utilization`,
+      body
+    );
+  }
+  getOrderAnalysisData(body:any)
+  {
+    return this.http.post(
+      `${this.baseUrl}/order-count`,
       body
     );
   }

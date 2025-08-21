@@ -2,13 +2,14 @@ import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Router, NavigationEnd } from '@angular/router';
 import { SidenavService } from 'src/app/services/sidenav.service';
 import { FormDrawerService } from 'src/app/services/form-drawer.service';
-
+import { RouteService } from './route-active.service';
 @Component({
   selector: 'app-sidenav',
   templateUrl: './sidenav.component.html',
   styleUrls: ['./sidenav.component.scss']
 })
 export class SidenavComponent implements OnInit, OnDestroy {
+  menu : any;
   activePath: string;
   settingsNav: boolean;
   panelOpenState;
@@ -19,7 +20,8 @@ export class SidenavComponent implements OnInit, OnDestroy {
   constructor(
     private router: Router,
     private sidenavService: SidenavService,
-    private fds: FormDrawerService
+    private fds: FormDrawerService,
+    public routeService: RouteService
   ) {
     this.sidenavService.softwareSidebar();
 
@@ -141,5 +143,9 @@ export class SidenavComponent implements OnInit, OnDestroy {
       return false;
     }
   }
+
+    isRouteActiveExact(path: string): boolean {
+  return this.router.url === path;
+}
 
 }

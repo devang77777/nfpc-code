@@ -16,16 +16,16 @@ import { CashierReceiptService } from '../cashier-receipt.service';
 })
 export class AddCashierRecieptComponent implements OnInit {
   public isValidOverviewFormCheck: boolean = false;
-  public formType: string;
-  private fds: FormDrawerService;
-  public parentFormGroup: FormGroup
-  private apiService: ApiService;
+  public formType: string | any;
+  private fds: FormDrawerService | any;
+  public parentFormGroup: FormGroup | any;
+  private apiService: ApiService | any;
   public cashierReceiptFormData: any
-  public buttonTitle: string;
+  public buttonTitle: string | any;
   public isAddForm: boolean = false;
-  private dataEditor: DataEditor;
+  private dataEditor: DataEditor | any;
   public nextTabEnable: boolean = true;
-  public cashierReceiptOverviewData: any[] = [];
+  public cashierReceiptOverviewData: any[] | any = [];
   public currentIndex: number = 0;
   private subscriptions: Subscription[] = [];
   depots: any;

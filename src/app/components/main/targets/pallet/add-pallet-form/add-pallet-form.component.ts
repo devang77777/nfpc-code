@@ -60,6 +60,8 @@ export class AddPalletFormComponent extends BaseComponent implements OnInit {
   settings = {};
   salesSetiings = {};
   items: any = [];
+  divisionList = [];
+  warehouseList: any = [];
   public filterItem = [];
   itemfilterValue = '';
   salesmans: any = [];
@@ -137,6 +139,17 @@ export class AddPalletFormComponent extends BaseComponent implements OnInit {
       }
     });
 
+    this.apiService.getLobs().subscribe(lobs => {
+      this.divisionList = lobs.data;
+    });
+
+     this.apiService.getMasterDataLists().subscribe((result: any) => {
+          this.filterItem = [...result.data.items];
+          this.items = result.data.items.map(i => {
+            return { id: i.id, itemName: i.item_code + ' - ' + i.item_name }
+          })
+          this.warehouseList = result?.data?.storage_location;
+        });
   }
 
   buildForm(data?) {
@@ -145,6 +158,8 @@ export class AddPalletFormComponent extends BaseComponent implements OnInit {
       item_id: new FormControl(),
       qty: new FormControl('', [Validators.required]),
       date: new FormControl('', [Validators.required]),
+      division: new FormControl('', [Validators.required]),
+      warehouse: new FormControl('', [Validators.required]),
       salesman_id: new FormControl(),
       type: new FormControl('0')
     });
@@ -186,6 +201,10 @@ export class AddPalletFormComponent extends BaseComponent implements OnInit {
       salesman_id: +model.salesman_id.find(i => i.id).id,
       item_id: +model.item_id.find(i => i.id).id,
       date: model.date,
+      // warehouse_id: model.warehouse.length > 0  ? model.warehouse.find(i => i.id).id : [],
+      warehouse_id: Array.isArray(model.warehouse) ? model.warehouse.map(i => i.id) : [],
+
+      divison_id: model.division.find(i => i.id).id,
       qty: model.qty,
       type: model.type === '0' ? 'add' : 'return'
     })
@@ -237,4 +256,5 @@ export class AddPalletFormComponent extends BaseComponent implements OnInit {
     this.detChange.detectChanges();
   }
 
+  
 }

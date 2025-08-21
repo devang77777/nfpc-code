@@ -12,15 +12,16 @@ import { constants } from 'buffer';
   styleUrls: ['./pallet-export.component.scss']
 })
 export class PalletExportComponent implements OnInit {
-
+  storageLocationFormControl = new FormControl([]);
+   storageLocation: any = [];
   pipe = new DatePipe('en-US');
   public exportForm: FormGroup;
-  storageLocationFormControl = new FormControl([]);
+  divisionFormControl = new FormControl([]);
   zoneFormControl = new FormControl([]);
-  storageLocation: any = [];
   zoneList = [];
   public export: any = [];
-
+  divisionList = [];
+  warehouseList = [];
   constructor(
     private datePipe: DatePipe,
     private apiService: ApiService,
@@ -36,15 +37,23 @@ export class PalletExportComponent implements OnInit {
       fileType: new FormControl(''),
       startDate: new FormControl(''),
       endDate: new FormControl(''),
-      storage_location_id: new FormControl(''),
       is_header_level: new FormControl(''),
+      is_division_level: new FormControl(''),
       exportBy: new FormControl(''),
+      storage_location_id: new FormControl(''),
       name: new FormControl(''),
     });
-    // this.apiService.getLocationStorageListById().subscribe(res => {
-    //   this.storageLocation = [...res.data];
-    // });
+   
     // this.getZoneList();
+      this.apiService.getLobs().subscribe(lobs => {
+      this.divisionList = lobs.data;
+    });
+     this.apiService.getLocationStorageListById().subscribe(res => {
+      this.storageLocation = [...res.data];
+    });
+
+   
+      
   }
   // getZoneList() {
   //   this.apiService.getAllZoneList().subscribe((res: any) => {
@@ -66,33 +75,39 @@ export class PalletExportComponent implements OnInit {
       criteria: this.export.type,
       start_date: this.export.startDate ? this.export.startDate : '',
       end_date: this.export.endDate ? this.export.endDate : '',
-      file_type: type,
+      file_type: 'csv',
       is_password_protected: 'no',
-      type: this.export.is_header_level,
-      // storage_location_id: this.exportForm.value.storage_location_id ? this.exportForm.value.storage_location_id : 0,
+      type: 1,
+      storage_location_id: this.exportForm.value.storage_location_id.length > 0 ? this.exportForm.value.storage_location_id.map(i => i.id) : [],
+      // type1: this.export.is_division_level,
+      // type:1
       // region_id: this.exportForm.value.name ? this.exportForm.value.name : 0,
     })
       .subscribe(
         (result: any) => {
           if (result.status) {
-            this.apiService.downloadFile(result.data.file_url, type);
+            this.apiService.downloadFile(result.data.file_url, 'csv');
             this.dataEditorService.sendMessage({ export: '' });
           }
         }
       );
   }
-  // selectionchangedstorageLocation() {
-  //   const storage = this.storageLocationFormControl.value;
-  //   this.exportForm.patchValue({
-  //     storage_location_id: storage[0].id
-  //   });
-  // }
-  // applyFilter() {
-  //   const zone = this.zoneFormControl.value;
-  //   this.exportForm.patchValue({
-  //     name: zone[0].id
-  //   });
-  // }
+   applyFilter() {
+    const division = this.divisionFormControl.value;
+    this.exportForm.patchValue({
+        division_id: division || null,
+       
+    });
+}
+  
+
+  
+   selectionchangedstorageLocation() {
+    const storage = this.storageLocationFormControl.value;
+    this.exportForm.patchValue({
+      storage_location_id: storage || null,
+    });
+  }
 
 }
 

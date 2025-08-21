@@ -130,6 +130,11 @@ export class DashboardPageComponent implements OnInit {
           index: 0
         },
         {
+          label: 'Order Analysis',
+          link: './order-analysis',
+          index: 4
+        },
+        {
           label: 'Live Tracking',
           link: './live-tracking',
           index: 1

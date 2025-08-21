@@ -1,0 +1,122 @@
+    <header>
+        <div class="container mt-3">
+            <div class="row">
+                <div class="col-md-12">
+                    <form [formGroup]="filterForm" >
+                        <div class="form-group row" style="padding: 5px;">
+                            <div class="col-sm-12">
+                                <div class="row">
+                                    <div class="col">
+
+                                        <input type="date" formControlName="startdate" (change)="applyFilter()"
+                                            class="form-control form-control-sm" placeholder="Start Date">
+                                    </div>
+                                    <div class="">
+                                        <span>_</span>
+                                    </div>
+                                    <div class="col">
+                                        <input type="date" formControlName="enddate" (change)="applyFilter()"
+                                            class="form-control form-control-sm" placeholder="End Date">
+                                    </div>
+
+                                    <div class="col">
+                                       
+                                    <app-multiautocomplete isSingle="false" [options]="allChannelList"
+                                        [control]="filterForm.controls['channel_code']" text="name" id="id"
+                                        param1="id" param2="name" objectName="code-root" placeholder="Select Service Channel">
+                                    </app-multiautocomplete>
+                                    </div>
+                                    <div class="col">
+                                        <!-- <app-multiautocomplete isSingle="false" [options]="regionList"
+                                            (selectionchanged)="applyFilter()" [control]="filterForm.controls['region']"
+                                            text="region_name" id="id" placeholder="Search region">
+                                        </app-multiautocomplete> -->
+                                       <app-multiautocomplete isSingle="false" [options]="warehouseList"
+                                              [control]="filterForm.controls['warehouse_id']" text="name" id="id"
+                                              param1="code" param2="name" objectName="code-root" placeholder="Select Warehouse">
+                                          </app-multiautocomplete>
+                                    </div>
+
+                                    <div class="col-1">
+                                        <button (click)="applyFilterOnClick()"type="submit" class="btn btn-sm btn-info mr-1">
+                                            <i class="fa fa-arrow-right" style="height: 27px;font-size: 26px;"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </header>
+<div class="dashboard" *ngIf="showExportButton == true" >
+  <!-- Left Sidebar -->
+  <div class="sidebar">
+    <div class="card order" >
+      <h3 >Order 📊</h3>
+      <p>Total Order {{dataSource2.totalOrder}}</p>
+      <span>AED  {{dataSource2.totalOrderAmount | number:'1.2-2'}}</span>
+    </div>
+    <div class="card approved">
+      <h3>Approved Order ✅</h3>
+      <p>Total Approved {{dataSource2.totalApprovedOrder}}</p>
+      <span>AED  {{dataSource2.totalApprovedOrderAmount | number:'1.2-2'}}</span>
+    </div>
+    <div class="card pending">
+      <h3>Pending Order ⏰</h3>
+      <p>Total Pending {{dataSource2.totalPendingOrder}}</p>
+      <span>AED  {{dataSource2.totalPendingOrderAmount | number:'1.2-2'}}</span>
+    </div>
+    <div class="card delivery">
+      <h3>Invoice 🚚</h3>
+      <p>Total Invoice {{dataSource2.totalInvoiceOrder}}</p>
+      <span>AED  {{dataSource2.totalInvoiceOrderAmount | number:'1.2-2'}}</span>
+    </div>
+    
+  </div>
+
+  <!-- Middle Chart Section -->
+  <div class="main-chart">
+    <h2 >Cases Delivered ('000)</h2>
+    <!-- <canvas id="orderTrendChart"></canvas> -->
+
+                    <!-- <p class="chart-heading" *ngIf="chartData.monthly">Cases Delivered ('000) </p> -->
+                    <div class="card">
+                        <div class="card-body" style="padding: 0px;">
+                            <div id="chartdiv1" style="width: 100%; height: 525px"></div>
+                        </div>
+                  
+                
+            </div>
+  </div>
+
+  <!-- Right Sidebar -->
+  <div class="metrics">
+    <div class="gauge">
+      <h2>Order Fullfill Rate</h2>
+      <!-- <div class="gauge-chart">
+        <span class="value">87.4</span>
+        <span class="unit">%</span>
+      </div> -->
+          <div class="card">
+                        <div class="card-body" style="padding: 0px;">
+                            <div id="chartdiv2" style="width: 100%; height:160px;"></div>
+                        </div>
+                  
+                
+            </div>
+    </div>
+    <div class="otif">
+      <h2  style="margin-bottom: 0px; margin-top: 0px;">Order Trends</h2>
+      
+                    <!-- <p class="chart-heading"  *ngIf="chartData.monthly">Vehicle Load Utilization</p> -->
+                    <div class="card">
+                        <div class="card-body" style="padding: 0px;">
+                            <div id="chartdiv4" style="width: 100%; height: 325px; padding: 0px;"></div>
+                        </div>
+                    </div>
+               
+    </div>
+  </div>
+</div>

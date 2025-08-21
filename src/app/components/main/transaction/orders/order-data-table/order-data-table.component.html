@@ -1,6 +1,7 @@
 <div class="scrolly">
   <ng-container *ngIf="advanceSearchRequest.length>0">
-    <app-search-criteria [data]="advanceSearchRequest" (change)="onChangeCriteria()" (close)="onCloseCriteria()">
+    <app-search-criteria [data]="advanceSearchRequest" (change)="onChangeCriteria()" (close)="onCloseCriteria()" [showExportButton]="true" (export)="exportData()">
+      
     </app-search-criteria>
   </ng-container>
   <div class="del-margin-bottom">
@@ -280,21 +281,20 @@
   <th mat-header-cell *matHeaderCellDef>
     <app-column-filter title="Created By" (changeSelected)="onColumnFilterOpen($event)"
       [selected]="selectedColumnFilter" controlName="created_id" (close)="onColumnFilter($event)">
-      
-      <mat-select multiple class="form-control form-control-sm" [formControl]="filterForm.get('created_id')">
-        <input class="form-control form-control-sm" [formControl]="filterForm.get('name')"
-        placeholder="Enter Name" type="text"/>
-        <mat-option *ngFor="let item of createdByList" [value]="item.id">
-          {{ item?.firstname }} {{ item?.lastname }}
-        </mat-option>
-      </mat-select>
+       <app-multiautocomplete isSingle="false" [options]="createdByList"
+                                        [control]="filterForm.controls['created_id']" text="name" id="id"
+                                        param1="firstname" param2="lastname" objectName="code-root" placeholder="Select Name">
+                                    </app-multiautocomplete>
     </app-column-filter>
   </th>
   <td mat-cell *matCellDef="let element" (click)="openDetailView(element)">
     <ng-container>
-      <span>
-        {{ element?.order_created_user?.id }} 
-      </span>
+     <span>
+{{ (element?.order_created_user?.firstname && element?.order_created_user?.lastname) 
+    ? (element?.order_created_user?.firstname + ' ' + element?.order_created_user?.lastname) 
+    : element?.order_created_user?.id }}
+
+</span>
     </ng-container>
 
   </td>

@@ -14,6 +14,7 @@ type AOA = any[][];
   styleUrls: ['./active-customer-pricing-export.component.scss']
 })
 export class ActiveCustomerPricingExportComponent implements OnInit {
+  public extractedData:any;
   @ViewChild('file') fileInput!: ElementRef<HTMLInputElement>;
   pipe = new DatePipe('en-US');
     private router: Router;
@@ -80,12 +81,14 @@ export class ActiveCustomerPricingExportComponent implements OnInit {
     //   type = 'xls';
     // }
     
-     const extractedData = (this.data || [])
-    .filter(row => row.length >= 2)
-    .map(row => ({
-      customer_code: row[0],
-      item_code: row[1],
-    }));
+   // Helper function to handle null/undefined/empty values
+ this.extractedData = (this.data || [])
+  .filter(row => row.length >= 1) // keep at least one column
+  .map(row => ({
+    customer_code: row[0] || "",   // first column
+    item_code: row[1] || ""        // second column (if missing, set to "")
+  }));
+
     this.apiService
       .exportCustomers({
         module: 'customer-based-price-active',
@@ -98,7 +101,7 @@ export class ActiveCustomerPricingExportComponent implements OnInit {
         is_password_protected: 'no',
         customer_id: '',
         item_code: '',
-        data: extractedData  
+        data: this.extractedData  
       })
       .subscribe(
         (result: any) => {

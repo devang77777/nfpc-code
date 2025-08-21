@@ -24,6 +24,7 @@ import { FormGroup, FormControl, FormBuilder } from '@angular/forms';
   styleUrls: ['./item-dt.component.scss']
 })
 export class ItemDtComponent implements OnInit {
+  selectedRow: any = null;
   @Output() public itemClicked: EventEmitter<any> = new EventEmitter<any>();
   @Output() public selectedRows: EventEmitter<any> = new EventEmitter<any>();
   @Input() public isDetailVisible: boolean;
@@ -59,6 +60,7 @@ export class ItemDtComponent implements OnInit {
     { def: 'item_description', title: 'Description', show: true },
     { def: 'brand', title: 'Brand', show: true },
     { def: 'category', title: 'Category', show: true },
+    { def: 'status', title: 'Status', show: true },
     // { def: 'item_group_name', title: 'Item Group', show: true },
     // { def: 'item_lob', title: 'Item Lob', show: true },
 
@@ -132,6 +134,7 @@ export class ItemDtComponent implements OnInit {
       item_name: [''],
       brand: [''],
       category: [''],
+      status: [''],
       page: [this.page],
       page_size: [this.pageSize]
     })
@@ -150,6 +153,7 @@ export class ItemDtComponent implements OnInit {
   }
 
   public openDetailView(data: Item): void {
+    this.selectedRow = data;
     this.isDetailVisible = true;
     this.itemClicked.emit(data);
     this.updateCollapsedColumns();

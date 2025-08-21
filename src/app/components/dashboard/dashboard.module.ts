@@ -22,6 +22,7 @@ import { VisitFrequencyComponent } from './components/visit-frequency/visit-freq
 import { MonthlyKpiDashboardComponent } from './components/monthly-kpi-dashboard/monthly-kpi-dashboard.component';
 import { TotalDeliveryLive } from './components/total-delivery-live/total-delivery-live.component';
 import { Logistic1Component } from './components/logistic1/logistic1.component';
+import { OrderAnalysisDashboardComponent } from './components/order-analysis-dashboard/order-analysis-dashboard.component';
 @NgModule({
   declarations: [
     DashboardPageComponent,
@@ -38,7 +39,8 @@ import { Logistic1Component } from './components/logistic1/logistic1.component';
     VisitFrequencyComponent,
     MonthlyKpiDashboardComponent,
     TotalDeliveryLive,
-    Logistic1Component
+    Logistic1Component,
+    OrderAnalysisDashboardComponent
   ],
   imports: [
     CommonModule,

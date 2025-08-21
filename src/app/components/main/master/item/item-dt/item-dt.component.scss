@@ -78,3 +78,10 @@ filter-btn:focus {
     order: 3;
   }
 }
+
+::ng-deep .mat-row.selected-row td {
+  background-color: #212529 !important;
+  // background-color: #920023 !important;
+  color: #fafafa !important;
+}
+

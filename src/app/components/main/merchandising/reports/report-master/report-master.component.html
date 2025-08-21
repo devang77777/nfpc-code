@@ -1,4 +1,4 @@
-<mat-drawer-container class="formdrawer-container" hasBackdrop="false">
+<mat-drawer-container class="formdrawer-container" hasBackdrop="false" style="height: 100%; width: 100%;">
     <mat-drawer id="formDrawer" mode="over" position="start" #formDrawer class="border">
         <div style="min-width: 350px;">
             <div class="card">
@@ -41,7 +41,7 @@
                             [ngStyle]="{'padding-top':activeRoute=='order-details' || activeRoute=='daily-operation'?'20px':'0px'}"
                             *ngIf="checkIsActiveRoute()===1">
                             <div class="mb-4"
-                                *ngIf="activeRoute=='sales-quantity' || (activeRoute!='driver-loaded-qty' && activeRoute!='sales-vs-grv' && activeRoute!='daily-operation') && activeRoute!='delivery-report'">
+                                *ngIf="activeRoute=='sales-quantity' ||  (activeRoute!='driver-loaded-qty' && activeRoute!='sales-vs-grv' && activeRoute!='daily-operation') && activeRoute!='delivery-report'">
                                 <label for="">Region</label>
                                 <app-multiautocomplete isSingle="false" [options]="regionList"
                                     [control]="sideFiltersForm.controls['region']" (selectionchanged)="filterSalesman()"
@@ -107,7 +107,7 @@
                                         </div>
                                     </div>
                                 </div>
-                                <div class="mb-4">
+                                <div class="mb-4" >
                                     <label for="">Division</label>
                                     <app-multiautocomplete isSingle="true" [options]="divisionList"
                                         (selectionchanged)="filterWarehouse()"
@@ -267,7 +267,7 @@
                                     </div>
                                 </div>
                             </ng-container>
-                            <ng-container *ngIf="activeRoute=='delivery-report'">
+                            <ng-container *ngIf="activeRoute=='delivery-report' ">
                               <div>
                                 <div class="row">
                                     <div class="col-6">
@@ -309,7 +309,7 @@
 
                           </ng-container>
                             <div class="mb-4"
-                                *ngIf="vehiclesList.length>0 && (activeRoute=='sales-quantity'  || activeRoute=='loading-chart-by-warehouse' || activeRoute=='loading-chart-final-by-route' || activeRoute==='truck-utilisation') || (activeRoute!=='sales-vs-grv' && activeRoute!='daily-operation' && activeRoute!='delivery-report' && activeRoute != 'delivery-export-report'  && activeRoute != 'pallet-report')">
+                                *ngIf="vehiclesList.length>0 && (activeRoute=='sales-quantity'  || activeRoute=='loading-chart-by-warehouse' || activeRoute=='loading-chart-final-by-route' || activeRoute==='truck-utilisation') || (activeRoute!=='sales-vs-grv' && activeRoute!='daily-operation' && activeRoute!='delivery-report' && activeRoute != 'delivery-export-report' && activeRoute!='pallet-report' )">
                                 <label for="">Vehicle</label>
                                 <app-multiautocomplete isSingle="true" [options]="vehiclesList"
                                     [control]="sideFiltersForm.controls['van_id']" text="name" id="id"
@@ -322,15 +322,19 @@
                                 </app-multiautocomplete> -->
                                 
                             </div>
-                            <div class="mb-4" *ngIf="(activeRoute=='loading-chart-by-warehouse' || activeRoute=='loading-chart-final-by-route' || activeRoute=='sales-quantity') || (activeRoute!=='order-details' && activeRoute!=='geo-approval' && activeRoute!=='delivery-export-report' && activeRoute!=='sales-vs-grv' &&  activeRoute!='delivery-report'  && activeRoute != 'pallet-report')">
+                            <div class="mb-4" *ngIf="(activeRoute=='loading-chart-by-warehouse' || activeRoute=='loading-chart-final-by-route' || activeRoute=='sales-quantity') || (activeRoute!=='order-details' && activeRoute!=='geo-approval' && activeRoute!=='delivery-export-report' && activeRoute!=='sales-vs-grv' &&  activeRoute!='delivery-report' && activeRoute!='pallet-report')">
                                 <label for="">Service Channel</label>
                                 <app-multiautocomplete isSingle="false" [options]="channelList"
                                     [control]="sideFiltersForm.controls['channel_code']" text="name" id="id"
                                     param1="id" param2="name" objectName="code-root" placeholder="Select Service Channel">
                                 </app-multiautocomplete>
                             </div>
-                            <div class="mb-4" *ngIf="activeRoute!=='sales-vs-grv' && activeRoute!='daily-operation' && activeRoute!='delivery-report'">
+                            <div class="mb-4" *ngIf="activeRoute!=='sales-vs-grv' && activeRoute!='daily-operation' && activeRoute!='delivery-report' ">
                                 <label for="">Salesman</label>
+                                <!-- <app-multiautocomplete isSingle="true" [options]="salesmanList"
+                                    [control]="sideFiltersForm.controls['salesman']" text="salesman_name" id="id"
+                                    placeholder="Search Salesman">
+                                </app-multiautocomplete> -->
                                 <app-multiautocomplete isSingle="true" [options]="salesmanList"
                                     [control]="sideFiltersForm.controls['salesman']" text="salesman_name" id="id"
                                     placeholder="Search Salesman">
@@ -387,7 +391,7 @@
                             </div>
                             
                             <div class="mb-4"
-                                *ngIf="activeRoute!=='daily-grv' && activeRoute!=='daily-spot-return' && activeRoute!=='daily-crf' && activeRoute!=='truck-utilisation' && activeRoute!=='difot' &&  activeRoute!=='daily-cancel-order' &&  activeRoute!=='monthly-kpi' &&  activeRoute!=='ytd-kpi' && activeRoute!=='timesheets' && activeRoute !== 'salesman-performance' && activeRoute !== 'driver-loaded-qty'">
+                                *ngIf="activeRoute!=='daily-grv' && activeRoute!=='daily-spot-return' && activeRoute!=='daily-crf' && activeRoute!=='truck-utilisation' && activeRoute!=='difot' &&  activeRoute!=='daily-cancel-order' &&  activeRoute!=='monthly-kpi' &&  activeRoute!=='ytd-kpi' && activeRoute!=='timesheets' &&  activeRoute !== 'salesman-performance' && activeRoute !== 'driver-loaded-qty'">
                                 <label for="">Region</label>
                                 <app-multiautocomplete isSingle="false" [options]="regionList"
                                     [control]="sideFiltersForm.controls['region']" (selectionchanged)="filterSalesman()"
@@ -404,7 +408,7 @@
                                 <!-- (selectionchanged)="onSelectUSer()" -->
                             </div>
                             <div class="mb-4"
-                                *ngIf="activeRoute==='daily-crf' || activeRoute==='truck-utilisation'  || activeRoute==='difot' || activeRoute==='daily-cancel-order' ||  activeRoute==='monthly-kpi' ||  activeRoute==='timesheets' || activeRoute === 'salesman-performance' ||  (activeRoute !== 'driver-loaded-qty' &&  activeRoute!=='ytd-kpi')">
+                                *ngIf="activeRoute==='daily-crf' || activeRoute==='truck-utilisation'  || activeRoute==='difot' || activeRoute==='daily-cancel-order' ||  activeRoute==='monthly-kpi' ||  activeRoute==='timesheets'  || activeRoute === 'salesman-performance' ||  (activeRoute !== 'driver-loaded-qty' &&  activeRoute!=='ytd-kpi')">
                                 <label for="">Zone</label>
                                 <app-multiautocomplete isSingle="true" [options]="zoneList"
                                     [control]="sideFiltersForm.controls['zone_id']" text="name" id="id"
@@ -418,13 +422,30 @@
                                     placeholder="Select Vehicle">
                                 </app-multiautocomplete>
                             </div>
-                            <div class="mb-4" *ngIf="activeRoute === 'truck-utilisation' || activeRoute==='timesheets'">
+                            <div class="mb-4" *ngIf="activeRoute === 'truck-utilisation' || activeRoute==='timesheets'  ">
                                 <label for="">Salesman</label>
                                 <app-multiautocomplete isSingle="true" [options]="salesmanList"
                                     [control]="sideFiltersForm.controls['salesman']" text="salesman_name" id="id"
                                     placeholder="Search Salesman">
                                 </app-multiautocomplete>
                             </div>
+                              <!-- <div class="mb-4" *ngIf="activeRoute === 'pallet-report'">
+                                  <label for="">Division</label>
+                                  <app-multiautocomplete isSingle="true" [options]="divisionList"
+                                      (selectionchanged)="filterWarehouse()"
+                                      [control]="sideFiltersForm.controls['division']" text="name" id="id"
+                                      placeholder="Select Division">
+                                  </app-multiautocomplete>
+                              </div>
+
+                              <div class="mb-4" *ngIf="activeRoute === 'pallet-report'">
+                                  <label for="">Warehouse</label>
+                                  <app-multiautocomplete isSingle="false" [options]="warehouseList"
+                                      [control]="sideFiltersForm.controls['warehouse_id']" text="name" id="id"
+                                      param1="code" param2="name" objectName="code-root"
+                                      placeholder="Select Warehouse">
+                                  </app-multiautocomplete>
+                              </div> -->
                         </div>
                         <div class="card-body" style="padding-top:0px"
                             *ngIf="activeRoute === 'salesman-performance' || activeRoute == 'driver-loaded-qty'">
@@ -449,7 +470,7 @@
                             </div>
                         </div>
                         <div class="card-body" style="padding-top:0px"
-                            *ngIf="activeRoute==='salesman-performance' || activeRoute == 'driver-loaded-qty'">
+                            *ngIf="activeRoute==='salesman-performance' || activeRoute == 'driver-loaded-qty' ">
                             <div class="mb-4" *ngIf="sideFiltersForm.controls.reportType.value ==='1'">
                                 <label for="">Salesman</label>
                                 <app-multiautocomplete isSingle="true" [options]="salesmanList"
@@ -749,10 +770,10 @@
                     </div>
                 </div>
                 <div class="separator"></div>
-                <div class="heading-row pt-2 pb-2 mb-2 clearfix">
-                    <div class="page-header text-center">
-                        <h3 class="mb-0">{{ org_name }} </h3>
-                        <h2 class="reports-headerspacing font-weight-bold"> {{SelectedRport? SelectedRport:''}} </h2>
+                <div class="pt-2 pb-2 mb-2 clearfix" style="max-height: 70px;">
+                    <div class="page-header text-center" >
+                        <!-- <h3 class="mb-0">{{ org_name }} </h3> -->
+                        <h2 class="reports-headerspacing font-weight-bold" style="margin-bottom: 6px;"> {{SelectedRport? SelectedRport:''}} </h2>
                         <h4 class="mb-1" *ngIf="activeRoute != 'order-details'">
                             <span>From</span>&nbsp;{{sideFiltersForm.value.start_date}}&nbsp;<span>To</span>&nbsp;{{sideFiltersForm.value.end_date}}
                         </h4>

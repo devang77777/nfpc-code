@@ -1,63 +1,618 @@
 <div class="form-box">
-  <form [formGroup]="cashFormGroup" class="order-form custom-mat square">
+  <form [formGroup]="cashierInput" class="order-form custom-mat square">
     <div class="card-body active-form overview">
-      <div class=" row justify-content-between">
+      <div class=" row">
         <div class="col-md-4">
           <div class="form-group smmatinput">
             <label for="">Route</label>
-            <mat-form-field>
+            <app-multiautocomplete isSingle="true" [options]="routeList" [control]="cashierInput.get('route')"
+              (selectionchanged)="getSalesManList()" text="route_name" id="id" placeholder="Select Route"
+              objectName="root" param1="route_name">
+            </app-multiautocomplete>
+            <mat-error class="mt-1"
+              *ngIf="(cashierInput.get('route').dirty || cashierInput.get('route').touched) && cashierInput.get('route').hasError('required')">
+              Please select
+              route</mat-error>
+            <!-- <mat-form-field>
               <mat-label>Select Route</mat-label>
-              <mat-select (selectionChange)="checkChange(routeFormControl, 1)" [formControl]="routeFormControl"
+              <mat-select (selectionChange)="getSalesManList($event)" formControlName="route"
                 [disabled]="disableCondition.routeControl" class="form-control form-control-sm">
+                <input matInput type="text" [formControl]="searchRout" class="p-2 material-icons"
+                  (keyup)="filterListRoute($event.target.value)" placeholder="Search">
                 <mat-option *ngFor="let item of routeList" [value]="item.id">
                   {{ item.route_name }}
                 </mat-option>
               </mat-select>
-              <mat-error class="mt-1" *ngIf="routeFormControl.hasError('required')">Please select route</mat-error>
-            </mat-form-field>
+              <mat-error class="mt-1"
+                *ngIf="(cashierInput.get('route').dirty || cashierInput.get('route').touched) && cashierInput.get('route').hasError('required')">
+                Please select
+                route</mat-error>
+            </mat-form-field> -->
+          </div>
+        </div>
+        <!-- <div class="col-md-4">
+          <div class="form-group smmatinput">
+            <label for="">Salesman</label>
+            <app-multiautocomplete isSingle="true" [options]="salesmanList" [control]="cashierInput.get('salesman_id')"
+              text="salesman_code" (selectionchanged)="getSalesManId()" id="id" param1="salesman_code"
+              placeholder="Select Route" objectName="salesman-root">
+            </app-multiautocomplete>
+          </div>
+        </div> -->
+        <div class="col-md-4">
+          <div class="form-group">
+            <label for="">Date</label>
+            <input class="form-control fixWidthsame" type="date" formControlName="date" />
+            <mat-error class="mt-1"
+              *ngIf="(cashierInput.get('date').dirty || cashierInput.get('date').touched) && cashierInput.get('date').hasError('required')">
+              Please select Date
+            </mat-error>
+          </div>
+        </div>
+        <div class="col-md-2 populate-box d-flex justify-content-start align-items-center">
+          <div class="form-group">
+            <button class="btn btn-p mr-2 mt-4" [ngClass]="!cashierInput.valid ? 'btn-disable' : ''"
+              [disabled]="!cashierInput.valid" (click)="populateTable();">
+              Populate
+            </button>
           </div>
         </div>
       </div>
+      <div class=" row justify-content-between">
+        <div class="col-md-6">
+
+        </div>
+
+
+      </div>
 
     </div>
+  </form>
+  <div class="positionFix">
+    <div *ngIf="openTable" id="collapseOne" class="tabCls bottom-bordor" aria-labelledby="headingOne">
+      <div class="row p-4 invoice-return-table">
+        <div class="col-6">
+          <h3 class="m-0">Invoices</h3>
+          <table class="table table-bordered">
+            <tr class="col-3 p-0" style="background-color: #fbfafa!important;">
+              <th>Cash</th>
+              <th>Credit</th>
+              <!-- <th>PDC</th>
+              <th>CDC</th> -->
+              <th>Discrepancy</th>
+              <th>Total</th>
+            </tr>
+            <tr>
+              <td>{{recieptData?.CashAmount}}</td>
+              <td>{{recieptData?.CreditAmount}}</td>
+              <!-- <td>{{recieptData?.PDC}}</td>
+              <td>{{recieptData?.CDC}}</td> -->
+              <td>{{recieptData?.Discprency}}</td>
+              <td>{{recieptData?.Total}}</td>
+            </tr>
+          </table>
+        </div>
+        <div class="col-6">
+          <h3 class="m-0">Returns</h3>
+          <table class="table table-bordered ">
+            <tr class="col-3 p-0" style="background-color: #fbfafa!important;">
+              <th></th>
+              <th>Cash</th>
+              <th>Credit</th>
+              <th>Total</th>
+            </tr>
+            <tr>
+              <td>Good Return</td>
+              <td>{{returnsData?.good_cash}}</td>
+              <td>{{returnsData?.good_credit}}</td>
+              <td>{{returnsData?.good_row_sum}}</td>
+            </tr>
+            <tr>
+              <td>Bad Return</td>
+              <td>{{returnsData?.bad_cash}}</td>
+              <td>{{returnsData?.bad_credit}}</td>
+              <td>{{returnsData?.bad_row_sum}}</td>
+            </tr>
+            <tr>
+              <td>Total</td>
+              <td>{{returnsData?.cash_column_sum}}</td>
+              <td>{{returnsData?.credit_column_sum}}</td>
+              <td>{{returnsData?.total}}</td>
+            </tr>
+          </table>
 
-    <div [ngClass]="{ 'inactive-form': routeFormControl.invalid }">
-      <div class="card-body overview">
-        <div class=" row justify-content-between">
-          <div class="col-md-4">
-            <div class="form-group smmatinput">
-              <label for="">Salesman</label>
-              <mat-form-field>
-                <mat-select (selectionChange)="checkChange(NameFormControl, 2)" [formControl]="NameFormControl"
-                  [disabled]="disableCondition.NameControl" class="form-control form-control-sm">
-                  <mat-option *ngFor="let item of salesmanList" [value]="item.user_id">
-                    {{ item.user.firstname+' '+item.user.lastname }} - {{ item.salesman_code }}
-                  </mat-option>
-                </mat-select>
-                <mat-error class="mt-1" *ngIf="NameFormControl.hasError('required')">Please select salesman</mat-error>
-              </mat-form-field>
+        </div>
+      </div>
+      <div class="px-4 pb-4">
+        <div class="p-2 table-responsive cashier-receipt-table">
+          <h3 class="m-0">Payments :</h3>
+          <table class="table table-hover table-bordered">
+            <tr>
+              <th>Name</th>
+              <th>Cash</th>
+              <th>CDC</th>
+              <th>PDC</th>
+              <th>Credit Card</th>
+            </tr>
+            <tr>
+              <td>Cash Collection</td>
+              <td>{{CashInvoiceData?.cash }}</td>
+              <td>{{CashInvoiceData?.cdc }}</td>
+              <td>{{CashInvoiceData?.pdc }}</td>
+              <td>{{CashInvoiceData?.cc }}</td>
+            </tr>
+            <tr>
+              <td>Credit Collection </td>
+              <td>{{CollectionData?.cash | number : '1.2-2'}}</td>
+              <td>{{CollectionData?.cdc | number : '1.2-2'}}</td>
+              <td>{{CollectionData?.pdc | number : '1.2-2'}}</td>
+              <td>{{CollectionData?.cc | number : '1.2-2'}}</td>
+            </tr>
+            <tr>
+              <td>On Account</td>
+              <td>{{DownpaymentData?.cash }}</td>
+              <td>{{DownpaymentData?.cdc }}</td>
+              <td>{{DownpaymentData?.pdc }}</td>
+              <td>{{DownpaymentData?.cc }}</td>
+            </tr>
+          </table>
+
+        </div>
+      </div>
+      <!-- <div class="row pr-3">
+        <div class="col-12 d-flex justify-content-end py-2">
+          <button class="btn btn-sm btn-p mr-2" (click)="saveStatesCashier('Verified')"
+            [ngClass]="!cashierOutPut.valid ? 'btn-disable' : ''" [disabled]="!cashierOutPut.valid">Verified</button>
+          <button class="btn btn-sm btn-p mr-2" (click)="saveStatesCashier('Not Verified')"
+            [ngClass]="!cashierOutPut.valid ? 'btn-disable' : ''" [disabled]="!cashierOutPut.valid">Not
+            Verified</button>
+        </div>
+      </div> -->
+      <div class="endorsement-tab-grp">
+        <mat-tab-group mat-stretch-tabs="false" style="height: 810px;" mat-align-tabs="start" class
+          [selectedIndex]="SelectedIndex" class="tab-group-box" (selectedTabChange)="tabChanged($event)">
+
+          <mat-tab label='Today Invoice'>
+            <ng-container>
+
+              <div class="label-data-table row">
+                <div class="col-10 text-right d-flex justify-content-end pb-2 pr-5"></div>
+                <div class="col-2 text-right d-flex justify-content-end flex-column total-values pb-2 pl-5">
+                  <h6 class="text-left">
+                    <i>You are viewing 1 to {{invoices_total}} of {{invoices_total}}</i>
+                  </h6>
+                </div>
+              </div>
+
+              <section class="table-container mat-elevation-z8">
+                <div class="type-collections-details">
+                  <div class="">
+                    <div class="table-responsive cashier-receipt-table">
+                      <mat-table class="table table-hover" style="margin: 0px !important;" [dataSource]="paginateData"
+                        matSort class="mat-elevation-z8">
+                        <ng-container matColumnDef="trxn_no">
+                          <mat-header-cell *matHeaderCellDef mat-sort-header>
+                            Receipt No
+                          </mat-header-cell>
+                          <mat-cell *matCellDef="let element">
+                            <!-- {{ element?.collection_number }} -->
+                            {{ element?.collection.collection?.collection_number }}
+                          </mat-cell>
+                        </ng-container>
+                        <ng-container matColumnDef="trxn_date">
+                          <mat-header-cell *matHeaderCellDef mat-sort-header>
+                            Invoice Date
+                          </mat-header-cell>
+                          <mat-cell *matCellDef="let element">
+                            <!-- {{ element?.created_at | date: "d MMM y h:mm a" }} -->
+                            {{ element?.invoice_date | date: "d MMM y h:mm a" }}
+                          </mat-cell>
+                        </ng-container>
+                        <ng-container matColumnDef="trxn_date2">
+                          <mat-header-cell *matHeaderCellDef mat-sort-header>
+                            Receipt Date
+                          </mat-header-cell>
+                          <mat-cell *matCellDef="let element">
+                            <!-- {{ element?.created_at | date: "d MMM y h:mm a" }} -->
+                            {{ element?.collection?.collection?.created_at | date: "d MMM y h:mm a" }}
+                          </mat-cell>
+                        </ng-container>
+                        <ng-container matColumnDef="invoice_type">
+                          <mat-header-cell *matHeaderCellDef mat-sort-header>
+                            Invoice Type
+                          </mat-header-cell>
+                          <mat-cell *matCellDef="let element">
+                            {{ element?.order_type?.name }}
+                          </mat-cell>
+                        </ng-container>
+                        <ng-container matColumnDef="receipt_type">
+                          <mat-header-cell *matHeaderCellDef mat-sort-header>
+                            Receipt Type
+                          </mat-header-cell>
+                          <mat-cell *matCellDef="let element">
+                            {{ element?.collection?.collection?.payemnt_type == '1' ? 'Cash' :
+                            element?.collection?.collection?.payemnt_type == '2'?'Cheque':'' }}
+                          </mat-cell>
+                        </ng-container>
+                        <ng-container matColumnDef="type">
+                          <mat-header-cell *matHeaderCellDef mat-sort-header>
+                            Type
+                          </mat-header-cell>
+                          <!-- <mat-cell *matCellDef="let element">
+                                <span *ngIf="element?.type == 0 || element?.type == 1">Invoice</span>
+                                <span *ngIf="element?.type == 2">Debit Note</span>
+                                <span *ngIf="element?.type == 3">Credit Note</span>
+                              </mat-cell> -->
+                          <mat-cell *matCellDef="let element">
+                            <span *ngIf="element?.type == 'Invoice'">Invoice</span>
+                            <span *ngIf="element?.type == 'Debit Note'">Debit Note</span>
+                            <span *ngIf="element?.type == 'Credit Note'">Credit Note</span>
+                          </mat-cell>
+                        </ng-container>
+                        <ng-container matColumnDef="customer_code">
+                          <mat-header-cell *matHeaderCellDef mat-sort-header>
+                            Customer Code
+                          </mat-header-cell>
+                          <!-- <mat-cell *matCellDef="let element">
+                                {{element.customer?.customer_info?.customer_code}}
+                              </mat-cell> -->
+                          <mat-cell *matCellDef="let element">
+                            {{element?.customer_info_details?.customer_code}}
+                          </mat-cell>
+                        </ng-container>
+                        <ng-container matColumnDef="customer_name">
+                          <mat-header-cell *matHeaderCellDef mat-sort-header>
+                            Customer Name
+                          </mat-header-cell>
+                          <!-- <mat-cell *matCellDef="let element">
+                                {{element.customer?.firstname}} {{element.customer?.lastname}}
+                              </mat-cell> -->
+                          <mat-cell *matCellDef="let element">
+                            <span *ngIf="element?.type == 'Invoice'">{{element?.user?.firstname}}
+                              {{element?.user?.lastname}}</span>
+                            <span *ngIf="element?.type == 'Credit Note'">{{element?.customer?.firstname}}
+                              {{element?.user?.lastname}}</span>
+                          </mat-cell>
+                        </ng-container>
+                        <ng-container matColumnDef="rec_no">
+                          <mat-header-cell *matHeaderCellDef mat-sort-header>
+                            Invoice No.
+                          </mat-header-cell>
+                          <!-- <mat-cell *matCellDef="let element">
+                                <span *ngIf="element?.type == 0 || element?.type == 1">{{element?.invoice?.invoice_number}}</span>
+                                <span *ngIf="element?.type == 2">{{element?.debit_note?.debit_note_number}}</span>
+                                <span *ngIf="element?.type == 3">{{element?.credit_note?.credit_note_number}}</span>
+                              </mat-cell> -->
+                          <mat-cell *matCellDef="let element">
+                            <span *ngIf="element?.type == 'Invoice'">{{element?.invoice_number}}</span>
+                            <span *ngIf="element?.type == 'Debit Note'">{{element?.debit_note_number}}</span>
+                            <span *ngIf="element?.type == 'Credit Note'">{{element?.credit_note_number}}</span>
+                          </mat-cell>
+                        </ng-container>
+                        <ng-container matColumnDef="inv_amt">
+                          <mat-header-cell *matHeaderCellDef mat-sort-header>
+                            Inv. Amt
+                          </mat-header-cell>
+                          <!-- <mat-cell *matCellDef="let element">
+                                <span *ngIf="element?.type == 0 || element?.type == 1">{{element?.invoice?.grand_total}}</span>
+                                <span *ngIf="element?.type == 2">{{element?.debit_note?.grand_total}}</span>
+                                <span *ngIf="element?.type == 3">{{element?.credit_note?.grand_total}}</span>
+                              </mat-cell> -->
+                          <mat-cell *matCellDef="let element">
+                            {{element?.grand_total}}
+                          </mat-cell>
+                        </ng-container>
+                        <ng-container matColumnDef="paid">
+                          <mat-header-cell *matHeaderCellDef mat-sort-header>
+                            Paid
+                          </mat-header-cell>
+                          <!-- <mat-cell *matCellDef="let element">
+                                {{element?.amount}}
+                              </mat-cell> -->
+                          <mat-cell *matCellDef="let element">
+                            {{element?.collection?.amount?element?.collection?.amount:'0.00'}}
+                          </mat-cell>
+                        </ng-container>
+                        <!-- <ng-container matColumnDef="exercise_amount">
+                          <mat-header-cell *matHeaderCellDef mat-sort-header>
+                            Exercise Amount
+                          </mat-header-cell>
+                          <mat-cell *matCellDef="let element">
+                            {{ element?.exercise_amount }}
+                          </mat-cell>
+                        </ng-container> -->
+                        <!-- <ng-container matColumnDef="net_amount">
+                          <mat-header-cell *matHeaderCellDef mat-sort-header>
+                            Net Amount
+                          </mat-header-cell>
+                          <mat-cell *matCellDef="let element">
+                            {{ element?.net_amount }}
+                          </mat-cell>
+                        </ng-container> -->
+                        <ng-container matColumnDef="balance">
+                          <mat-header-cell *matHeaderCellDef mat-sort-header>
+                            Balance
+                          </mat-header-cell>
+                          <!-- <mat-cell *matCellDef="let element">
+                                {{element?.pending_amount}}
+                              </mat-cell> -->
+                          <mat-cell *matCellDef="let element">
+                            <!-- {{element?.collection?.pending_amount}} -->
+                            {{(+(element?.grand_total)-(+element?.collection?.amount)).toFixed(2)}}
+                          </mat-cell>
+                        </ng-container>
+                        <ng-container matColumnDef="stamp">
+                          <mat-header-cell *matHeaderCellDef mat-sort-header>
+                            Stamp
+                          </mat-header-cell>
+                          <mat-cell *matCellDef="let element">
+                            <select class="form-control form-select form-control-sm" value="{{element?.stamp}}"
+                              (change)="changeStamps(element.id,$event.target.value)"
+                              *ngIf="element?.type == 'Invoice'">
+                              <option value="1">Yes</option>
+                              <option value="0">No</option>
+                            </select>
+                            <select class="form-control form-select form-control-sm" [value]="0"
+                              *ngIf="element?.type != 'Invoice'" disabled>
+                              <option value="1">Yes</option>
+                              <option value="0">No</option>
+                            </select>
+                          </mat-cell>
+                        </ng-container>
+                        <mat-header-row *matHeaderRowDef="displayedColumns3; sticky: true"></mat-header-row>
+                        <mat-row *matRowDef="let row; columns: displayedColumns3"></mat-row>
+                      </mat-table>
+                      <!-- <mat-paginator [hidden]="collectionDetails.length < 5" (page)="onPageFired($event)"
+                        [length]="collectionDetails.length" [pageSize]="pageSize" [pageSizeOptions]="[5,10, 25, 50]">
+                      </mat-paginator> -->
+                    </div>
+                  </div>
+                </div>
+              </section>
+            </ng-container>
+          </mat-tab>
+
+          <mat-tab [label]='"Past Invoice" + " ("+ pendingCollection?.length +")"'>
+            <ng-container>
+              <div class="label-data-table row">
+                <div class="col-10 text-right d-flex justify-content-end pb-2 pr-5"></div>
+                <div class="col-2 text-right d-flex justify-content-end flex-column total-values pb-2 pl-5">
+                  <h6 class="text-left"><i>You are viewing 1 to {{pendingCollection?.length}} of
+                      {{pendingCollection?.length}}</i></h6>
+                </div>
+                <!-- <div class="col-4 text-left d-flex justify-content-start align-items-center">
+                  <div class="Clear-box row align-items-start">
+                    <div class="col-4 Clear-box-values p-0">
+                      <h6 class="text-left clrhvr" (click)="masterCashToggle()">Check All</h6>
+                      <p>|</p>
+                    </div>
+                    <div class="col-4 Clear-box-values p-0">
+                      <h6 class="text-left clrhvr" (click)="clearCashChecks()">Clear All</h6>
+                      <p>|</p>
+                    </div>
+                    <div class="col-4 Clear-box-values  values-width p-0">
+                      <h6 class="text-left clrhvr" (click)="updateCashCheck()">Update Checked</h6>
+                    </div>
+                  </div>
+                </div> -->
+
+                <!-- <div class="col-8 text-right d-flex justify-content-center pb-2 pr-5">
+                  <div class="cash-value-box row align-items-end">
+                    <div class="col-4 values p-0 mr-1">
+                      <h6 class="text-left">Total Amt:</h6>
+                      <p class="text-left">{{pendingCollection?.total_amount}}</p>
+                    </div>
+                    <div class="col-4 values values-width p-0 mr-1">
+                      <h6 class="text-left">Collected Amt:</h6>
+                      <p class="text-left">{{pendingCollection?.collected_amt}}</p>
+                    </div>
+
+                    <div class="col-4 values  values-width p-0">
+                      <h6 class="text-left">Remaining Amt:</h6>
+                      <p class="text-left">{{pendingCollection?.remaining_amt}}</p>
+                    </div>
+                  </div>
+                </div> -->
+              </div>
+
+              <section class="table-container mat-elevation-z8">
+                <div class="type-collections-details">
+                  <table class="table table-hover" mat-table [dataSource]="dataPendingSource">
+                    <ng-container matColumnDef="select">
+                      <th mat-header-cell *matHeaderCellDef>Select</th>
+                      <td mat-cell *matCellDef="let element"><mat-checkbox class="example-margin"
+                          (click)="$event.stopPropagation()" (change)="$event ? pastInvselection.toggle(element) : null"
+                          [checked]="pastInvselection.isSelected(element)"></mat-checkbox></td>
+                    </ng-container>
+
+                    <ng-container matColumnDef="receipt_no">
+                      <th mat-header-cell *matHeaderCellDef>Recpt
+                        No</th>
+                      <td mat-cell *matCellDef="let element">{{
+                        element?.receipt_no}} </td>
+                    </ng-container>
+
+                    <ng-container matColumnDef="invoice_no">
+                      <th mat-header-cell *matHeaderCellDef>Invoice
+                        No</th>
+                      <td mat-cell *matCellDef="let element">
+                        {{element?.invoice_no}} </td>
+                    </ng-container>
+                    <ng-container matColumnDef="salesman_code">
+                      <th mat-header-cell *matHeaderCellDef>Salesman</th>
+                      <td mat-cell *matCellDef="let element">[{{element?.salesman_code}}]
+                        {{element?.salesman_name}} </td>
+                    </ng-container>
+
+                    <ng-container matColumnDef="route_code">
+                      <th mat-header-cell *matHeaderCellDef>Route
+                        Code</th>
+                      <td mat-cell *matCellDef="let element">
+                        {{element?.route_code}} </td>
+                    </ng-container>
+
+                    <ng-container matColumnDef="customer_code">
+                      <th mat-header-cell *matHeaderCellDef>Customer</th>
+                      <td mat-cell *matCellDef="let element">
+                        [{{element?.customer_code}}]
+                        {{element?.customer_name}} </td>
+                    </ng-container>
+
+                    <ng-container matColumnDef="type">
+                      <th mat-header-cell *matHeaderCellDef>Type</th>
+                      <td mat-cell *matCellDef="let element">
+                        {{element?.type}} </td>
+                    </ng-container>
+
+                    <ng-container matColumnDef="amount">
+                      <th mat-header-cell *matHeaderCellDef>Amount</th>
+                      <td mat-cell *matCellDef="let element">
+                        {{element?.amount}} </td>
+                    </ng-container>
+
+                    <ng-container matColumnDef="collected_amount">
+                      <th mat-header-cell *matHeaderCellDef>Collected
+                        Amount</th>
+                      <td mat-cell *matCellDef="let element">
+                        {{element?.collected_amount}} </td>
+                    </ng-container>
+
+                    <ng-container matColumnDef="remaining_amount">
+                      <th mat-header-cell *matHeaderCellDef>Remaining
+                        Amount</th>
+                      <td mat-cell *matCellDef="let element"><input type="number" class="form-control form-control-sm"
+                          [value]="element.remaining_amount" disabled>
+                      </td>
+                    </ng-container>
+
+                    <ng-container matColumnDef="is_stemp">
+                      <th mat-header-cell *matHeaderCellDef class="cashstemp">Is
+                        Stamp</th>
+                      <td mat-cell *matCellDef="let element">
+                        <select class="form-control form-select form-control-sm" value="{{element.is_stemp}}"
+                          (change)="updateCashCheck(element.invoice_id,$event.target.value)">
+                          <!-- (change)="upadteStamp(element.invoice_id,$event.target.value)"> -->
+                          <option value="1">Yes</option>
+                          <option value="0">No</option>
+                        </select>
+                      </td>
+                    </ng-container>
+
+                    <ng-container matColumnDef="receipt_date">
+                      <th mat-header-cell *matHeaderCellDef>Receipt
+                        Date</th>
+                      <td mat-cell *matCellDef="let element">
+                        {{element?.receipt_date| date:'medium'}}
+                      </td>
+                    </ng-container>
+
+                    <tr mat-header-row *matHeaderRowDef="getPendingDisplayedColumns(); sticky: true"></tr>
+                    <tr mat-row *matRowDef="let row; columns: getPendingDisplayedColumns();"></tr>
+                  </table>
+                </div>
+              </section>
+            </ng-container>
+          </mat-tab>
+        </mat-tab-group>
+      </div>
+      <mat-paginator [hidden]="collectionDetails.length < 5" (page)="onPageFired($event)"
+      [length]="collectionDetails.length" [pageSize]="pageSize" [pageSizeOptions]="[5,10, 25, 50]">
+    </mat-paginator>
+
+    </div>
+    <div [formGroup]="cashierOutPut" *ngIf="openTable">
+      <table class="pl-3" style="width:100%; margin-top: 20px;">
+        <tr>
+          <td style="width:20%" class="m-1 p-1 pl-2">
+            <p class="m-0 pl-2">Total Amount<i class="text-red">*</i></p>
+
+            <div class="position-relative m-1">
+              <input type="text" class="form-control form-control-sm" formControlName="total_amount" readonly />
+              <mat-error class="mt-1"
+                *ngIf="(cashierOutPut.get('total_amount').dirty || cashierOutPut.get('total_amount').touched) && cashierOutPut.get('total_amount').hasError('required')">
+                Total Amount is required
+              </mat-error>
             </div>
-            <div class="form-group">
-              <label for="">Date</label>
-              <input class="form-control fixWidthsame form-control-sm" (change)="checkChange(dateFormControl, 3)"
-                [disabled]="disableCondition.dateControl" type="date" [formControl]="dateFormControl" />
-              <mat-error class="mt-1" *ngIf="dateFormControl.hasError('required')">Please select Date</mat-error>
+          </td>
+          <td style="width:20%" class="m-1 p-1 pl-2">
+            <p class="m-0 pl-2">Received Amount<i class="text-red">*</i></p>
+            <div class="position-relative m-1">
+              <input type="number" min="0"  (input)="valuechange($event)"
+                class="form-control form-control-sm" formControlName="actual_amount" />
+              <mat-error class="mt-1"
+                *ngIf="(cashierOutPut.get('actual_amount').dirty || cashierOutPut.get('actual_amount').touched) && cashierOutPut.get('actual_amount').hasError('required')">
+                Received Amount is required
+              </mat-error>
             </div>
-          </div>
-          <div class="col-md-4">
-            <label for="">Receipt Code</label>
-            <div class="position-relative">
+          </td>
+          <td style="width:20%" class="m-1 p-1 pl-2">
+            <p class="m-0 pl-2">Variance<i class="text-red">*</i></p>
+            <div class="position-relative m-1 ">
+              <input type="text" class="form-control form-control-sm" formControlName="variance" readonly />
+            </div>
+          </td>
+          <td style="width:20%" class="m-1 p-1 pl-2">
+            <p class="m-0 pl-2">Date<i class="text-red">*</i></p>
+            <div class="position-relative m-1">
+              <input type="date" class="form-control form-control-sm" formControlName="slip_date" />
+              <mat-error class="mt-1"
+                *ngIf="(cashierOutPut.get('slip_date').dirty || cashierOutPut.get('slip_date').touched) && cashierOutPut.get('slip_date').hasError('required')">
+                Please select Date
+              </mat-error>
+            </div>
+          </td>
+        </tr>
+
+        <tr>
+
+
+          <!-- <td style="width:20%" class="m-1 p-1">
+            <p class="m-0 pl-2">Slip No<i class="text-red">*</i></p>
+            <div class="position-relative m-1 ">
+              <input type="number" class="form-control form-control-sm" formControlName="slip_number" />
+              <mat-error class="mt-1"
+                *ngIf="(cashierOutPut.get('slip_number').dirty || cashierOutPut.get('slip_number').touched) && cashierOutPut.get('slip_number').hasError('required')">
+                Slip No is required
+              </mat-error>
+            </div>
+          </td> -->
+          <!-- <td style="width:20%" class="m-1 p-1 pl-2">
+            <p class="m-0 pl-2">Bank<i class="text-red">*</i></p>
+            <div class="position-relative m-1">
+              <select formControlName="bank_id" class="form-control form-select form-control-sm">
+                <option *ngFor="let item of bankList" [value]="item.id">
+                  {{ item.bank_name }}
+                </option>
+              </select>
+              <mat-error class="mt-1"
+                *ngIf="(cashierOutPut.get('bank_id').dirty || cashierOutPut.get('bank_id').touched) && cashierOutPut.get('bank_id').hasError('required')">
+                Please select Bank
+              </mat-error>
+            </div>
+          </td> -->
+          <td style="width:20%" class="m-1 p-1 pl-2">
+            <p class="m-0 pl-2">Cashier Receipt No</p>
+            <div class="position-relative m-1">
               <input type="text" class="form-control form-control-sm" (keypress)="restrictLength($event)"
                 [disabled]="true" [formControl]="CodeFormControl">
               <span class="setting-btn" [hidden]="!isAddForm"><button (click)="openNumberSettings()"><i
                     class="os-icon os-icon-ui-46"></i></button></span>
             </div>
-          </div>
-        </div>
-
+            <!-- <input type="text" class="m-1" formControlName="cashier_receipt" />
+            <mat-error class="mt-1"
+              *ngIf="(cashierOutPut.get('cashier_receipt').dirty || cashierOutPut.get('cashier_receipt').touched) && cashierOutPut.get('cashier_receipt').hasError('required')">
+              Cashier Receipt No is required
+            </mat-error> -->
+          </td>
+        </tr>
+      </table>
+      <div class="position-relative m-1 col-6 pl-1">
+        <p class="m-0 pl-1 mb-1">Remarks</p>
+        <textarea class="form-control form-control-sm" [formControl]="remarksFormControl" id="Remarks"></textarea>
       </div>
     </div>
-  </form>
+  </div>
+
   <div class="positionFix">
     <div *ngIf="opencashiertable" id="collapseOne" class="tabCls" aria-labelledby="headingOne">
       <label *ngIf="opencashiertable" class="labelCash"> Cash </label>
@@ -379,4 +934,24 @@
       &nbsp;{{ +calculatedTotalCash + +calculatedTotalCheque + +calculatedTotalNeft | currency: "INR" }}
     </span>
   </div>
+  <div *ngIf="openTable">
+    <button class="btn btn-sm btn-p mr-2 mb-4 float-right" [ngClass]="!cashierOutPut.valid ? 'btn-disable' : ''"
+      [disabled]="!cashierOutPut.valid" (click)="saveCashier()">
+      Save
+    </button>
+    <button class="btn btn-sm btn-light mr-2 mb-4 float-right" (click)="close()">
+      Cancel
+    </button>
+  </div>
+  <!-- <div class="card-footer">
+    <div class="d-inline floating">
+      <button class="btn btn-sm btn-light mr-2" (click)="close()">
+        Cancel
+      </button>
+      <button class="btn btn-sm btn-p" [ngClass]="!cashierOutPut.valid ? 'btn-disable' : ''"
+        [disabled]="!cashierOutPut.valid" (click)="saveCashier()">
+        Save
+      </button>
+    </div>
+  </div> -->
 </div>

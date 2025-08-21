@@ -316,8 +316,8 @@ export class ReportMasterComponent extends BaseComponent implements OnInit, OnCh
       "start_date": del_start_date,
       "end_date": del_end_date,
       "export": 0,
-      "salesman_id": this.sideFiltersForm.value.salesman ? this.sideFiltersForm.value.salesman.lngth > 0 ? this.sideFiltersForm.value.salesman[0].id : '' : '',
-      "region_id": this.sideFiltersForm.value?.zone_id ? this.sideFiltersForm.value?.zone_id.length > 0 ? this.sideFiltersForm.value?.zone_id[0]?.id : [] : [],
+       salesman_id: sideFilter.salesman ? sideFilter.salesman.length > 0 ? sideFilter.salesman[0].id : [] : [],
+      "region_id":  this.sideFiltersForm.get('region').value.length > 0 ? this.sideFiltersForm.get('region').value.map(x => x.id) : [],
       "divison_id":this.sideFiltersForm.get('division').value.length > 0 ? this.sideFiltersForm.get('division').value.map(x => x.id) : [],
      
 
@@ -421,6 +421,7 @@ export class ReportMasterComponent extends BaseComponent implements OnInit, OnCh
       van_id: '',
       level: new FormControl(''),
       division: new FormControl(''),
+      // region: new FormControl(''),
       region: [[]],
       route: [[]],
       supervisor: [[]],
@@ -797,7 +798,7 @@ export class ReportMasterComponent extends BaseComponent implements OnInit, OnCh
       this.activeRoute == 'monthly-kpi' ||
       this.activeRoute == 'ytd-kpi' ||
       this.activeRoute == 'daily-grv' ||
-      this.activeRoute == 'daily-cancel-order' || this.activeRoute == 'timesheets' || this.activeRoute == 'salesman-performance' || this.activeRoute == 'driver-loaded-qty') {
+      this.activeRoute == 'daily-cancel-order' || this.activeRoute == 'timesheets' ||this.activeRoute == 'salesman-performance' || this.activeRoute == 'driver-loaded-qty') {
       this.sideFiltersForm.controls['start_date'].setValidators([Validators.required]);
       this.sideFiltersForm.controls['start_date'].updateValueAndValidity();
       this.sideFiltersForm.controls['end_date'].setValidators([Validators.required]);
@@ -1422,21 +1423,28 @@ export class ReportMasterComponent extends BaseComponent implements OnInit, OnCh
     }
   }
   else if (this.activeRoute == 'pallet-report') {
-    let del_start_date1 = sideFilter.del_start_date ? sideFilter.del_start_date : null;
-    let del_end_date2 = sideFilter.del_end_date ? sideFilter.del_end_date : null;
+     let del_start_date = sideFilter.start_date ? sideFilter.start_date : null;
+    let del_end_date = sideFilter.end_date ? sideFilter.end_date : null;
     let codes = []
     sideFilter.warehouse_id.map(i => {
      console.log(i,"in")
        codes.push(i.itemName.split(" ")[0])
     })
+  
      body = {
-      "start_date": del_start_date1,
-      "end_date": del_end_date2,
+      start_date: del_start_date,
+      end_date: del_end_date,
       export: 1,
-      "branch_plant_code": sideFilter?.warehouse_id ? sideFilter?.warehouse_id?.length > 0 ? codes : [] : [],
-      "salesman_id": this.sideFiltersForm.value.salesman ? this.sideFiltersForm.value.salesman.lngth > 0 ? this.sideFiltersForm.value.salesman[0].id : '' : '',
-      "region_id": this.sideFiltersForm.value?.zone_id ? this.sideFiltersForm.value?.zone_id.length > 0 ? this.sideFiltersForm.value?.zone_id[0]?.id : [] : [],
-      "divison_id":this.sideFiltersForm.get('division').value.length > 0 ? this.sideFiltersForm.get('division').value.map(x => x.id) : [],
+      branch_plant_code: sideFilter?.warehouse_id ? sideFilter?.warehouse_id?.length > 0 ? codes : [] : [],
+      // "salesman_id": this.sideFiltersForm.value.salesman ? this.sideFiltersForm.value.salesman.lngth > 0 ? this.sideFiltersForm.value.salesman[0].id : '' : '',
+      // salesman_id: sideFilter.salesman ? sideFilter.salesman.length > 0 ? sideFilter.salesman[0].id : '' : '',
+      // "region_id": this.sideFiltersForm.get('region').value ? this.sideFiltersForm.get('region').value.length > 0 ? this.sideFiltersForm.get('region').value?.map(x => x.id) : [] : [],
+      // region_id: sideFilter?.zone_id ? sideFilter.zone_id.length > 0 ? sideFilter?.zone_id[0]?.id : '' : '',
+    //    salesman_id: salesman_id,
+    // region_id: region_id,
+       region_id: this.sideFiltersForm.get('region').value.length > 0 ? this.sideFiltersForm.get('region').value.map(x => x.id) : [],
+         salesman_id: sideFilter.salesman ? sideFilter.salesman.length > 0 ? sideFilter.salesman[0].id : [] : [],
+      divison_id:this.sideFiltersForm.get('division').value.length > 0 ? this.sideFiltersForm.get('division').value.map(x => x.id) : [],
     }
   }
   else if (this.activeRoute == 'geo-approvals') {
@@ -1827,6 +1835,9 @@ export class ReportMasterComponent extends BaseComponent implements OnInit, OnCh
       case 'salesman-performance':
         module = 'salesman-performance';
         break;
+      case 'pallet-report':
+        module = 'pallet-report';
+        break;
       case 'monthly-ageing':
         module = 'customer_payment_report';
         this.intervals = [
@@ -1988,10 +1999,10 @@ export class ReportMasterComponent extends BaseComponent implements OnInit, OnCh
     return true;
   }
   checkIsActiveRoute() {
-    if (this.activeRoute == 'consolidated-load' || this.activeRoute == 'consolidated-return-load' || this.activeRoute == 'loading-chart-by-warehouse' || this.activeRoute == 'order-details' || this.activeRoute == 'daily-operation' ||this.activeRoute == 'delivery-report'||this.activeRoute == 'delivery-export-report' || this.activeRoute == 'pallet-report'  ||this.activeRoute == 'geo-approvals' || this.activeRoute == 'sales-quantity' || this.activeRoute == 'sales-vs-grv' || this.activeRoute == 'loading-chart-final-by-route') {
+    if (this.activeRoute == 'consolidated-load' || this.activeRoute == 'consolidated-return-load' || this.activeRoute == 'loading-chart-by-warehouse' || this.activeRoute == 'order-details' || this.activeRoute == 'daily-operation' ||this.activeRoute == 'delivery-report'||this.activeRoute == 'delivery-export-report' || this.activeRoute == 'pallet-report'  || this.activeRoute == 'geo-approvals' || this.activeRoute == 'sales-quantity' || this.activeRoute == 'sales-vs-grv' || this.activeRoute == 'loading-chart-final-by-route') {
       return 1;
     } else {
-      if (this.activeRoute == 'truck-utilisation' || this.activeRoute == 'monthly-kpi' || this.activeRoute == 'ytd-kpi' || this.activeRoute == 'daily-crf' || this.activeRoute == 'difot' || this.activeRoute == 'daily-grv' || this.activeRoute == 'daily-spot-return' || this.activeRoute == 'daily-cancel-order' || this.activeRoute == 'timesheets' || this.activeRoute == 'salesman-performance' || this.activeRoute == 'driver-loaded-qty') {
+      if (this.activeRoute == 'truck-utilisation' || this.activeRoute == 'monthly-kpi' || this.activeRoute == 'ytd-kpi' || this.activeRoute == 'daily-crf' || this.activeRoute == 'difot' || this.activeRoute == 'daily-grv' || this.activeRoute == 'daily-spot-return' || this.activeRoute == 'daily-cancel-order' || this.activeRoute == 'timesheets' ||  this.activeRoute == 'salesman-performance' || this.activeRoute == 'driver-loaded-qty') {
         return 2;
       } else {
         return 0;

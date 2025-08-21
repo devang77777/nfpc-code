@@ -1,13 +1,13 @@
 mat-toolbar {
     height: 50px;
-    background-color: #f7f7f7;
+    background-color: #920023;
     // background-color: #304145;
     border-bottom: 1px solid #eee;
 
 }
 a {
     cursor: pointer;
-    color: black;
+    color: #e0e0e0;
     
 }
 
@@ -105,4 +105,14 @@ input:focus {
     border-radius: 50%;
     font-size: 12px;
     position: absolute;
+}
+
+.ml-auto {
+    :hover{
+        color: #000000;
+    }
+
+    &.active {
+        color: #000000;
+    }
 }

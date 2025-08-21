@@ -14,6 +14,8 @@ import { DeleteConfirmModalComponent } from 'src/app/components/shared/delete-co
 import { DataEditor } from 'src/app/services/data-editor.service';
 import { CompDataServiceType } from 'src/app/services/constants';
 import { startWith, map } from 'rxjs/operators';
+import { debounceTime } from 'rxjs/operators';
+import { Subject } from 'rxjs';
 @Component({
   selector: 'app-customer-supervisor-dt',
   templateUrl: './customer-supervisor-dt.component.html',
@@ -25,8 +27,12 @@ export class CustomerSupervisorDtComponent implements OnInit {
     @Output() public updateTableData: EventEmitter<any> = new EventEmitter<any>();
    public selectedTab = 0;
     @Input() public isDetailVisible: boolean;
+searchSubject = new Subject<string>();
+  channelList : any= [];
   branchPlantsList: any = [];
+  filteredSupervisorList: any[] = [];
   supervisor: any = [];
+  supervisorSearchText: string = '';
   supervisorList: any = [];
   public dataSource: MatTableDataSource<any>;
   tempDataSource: any = [];
@@ -47,7 +53,8 @@ export class CustomerSupervisorDtComponent implements OnInit {
   private allColumns: ColumnConfig[] = [
     { def: 'customer_code', title: 'Customer Code', show: true },
     { def: 'customer_name', title: 'Customer Name', show: true },
-    { def: 'supervisor_name', title: 'Supervisor Name', show: true },
+    { def: 'channel_name', title: 'Service Channel', show: true },
+    { def: 'supervisor_id', title: 'Supervisor Name', show: true },
     { def: 'delete', title: ' ', show: true },
   ];
   filterForm: FormGroup;
@@ -65,30 +72,45 @@ private commonToasterService: CommonToasterService,
   }
 
   ngOnInit(): void {
+    this.getChannelList();
     this.getAllSupervisorList();
     // this.getSupervisorData()
     this.filterForm = this.fb.group({
       customer_code: [''],
       customer_name: [''],
-      supervisor_id: [''],
+      channel_name: [''],
+      supervisor_id: [[]],
       page: [this.apiResponse.pagination.page],
       page_size: [this.apiResponse.pagination.pageSize],
     });
     this.displayedColumns = this.allColumns;
     this.filterColumns = [...this.allColumns].splice(1);
     this.getAllBranchPlants();
-    this.filterForm.get('supervisor_id')!.valueChanges.pipe(startWith(''),map(value => this._filterSupervisor(value || ''))
-      )
-      .subscribe(filtered => {
-        this.filteredSupervisors = filtered;
-      });
+    // this.filterForm.get('supervisor_id')!.valueChanges.pipe(startWith(''),map(value => this._filterSupervisor(value || []))
+    //   )
+    //   .subscribe(filtered => {
+    //     this.filteredSupervisors = filtered;
+    //   });
+     this.searchSubject.pipe(debounceTime(300)).subscribe(() => {
+    this.filterSupervisorList();
+  });
+
+  // after loading supervisors
+  this.filteredSupervisorList = [...this.supervisorList];
   }
   getAllBranchPlants() {
 
     this.filterForm.value.page = this.apiResponse.pagination.page;
     this.filterForm.value.page_size = this.apiResponse.pagination.pageSize;
-
-    this.customerService.getSupervisorList(this.filterForm.value).subscribe(res => {
+    const body = {
+      customer_code: this.filterForm.value.customer_code,
+      customer_name: this.filterForm.value.customer_name,
+      channel_id: this.filterForm.value.channel_name,
+      supervisor_id: this.filterForm.value.supervisor_id ? this.filterForm.value.supervisor_id.map(i => i.id) : [],
+      page: this.apiResponse.pagination.page,
+      page_size: this.apiResponse.pagination.pageSize
+    }
+    this.customerService.getSupervisorList(body).subscribe(res => {
       this.dataSource = res.data;
       this.dataSource.paginator = this.paginator;
       this.tempDataSource = res.data;
@@ -154,6 +176,7 @@ private commonToasterService: CommonToasterService,
   public getAllSupervisorList(){
     this.apiService.getAllCustomerSupervisor('').subscribe((res: any) => {
         this.supervisorList = res.data;
+        this.filteredSupervisorList = [...this.supervisorList];
     });
   }
  private _filterSupervisor(value: string): any[] {
@@ -163,12 +186,48 @@ private commonToasterService: CommonToasterService,
   );
 }
 
+filterSupervisors(event: KeyboardEvent) {
+  const input = (event.target as HTMLInputElement).value.toLowerCase().trim();
+
+  if (!input) {
+    this.filteredSupervisorList = [...this.supervisorList];
+    return;
+  }
+
+  this.filteredSupervisorList = this.supervisorList.filter(item => {
+    const fullName = `${item?.firstname || ''} ${item?.lastname || ''}`.toLowerCase();
+    return fullName.includes(input);
+  });
 }
 
+
+filterSupervisorList(): void {
+  const searchText = this.supervisorSearchText.toLowerCase().trim();
+  if (!searchText) {
+    this.filteredSupervisorList = [...this.supervisorList];
+    return;
+  }
+
+  this.filteredSupervisorList = this.supervisorList.filter(sup => {
+    const fullName = `${sup.firstname} ${sup.lastname}`.toLowerCase();
+    return fullName.includes(searchText);
+  });
+}
+
+onSearchInputChange(event: any) {
+  this.searchSubject.next(event.target.value);
+}
+getChannelList(){
+    this.apiService.getAllCustomerCategory().subscribe((res: any) => {
+      this.channelList = res.data;
+    });
+  }
+}
 export interface BranchPlant {
 
   // branch_plant: string;
   customer_code: string;
   customer_name: string;
+  channel_name: string;
   supervisor_name: string;
 }

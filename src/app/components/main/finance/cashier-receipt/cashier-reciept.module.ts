@@ -10,7 +10,8 @@ import { AddCashierRecieptComponent } from './add-cashier-reciept/add-cashier-re
 import { AddCashierReceiptSlipComponent } from './add-cashier-reciept/add-cashier-receipt-slip/add-cashier-receipt-slip.component';
 import { AddCashierReceiptOverviewComponent } from './add-cashier-reciept/add-cashier-receipt-overview/add-cashier-receipt-overview.component';
 import { SharedModule } from '../../../../features/shared/shared.module';
-
+// import { CashierReceiptModule } from './cashier-receipt.module';
+import { CashierRecieptExportComponent } from './cashier-reciept-export/cashier-reciept-export.component';
 @NgModule({
   declarations: [
     CashierRecieptMasterPageComponent,
@@ -19,6 +20,7 @@ import { SharedModule } from '../../../../features/shared/shared.module';
     AddCashierRecieptComponent,
     AddCashierReceiptSlipComponent,
     AddCashierReceiptOverviewComponent,
+    CashierRecieptExportComponent
   ],
   imports: [
     FormsModule,

@@ -1,0 +1,24 @@
+.w-full {
+    width: 100%;
+  }
+  
+  .half-w {
+    width: 90%;
+  }
+  
+  section {
+    align-content: center;
+    align-items: center;
+    height: 60px;
+    padding: 5px;
+  }
+  .export-details-form{
+    height: auto;
+    max-height: 500px !important;
+  
+    padding-bottom: 40px;
+    mat-radio-group.mat-mdc-radio-group {
+      flex-direction: column!important;
+      display: flex !important;
+  }
+  }

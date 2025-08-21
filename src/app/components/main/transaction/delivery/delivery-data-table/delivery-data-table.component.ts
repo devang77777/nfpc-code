@@ -203,11 +203,22 @@ export class DeliveryDataTableComponent implements OnInit, OnDestroy {
     this.checkDeliveryeParamUuid();
   }
   onCloseCriteria() {
-    this.advanceSearchRequest = []
-    this.eventService.emit(new EmitEvent(Events.CHANGE_CRITERIA, { reset: true, module: Events.SEARCH_DELIVERY, route: '/transaction/delivery' }));
+     this.advanceSearchRequest = [];
+
+  // Redirect with full page reload to /transaction/order
+  window.location.href = '/transaction/delivery';
   }
   onChangeCriteria() {
     this.eventService.emit(new EmitEvent(Events.CHANGE_CRITERIA, { route: '/transaction/delivery' }));
+  }
+   exportData(){
+     const exportRequest = { ...this.requestOriginal, export: 1 };
+   this.apiService.onSearch(exportRequest).subscribe((response) => {
+      
+            this.apiService.downloadFile(response.data.file_url, 'csv');
+            // this.dataEditor.sendMessage({ export: '' });
+        
+    });
   }
   changAllTrips()
   {

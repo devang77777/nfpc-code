@@ -5,6 +5,7 @@
   z-index: 99999;
   background-color: rgba(0, 0, 0, 0.03);
   left: 0;
+  z-index: 1;
   text-align: right;
 }
 .fullWidth {
@@ -12,15 +13,15 @@
   height: 500px;
 }
 .btn-p {
-  padding: 2px 7px;
   border-radius: 3px;
-  color: #fff;
-  border-color: #1abc9c;
-  background-color: #1abc9c;
+ color: var(--text);
+ border: unset !important;
+  background-color: var(--primary);
   float: right !important;
+  text-align: center !important;
 }
 .form-box {
-  overflow-y: scroll !important;
+  /*overflow-y: scroll !important;*/
 }
 mat-table {
   margin-left: 30px;
@@ -114,7 +115,7 @@ mat-header-row {
 // changes required
 .active-form {
   background-color: #f3f3f3;
- 
+
 }
 .mat-select-value {
   padding-top: 3px;
@@ -188,7 +189,7 @@ button:focus {
   outline: none;
 }
 .order-form {
-  overflow: scroll;
+  /*overflow: scroll;*/
 }
 input {
   &:disabled {
@@ -415,6 +416,9 @@ section {
     }
   }
 }
+.bottom-bordor{
+  border-bottom: thin solid;
+}
 @media (max-width: 575px) {
 
 .item-container{
@@ -436,4 +440,317 @@ mat-table {
 mat-cell:first-of-type, mat-header-cell:first-of-type, mat-footer-cell:first-of-type {
   padding-left:8px;
 }
+.populate-box {
+  display: flex !important;
+  justify-content: flex-start !important;
+  align-items: center !important;
+  margin-top: 20px !important;
+}
+}::ng-deep{
+  .cashier-receipt-table{
+    .mat-sort-header-content {
+      text-align: left;
+    }
+  }
+}
+.invoice-return-table{
+  h3{
+    font-size: 15px;
+    line-height: 37px;
+    font-weight: 600;
+    }
+}
+
+.text-red {
+  color: red;
+  font-size: 20px;
+  font-weight: 600;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+.endorsement-tab-grp {
+  ::ng-deep mat-tab-header.mat-mdc-tab-header {
+      display: flex;
+      justify-content: flex-start;
+      padding-left: 10px;
+  }
+
+  ::ng-deep .mat-mdc-tab-list {
+      padding: unset !important;
+  }
+}
+
+.credit-value-box {
+  margin-left: 110px;
+}
+
+.cash-value-box {
+  margin-left: 133px;
+}
+
+.amt-box {
+  margin-right: 23px;
+}
+
+.Clear-box {
+  margin-left: 10px;
+  margin-top: 20px;
+}
+
+.values-width {
+  width: 102px !important;
+}
+
+.values {
+  width: 73px;
+
+  h6 {
+      font-size: 13px;
+      line-height: 27px;
+      font-weight: 800;
+      margin: 0;
+  }
+
+  p {
+      font-size: 14px;
+      line-height: 27px;
+      font-weight: 800;
+      margin: 0;
+      color: var(--primary);
+  }
+}
+
+.total-values {
+  padding-left: 1rem !important;
+
+  h6 {
+      font-size: 12px;
+      line-height: 27px;
+      font-weight: 800;
+      margin: 0;
+      color: var(--primary);
+  }
+
+  p {
+      margin: 0;
+  }
+}
+
+.type-collections-details {
+  width: 100%;
+  float: left;
+  overflow: auto;
+  height: auto;
+  max-height:100vh;
+  overflow-x: hidden;
+}
+
+::ng-deep .mat-mdc-tab-body-content {
+  // height: 100%;
+  height: 100%;
+  overflow: auto !important;
+  overflow-x: hidden !important;
+}
+
+// ::ng-deep .mat-mdc-dialog-surface.mdc-dialog__surface {
+//     overflow-x: hidden;
+// }
+
+// ::ng-deep .mat-mdc-dialog-surface.mdc-dialog__surface {
+//     overflow: hidden;
+// }
+
+// mat table Columns
+th.mat-mdc-header-cell:first-of-type,
+td.mat-mdc-cell:first-of-type,
+td.mat-mdc-footer-cell:first-of-type {
+  padding-left: 12px !important;
+}
+
+
+
+.mat-column-select {
+  width: 70px;
+  word-wrap: break-word;
+  line-height: normal;
+}
+
+.mat-column-order_number {
+  word-wrap: break-word;
+  line-height: normal;
+}
+.mat-column-receipt_no {
+  width: 70px;
+  word-wrap: break-word;
+  line-height: normal;
+}
+
+.mat-column-invoice_no {
+  width: 80px;
+  word-wrap: break-word;
+  line-height: normal;
+}
+
+.mat-column-salesman_code {
+  width: 240px;
+  word-wrap: break-word;
+  line-height: normal;
+}
+
+.mat-column-route_code {
+  width: 55px;
+  word-wrap: break-word;
+  line-height: normal;
+}
+
+.mat-column-customer_code {
+  width: 280px;
+  word-wrap: break-word;
+  line-height: normal;
+}
+
+.mat-column-type {
+  width: 70px;
+  word-wrap: break-word;
+  line-height: normal;
+}
+
+.mat-column-amount {
+  width: 86px;
+  word-wrap: break-word;
+  line-height: normal;
+}
+
+.mat-column-collected_amount {
+  width: 115px;
+  word-wrap: break-word;
+  line-height: normal;
+}
+
+.mat-column-remaining_amount {
+  width: 100px;
+  word-wrap: break-word;
+  line-height: normal;
+}
+
+.mat-column-receipt_date {
+  width: 150px !important;
+  word-wrap: break-word;
+  line-height: normal;
+}
+
+.clrhvr {
+  color: blue;
+}
+
+.clrhvr:hover {
+  text-decoration: underline;
+  cursor: pointer;
+  text-underline-offset: 3px;
+}
+
+.Clear-box-values {
+  width: 73px;
+  display: flex;
+
+  h6 {
+      font-size: 11px;
+      line-height: 27px;
+      font-weight: 800;
+      margin-bottom: 0;
+      margin-right: 10px;
+  }
+
+  p {
+      font-size: 12px;
+      line-height: 27px;
+      font-weight: 800;
+      margin: 0;
+      color: var(--primary);
+  }
+}
+
+::ng-deep {
+  .type-collections-details {
+      tr.mat-mdc-header-row {
+          position: sticky;
+          top: -10px;
+          z-index: 111;
+          height: 40px;
+      }
+  }
+}
+
+.cashstemp {
+  width: 120px;
+}
+.creditstamp {
+  width: 110px;
+}
+
+
+
+.required {
+  color: red;
+}
+.form1,
+.form2,
+.form3 {
+  display: flex;
+}
+.form1 {
+  align-items: baseline;
+}
+.endorsement-tab-grp {
+  background: #fafafa;
+}
+input{
+  font-size: 12px !important;
+}
+::ng-deep {
+  span.mdc-tab-indicator__content.mdc-tab-indicator__content--underline {
+      display: none;
+  }
+}
+.collection-deposite{
+  input{
+      height: 30px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-left: 20px;
+      border-radius: 4px;
+      overflow: hidden;
+      border: 1px solid grey;
+      width: 52%;
+  }
+  label{
+      font-size: 10px;
+ text-align: end;
+      width: 37%;
+  }
+  textarea{
+
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-left: 20px;
+      border-radius: 4px;
+      overflow: hidden;
+      border: 1px solid grey;
+      width: 52%;
+  }
 }

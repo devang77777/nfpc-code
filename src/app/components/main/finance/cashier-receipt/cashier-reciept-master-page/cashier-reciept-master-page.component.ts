@@ -7,6 +7,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { DeleteConfirmModalComponent } from 'src/app/components/shared/delete-confirmation-modal/delete-confirmation-modal.component';
 import { ApiService } from 'src/app/services/api.service';
 import { CommonToasterService } from 'src/app/services/common-toaster.service';
+import { CashierRecieptExportComponent } from '../cashier-reciept-export/cashier-reciept-export.component';
 @Component({
   selector: 'app-cashier-reciept-master-page',
   templateUrl: './cashier-reciept-master-page.component.html',
@@ -102,6 +103,9 @@ export class CashierRecieptMasterPageComponent extends BaseComponent
         this.cts.showError('Error', 'Action Un-successfull');
       }
     )
+  }
+  openModal() {
+    const dialogRef = this.deleteDialog.open(CashierRecieptExportComponent);
   }
 }
 

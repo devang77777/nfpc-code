@@ -72,13 +72,15 @@ advanceSearchRequest: any[] = [];
        page: [this.page],
       page_size: [this.pageSize],
       role_name: [''],
-      user_name: ['']
+      user_name: [''],
+      email: ['']
     });
     this.displayedColumns = this.allColumns;
     this.filterColumns = [...this.allColumns].splice(1);
  const filters = {
-    name: this.filterForm.get('user_name')?.value || '',
-    role: this.filterForm.get('role_name')?.value || ''
+    name: this.filterForm.get('user_name')?.value || this.filterForm.get('email')?.value || '',
+    role: this.filterForm.get('role_name')?.value || '',
+    // email: this.filterForm.get('email')?.value || '',
   };
     this.fds.formType.subscribe(x => {
       if (x == 'user') {
@@ -191,7 +193,8 @@ advanceSearchRequest: any[] = [];
     }
      const filters = {
     name: this.filterForm.get('user_name')?.value || '',
-    role: this.filterForm.get('role_name')?.value || ''
+    role: this.filterForm.get('role_name')?.value || '',
+    // email: this.filterForm.get('email')?.value || '',
   };
     // this.getDisplayedColumns();
      this.subscriptions.push(this.apiService.getAllInviteUser(filters).subscribe((users: any) => {
@@ -203,7 +206,8 @@ advanceSearchRequest: any[] = [];
   getUserData(){
      const filters = {
     name: this.filterForm.get('user_name')?.value || '',
-    role: this.filterForm.get('role_name')?.value || ''
+    role: this.filterForm.get('role_name')?.value || '',
+    // email: this.filterForm.get('email')?.value || '',
   };
       if (this.advanceSearchRequest.length > 0) {
       this.advanceSearch();

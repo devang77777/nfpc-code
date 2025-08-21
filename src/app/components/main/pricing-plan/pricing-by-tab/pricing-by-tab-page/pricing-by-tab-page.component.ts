@@ -217,7 +217,7 @@ export class PricingByTabPageComponent implements OnInit {
       end_date: new FormControl(),
       created_date: new FormControl(),
     });
-    this.customerFormControl = new FormControl('', [Validators.required]);
+  this.customerFormControl = new FormControl('', [Validators.required]);
     this.channelFormControl = new FormControl('', [Validators.required]);
     this.statusFormControl = new FormControl('', [Validators.required]);
     this.api.getMasterDataLists().subscribe((result: any) => {

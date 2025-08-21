@@ -10,15 +10,15 @@ import { DataEditor } from 'src/app/services/data-editor.service';
 })
 export class AddCashierReceiptSlipComponent implements OnInit {
   @Input() isOpenedForDetail: boolean = false;
-  @Input() mainFormGroup: FormGroup;
-  public receiptFormGroup: FormGroup;
+  @Input() mainFormGroup: FormGroup | any;
+  public receiptFormGroup: FormGroup | any;
   public populatedata: any;
-  public cashamountFormControl: FormControl;
-  public checkAmountFormControl: FormControl;
-  public totalFormControl: FormControl;
-  public slipnoFormControl: FormControl;
-  public bankFormControl: FormControl;
-  public dateReceiptFormControl: FormControl;
+  public cashamountFormControl: FormControl | any;
+  public checkAmountFormControl: FormControl | any;
+  public totalFormControl: FormControl | any;
+  public slipnoFormControl: FormControl | any;
+  public bankFormControl: FormControl | any;
+  public dateReceiptFormControl: FormControl | any;
   public cashierReceiptFormData: any;
   public bankList: any[] = [];
 

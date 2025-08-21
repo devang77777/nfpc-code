@@ -1,26 +1,35 @@
 import { filter } from 'rxjs/operators';
 import { Component, OnInit, Inject, ViewChild } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
-
+import { Router } from '@angular/router';
 import { ApiService } from 'src/app/services/api.service';
 import { AdvanceSearchService } from './services/advance-serach.service';
 import { EventBusService } from 'src/app/services/event-bus.service';
 import { EmitEvent, Events } from 'src/app/models/events.model';
-
+import { DataEditor } from 'src/app/services/data-editor.service';
+import { RouterOutlet } from '@angular/router';
 @Component({
   selector: 'app-advance-search-form',
   templateUrl: './advance-search-form.component.html',
   styleUrls: ['./advance-search-form.component.scss'],
 })
 export class AdvanceSearchFormComponent implements OnInit {
+  oldModule = '';
+  intervals: any[] = [];
+  selectedModule: string = '';
+  selectedModulePath: string = '';
+  dataPath: string = '';
   @ViewChild('activeComponent') childComponent: any;
   masterData: any;
+  // data: string = '';
   constructor(
     @Inject(MAT_DIALOG_DATA) public data: any,
     private service: AdvanceSearchService,
     public dialogRef: MatDialogRef<AdvanceSearchFormComponent>,
     private apiService: ApiService,
-    private eventService: EventBusService
+    private eventService: EventBusService,
+    private router: Router,
+    private dataEditor: DataEditor
   ) { }
 
   ngOnInit(): void {
@@ -36,7 +45,7 @@ export class AdvanceSearchFormComponent implements OnInit {
   }
   clean(model) {
     for (var propName in model) {
-      if (model[propName] === null || model[propName] === undefined || propName === 'module' || propName === "page" || propName === "page_size") {
+      if (model[propName] === null || model[propName] === undefined || propName === 'module' || propName === "page" || propName === "page_size" || propName === 'export') {
         delete model[propName];
       }
     }
@@ -59,6 +68,7 @@ export class AdvanceSearchFormComponent implements OnInit {
     model.module = this.childComponent.form.value.module;
     model.page = 1;
     model.page_size = 10;
+    model.export = 0;
     this.apiService.onSearch(model).subscribe((response) => {
       this.eventService.emit(new EmitEvent(model.module, {
         request: request,
@@ -105,6 +115,7 @@ export class AdvanceSearchFormComponent implements OnInit {
         case "salesman":
           filterdata = this.masterData.salesmans.filter((x) => x.id == model[propName])[0];
           model[propName] = filterdata.firstname + ' ' + filterdata.lastname;
+          // model[propName] = `${filterdata.salesman_code} - ${filterdata.firstname} ${filterdata.lastname}`
           break;
         case "channel":
           filterdata = this.masterData.channel.filter((x) => x.id == model[propName]);
@@ -117,6 +128,13 @@ export class AdvanceSearchFormComponent implements OnInit {
             }
           }
           break;
+        // case "channel_name":
+        //   filterdata = this.masterData.channel.filter((x) => x.id == model[propName]);
+          
+        //     model[propName] = filterdata[0].name;
+         
+          
+        //   break;
         case "sales_organisation":
           filterdata = this.masterData.sales_organisation.filter((x) => x.id == model[propName]);
           if (filterdata.length > 0) {
@@ -233,4 +251,6 @@ export class AdvanceSearchFormComponent implements OnInit {
     }
     return model;
   }
+
+
 }

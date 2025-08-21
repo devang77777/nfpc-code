@@ -12,7 +12,7 @@ import { CompDataServiceType } from 'src/app/services/constants';
 import { Cashier, cashierData } from '../cashier-reciept-master-page/cashier-reciept-master-page.component';
 import { CashierReceiptService } from '../cashier-receipt.service';
 import { PAGE_SIZE_10 } from 'src/app/app.constant';
-
+import { FormGroup,FormBuilder } from '@angular/forms';
 @Component({
   selector: 'app-cashier-reciept-dt',
   templateUrl: './cashier-reciept-dt.component.html',
@@ -23,7 +23,7 @@ export class CashierRecieptDtComponent implements OnInit {
   @Output() public selectedRows: EventEmitter<any> = new EventEmitter<any>();
   @Input() public newCRData: any;
   @Input() public isDetailVisible: boolean;
-
+  filterForm: FormGroup | any;
   public dataSource: MatTableDataSource<any>;
   @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator;
   public selections = new SelectionModel(true, []);
@@ -32,6 +32,7 @@ export class CashierRecieptDtComponent implements OnInit {
   selectedColumnFilter: string;
 
   private apiService: CashierReceiptService;
+  private fb: FormBuilder;
   private fds: FormDrawerService;
   private dataEditor: DataEditor;
   private deleteDialog: MatDialog;
@@ -49,9 +50,16 @@ export class CashierRecieptDtComponent implements OnInit {
   private allColumns: ColumnConfig[] = [
     { def: 'select', title: 'Select', show: true },
     { def: 'cashier_reciept_number', title: 'Code', show: true },
+    { def: 'date', title: 'Date Of Endorsment', show: true },
+
     { def: 'salesman', title: 'Salesman Name', show: true },
-    { def: 'route', title: 'Route', show: true },
-    { def: 'total_amount', title: 'Amount', show: true }
+    { def: 'date_trip', title: 'Date Of Trip', show: true },
+
+    { def: 'route_name', title: 'Route Name', show: true },
+    { def: 'route_code', title: 'Route Code', show: true },
+    { def: 'total_amount', title: 'Amount', show: true },
+    { def: 'status', title: 'Status', show: true }
+
 
   ]
   private collapsedColumns: ColumnConfig[] = [
@@ -59,11 +67,26 @@ export class CashierRecieptDtComponent implements OnInit {
     { def: 'code', title: 'Code', show: true },
   ];
 
-  constructor(apiService: CashierReceiptService, dataEditor: DataEditor, fds: FormDrawerService, deleteDialog: MatDialog) {
-    Object.assign(this, { apiService, dataEditor, fds, deleteDialog });
+  constructor(apiService: CashierReceiptService, dataEditor: DataEditor, fds: FormDrawerService, deleteDialog: MatDialog,fb: FormBuilder) {
+    Object.assign(this, { apiService, dataEditor, fds, deleteDialog ,fb});
     this.dataSource = new MatTableDataSource<Cashier>();
   }
   public ngOnInit(): void {
+    this.filterForm = this.fb.group({
+      code: [''],
+      salesman_name: [''],
+      date: [''],
+      date_trip: [''],
+
+
+      salesman_code: [''],
+      route_name: [''],
+      route_code: [''],
+      status: [''],
+      type: [1],
+      page: [this.page],
+      page_size: [this.pageSize]
+    })
     this.displayedColumns = this.allColumns;
     this.filterColumns = [...this.allColumns].splice(1);
     this.getCashierReceiptList();

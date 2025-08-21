@@ -77,12 +77,12 @@ html[data-theme="theme2"] {
 }
 
 html[data-theme="theme3"] {
-  --primary: #005689 !important;
-  --secondary: #1284c9 !important;
-  --active: #00446d !important;
-  --text: #eee !important;
-  --hover: #004d7b !important;
-  --hover-text: #eee !important;
+  --primary: #000000 !important;
+  --secondary: #ffffff !important;
+  --active: #a20027 !important;
+  --text: #ffffff !important;
+  --hover: #a20027 !important;
+  --hover-text: #a20027 !important;
   --btn-disable: #ffffff !important;
   --btn-disable-bg: #005689 !important;
 }
@@ -94,7 +94,10 @@ body {
 body {
   margin: 0;
   font-family: Roboto, "Helvetica Neue", sans-serif;
-  color: #212529;
+  // font-family: Josefin Sans, "Source Sans Pro", serif;
+
+  color: #f5f5f5;
+  // background-color: #6BD4D4;
 
   a {
     color: #2485e8;
@@ -410,6 +413,7 @@ table {
   overflow-y: scroll;
   padding-bottom: 20px;
   height: calc(100vh - 130px);
+  // background-color:#f5f5f5;
 }
 
 .table-striped tbody tr:nth-of-type(odd) {
@@ -425,11 +429,11 @@ table {
   border-bottom: 1px solid #ebedf3;
   border-top: 1px solid #ddd;
   vertical-align: middle;
-  background: #fff;
+  background: #000000;
   padding: 8px !important;
   text-transform: uppercase;
   font-size: 12px;
-  color: #263035;
+  color: #e0e0e0;
 }
 
 .mat-header-cell {
@@ -475,14 +479,37 @@ tr.mat-footer-row {
   padding: 12px 8px;
 }
 
+// th.mat-header-cell,
+// td.mat-cell,
+// td.mat-footer-cell {
+//   padding: 0.5rem !important;
+//   vertical-align: middle;
+//   border-top: 0 !important;
+//   color: #fafafa;
+//   background-color: #9f9797;
+//   border-bottom: 1px solid #eee !important;
+// }
+
+/* Table header and footer cell styling */
 th.mat-header-cell,
 td.mat-cell,
 td.mat-footer-cell {
   padding: 0.5rem !important;
   vertical-align: middle;
   border-top: 0 !important;
-  color: #212529;
+  color: #000000; /* Changed text color for better contrast */
+  background-color: #ffffff; /* Default background */
   border-bottom: 1px solid #eee !important;
+}
+
+/* Zebra striping: even rows */
+.mat-row:nth-child(even) td {
+  background-color: #e3e0e0 !important;
+}
+
+/* Zebra striping: odd rows */
+.mat-row:nth-child(odd) td {
+  background-color: #ffffff !important;
 }
 
 .mat-checkbox-frame {
@@ -497,7 +524,7 @@ td.mat-footer-cell {
 .table thead,
 .table thead tr,
 .mat-header-row {
-  background-color: #f1f5fa !important;
+  background-color: #fafafa !important;
 }
 
 th.mat-header-cell:first-of-type,
@@ -510,6 +537,10 @@ td.mat-footer-cell:first-of-type {
   color: #212529;
   background-color: #fafafa;
 }
+// .table-hover tbody tr:active {
+//   color: #fafafa;
+//   background-color: #212529;
+// }
 
 // .mainsection{
 //   padding: 25px;
@@ -606,7 +637,10 @@ label {
 }
 
 .heading-row {
-  padding: 20px;
+  padding: 8px;
+  max-height: 50px;
+  // background-color: #000000;
+  // color: #fafafa;
 
   p {
     font-size: 20px;
@@ -811,13 +845,13 @@ ul {
   }
 }
 
-@media (min-width: 576px) {
-  .collapse_sidenav {
-    span {
-      display: none;
-    }
-  }
-}
+// @media (min-width: 576px) {
+//   .collapse_sidenav {
+//     span {
+//       display: none;
+//     }
+//   }
+// }
 
 // @media (min-width: 1600px) {
 //   .customertab{
@@ -1128,4 +1162,71 @@ input:focus-within,
 .form-control:focus {
   border-color: #2196f3;
   box-shadow: none;
+}
+
+.mat-table {
+  border-collapse: separate;
+  border-spacing: 0 4px;
+}
+
+.mat-row td {
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+  border: none !important;
+  background-color: #fff;
+}
+
+.mat-row:hover td {
+  background-color: #211f1f !important;
+  color: #fafafa !important;
+  cursor: pointer;
+
+}
+
+
+.mat-row td:first-child {
+  border-top-left-radius: 8px;
+  border-bottom-left-radius: 8px;
+}
+
+.mat-row td:last-child {
+  border-top-right-radius: 8px;
+  border-bottom-right-radius: 8px;
+}
+.mat-header-row {
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  background-color: #a30000 !important; /* Your current header color */
+  
+}
+// th.mat-header-cell,
+// td.mat-cell {
+//   padding: 0.75rem 1rem !important;
+// }
+
+
+.cdk-column-select .filter-btn {
+    position: absolute;
+    left: 0px;
+    top: 0;
+    height: 35px;
+    line-height: 35px;
+    width: 30px;
+    padding: 0;
+    margin: 0;
+    text-align: center;
+    display: block;
+    color:#e0e0e0 !important;
+}
+
+// * {
+//     box-sizing: border-box;
+//     /* text-align: center; */
+//     align-items: center;
+// }
+
+.d-flex {
+    display: flex !important;
+    // text-align: center;
+    align-items: center;
 }

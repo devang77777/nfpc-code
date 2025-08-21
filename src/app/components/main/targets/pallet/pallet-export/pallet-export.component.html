@@ -25,6 +25,40 @@
                         </mat-radio-group>
                     </div>
                 </div>
+                <div class="row" style="margin:10px">
+                    <div class="col-12">
+                        <label class="full-w">Export By</label>
+                        <mat-radio-group formControlName="is_division_level" name="is_division_level"
+                            [(ngModel)]="export.is_division_level">
+                            <!-- <mat-radio-button class="example-margin full-w" value="1">Division</mat-radio-button> -->
+                            <mat-radio-button class="example-margin full-w" value="2">Branch Plant</mat-radio-button>
+                        </mat-radio-group>
+                    </div>
+                </div>
+
+                  <!-- <div class="row" style="margin:10px" *ngIf="export.is_division_level==='1' ">
+          <div class="col-8">
+            <label class="full-w">Division</label>
+                    <app-multiautocomplete 
+                        isSingle="true" 
+                        [options]="divisionList" 
+                        [control]="divisionFormControl" 
+                        (selectionchanged)="applyFilter()"
+                        text="name" 
+                        id="id" 
+                        placeholder="Search Division">
+                    </app-multiautocomplete>
+          </div>
+        </div> -->
+                  <div class="row" style="margin:10px" *ngIf="export.is_division_level==='2'">
+          <div class="col-8">
+            <label class="full-w">Branch Plant</label>
+            <app-multiautocomplete isSingle="false" [options]="storageLocation"
+              (selectionchanged)="selectionchangedstorageLocation()" [control]="storageLocationFormControl" text="name"
+              param1="code" param2="name" objectName="code-root" id="id">
+            </app-multiautocomplete>
+          </div>
+        </div>
 
 
                 <div class="row" style="margin:10px" *ngIf="export.type === '1'">
@@ -47,11 +81,10 @@
 
                 <section class="full-w">
                     <label>Export As : </label>
-                    <mat-radio-group formControlName="fileType" name="fileType" [(ngModel)]="export.fileType">
+                    <mat-radio-group formControlName="fileType" name="fileType" >
                         <mat-radio-button class="example-margin full-w" value="csv">CSV (Comma Separated
                             Value)</mat-radio-button>
-                        <mat-radio-button class="example-margin full-w" value="xlsx">XLS (Microsoft Excel Compatible)
-                        </mat-radio-button>
+                      
                     </mat-radio-group>
                 </section>
             </div>

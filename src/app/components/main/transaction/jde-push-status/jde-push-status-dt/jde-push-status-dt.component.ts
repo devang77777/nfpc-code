@@ -20,6 +20,7 @@ import { JdePushStatusService } from '../jde-push-status.service';
   styleUrls: ['./jde-push-status-dt.component.scss']
 })
 export class JdePushStatusDtComponent implements OnInit {
+  selectedRow: any;
   passData : any;
   selectedCode: any ;
   selectedDate: any ;
@@ -691,4 +692,7 @@ scrollToExpandedRow(): void {
       disableClose: true
     });
   }
+  toggleRow1(row: any) {
+  this.selectedRow = row === this.selectedRow ? null : row; // toggle behavior
+}
 }

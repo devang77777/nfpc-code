@@ -1,6 +1,6 @@
 <div class="scrolly">
   <ng-container *ngIf="advanceSearchRequest.length>0">
-    <app-search-criteria [data]="advanceSearchRequest" (change)="onChangeCriteria()" (close)="onCloseCriteria()">
+    <app-search-criteria [data]="advanceSearchRequest" (change)="onChangeCriteria()" (close)="onCloseCriteria()" [showExportButton]="true" (export)="exportData()">
     </app-search-criteria>
   </ng-container>
   <!-- <button (click)="selectedS()">click</button> -->

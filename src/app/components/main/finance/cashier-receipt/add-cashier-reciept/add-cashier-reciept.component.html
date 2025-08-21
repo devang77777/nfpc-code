@@ -1,9 +1,12 @@
 <div class="card fullWidth">
   <div class="card-header ">
-    <span class="h6 font-weight-light">{{ formType }} Cashier Receipt</span>
+    <span class="h6 font-weight-light">{{ formType }} Cashier Receipts</span>
     <a (click)="close()"><i class="fa fa-times fa-lg text-secondary float-right" aria-hidden="true"></i></a>
   </div>
-  <mat-tab-group [(selectedIndex)]="currentIndex" mat-align-tabs="start" dynamicHeight mat-stretch-tabs
+  <app-add-cashier-receipt-overview [isOpenedForDetail]="false" [recalculateReceipt]="recalculateReceipt"
+    (formValid)="validFormCheck($event)" (currentCashierData)="cashierReceiptData($event)">
+  </app-add-cashier-receipt-overview>
+  <!-- <mat-tab-group [(selectedIndex)]="currentIndex" mat-align-tabs="start" dynamicHeight mat-stretch-tabs
     class="customertab">
     <mat-tab label="Overview">
       <app-add-cashier-receipt-overview [isOpenedForDetail]="false" [recalculateReceipt]="recalculateReceipt"
@@ -14,8 +17,8 @@
       <app-add-cashier-receipt-slip [isOpenedForDetail]="false" [mainFormGroup]="parentFormGroup">
       </app-add-cashier-receipt-slip>
     </mat-tab>
-  </mat-tab-group>
-  <div class="card-footer">
+  </mat-tab-group> -->
+  <!-- <div class="card-footer">
     <div class="d-inline floating">
       <button class="btn btn-sm btn-light mr-2" (click)="close()">
         Cancel
@@ -25,5 +28,5 @@
         {{ buttonTitle }}
       </button>
     </div>
-  </div>
+  </div> -->
 </div>

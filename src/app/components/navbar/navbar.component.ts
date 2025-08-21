@@ -14,6 +14,7 @@ import { ApiService } from 'src/app/services/api.service';
 import { DataEditor } from 'src/app/services/data-editor.service';
 import { CommonToasterService } from 'src/app/services/common-toaster.service';
 import { ToastrService } from 'ngx-toastr';
+import { RouteService } from '../sidenav/route-active.service';
 @Component({
   selector: 'app-navbar',
   templateUrl: './navbar.component.html',
@@ -40,12 +41,18 @@ export class NavbarComponent implements OnInit {
     private auth: AuthService,
     private dataEditor: DataEditor,
     private toastrService: ToastrService,
-  ) { }
+    public routeService: RouteService,
+  ) { 
+    this.checkedOption = this.router.url;
+  }
 
   login_track_activity = JSON.parse(localStorage.getItem('login_track_activity'));
   is_trial;
   domain = window.location.host;
   ngOnInit(): void {
+     this.router.events.subscribe(() => {
+      this.checkedOption = this.router.url;
+    });
     this.dataEditor.getMessage().subscribe(message => {
       this.isNotification = message.export;
     });
@@ -249,10 +256,9 @@ export class NavbarComponent implements OnInit {
     });
   }
 
-  check(route) {
-    this.checkedOption = '/' + route;
-    this.router.navigateByUrl(route);
-  }
+ check(route: string) {
+  this.router.navigateByUrl(route);
+}
   isChecked(route) {
     return this.checkedOption === '/' + route;
   }

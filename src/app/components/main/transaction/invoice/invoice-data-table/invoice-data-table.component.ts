@@ -227,13 +227,7 @@ export class InvoiceDataTableComponent implements OnInit, OnDestroy, OnChanges {
     });
   }
 
-  onCloseCriteria() {
-    this.advanceSearchRequest = [];
-    this.eventService.emit(new EmitEvent(Events.CHANGE_CRITERIA, { reset: true, module: Events.SEARCH_ORDER, route: '/transaction/order' }));
-  }
-  onChangeCriteria() {
-    this.eventService.emit(new EmitEvent(Events.CHANGE_CRITERIA, { route: '/transaction/order' }));
-  }
+
   getChannelList(){
     this.apiService.getAllCustomerCategory().subscribe((res: any) => {
       this.channelList = res.data;
@@ -533,6 +527,27 @@ export class InvoiceDataTableComponent implements OnInit, OnDestroy, OnChanges {
     this.apiService.postInvoiceOdooData(invoiceData.id).subscribe(res => {
       this.getInvoiceList();
 
+    });
+  }
+  onCloseCriteria() {
+   
+  // Optional: clean up any state before redirect
+  this.advanceSearchRequest = [];
+
+  // Redirect with full page reload to /transaction/order
+  window.location.href = '/transaction/invoice';
+
+  }
+  onChangeCriteria() {
+    this.eventService.emit(new EmitEvent(Events.CHANGE_CRITERIA, { route: '/transaction/invoice' }));
+  }
+  exportData(){
+     const exportRequest = { ...this.requestOriginal, export: 1 };
+   this.apiService.onSearch(exportRequest).subscribe((response) => {
+      
+            this.apiService.downloadFile(response.data.file_url, 'csv');
+            // this.dataEditor.sendMessage({ export: '' });
+        
     });
   }
 }

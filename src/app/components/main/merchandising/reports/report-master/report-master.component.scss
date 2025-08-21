@@ -165,3 +165,21 @@ mat-form-field[_ngcontent-ikn-c439] {
   font-size: 20px;
   font-weight: 600;
 }
+@media (min-width: 768px) {
+    .col-md-2 {
+        flex: 0 0 16.666667%;
+        max-width: 11.5%;
+    }
+}
+@media (min-width: 768px) {
+    .col-md-10 {
+        flex: 0 0 88.5%;
+        max-width: 88.5%;
+        padding-left: 0;
+        padding-right: 0;
+    }
+}
+
+.col-md-12{
+  padding-right: 0;
+}

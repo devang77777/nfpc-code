@@ -79,7 +79,7 @@ export class CreditNoteDataTableComponent implements OnInit, OnDestroy {
   };
   page = 1;
   selectedColumnFilter: string;
-
+  is_export = 0;
   pageSize = PAGE_SIZE_10;
   private router: Router;
   private creditNoteService: CreditNoteService;
@@ -258,16 +258,28 @@ export class CreditNoteDataTableComponent implements OnInit, OnDestroy {
     });
   }
   onCloseCriteria() {
-    this.advanceSearchRequest = []
-    this.eventService.emit(new EmitEvent(Events.CHANGE_CRITERIA, { reset: true, module: Events.SEARCH_CREDIT_NOTE, route: '/transaction/credit-note' }));
+    this.advanceSearchRequest = [];
+
+  // Redirect with full page reload to /transaction/order
+  window.location.href = '/transaction/credit-note';
   }
   onChangeCriteria() {
     this.eventService.emit(new EmitEvent(Events.CHANGE_CRITERIA, { route: '/transaction/credit-note' }));
+  }
+  exportData(){
+    const exportRequest = { ...this.requestOriginal, export: 1 };
+   this.apiService.onSearch(exportRequest).subscribe((response) => {
+      
+            this.apiService.downloadFile(response.data.file_url, 'csv');
+            // this.dataEditor.sendMessage({ export: '' });
+        
+    });
   }
 
   getCreditNotes() {
     if (this.advanceSearchRequest.length > 0) {
       let requestOriginal = this.requestOriginal;
+      requestOriginal['export'] = this.is_export;
       requestOriginal['page'] = this.page;
       requestOriginal['page_size'] = this.pageSize;
       this.subscriptions.push(

@@ -62,6 +62,26 @@
                         </angular2-multiselect>
                     </div>
                 </div>
+                 <div class="row mb-3">
+                    <div class="col">
+                        <label for="">Division</label>
+                         <app-multiautocomplete isSingle="true" [options]="divisionList"
+                                    
+                                    [control]="palletFormGroup.controls['division']" text="name" id="id"
+                                    placeholder="Select Division">
+                                </app-multiautocomplete>
+                    </div>
+                </div>
+                 <div class="row mb-3">
+                    <div class="col">
+                        <label for="">Warehouse</label>
+                        <app-multiautocomplete isSingle="false" [options]="warehouseList"
+                                    
+                                    [control]="palletFormGroup.controls['warehouse']" text="name" id="id"
+                                    param1="code" param2="name" objectName="code-root" placeholder="Select Warehouse">
+                                </app-multiautocomplete>
+                    </div>
+                </div>
                 <div class="row mb-3">
                     <div class="col">
                         <label for="">Qty<i class="text-red">*</i>:</label>

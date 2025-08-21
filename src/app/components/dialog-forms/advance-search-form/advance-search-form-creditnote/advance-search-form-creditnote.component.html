@@ -47,8 +47,9 @@
             <div class="form-group row">
                 <label class="col-sm-3 col-form-label">Customer Name</label>
                 <div class="col-sm-9">
-                    <input type="text" formControlName="customerName" class="form-control form-control-sm"
-                        placeholder="Customer  Name">
+                     <app-multiautocomplete [options]="customerID" [control]="CustomersFormControl" text="" id="id" formControlName="customer_id"
+                objectName="user-root" param1="customer_code" param2="name" (selectionchanged)="selectionchangedCustomer()" >
+              </app-multiautocomplete>
                 </div>
             </div>
         </div>
@@ -58,16 +59,28 @@
                 <label class="col-sm-3 col-form-label">{{domain == 'presales-prodmobiato.nfpc.net' || domain == 'merchandising' ?
                     'Merchandiser' : 'Salesman'}}</label>
                 <div class="col-sm-9">
-                    <mat-select class="form-control form-control-sm" formControlName="salesman">
+                     <!-- <app-multiautocomplete isSingle="true" objectName="code-root" [options]="salesmanList" formControlName="salesman" [control]="SalesmanFormControl"
+             
+            id="id" text="salesman"  (selectionchanged)="selectionchangedSalesman()">
+          </app-multiautocomplete> -->
+              <!-- <app-multiautocomplete isSingle="false" [options]="salesmanList"  [control]="SalesmanFormControl"
+                                    formControlName="salesman" text="salesman_name" id="id" objectName="code-root"
+                                    placeholder="Search Salesman">
+                                </app-multiautocomplete> -->
+                                <app-multiautocomplete isSingle="true" [options]="salesmanList" (selectionchanged)="selectionchangedSalesman()"
+                                    [control]="SalesmanFormControl" text="salesman_name" id="id"
+                                    placeholder="Search Salesman">
+                                </app-multiautocomplete>
+                    <!-- <mat-select class="form-control form-control-sm" formControlName="salesman">
                         <mat-option *ngFor="let item of salesman" [value]="item.id">
                             {{ item.firstname }} {{ item.lastname }}
                         </mat-option>
-                    </mat-select>
+                    </mat-select> -->
                 </div>
             </div>
         </div>
         <div class="col-md-6">
-            <div class="form-group row">
+            <!-- <div class="form-group row">
                 <label class="col-sm-3 col-form-label">Status</label>
                 <div class="col-sm-9">
                     <mat-select class="form-control form-control-sm" formControlName="current_stage">
@@ -75,6 +88,41 @@
                             {{ item.name }}
                         </mat-option>
                     </mat-select>
+                </div>
+            </div> -->
+            <div class="form-group row">
+                <label class="col-sm-3 col-form-label">Service Channel</label>
+                <div class="col-sm-9">
+                     <mat-select multiple class="form-control form-control-sm" formControlName="channel_name">
+                                    <mat-option *ngFor="let item of channelList" [value]="item.id">
+                                    {{ item?.name }}
+                                    </mat-option>
+                                </mat-select>
+                </div>
+            </div>
+        </div>
+         <div class="col-md-6">
+            <div class="form-group row">
+                <label class="col-sm-3 col-form-label">Item</label>
+                <div class="col-sm-9">
+                     <app-multiautocomplete isSingle="false" [options]="filteredItems" [control]="itemsFormControl" text="" formControlName="item_id"
+                  id="id" objectName="item-portfolio-root" (selectionchanged)="selectionchangedItems()" param1="item_code"
+                  param2="item_name">
+                </app-multiautocomplete>
+                </div>
+            </div>
+        </div>
+         <div class="col-md-6">
+            <div class="form-group row">
+                <label class="col-sm-3 col-form-label">ERP Status</label>
+                <div class="col-sm-9">
+                     
+            <mat-select class="form-control form-control-sm" formControlName="erp_status">
+              <mat-option value="Not Posted">Not Posted</mat-option>
+              <mat-option value="Posted">Posted</mat-option>
+              <mat-option value="Failed">Fail</mat-option>
+            </mat-select>
+         
                 </div>
             </div>
         </div>

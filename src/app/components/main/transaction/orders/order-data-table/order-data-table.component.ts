@@ -251,15 +251,42 @@ export class OrderDataTableComponent implements OnInit, OnDestroy, OnChanges {
     });
   }
   
+  // onCloseCriteria() {
+  //   this.advanceSearchRequest = [];
+  //   // this.router.navigate(['transaction/order']);
+  //   this.eventService.emit(new EmitEvent(Events.CHANGE_CRITERIA, { reset: true, module: Events.SEARCH_ORDER, route: '/transaction/order' }));
+  // }
   onCloseCriteria() {
-    this.advanceSearchRequest = [];
-    this.eventService.emit(new EmitEvent(Events.CHANGE_CRITERIA, { reset: true, module: Events.SEARCH_ORDER, route: '/transaction/order' }));
-  }
+
+  // Optional: clean up any state before redirect
+  this.advanceSearchRequest = [];
+
+  // Redirect with full page reload to /transaction/order
+  window.location.href = '/transaction/order';
+
+
+}
+
   onChangeCriteria() {
     this.eventService.emit(new EmitEvent(Events.CHANGE_CRITERIA, { route: '/transaction/order' }));
   }
-  
+  exportData(){
+    const exportRequest = { ...this.requestOriginal, export: 1 };
+   this.apiService.onSearch(exportRequest).subscribe((response) => {
+      
+            this.apiService.downloadFile(response.data.file_url, 'csv');
+            // this.dataEditor.sendMessage({ export: '' });
+        
+    });
+    // this.eventService.emit(new EmitEvent(Events.CHANGE_CRITERIA, { reset: true, module: Events.SEARCH_ORDER, route: '/transaction/order' }));
+  }
   getAllOrdersList() {
+    const payload = {
+  ...this.filterForm.value,
+  created_id: this.filterForm.value.created_id?.length
+    ? this.filterForm.value.created_id.map(i => i.id)
+    : [],
+};
     if (this.advanceSearchRequest.length > 0) {
       this.advanceSearch();
     } else {
@@ -291,9 +318,11 @@ export class OrderDataTableComponent implements OnInit, OnDestroy, OnChanges {
       //   );
       //   return false;
       // }
+      
       this.subscriptions.push(
+        
         this.orderService
-          .orderList(this.filterForm.value)
+          .orderList(payload)
           .subscribe((result) => {
             this.orders = result.data;
             const statusCheck = ['Created', 'Updated'];

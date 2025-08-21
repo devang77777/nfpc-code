@@ -1,7 +1,16 @@
 <div class="card">
   <div class="card-header">
     <h4 class="p-0 m-0">Search</h4>
+     
   </div>
+  <!-- <mat-form-field appearance="fill" class="w-100">
+  <mat-label>Search</mat-label>
+  <mat-select [(value)]="selectedModule" (selectionChange)="onModuleChange($event.value)">
+    <mat-option *ngFor="let module of moduleOptions" [value]="module.path">
+      {{ module.label }}
+    </mat-option>
+  </mat-select>
+</mat-form-field> -->
   <div class="card-body" *ngIf="data === '/masters/salesman'">
     <app-advance-search-form-salesman-load [routes]="masterData?.route" [roles]="masterData?.salesman_role"
       [types]="masterData?.salesman_type" #activeComponent>
@@ -26,7 +35,8 @@
   </div>
   <div class="card-body" *ngIf="data === '/transaction/order'">
     <app-advance-search-form-order [items]="masterData?.items" [orderCreatedUser]="masterData?.order_created_user"
-      [storageLocation]="masterData?.storage_location" #activeComponent></app-advance-search-form-order>
+      [storageLocation]="masterData?.storage_location"  #activeComponent>
+    </app-advance-search-form-order>
   </div>
   <div class="card-body" *ngIf="data === '/transaction/invoice'">
     <app-advance-search-form-invoice #activeComponent [salesman]="masterData?.salesmans"

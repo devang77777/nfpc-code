@@ -103,7 +103,7 @@ expandedRow: any;
   public date : any =[]
   public salesman_code : any =[]
  
-   customerDisplayedColumns2: string[] = ['trxDate','driverCode','invoiceNumber','invoiceType','status']
+   customerDisplayedColumns2: string[] = ['trxDate','driverCode','invoiceNumber','invoiceType','status','failed_message']
   
   constructor(
     public fb: FormBuilder,

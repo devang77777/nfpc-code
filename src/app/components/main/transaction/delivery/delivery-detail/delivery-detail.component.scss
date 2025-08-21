@@ -147,8 +147,8 @@ mat-option {
       border-top: none;
       text-align: left;
       min-width: 75px;
-      color: #263035;
-      background-color: #f3f3f3;
+       background-color: #000000;
+      color: #e0e0e0;
       font-size: 12px;
       font-weight: 600;
       text-transform: uppercase;
@@ -404,4 +404,15 @@ tr.disabled {
 }
 .enable-btn-edit {
   cursor: pointer !important;
+}
+
+.item-row:nth-child(even) td {
+  background-color: #e3e0e0 !important;
+  color: #212529;
+}
+
+/* Zebra striping: odd rows */
+.item-row:nth-child(odd) td {
+  background-color: #ffffff !important;
+  color: #212529;
 }

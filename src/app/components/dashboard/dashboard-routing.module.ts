@@ -12,6 +12,7 @@ import { VisitFrequencyComponent } from './components/visit-frequency/visit-freq
 import { DashboardPageComponent } from './views/dashboard-page/dashboard-page.component';
 import { TotalDeliveryLive } from './components/total-delivery-live/total-delivery-live.component';
 import { Logistic1Component } from './components/logistic1/logistic1.component';
+import { OrderAnalysisDashboardComponent } from './components/order-analysis-dashboard/order-analysis-dashboard.component';
 const routes: Routes = [
   {
     path: '', component: DashboardPageComponent,
@@ -25,6 +26,7 @@ const routes: Routes = [
       { path: 'coverage', component: CoverageComponent },
       { path: 'visit-frequency', component: VisitFrequencyComponent},
       { path: 'monthly-kpi', component: MonthlyKpiDashboardComponent },
+      { path: 'order-analysis', component: OrderAnalysisDashboardComponent },
       { path: 'live-tracking', component: TotalDeliveryLive },
       { path: 'logistic', component: Logistic1Component },
 

@@ -92,6 +92,12 @@
         "icon": "fa fa-credit-card-alt"
     },
     {
+        "label": "Cashier Receipt",
+        "routeTo": "finance/cashier-reciept",
+        "active": "/cashier-reciept",
+        "icon": "os-icon os-icon-file-text"
+    },
+    {
         "label": "JDE Push Status",
         "routeTo": "transaction/jde-push-status",
         "active": "/jde-push-status",

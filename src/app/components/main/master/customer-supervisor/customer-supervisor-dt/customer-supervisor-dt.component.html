@@ -36,6 +36,26 @@
                 </th>
                 <td mat-cell *matCellDef="let element"> {{element?.customer_info?.user?.firstname}} </td>
             </ng-container>
+                                <ng-container matColumnDef="channel_name">
+                    <th mat-header-cell *matHeaderCellDef>
+                        <app-column-filter title="Service Channel" (changeSelected)="onColumnFilterOpen($event)"
+                        [selected]="selectedColumnFilter" controlName="channel_name" (close)="onColumnFilter($event)">
+                        <mat-select  multiple class="form-control form-control-sm" [formControl]="filterForm.get('channel_name')">
+                            <mat-option *ngFor="let item of channelList" [value]="item.id">
+                            {{ item?.name }}
+                            </mat-option>
+                        </mat-select>
+                        </app-column-filter>
+                    </th>
+                    <td mat-cell *matCellDef="let element" >
+                        <ng-container>
+                        <span>
+                            {{ element.customer_info?.customer_category?.customer_category_name }} 
+                        </span>
+                        </ng-container>
+
+                    </td>
+                    </ng-container>
             <!-- <ng-container matColumnDef="supervisor_name">
                 <th mat-header-cell *matHeaderCellDef>
                     <app-column-filter title="Supervisor Name" (changeSelected)="onColumnFilterOpen($event)"
@@ -46,22 +66,28 @@
                 </th>
                 <td mat-cell *matCellDef="let element"> {{element?.supervisor?.firstname}} {{element?.supervisor?.lastname}}</td>
             </ng-container> -->
-            <ng-container matColumnDef="supervisor_name">
+            <ng-container matColumnDef="supervisor_id">
                     <th mat-header-cell *matHeaderCellDef>
                         <app-column-filter title="Supervisor Name" (changeSelected)="onColumnFilterOpen($event)"
                         [selected]="selectedColumnFilter" controlName="supervisor_id" (close)="onColumnFilter($event)">
-                        <!-- <mat-select  multiple class="form-control form-control-sm" [formControl]="filterForm.get('supervisor_name')">
-                            <mat-option *ngFor="let item of supervisorList" >
-                            {{ item?.firstname }} {{ item?.lastname }}
-                            </mat-option>
-                        </mat-select> -->
-                        <mat-select multiple class="form-control form-control-sm" >
-                                <input class="form-control form-control-sm" [formControl]="filterForm.get('supervisor_id')"
-                                placeholder="Enter Name" type="text"/>
+                        <app-multiautocomplete isSingle="false" [options]="supervisorList"
+                                    [control]="filterForm.controls['supervisor_id']" text="name" id="id"
+                                    param1="firstname" param2="lastname" objectName="code-root" placeholder="Select Supervisor">
+                                </app-multiautocomplete>
+<!--                        
+                        <mat-select multiple class="form-control form-control-sm" [formControl]="filterForm.get('supervisor_id')">
+                               
+                                 <input class="form-control form-control-sm"
+                                        [(ngModel)]="supervisorSearchText"
+                                        (keydown.space)="$event.stopPropagation()"  
+                                        (keyup)="filterSupervisorList()"
+                                        placeholder="Enter Name"
+                                        (input)="onSearchInputChange($event)"
+                                        type="text" />
                                 <mat-option *ngFor="let item of supervisorList" [value]="item.id">
                                 {{ item?.firstname }} {{ item?.lastname }}
                                 </mat-option>
-                            </mat-select>
+                            </mat-select> -->
                         </app-column-filter>
                     </th>
                     <td mat-cell *matCellDef="let element">

@@ -19,7 +19,7 @@
                                         <label for="">End Date</label>
                                         <input type="date" class="form-control form-control-sm"
                                             formControlName="end_date"
-                                            [min]="activeCustomerPriceForm.controls.start_date.value">
+                                            >
                                     </div>
                                 </div>
                                  <div class="col-md-3" >
@@ -33,7 +33,7 @@
                                  <div class="col-md-3">
                                 <label for="">Division</label>
                                 <app-multiautocomplete isSingle="true" [options]="divisionList"
-                                    (selectionchanged)="filterWarehouse()"
+                                    
                                     [control]="sideFiltersForm.controls['division']" text="name" id="id"
                                     placeholder="Select Division">
                                 </app-multiautocomplete>
@@ -42,7 +42,7 @@
                             <div class="col-md-3">
                                 <label for="">Warehouse</label>
                                 <app-multiautocomplete isSingle="false" [options]="warehouseList"
-                                    (selectionchanged)="filterVehicles()"
+                                    
                                     [control]="sideFiltersForm.controls['warehouse']" text="name" id="id"
                                     param1="code" param2="name" objectName="code-root" placeholder="Select Warehouse">
                                 </app-multiautocomplete>
@@ -108,7 +108,7 @@
                         </ng-container>
 
                         <mat-header-row *matHeaderRowDef="customerDisplayedColumns2; sticky: true"></mat-header-row>
-                        <mat-row *matRowDef="let row; columns: customerDisplayedColumns2  "></mat-row>
+                        <mat-row class="item-row" *matRowDef="let row; columns: customerDisplayedColumns2  " [ngClass]="{'selected-row': selectedRow === row}"> </mat-row>
                          
                         <ng-container matColumnDef="expandedDetail" >
     <mat-cell *matCellDef="let element" [attr.colspan]="mainDisplayedColumns.length">
@@ -148,7 +148,7 @@
           </ng-container>
 
           <mat-header-row *matHeaderRowDef="detailDisplayedColumns"></mat-header-row>
-          <mat-row *matRowDef="let row; columns: detailDisplayedColumns" (click)="toggleFunction(element,row)"></mat-row>
+          <mat-row  class="item-row detail-row" *matRowDef="let row; columns: detailDisplayedColumns" (click)="toggleFunction(element,row)"></mat-row>
         </mat-table>
               
         <!-- <mat-paginator #jdePushStatusDatePaginator pageSize="5" [pageSizeOptions]="[5,10,15,25,50,100]"></mat-paginator> -->
@@ -202,7 +202,7 @@
     </mat-cell>
 </ng-container>
 
-     <mat-row *matRowDef="let row; columns: ['salesOrgDetails'] " class="detail-row"  [ngClass]="{'hidden': openDriverElement !== row}"></mat-row>
+     <mat-row  class="item-row detail-row" *matRowDef="let row; columns: ['salesOrgDetails'] " class="detail-row"  [ngClass]="{'hidden': openDriverElement !== row}"></mat-row>
 
                     </mat-table>
                 </div>
