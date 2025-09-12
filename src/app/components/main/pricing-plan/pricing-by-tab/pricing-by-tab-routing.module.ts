@@ -7,8 +7,7 @@ import { PricingByTabImportComponent } from './pricing-by-tab-import/pricing-by-
 import { PricingByItemBaseTabImportComponent } from './pricing-by-item-base-tab-import/pricing-by-item-base-tab-import.component';
 import { ActiveCustomerPricingExportComponent } from './active-customer-pricing-export/active-customer-pricing-export.component';
 import { CopyPricingComponent } from './copy-pricing/copy-pricing.component';
-
-
+import { ItemCopyPriceComponent } from './item-copy-price/item-copy-price.component';
 const routes: Routes = [
   {
     path: '',
@@ -29,6 +28,10 @@ const routes: Routes = [
   {
     path: 'copy-pricing',
     component: CopyPricingComponent,
+  },
+  {
+    path: 'item-copy-pricing',
+    component: ItemCopyPriceComponent,
   },
 
 ];

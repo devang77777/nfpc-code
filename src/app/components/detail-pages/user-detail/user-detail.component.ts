@@ -51,7 +51,7 @@ export class UserDetailComponent implements OnInit {
     let body = {
       user_id: this.user?.user_id
     };
-    this.getHistory();
+    // this.getHistory();
     
   }
 
@@ -112,7 +112,7 @@ export class UserDetailComponent implements OnInit {
   selectedTabChange(index) {
     switch (index) {
       case 2:
-        this.getHistory();
+        // this.getHistory();
         break;
     }
     switch (index) {
@@ -151,12 +151,12 @@ export class UserDetailComponent implements OnInit {
     return this.displayedColumns.filter(column => column.show).map(column => column.def);
   }
 
-  getHistory(){
-    this.apiService.getUserHistory({ user_id: this.user?.user_id 
-}).subscribe((res) => {
-      this.dataSource = new MatTableDataSource<Users>(res.data);
-      this.dataSource.paginator = this.paginator;
-    })
-  }
+//   getHistory(){
+//     this.apiService.getUserHistory({ user_id: this.user?.user_id 
+// }).subscribe((res) => {
+//       this.dataSource = new MatTableDataSource<Users>(res.data);
+//       this.dataSource.paginator = this.paginator;
+//     })
+//   }
 }
 // user_id: this.user?.user_id 

@@ -31,7 +31,7 @@ export class AuthInterceptor implements HttpInterceptor {
           'x-domain': 'presales.prodmobiato.nfpc.net',
         },
       });
-    } else if (req.url.includes('import') || req.url.includes('customer-warehouse-mapping') || req.url.includes('customer-region-mapping') || req.url.includes('customer-ksm-kam-mapping') || req.url.includes('item-base-price-mapping') || req.url.includes('customer-copy-price')) {
+    } else if (req.url.includes('import') || req.url.includes('customer-warehouse-mapping') || req.url.includes('customer-region-mapping') || req.url.includes('customer-ksm-kam-mapping') || req.url.includes('item-base-price-mapping') || req.url.includes('customer-copy-price') || req.url.includes('copy-item-base-price')) {
       req = req.clone({
         setHeaders: {
           Authorization: `Bearer ${this.authService.getToken()}`,

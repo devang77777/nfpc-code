@@ -12,7 +12,10 @@ export class SearchCriteriaComponent implements OnInit {
     @Output() export: EventEmitter<any> = new EventEmitter()
     constructor() { }
 
-    ngOnInit(): void { }
+    ngOnInit(): void {
+         
+
+     }
 
     onClose() {
         this.close.emit()
@@ -23,4 +26,5 @@ export class SearchCriteriaComponent implements OnInit {
     exportData() {
         this.export.emit()
     }
+    
 }

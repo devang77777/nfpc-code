@@ -119,3 +119,19 @@ td.mat-column-code {
     margin-bottom: 120px;
   }
 }
+
+:host ::ng-deep app-multiautocomplete.created .dropdown-list.tagToBody {
+  position: sticky !important;
+}
+
+:host ::ng-deep .mat-column-created {
+  .action {
+    padding: 5px 1px;
+    margin-top: 30px !important;
+  }
+}
+
+// :host ::ng-deep .mat-column-created app-multiautocomplete.multi-selected .action {
+//   padding: 5px 1px !important;
+//   margin-top: 30px !important;
+// }

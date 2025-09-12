@@ -11,14 +11,17 @@ import { MasterService } from 'src/app/components/main/master/master.service';
   ]
 })
 export class AdvanceSearchFormCreditnoteComponent implements OnInit {
+  @Input() customers: Array<any> = [];
   code : any;
   channelList: any[] = [];
+  salesmanList1: any[] = [];
   salesmanList: any[] = [];
    public filteredItems: any[] = [];
    public itemData: any[] = [];
    itemsFormControl = new FormControl([]);
   statusList: Array<any> = STATUS;
   @Input() salesman: Array<any> = [];
+  @Input() items: Array<any> = [];
   domain = window.location.host;
   form: FormGroup
    private subscriptions: Subscription[] = [];
@@ -28,6 +31,14 @@ export class AdvanceSearchFormCreditnoteComponent implements OnInit {
   constructor(private apiService: ApiService,private ms : MasterService) { }
 
   ngOnInit(): void {
+     this.salesmanList1
+      .map((item: any) => {
+      return {
+        salesman_code: item.salesman_code,
+        name: `${item.user.firstname} ${item.user.lastname}`
+      };
+    });
+    console.log("the new salesman data is here 40:",this.salesmanList1)
     this.subscriptions.push(
       this.ms.itemDetailDDllistTable({ page: 1, page_size: 10 }).subscribe((result: any) => {
         this.itemData = result.data;
@@ -50,6 +61,7 @@ export class AdvanceSearchFormCreditnoteComponent implements OnInit {
       startdate: new FormControl(),
       enddate: new FormControl(),
       credit_notes_no: new FormControl(),
+      customer_ref_no: new FormControl(),
       customer_id: new FormControl(),
       startrange: new FormControl(),
       endrange: new FormControl(),
@@ -58,11 +70,9 @@ export class AdvanceSearchFormCreditnoteComponent implements OnInit {
       channel_name: new FormControl(),
       item_id: new FormControl(),
       erp_status: new FormControl(),
+      approval_status: new FormControl(),
     })
-    this.ms.customerDetailDDlListTable({}).subscribe((result) => {
-      this.customerID = result.data;
-      // this.filterCustomer = result.data.slice(0, 30);
-    })
+   
   }
 
    selectionchangedCustomer() {

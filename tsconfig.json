@@ -16,10 +16,11 @@
       "@components/*": ["app/components/*"],
       "@services/*": ["app/services/*"],
       "@env/*": ["environments/*"]
-    }
+    },
   },
   "angularCompilerOptions": {
     "fullTemplateTypeCheck": true,
-    "strictInjectionParameters": true
+    "strictInjectionParameters": true,
+    
   }
 }

@@ -11,6 +11,8 @@
                         Pricing</button>
                     <button mat-menu-item type="button" (click)="copyPricing()" *ngIf="selectedIndex===1">Copy
                         Pricing</button>
+                    <button mat-menu-item type="button" (click)="copyItemPricing()" *ngIf="selectedIndex===1">Copy Item
+                        Pricing</button>
                     <button mat-menu-item type="button" (click)="exportPricing()">Export Pricing</button>
                 </mat-menu>
             </div>
@@ -24,7 +26,7 @@
                             <div class="row">
                                 <div class="col-md-3">
                                     <label for="">Warehouse</label>
-                                    <app-multiautocomplete isSingle="true" [options]="warehouseList"
+                                    <app-multiautocomplete isSingle="false" [options]="warehouseList"
                                         [control]="sideFiltersForm.controls['warehouse_code']" text="name" id="id"
                                         param1="code" param2="name" objectName="code-root"
                                         placeholder="Select Warehouse">
@@ -44,7 +46,7 @@
 
                                 <div class="col-md-3">
                                     <label for="">Item</label>
-                                    <angular2-multiselect [data]="items"
+                                    <!-- <angular2-multiselect [data]="items"
                                         [formControl]="sideFiltersForm.controls['item_code']" [settings]="settings"
                                         (onSelect)="onItemSelect($event)" (onDeSelect)="OnItemDeSelect($event)"
                                         (onSelectAll)="onSelectAll($event)" (onDeSelectAll)="onDeSelectAll($event)">
@@ -60,7 +62,11 @@
                                                     style="font-weight: 100 !important;margin-bottom:0 !important">{{item.itemName}}</label>
                                             </ng-template>
                                         </c-item>
-                                    </angular2-multiselect>
+                                    </angular2-multiselect> -->
+                                     <app-multiautocomplete isSingle="false" [options]="items" [control]="sideFiltersForm.controls['item_code']"  text="" 
+                  id="id" objectName="item-portfolio-root" (selectionchanged)="selectionchangedItems()" param1="item_code"
+                  param2="item_name">
+                </app-multiautocomplete>
                                 </div>
                                 <!-- <div class="col-md-2">
                                     <div class="form-group smmatinput">
@@ -73,7 +79,7 @@
                                 <div class="col-md-2" style="margin-top: 25px;">
                                     <div class="form-group smmatinput">
                                         <button type="button" class="btn btn-sm btn-p"
-                                            (click)="showOrder()">Submit</button>
+                                            (click)="showOrder()" [disabled]="!isItemBasePriceFormValid()">Submit</button>
                                     </div>
                                 </div>
                             </div>
@@ -160,30 +166,21 @@
                             <div class="row">
                                 <div class="col-md-3">
                                     <label for="">Customer</label>
+                                    <app-multiautocomplete 
+                                        [options]="customerID" 
+                                        [control]="customerFormControl" 
+                                        text="" 
+                                        id="id" 
+                                        formControlName="customer_code"
+                                        objectName="user-root" 
+                                        param1="customer_code" 
+                                        param2="name" 
+                                        (selectionchanged)="selectionchangedCustomer()">
+                                    </app-multiautocomplete>
 
-                                    <mat-form-field class="example-full-width" id="customerFormField">
-                                        <input type="text" placeholder="Search Customer" matInput
-                                            [matAutocomplete]="auto" [formControl]="customerFormControl"
-                                            (keyup)="keyUp.next($event)">
-                                        <mat-autocomplete appOptionScroll (optionsScroll)="onScroll()"
-                                            (optionSelected)="getCustomerLobList($event.option.value)"
-                                            #auto="matAutocomplete" (opened)="checkFormValidation('order')"
-                                            [displayWith]="customerControlDisplayValue" required>
-                                            <mat-option *ngFor="let customer of filterCustomer" [value]="customer">
-                                                {{ customer.customer_code }} - {{ customer.name }} </mat-option>
-                                            <hr class="customerHr">
-
-                                            <!-- <mat-option *ngIf="isLoading">
-                                            <div class="select-placeholder-container">
-                                              <mat-spinner class="spinner" diameter="20"></mat-spinner>
-                                            </div>
-                                          </mat-option> -->
-
-                                        </mat-autocomplete>
-                                        <mat-error *ngIf="customerFormControl.hasError('required')">Please select a
-                                            customer
-                                        </mat-error>
-                                    </mat-form-field>
+                                   <!-- <app-multiautocomplete [options]="customerID" [control]="customerFormControl" text="" id="id" formControlName="customer_code"
+                objectName="user-root" param1="customer_code" param2="name" (selectionchanged)="selectionchangedCustomer()" >
+              </app-multiautocomplete> -->
                                     <!-- <select name="" id="">
                                         <option *ngFor="let cl of customerList" [value]="cl.customer_code">{{cl.name}}</option>
                                     </select> -->
@@ -202,7 +199,7 @@
 
   <div class="col-md-3">
                                     <label for="">Item</label>
-                                    <angular2-multiselect [data]="items"
+                                    <!-- <angular2-multiselect [data]="items"
                                         [formControl]="sideFiltersForm.controls['item_code']" [settings]="settings"
                                         (onSelect)="onItemSelect($event)" (onDeSelect)="OnItemDeSelect($event)"
                                         (onSelectAll)="onSelectAll($event)" (onDeSelectAll)="onDeSelectAll($event)">
@@ -218,7 +215,11 @@
                                                     style="font-weight: 100 !important;margin-bottom:0 !important">{{item.itemName}}</label>
                                             </ng-template>
                                         </c-item>
-                                    </angular2-multiselect>
+                                    </angular2-multiselect> -->
+                                    <app-multiautocomplete isSingle="false" [options]="items" [control]="sideFiltersForm.controls['item_code']"  text="" 
+                  id="id" objectName="item-portfolio-root" (selectionchanged)="selectionchangedItems()" param1="item_code"
+                  param2="item_name">
+                </app-multiautocomplete>
                                 </div>
 
 
@@ -263,7 +264,7 @@
                                 <div class="col-md-2" style="margin-top: 25px;">
                                     <div class="form-group smmatinput">
                                         <button type="button" class="btn btn-sm btn-p"
-                                            (click)="showCustomer()">Submit</button>
+                                            (click)="showCustomer()" [disabled]="!isCustomerBasePriceFormValid()">Submit</button>
                                     </div>
                                 </div>
                             </div>
@@ -276,7 +277,72 @@
                 </div>
                 <div class="table-responsive">
                     <mat-table [dataSource]="customerDataSource" class="mat-elevation-z8 table-hover table-scroll ">
+                        <ng-container matColumnDef="customerCode">
+                            <mat-header-cell *matHeaderCellDef> Customer Code </mat-header-cell>
+                            <mat-cell *matCellDef="let element"> {{element?.customer_code}} </mat-cell>
+                        </ng-container>
+                        <ng-container matColumnDef="customerName">
+                            <mat-header-cell *matHeaderCellDef> Customer Name </mat-header-cell>
+                            <mat-cell *matCellDef="let element"> {{element?.firstname + ' ' + element?.lastname}}
+                            </mat-cell>
+                        </ng-container>
                         <ng-container matColumnDef="itemCode">
+                            <mat-header-cell *matHeaderCellDef> Item Code </mat-header-cell>
+                            <mat-cell *matCellDef="let element"> {{element?.itemcode}}
+                            </mat-cell>
+                        </ng-container>
+                        <ng-container matColumnDef="itemDesc">
+                            <mat-header-cell *matHeaderCellDef> Item Description </mat-header-cell>
+                            <mat-cell *matCellDef="let element"> {{element?.itemname}} </mat-cell>
+                        </ng-container>
+                        <ng-container matColumnDef="uom">
+                            <mat-header-cell *matHeaderCellDef> UOM </mat-header-cell>
+                            <mat-cell *matCellDef="let element"> {{element?.uomname}}
+                            </mat-cell>
+                        </ng-container>
+                        <ng-container matColumnDef="basePrice">
+                            <mat-header-cell *matHeaderCellDef>Base Price </mat-header-cell>
+                            <mat-cell *matCellDef="let element"> {{element?.itembaseprice}} </mat-cell>
+                        </ng-container>
+                        <ng-container matColumnDef="discountPrice">
+                            <mat-header-cell *matHeaderCellDef>Discount Price </mat-header-cell>
+                            <mat-cell *matCellDef="let element"> {{(element?.itembaseprice -
+                                element?.customerprice).toFixed(2)}} </mat-cell>
+                        </ng-container>
+                         <ng-container matColumnDef="exciseTax">
+                            <mat-header-cell *matHeaderCellDef>Excise Price</mat-header-cell>
+                            <mat-cell *matCellDef="let element"> {{element?.itemexcise }} </mat-cell>
+                        </ng-container>
+                        <ng-container matColumnDef="customerPrice">
+                            <mat-header-cell *matHeaderCellDef >Customer Price </mat-header-cell>
+                            <mat-cell *matCellDef="let element"> {{element?.customerprice}} </mat-cell>
+                        </ng-container>
+                        <ng-container matColumnDef="startDate">
+                            <mat-header-cell *matHeaderCellDef> Start Date </mat-header-cell>
+                            <mat-cell *matCellDef="let element"> {{element?.start_date}} </mat-cell>
+                        </ng-container>
+                        <ng-container matColumnDef="endDate">
+                            <mat-header-cell *matHeaderCellDef> End Date </mat-header-cell>
+                            <mat-cell *matCellDef="let element"> {{element?.end_date}} </mat-cell>
+
+                        </ng-container>
+                         <ng-container matColumnDef="modifiedDate">
+                            <mat-header-cell *matHeaderCellDef> Modified Date </mat-header-cell>
+                            <mat-cell *matCellDef="let element"> {{element?.modifieddate}} </mat-cell>
+                        </ng-container>
+                        <ng-container matColumnDef="modifyBy">
+                            <mat-header-cell *matHeaderCellDef> Modified By </mat-header-cell>
+                            <mat-cell *matCellDef="let element"> {{element?.modifiedby}} </mat-cell>
+                        </ng-container>
+                        <ng-container matColumnDef="primaryKey">
+                            <mat-header-cell *matHeaderCellDef> Price Key </mat-header-cell>
+                            <mat-cell *matCellDef="let element"> {{element?.key}} </mat-cell>
+                        </ng-container>
+                         <ng-container matColumnDef="status">
+                            <mat-header-cell *matHeaderCellDef> Status </mat-header-cell>
+                            <mat-cell *matCellDef="let element"> {{ element?.price_status ? (element.price_status.charAt(0).toUpperCase() + element.price_status.slice(1)) : '' }} </mat-cell>
+                        </ng-container>
+                        <!-- <ng-container matColumnDef="itemCode">
                             <mat-header-cell *matHeaderCellDef> Item Code </mat-header-cell>
                             <mat-cell *matCellDef="let element"> {{element?.itemcode}}
                             </mat-cell>
@@ -323,7 +389,7 @@
                         <ng-container matColumnDef="primaryKey">
                             <mat-header-cell *matHeaderCellDef> Price Key </mat-header-cell>
                             <mat-cell *matCellDef="let element"> {{element?.key}} </mat-cell>
-                        </ng-container>
+                        </ng-container> -->
                         <mat-header-row *matHeaderRowDef="customerDisplayedColumns; sticky: true"></mat-header-row>
                         <mat-row *matRowDef="let row; columns: customerDisplayedColumns;"></mat-row>
                     </mat-table>
@@ -341,8 +407,10 @@
                             <div class="row">
                                 <div class="col-md-3">
                                     <label for="">Customer</label>
-
-                                    <mat-form-field class="example-full-width" id="customerFormField">
+                                    <app-multiautocomplete [options]="customerID" [control]="customerFormControl" text="" id="id" formControlName="customer_code"
+                objectName="user-root" param1="customer_code" param2="name" (selectionchanged)="selectionchangedCustomer()" >
+              </app-multiautocomplete>
+                                    <!-- <mat-form-field class="example-full-width" id="customerFormField">
                                         <input type="text" placeholder="Search Customer" matInput
                                             [matAutocomplete]="auto" [formControl]="customerFormControl"
                                             (keyup)="keyUp.next($event)">
@@ -354,17 +422,12 @@
                                                 {{ customer.customer_code }} - {{ customer.name }} </mat-option>
                                             <hr class="customerHr">
 
-                                            <!-- <mat-option *ngIf="isLoading">
-                                            <div class="select-placeholder-container">
-                                              <mat-spinner class="spinner" diameter="20"></mat-spinner>
-                                            </div>
-                                          </mat-option> -->
-
+                                           
                                         </mat-autocomplete>
                                         <mat-error *ngIf="customerFormControl.hasError('required')">Please select a
                                             customer
                                         </mat-error>
-                                    </mat-form-field>
+                                    </mat-form-field> -->
                                     <!-- <select name="" id="">
                                         <option *ngFor="let cl of customerList" [value]="cl.customer_code">{{cl.name}}</option>
                                     </select> -->
@@ -384,7 +447,7 @@
                                 </div>
   <div class="col-md-3">
                                     <label for="">Item</label>
-                                    <angular2-multiselect [data]="items"
+                                    <!-- <angular2-multiselect [data]="items" 
                                         [formControl]="sideFiltersForm.controls['item_code']" [settings]="settings"
                                         (onSelect)="onItemSelect($event)" (onDeSelect)="OnItemDeSelect($event)"
                                         (onSelectAll)="onSelectAll($event)" (onDeSelectAll)="onDeSelectAll($event)">
@@ -400,7 +463,11 @@
                                                     style="font-weight: 100 !important;margin-bottom:0 !important">{{item.itemName}}</label>
                                             </ng-template>
                                         </c-item>
-                                    </angular2-multiselect>
+                                    </angular2-multiselect> -->
+                                    <app-multiautocomplete isSingle="false" [options]="items" [control]="sideFiltersForm.controls['item_code']"  text="" 
+                  id="id" objectName="item-portfolio-root" (selectionchanged)="selectionchangedItems()" param1="item_code"
+                  param2="item_name">
+                </app-multiautocomplete>
                                 </div>
 
 
@@ -474,7 +541,7 @@
                                 <div class="col-md-2" style="margin-top: 25px;">
                                     <div class="form-group smmatinput">
                                         <button type="button" class="btn btn-sm btn-p"
-                                            (click)="showCustomerActiveList()">Submit</button>
+                                            (click)="showCustomerActiveList()" [disabled]="!isActiveCustomerPriceFormValid()">Submit</button>
                                     </div>
                                 </div>
                             </div>
@@ -588,29 +655,9 @@
                                 <div class="col-md-3">
                                     <label for="">Customer</label>
 
-                                    <mat-form-field class="example-full-width" id="customerFormField">
-                                        <input type="text" placeholder="Search Customer" matInput
-                                            [matAutocomplete]="auto" [formControl]="customerFormControl"
-                                            (keyup)="keyUp.next($event)">
-                                        <mat-autocomplete appOptionScroll (optionsScroll)="onScroll()"
-                                            (optionSelected)="getCustomerLobList($event.option.value)"
-                                            #auto="matAutocomplete" (opened)="checkFormValidation('order')"
-                                            [displayWith]="customerControlDisplayValue" required>
-                                            <mat-option *ngFor="let customer of filterCustomer" [value]="customer">
-                                                {{ customer.customer_code }} - {{ customer.name }} </mat-option>
-                                            <hr class="customerHr">
-
-                                            <!-- <mat-option *ngIf="isLoading">
-                                            <div class="select-placeholder-container">
-                                              <mat-spinner class="spinner" diameter="20"></mat-spinner>
-                                            </div>
-                                          </mat-option> -->
-
-                                        </mat-autocomplete>
-                                        <mat-error *ngIf="customerFormControl.hasError('required')">Please select a
-                                            customer
-                                        </mat-error>
-                                    </mat-form-field>
+                                   <app-multiautocomplete [options]="customerID" [control]="customerFormControl" text="" id="id" formControlName="customer_code"
+                objectName="user-root" param1="customer_code" param2="name" (selectionchanged)="selectionchangedCustomer()" >
+              </app-multiautocomplete>
                                     <!-- <select name="" id="">
                                         <option *ngFor="let cl of customerList" [value]="cl.customer_code">{{cl.name}}</option>
                                     </select> -->
@@ -645,7 +692,7 @@
                                 </div> -->
                                  <div class="col-md-3">
                                     <label for="">Item</label>
-                                    <angular2-multiselect [data]="items"
+                                    <!-- <angular2-multiselect [data]="items"
                                         [formControl]="sideFiltersForm.controls['item_code']" [settings]="settings"
                                         (onSelect)="onItemSelect($event)" (onDeSelect)="OnItemDeSelect($event)"
                                         (onSelectAll)="onSelectAll($event)" (onDeSelectAll)="onDeSelectAll($event)">
@@ -661,7 +708,11 @@
                                                     style="font-weight: 100 !important;margin-bottom:0 !important">{{item.itemName}}</label>
                                             </ng-template>
                                         </c-item>
-                                    </angular2-multiselect>
+                                    </angular2-multiselect> -->
+                                    <app-multiautocomplete isSingle="false" [options]="items" [control]="sideFiltersForm.controls['item_code']"  text="" 
+                  id="id" objectName="item-portfolio-root" (selectionchanged)="selectionchangedItems()" param1="item_code"
+                  param2="item_name">
+                </app-multiautocomplete>
                                 </div>
 
 
@@ -711,7 +762,7 @@
                                 <div class="col-md-2" style="margin-top: 25px;">
                                     <div class="form-group smmatinput">
                                         <button type="button" class="btn btn-sm btn-p"
-                                            (click)="showUpdateEndDate()">Submit</button>
+                                            (click)="showUpdateEndDate()" [disabled]="!isUpdateEndDateFormValid()">Submit</button>
                                     </div>
                                 </div>
                             </div>

@@ -105,7 +105,7 @@
             </app-order-data-table>
         </div>
         <div class="details-box" [ngClass]="{ expanded: isDetailVisible }">
-            <app-order-detail (detailsClosed)="closeClicked()" [isDetailVisible]="isDetailVisible" [orderData]="orderData" (toggleHistory)="openHistoryView()" [updatedLists]="allOrderList">
+            <app-order-detail (detailsClosed)="closeClicked()" [isDetailVisible]="isDetailVisible" [orderData]="orderData"  [updatedLists]="allOrderList">
             </app-order-detail>
         </div>
     </section>

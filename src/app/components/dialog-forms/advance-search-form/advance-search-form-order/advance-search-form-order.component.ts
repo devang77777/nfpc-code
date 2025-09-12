@@ -4,21 +4,24 @@ import { STATUS, ORDER_STATUS } from 'src/app/app.constant';
 import { Subscription,Subject } from 'rxjs';
 import { ApiService } from 'src/app/services/api.service';
 import { MasterService } from 'src/app/components/main/master/master.service';
+import { ORDER_STATUS_ADVANCE_SEARCH } from '../advance-search-form.component';
 @Component({
   selector: 'app-advance-search-form-order',
   templateUrl: './advance-search-form-order.component.html',
   styleUrls: ['./advance-search-form-order.component.scss']
 })
 export class AdvanceSearchFormOrderComponent implements OnInit {
+  createdByList: any[] = [];
   channelList: any[] = [];
   public itemData: any[] = [];
   public filteredItems: any[] = [];
   statusList: Array<any> = STATUS;
-  orderStatusList: Array<any> = ORDER_STATUS;
+  orderStatusList: Array<any> = ORDER_STATUS_ADVANCE_SEARCH;
   public customerID: any;
   @Input() storageLocation: Array<any> = [];
   @Input() items: Array<any> = [];
   @Input() orderCreatedUser: Array<any> = [];
+  @Input() customers: Array<any> = [];
   itemsFormControl = new FormControl([]);
   branchplantsFormControl = new FormControl([]);
   customersFormControl = new FormControl([]);
@@ -41,6 +44,7 @@ export class AdvanceSearchFormOrderComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    // this.getCreatedByList();
       this.subscriptions.push(
       this.ms.itemDetailDDllistTable({ page: 1, page_size: 10 }).subscribe((result: any) => {
         this.itemData = result.data;
@@ -66,11 +70,8 @@ export class AdvanceSearchFormOrderComponent implements OnInit {
       enddate: new FormControl(),
       order_no: new FormControl(),
       customer_id: new FormControl(),
-      startrange: new FormControl(),
-      endrange: new FormControl(),
-      current_stage: new FormControl(),
       channel_name: new FormControl(),
-      // approval_status: new FormControl(),
+      status: new FormControl(),
       customer_lpo: new FormControl(),
       delivery_start_date: new FormControl(),
       delivery_end_date: new FormControl(),
@@ -80,12 +81,14 @@ export class AdvanceSearchFormOrderComponent implements OnInit {
     })
     // this.getCustomerLobList(this.orderCreatedUser[0]);
     // this.getCustomerLobList(customer);
-   this.ms.customerDetailDDlListTable({}).subscribe((result) => {
-      this.customerID = result.data;
-      // this.filterCustomer = result.data.slice(0, 30);
-    })
+  //  this.ms.customerDetailDDlListTable({}).subscribe((result) => {
+  //     this.customerID = result.data;
+  //     // this.filterCustomer = result.data.slice(0, 30);
+  //   })
 
-
+    //  this.apiService.getLocationStorageListById().subscribe(res => {
+    //   this.storageLocation = [...res.data];
+    // });
   }
   ngOnChanges(changes: SimpleChanges) {
     if (changes.items?.currentValue != changes.items?.previousValue) {
@@ -105,14 +108,16 @@ export class AdvanceSearchFormOrderComponent implements OnInit {
   // }
   selectionchangedstorageLocation() {
     let storage = this.branchplantsFormControl.value;
+    let storageIds = storage.map((item: any) => item.id);
     this.form.patchValue({
-      storage_location_id: storage[0].id
+      storage_location_id: storageIds
     });
   }
   selectionchangedorderCreatedUser() {
     let user = this.customersFormControl.value;
+    let userIds = user.map((item: any) => item.id);
     this.form.patchValue({
-      user_created: user[0].id
+      user_created: userIds
     });
   }
    selectionchangedCustomer() {
@@ -185,5 +190,17 @@ export class AdvanceSearchFormOrderComponent implements OnInit {
     //   });
     // }
   
-  
+  // getCreatedByList(name: string = '') {
+    
+  //   this.apiService.getAllCreatedByUserList(name).subscribe((res: any) => {
+  //     this.orderCreatedUser = res.data;
+  //   });
+  // }
+
+  getCreatedByList(name: string = '') {
+    
+    this.apiService.getAllCreatedByUserList(name).subscribe((res: any) => {
+      this.createdByList = res.data;
+    });
+  }
 }

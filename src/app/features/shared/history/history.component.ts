@@ -32,13 +32,13 @@ export class HistoryComponent implements OnInit, OnChanges {
   ngOnInit(): void {
     this.createContactForm();
   }
-  getHistory() {
-    this.subscriptions.push(
-      this.apiService.getHistory(this.module).subscribe((result) => {
-        this.comments = result.data;
-      })
-    );
-  }
+  // getHistory() {
+  //   this.subscriptions.push(
+  //     this.apiService.getHistory(this.module).subscribe((result) => {
+  //       this.comments = result.data;
+  //     })
+  //   );
+  // }
   createContactForm() {
     this.historyForm = this.formBuilder.group({
       comment: ['', [Validators.required]],
@@ -70,7 +70,7 @@ export class HistoryComponent implements OnInit, OnChanges {
   ngOnChanges(changes: SimpleChanges) {
     if (!changes.module?.firstChange != changes.module?.currentValue) {
       if (this.module.module_id) {
-        this.getHistory();
+        // this.getHistory();
       }
     }
   }

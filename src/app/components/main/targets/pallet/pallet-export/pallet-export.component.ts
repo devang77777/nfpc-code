@@ -73,6 +73,7 @@ export class PalletExportComponent implements OnInit {
     this.palletService.exportPallet({
       module: 'pallet',
       criteria: this.export.type,
+      is_header_level: this.export.is_header_level ? this.export.is_header_level : '',
       start_date: this.export.startDate ? this.export.startDate : '',
       end_date: this.export.endDate ? this.export.endDate : '',
       file_type: 'csv',

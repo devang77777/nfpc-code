@@ -55,7 +55,7 @@ export class DeliveryBaseComponent extends BaseComponent {
     this.fds.setFormName('History');
     this.fds.setFormType('Add');
     this.fds.open();
-    this.history.getHistory();
+    // this.history.getHistory();
   }
   openDialogAllChangeReason()
   {

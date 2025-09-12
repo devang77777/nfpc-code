@@ -10,13 +10,15 @@ import { MasterService } from 'src/app/components/main/master/master.service';
   styleUrls: ['./advance-search-form-invoice.component.scss']
 })
 export class AdvanceSearchFormInvoiceComponent implements OnInit {
+  @Input() salesman: Array<any> = [];
    SalesmanFormControl = new FormControl([]);
   salesmanList: any[] = [];
   channelList: any[] = [];
   @Input() items: Array<any> = [];
+  @Input() customers: Array<any> = [];
   itemsFormControl = new FormControl([]);
    selectedItems = [];
-   customers: any=[];
+  //  customers: any=[];
    public filterItem = [];
    settings = {};
    itemfilterValue = '';
@@ -26,7 +28,7 @@ export class AdvanceSearchFormInvoiceComponent implements OnInit {
     uomList: any = [];
   form: FormGroup;
   statusList: Array<any> = INVOICE_STATUS;
-  @Input() salesman: Array<any> = [];
+  // @Input() salesman: Array<any> = [];
   @Input() storageLocation: Array<any> = [];
   customersFormControl = new FormControl([]);
 
@@ -58,29 +60,24 @@ export class AdvanceSearchFormInvoiceComponent implements OnInit {
     this.ItemCodeFormControl = new FormControl([], [Validators.required]);
     this.form = new FormGroup({
       module: new FormControl('invoice'),
-      // export: new FormControl('0'),
       startdate: new FormControl(),
-      syncdate: new FormControl(),
-      creationDate: new FormControl(),
       enddate: new FormControl(),
       invoice_no: new FormControl(),
       customer_id: new FormControl(),
-      startrange: new FormControl(),
-      endrange: new FormControl(),
       salesman: new FormControl(),
-      // current_stage: new FormControl(),
       channel_name: new FormControl(),
       order_no: new FormControl(),
+      customer_lpo_no: new FormControl(),
       storage_location_id: new FormControl(),
       item_id: new FormControl(),
       erp_status: new FormControl(),
+      syncdate: new FormControl(),
+      creationDate: new FormControl(),
     });
-     this.ms.customerDetailDDlListTable({}).subscribe((result) => {
-      this.customers = result.data;
-      // this.filterCustomer = result.data.slice(0, 30);
-    })
+     
    
   }
+  
 
     ngOnChanges(changes: SimpleChanges) {
       if (changes.items?.currentValue != changes.items?.previousValue) {
@@ -91,103 +88,12 @@ export class AdvanceSearchFormInvoiceComponent implements OnInit {
       }
     };
 
-  //   selectionchangedItems() {
-  //   let items = this.itemsFormControl.value;
-  //   this.form.patchValue({
-  //     item_id: items[0].id
-  //   });
-    
-  // }
-//   selectionchangedItems() {
-//   const item = this.itemsFormControl.value;
 
-//   if (item && item.id) {
-//     this.form.patchValue({
-//       item_id: item.id
-//     });
-//   } else {
-//     this.form.patchValue({
-//       item_id: null
-//     });
-//   }
-// }
-  // onChange(event) {
-  //   let uomLists = this.filteredItems.find(i => i.id === event.id);
-  //   // this.uomList.push(uomLists.item_uom_lower_unit);
-  //   this.getItemDetailByName(event.item_name).subscribe(res => {
-  //     var _items = res.data || [];
-
-  //     const selectedItem: any = _items.find((res: any) => res.id === event.id);
-  //     this.setItemRelatedUOM(selectedItem);
-  //   });
-  // }
-
-  // getItemDetailByName(name) {
-  //   return this.ms
-  //     .itemDetailListTable({ item_name: name.toLowerCase(), })
-
-  // }
-  // setItemRelatedUOM(selectedItem: any) {
-  //   // const uomControl = formGroup.controls.item_uom_id;
-  //   let lowerUnitUOM = [selectedItem.item_uom_lower_unit];
-  //   let baseUnitUOM = [];
-  //   let itemUOMArray = [];
-  //   if (selectedItem.item_main_price.length > 0) {
-  //     selectedItem.item_main_price.forEach(element => {
-  //       baseUnitUOM.push(element.item_uom);
-  //     });
-  //     itemUOMArray = [...baseUnitUOM, ...lowerUnitUOM];
-  //   } else {
-  //     itemUOMArray = lowerUnitUOM;
-  //   }
-  //   this.uomList = itemUOMArray
-  //   // formGroup.controls.item_uom_list.setValue(itemUOMArray);
-  //   // if (isEdit) {
-
-  //   //   uomControl.setValue(selectedItem?.uom_info?.id);
-  //   // } else {
-
-  //   //   uomControl.setValue(selectedItem?.lower_unit_uom_id);
-  //   // }
-
-  // }
-
-  //  onItemSelect(item: any) {
-  //   let items = this.itemsFormControl.value;
-  //   this.form.patchValue({
-  //     item_id: items[0].id
-  //   });
-  // }
-  // OnItemDeSelect(item: any) {
-  //   //console.log(item);
-  //   //console.log(this.selectedItems);
-  // }
-  // onSelectAll(items: any) {
-
-  // }
-  // onDeSelectAll(items: any) {
-
-  // }
-
-  //  onSearch(evt: any) {
-  //   let value = evt.target.value
-  //   if (value !== '') {
-  //     this.itemfilterValue = value.toLowerCase().trim() || "";
-  //     this.items = this.filterItem.filter(x => x.item_code.toLowerCase().trim() === this.itemfilterValue || x.item_name.toLowerCase().trim() === this.itemfilterValue);
-  //     this.items = this.items.map(i => {
-  //       return { id: i.id, itemName: i.item_code + ' - ' + i.item_name }
-  //     });
-  //   } else {
-  //     this.items = this.filterItem.map(i => {
-  //       return { id: i.id, itemName: i.item_code + ' - ' + i.item_name }
-  //     })
-  //   }
-  //   this.detChange.detectChanges();
-  // }
   selectionchangedstorageLocation() {
     const storage = this.branchplantsFormControl.value;
+    let storageIds = storage.map((item: any) => item.id);
     this.form.patchValue({
-      storage_location_id: storage[0].id
+      storage_location_id: storageIds
     });
   }
 
@@ -222,11 +128,14 @@ export class AdvanceSearchFormInvoiceComponent implements OnInit {
     item_id: itemIds
   });
   }
-   selectionchangedSalesman() {
+  selectionchangedSalesman() {
     let user = this.SalesmanFormControl.value;
+    let items = this.SalesmanFormControl.value;
 
   // Extract the ids from the selected items
-  const itemIds = user.map((item: any) => item.id);
+  const itemIds = items.map((item: any) => item.id);
+  // Extract the ids from the selected items
+  // const itemIds = user.map((item: any) => item.id);
 
   // Patch the form with the array of item IDs
   this.form.patchValue({
@@ -236,5 +145,14 @@ export class AdvanceSearchFormInvoiceComponent implements OnInit {
     //   customerName: user[0].id
     //   // customerName: user[0].name
     // });
+  }
+
+  resetForm() {
+    this.form.reset();
+    this.SalesmanFormControl.reset();
+    this.CustomersFormControl.reset();
+    this.itemsFormControl.reset();
+    this.branchplantsFormControl.reset();
+    this.ItemCodeFormControl.reset();
   }
 }

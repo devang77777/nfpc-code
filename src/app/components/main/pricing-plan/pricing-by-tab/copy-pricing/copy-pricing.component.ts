@@ -126,7 +126,7 @@ export class CopyPricingComponent implements OnInit {
     };
     const formData = new FormData();
     formData.append('customer_mapping', this.fileInfo);
-
+    console.log("the form data is",this.fileInfo);
     this.api.uploadCopyPricingByCustomerImport(formData).subscribe((res: any) => {
       if (res.status) {
         this.backToMain();

@@ -6,6 +6,7 @@ export const environment = {
   // baseApiUrl: 'https://prodmobiato.nfpc.net/production/public/api',
   // nfpcApiUrl: 'https://prodmobiato.nfpc.net/production/public/api',
   // baseApiUrl: 'https://devmobiato.nfpc.net/merchandising/public/api',
+  // baseApiUrl: 'https://devmobiato.nfpc.net/merchandising/public/api',
   baseApiUrl: 'https://prodmobiato.nfpc.net/production/public/api',
   nfpcApiUrl: 'https://devmobiato.nfpc.net/merchandising/public/api',
   host: 'https://devmobiato.nfpc.net',

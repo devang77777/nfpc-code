@@ -33,11 +33,11 @@
         font-size: 1rem;
       }
 
-      &.order { background: #4ea7f8; height: 100%;}
-      &.approved { background: #2ec4b6; height: 100%;}
-      &.pending { background: #ff5d5d; height: 100%;}
+      &.order { background: #E3F2FD; color: #1565C0; height: 100%;}
+      &.approved { background: #E8F5E9; color: #2E7D32; height: 100%;}
+      &.pending { background: #FFF3E0; color: #EF6C00; height: 100%;}
     //   &.delivery { background: #f7b733; color: #000; height: 100%;}
-      &.delivery { background: #f7b733;  height: 100%;}
+      &.delivery { background: #F3E5F5; color: #6A1B9A;  height: 100%;}
     }
   }
 
@@ -65,13 +65,15 @@
     display: flex;
     flex-direction: column;
     gap: 20px;
-
+    .otif{
+      height: 100%;
+    }
     .gauge, .otif {
       background: #fff;
       padding: 0px 15px 15px 15px;
       border-radius: 8px;
       box-shadow: 0 1px 5px rgba(0,0,0,0.1);
-
+      
       h2 {
         font-size: 1rem;
         margin-bottom: 10px;
@@ -82,7 +84,7 @@
       display: flex;
       align-items: center;
       justify-content: center;
-      height: 150px;
+      height: 50%;
       border-radius: 50%;
       background: radial-gradient(circle at center, #dff0d8 70%, #fff 71%);
       position: relative;

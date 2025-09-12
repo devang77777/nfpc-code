@@ -1,14 +1,13 @@
 ._logo {
-  height: 50px;
-  width: 100px;
+  width: 120px;
   display: block;
-  // object-fit: contain;
+  object-fit: contain;
 }
 
 
 .logo-container {
   position: relative;
-  // height: 75px;
+  height: 50px;
   background-color: var(--primary);
   // background-color: #bd3147;
   display: flex;
@@ -30,7 +29,7 @@
     position: fixed;
     left: 0;
     top: 0;
-    width: 100px;
+    width: 210px;
     height: 100%;
     z-index: -1;
   }
@@ -52,19 +51,18 @@
 // .collapse_sidenav{
 //     overflow: scroll;
 // }
-// .collapse_sidenav .logo-container {
-//   text-align: center;
-//   display: flex;
-//   align-items: center;
-//   justify-content: center;
+.collapse_sidenav .logo-container {
+  text-align: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 
-//   >img {
-//     width: 100%;
-//     height: 50px;
-//     max-width: 100px;
-
-//   }
-// }
+  >img {
+    width: 100%;
+    height: auto;
+    max-width: 38px;
+  }
+}
 
 .mat-expansion-panel {
   background: #1e1e2b;
@@ -126,7 +124,7 @@ a:hover {
 }
 
 .spacing {
-  margin-top: 1px;
+  margin-top: 15px;
 }
 
 .active>a {
@@ -177,18 +175,17 @@ a:hover {
 
 @media (min-width: 576px) {
   ._sidenav {
-    width: 100px;
+    width: 210px;
 
     .logo-container {
       .logomin {
         display: none;
-        
       }
     }
   }
 
   .collapse_sidenav {
-    width: 100px;
+    width: 60px;
 
     .logo-container {
       ._logo {
@@ -201,7 +198,7 @@ a:hover {
     }
 
     &::after {
-      width: 100px;
+      width: 60px;
     }
 
     .sidenav-toggler {
@@ -266,7 +263,7 @@ a:hover {
     overflow: visible;
     position: fixed;
     top: 50px;
-    width: 100px;
+    width: 200px;
     height: 100%;
     left: -200px;
     transition: all 0.31s ease;
@@ -274,7 +271,7 @@ a:hover {
     .logo-container {
       ._logo {
         display: block;
-        max-width: 100px;
+        max-width: 110px;
       }
 
       .logomin {
@@ -318,248 +315,6 @@ a:hover {
   }
 }
 
-// #mySidenav {
-//   overflow: scroll;
-//   position: fixed;
-//   top: 0;
-//   left: 0;
-//   height: 100vh;
-//   width: 100px;
-//   background-color: #111;
-//   display: flex;
-//   flex-direction: column;
-//   align-items: center;
-//   padding-top: 20px;
-
-//   a {
-//     display: flex;
-//     flex-direction: column; // icon above label
-//     align-items: center;
-//     justify-content: center;
-//     gap: 6px;
-//     width: 100%;
-//     padding: 12px 0;
-//     color: white;
-//     text-decoration: none;
-//     font-size: 12px;
-//     transition: background 0.3s ease;
-//     position: relative;
-
-//     i {
-//       font-size: 20px;
-//     }
-
-//     &:hover {
-//       background-color: #333;
-//     }
-
-//     &.active {
-//       background-color: #f44336;
-//       border-left: 4px solid #988a8a;
-//     }
-//   }
 
 
-// }
-
-// #mySidenav {
-//   overflow-y: auto; // enable vertical scrolling
-//   position: fixed;
-//   top: 0;
-//   left: 0;
-//   height: 100vh;
-//   width: 100px;
-//   background-color: #111;
-//   display: flex;
-//   flex-direction: column;
-//   align-items: center;
-//   padding-top: 20px;
-//   z-index: 1000;
-
-//   a {
-//     display: flex;
-//     flex-direction: column; // icon above label
-//     align-items: center;
-//     justify-content: center;
-//     gap: 6px;
-//     width: 100%;
-//     padding: 12px 0;
-//     color: white;
-//     text-decoration: none;
-//     font-size: 12px;
-//     transition: background 0.3s ease, transform 0.3s ease;
-//     position: relative;
-
-//     i {
-//       font-size: 20px;
-//     }
-
-//     // Slide-in effect (mimics absolute-position behavior but still scrolls)
-//     transform: translateX(-0px);
-//     opacity: 0.85;
-
-//     &:hover {
-//       background-color: #333;
-//       transform: translateX(25px);
-//       opacity: 1;
-//     }
-
-//     &.active {
-//       background-color: #f44336;
-//       border-left: 4px solid #988a8a;
-//     }
-//   }
-// }
-// #mySidenav {
-//   overflow-y: scroll; /* only vertical scrolling */
-//   // overflow-x: hidden; /* prevent horizontal scrolling */
-//   position: fixed;
-//   top: 0;
-//   left: 0;
-//   height: 100vh;
-//   width: 100px;
-//   background-color: #111;
-//   display: flex;
-//   flex-direction: column;
-//   align-items: center;
-//   // padding-top: 20px;
-//   z-index: 1000;
-
-//   a {
-//     display: flex;
-//     flex-direction: column; /* icon above label */
-//     align-items: center;
-//     justify-content: center;
-//     gap: 6px;
-//     width: 100%;
-//     padding: 12px 6px; /* slight horizontal padding for better label spacing */
-//     color: white;
-//     text-decoration: none;
-//     font-size: 12px;
-//     line-height: 1.2; /* tighter spacing between icon and text */
-//     text-align: center; /* center label text */
-//     transition: background 0.3s ease, transform 0.3s ease;
-//     position: relative;
-//     word-break: break-word; /* break words if too long */
-//     white-space: normal; /* allow wrapping */
-//     transform: translateX(0);
-//     opacity: 0.85;
-
-//     i {
-//       font-size: 20px;
-//     }
-
-//     &:hover {
-//       background-color: #333;
-//       transform: translateX(8px);
-//       opacity: 1;
-//     }
-
-//     &.active {
-//       background-color: #f44336;
-//       border-left: 4px solid #988a8a;
-//       transform: translateX(8px);
-//       opacity: 1;
-//       font-weight: bold;
-//     }
-
-//     span {
-//       display: inline-block;
-//       width: 100%;
-//     }
-//   }
-// }
-#mySidenav {
-  // overflow-y: scroll; /* vertical scroll only when needed */
-  // overflow-x: hidden; /* prevent horizontal scrolling */
-  // position: relative;
-  top: 0;
-  left: 0;
-  height: 100vh;
-  width: 100px;
-  background-color: #111;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  z-index: 1000;
-
-  /* Hide scrollbar for Chrome, Safari, Edge */
-  &::-webkit-scrollbar {
-    display: none;
-  }
-
-  /* Hide scrollbar for Firefox */
-  scrollbar-width: none;
-
-  a {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    gap: 6px;
-    width: 100%;
-    padding: 12px 6px;
-    color: white;
-    text-decoration: none;
-    font-size: 12px;
-    line-height: 1.2;
-    text-align: center;
-    transition: background 0.3s ease, transform 0.3s ease;
-    position: relative;
-    word-break: break-word;
-    white-space: normal;
-    transform: translateX(0);
-    opacity: 0.85;
-
-    i {
-      font-size: 20px;
-    }
-
-    &:hover {
-      background-color: #333;
-      transform: translateX(12px);
-      opacity: 1;
-    }
-
-    &.active {
-      background-color: #920023;
-      border-left: 4px solid #988a8a;
-      transform: translateX(12px);
-      opacity: 1;
-      font-weight: bold;
-    }
-
-    span {
-      display: inline-block;
-      width: 100%;
-    }
-  }
-}
-
-
-#mySidenav a span {
-  text-align: center; // keep text centered
-  white-space: pre-line; // allow line breaks
-  display: inline-block;
-}
-
-#mySidenav a span::before {
-  content: attr(data-first);
-  display: block;
-}
-
-#mySidenav a span::after {
-  content: attr(data-rest);
-  display: block;
-}
-
-
-
-
-._sidenav .menuholder {
-    
-    overflow-x: hidden;
-    max-height: calc(100% - 50px);
-    height: 100%;
-}
 

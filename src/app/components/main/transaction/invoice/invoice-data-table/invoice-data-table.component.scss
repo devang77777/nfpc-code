@@ -121,10 +121,8 @@ td.mat-column-code {
 .erp-status {
   width: 109px;
   display: block;
-  // text-align: center;
-  align-items: center;
-  padding: 22px 0px 19px 0px !important;
-  height: 69px;
+  text-align: center;
+  padding: 12px 0px 19px 0px !important;
 }
 
 @media (min-width: 749px) {
@@ -138,6 +136,3 @@ td.mat-column-code {
     margin-bottom: 120px;
   }
 }
-
-
-

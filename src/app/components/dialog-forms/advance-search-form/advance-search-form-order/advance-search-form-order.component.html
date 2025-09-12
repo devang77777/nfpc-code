@@ -47,32 +47,16 @@
     </div>
     <div class="col-md-6">
       <div class="form-group row">
-        <label class="col-sm-3 col-form-label">Customer Name</label>
+        <label class="col-sm-3 col-form-label">Customer</label>
         <div class="col-sm-9">
           <!-- <input type="text" formControlName="customerName" class="form-control form-control-sm"
             placeholder="Customer  Name" /> -->
-             <app-multiautocomplete [options]="customerID" [control]="CustomersFormControl" text="" id="id" formControlName="customer_id"
+             <!-- <app-multiautocomplete [options]="customers" [control]="CustomersFormControl" text="" id="id" formControlName="customer_id"
+                objectName="user-root" param1="customer_code" param2="name" (selectionchanged)="selectionchangedCustomer()" >
+              </app-multiautocomplete> -->
+               <app-multiautocomplete [options]="customers" [control]="CustomersFormControl" text="" id="id" formControlName="customer_id"
                 objectName="user-root" param1="customer_code" param2="name" (selectionchanged)="selectionchangedCustomer()" >
               </app-multiautocomplete>
-                <!-- <mat-form-field class="example-full-width" id="customerFormField">
-                                        <input type="text" placeholder="Search Customer" matInput
-                                            [matAutocomplete]="auto" [formControl]="customerFormControl"
-                                            (keyup)="keyUp.next($event)">
-                                        <mat-autocomplete appOptionScroll (optionsScroll)="onScroll()"
-                                            (optionSelected)="getCustomerLobList($event.option.value)"
-                                            #auto="matAutocomplete" (opened)="checkFormValidation('order')"
-                                            [displayWith]="customerControlDisplayValue" required>
-                                            <mat-option *ngFor="let customer of filterCustomer" [value]="customer">
-                                                {{ customer.customer_code }} - {{ customer.name }} </mat-option>
-                                            <hr class="customerHr">
-
-                                           
-
-                                        </mat-autocomplete>
-                                        <mat-error *ngIf="customerFormControl.hasError('required')">Please select a
-                                            customer
-                                        </mat-error>
-                                    </mat-form-field> -->
         </div>
       </div>
     </div>
@@ -121,25 +105,30 @@
         </div>
       </div>
     </div>
-    <div class="col-md-6" *ngIf="orderCreatedUser?.length>0">
+    <div class="col-md-6">
       <div class="form-group row">
         <label class="col-sm-3 col-form-label">User Created</label>
         <div class="col-sm-9">
-          <app-multiautocomplete isSingle="true" objectName="user-root" [options]="orderCreatedUser"
+          <app-multiautocomplete isSingle="false" objectName="user-root" [options]="orderCreatedUser"
             (selectionchanged)="selectionchangedorderCreatedUser()" [control]="customersFormControl" text="firstname"
             id="id" param1="firstname" param2="lastname">
           </app-multiautocomplete>
         </div>
       </div>
     </div>
-    <div class="col-md-6" *ngIf="storageLocation?.length>0">
+    <div class="col-md-6">
       <div class="form-group row">
         <label class="col-sm-3 col-form-label">Brachplant</label>
         <div class="col-sm-9">
-          <app-multiautocomplete isSingle="true" objectName="code-root" [options]="storageLocation"
+          <!-- <app-multiautocomplete isSingle="false" objectName="code-root" [options]="storageLocation"
             (selectionchanged)="selectionchangedstorageLocation()" [control]="branchplantsFormControl" text="name"
             id="id" param1="code" param2="name">
-          </app-multiautocomplete>
+          </app-multiautocomplete> -->
+           <app-multiautocomplete isSingle="false" [options]="storageLocation" (selectionchanged)="selectionchangedstorageLocation()"
+                                        [control]="branchplantsFormControl" text="name" id="id"
+                                        param1="code" param2="name" objectName="code-root"
+                                        placeholder="Select Warehouse">
+                                    </app-multiautocomplete>
         </div>
       </div>
     </div>
@@ -147,16 +136,29 @@
 
     <div class="col-md-6">
       <div class="form-group row">
-        <label class="col-sm-3 col-form-label">Approval Status</label>
+        <label class="col-sm-3 col-form-label">Status</label>
         <div class="col-sm-9">
-          <mat-select class="form-control form-control-sm" formControlName="current_stage">
-            <mat-option *ngFor="let item of statusList" [value]="item.id">
-              {{ item.name }}
-            </mat-option>
-          </mat-select>
+          <mat-select multiple class="form-control form-control-sm" formControlName="status">
+                <mat-option *ngFor="let item of orderStatusList" [value]="item.id">
+                  {{ item.name }}
+                </mat-option>
+              </mat-select>
         </div>
       </div>
     </div>
+    <!-- <div class="col-md-6">
+      <div class="form-group row">
+        <label class="col-sm-3 col-form-label">Status</label>
+        <div class="col-sm-9">
+          <mat-select multiple class="form-control form-control-sm" formControlName="status">
+                <mat-option *ngFor="let item of orderStatusList" [value]="item.id">
+                  {{ item.name }}
+                </mat-option>
+              </mat-select>
+             
+        </div>
+      </div>
+    </div> -->
     <!-- <div class="col-md-6">
       <div class="form-group row">
         <label class="col-sm-3 col-form-label">Order Status</label>

@@ -23,18 +23,19 @@
             <div class="form-group row">
                 <label class="col-sm-3 col-form-label">Salesman</label>
                 <div class="col-sm-9">
-                     <app-multiautocomplete isSingle="true" [options]="salesmanList" (selectionchanged)="selectionchangedSalesman()"
-                                    [control]="SalesmanFormControl" text="salesman_name" id="id"
+                     <app-multiautocomplete isSingle="false" [options]="salesman" (selectionchanged)="selectionchangedSalesman()"
+                                    [control]="SalesmanFormControl" text="" id="id" param1="salesman_code"
+                                    param2="name" objectName="user-root"
                                     placeholder="Search Salesman">
                                 </app-multiautocomplete>
                 </div>
             </div>
         </div>
-        <div class="col-md-6" *ngIf="storageLocation?.length>0">
+        <div class="col-md-6" >
             <div class="form-group row">
-                <label class="col-sm-3 col-form-label">Brachplant</label>
+                <label class="col-sm-3 col-form-label">Branchplant</label>
                 <div class="col-sm-9">
-                    <app-multiautocomplete isSingle="true" objectName="code-root" [options]="storageLocation"
+                    <app-multiautocomplete isSingle="false" objectName="code-root" [options]="storageLocation"
                         (selectionchanged)="selectionchangedstorageLocation()" [control]="branchplantsFormControl"
                         text="name" id="id" param1="code" param2="name">
                     </app-multiautocomplete>
@@ -53,27 +54,21 @@
 
         <div class="col-md-6">
             <div class="form-group row">
-                <label class="col-sm-3 col-form-label">Invoice Date Range</label>
-                <!-- <div class="col-sm-9" style="display:flex;">
-                    <input type="date" formControlName="startdate" class="form-control form-control-sm" placeholder="Start Date">
-                   &nbsp; &nbsp;<span>_</span>&nbsp;&nbsp;
-                   <input type="date" formControlName="enddate" class="form-control form-control-sm" placeholder="End Date">
-                </div> -->
-                <div class="col-sm-9">
+                <label class="col-sm-3 col-form-label">Invoice Date</label>
+               
+                 <div class="col-sm-9" >
                     <div class="row">
                         <div class="col">
-                            <input type="date" formControlName="startdate" class="form-control form-control-sm"
-                                placeholder="Start Date">
+                            <input type="date" formControlName="startdate" class="form-control form-control-sm" placeholder="Start Date"/>
                         </div>
                         <div class="col-1 p-0">
                             &nbsp; &nbsp;<span>_</span>&nbsp;&nbsp;
                         </div>
                         <div class="col">
-                            <input type="date" formControlName="enddate" class="form-control form-control-sm"
-                                placeholder="End Date">
+                            <input type="date" formControlName="enddate" class="form-control form-control-sm" placeholder="End Date"/>
                         </div>
                     </div>
-
+                 
                 </div>
             </div>
         </div>
@@ -101,7 +96,7 @@
 
         <div class="col-md-6">
             <div class="form-group row">
-                <label class="col-sm-3 col-form-label">Customer Name</label>
+                <label class="col-sm-3 col-form-label">Customer</label>
                 <div class="col-sm-9">
                      <app-multiautocomplete [options]="customers" [control]="CustomersFormControl" text="" id="id" formControlName="customer_id"
                 objectName="user-root" param1="customer_code" param2="name" (selectionchanged)="selectionchangedCustomer()" >
@@ -113,7 +108,15 @@
             </div>
         </div>
 
-
+        <div class="col-md-6">
+            <div class="form-group row">
+                <label class="col-sm-3 col-form-label">Customer LPO NO</label>
+                <div class="col-sm-9">
+                    <input type="text" formControlName="customer_lpo_no" class="form-control form-control-sm"
+                        placeholder="Customer LPO No" />
+                </div>
+            </div>
+        </div>
         <!-- <div class="col-md-6">
             <div class="form-group row">
                 <label class="col-sm-3 col-form-label">Status</label>
@@ -169,12 +172,16 @@
                 <label class="col-sm-3 col-form-label">ERP Status</label>
                 <div class="col-sm-9">
                      
-            <mat-select class="form-control form-control-sm" formControlName="erp_status">
-              <mat-option value="Not Posted">Not Posted</mat-option>
-              <mat-option value="Posted">Posted</mat-option>
-              <mat-option value="Failed">Fail</mat-option>
-            </mat-select>
-         
+            <!-- <mat-select multiple class="form-control form-control-sm" formControlName="erp_status">
+                        <mat-option *ngFor="let item of statusList" [value]="item.id">
+                          {{ item.name }}
+                        </mat-option>
+                      </mat-select> -->
+          <mat-select multiple class="form-control form-control-sm" formControlName="erp_status">
+                <mat-option value="Not Posted">Not Posted</mat-option>
+                <mat-option value="Posted">Posted</mat-option>
+                <mat-option value="Failed">Fail</mat-option>
+              </mat-select>
                 </div>
             </div>
         </div>

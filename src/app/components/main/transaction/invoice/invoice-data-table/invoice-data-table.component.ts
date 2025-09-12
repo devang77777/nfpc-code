@@ -179,28 +179,78 @@ export class InvoiceDataTableComponent implements OnInit, OnDestroy, OnChanges {
       })
     );
 
+    // this.subscriptions.push(
+    //   this.eventService.on(Events.SEARCH_INVOICE,
+    //     ({ request, correctRequest, requestOriginal, response }) => {
+    //       this.advanceSearchRequest = [];
+    //       this.requestOriginal = requestOriginal;
+    //       if (request) {
+    //         Object.keys(request).forEach(item => {
+    //           Object.keys(correctRequest).forEach(correctItem => {
+    //             if (request[item] == correctRequest[correctItem]) {
+    //               this.advanceSearchRequest.push({ param: item, value: request[item], key: correctItem })
+    //             }
+    //           });
+    //         });
+    //       }
+    //       this.advanceSearchRequest = this.advanceSearchRequest.filter(
+    //     (item, index, self) =>
+    //       index === self.findIndex(
+    //         t => t.param === item.param && t.value === item.value
+    //       )
+    //   );
+    
+    //       this.apiResponse = response;
+    //       this.allResData = response.data;
+    //       this.updateDataSource(response.data);
+    //       this.dataSource.paginator = this.paginator;
+
+    //       // this.dataSource = new MatTableDataSource<InvoiceModel>(data);
+    //       // this.dataSource.paginator = this.paginator;
+    //     })
+    // );
     this.subscriptions.push(
-      this.eventService.on(Events.SEARCH_INVOICE,
-        ({ request, correctRequest, requestOriginal, response }) => {
+        
+      this.eventService.on(
+        Events.SEARCH_INVOICE,
+        ({ request, correctRequest, requestOriginal, response, criteria }) => {
           this.advanceSearchRequest = [];
+          
           this.requestOriginal = requestOriginal;
-          if (request) {
+    
+          // show instantly if criteria was passed
+          if (criteria) {
+            this.advanceSearchRequest = criteria;
+          } else if (request) {
+            // fallback if no criteria provided
             Object.keys(request).forEach(item => {
               Object.keys(correctRequest).forEach(correctItem => {
                 if (request[item] == correctRequest[correctItem]) {
-                  this.advanceSearchRequest.push({ param: item, value: request[item], key: correctItem })
+                  this.advanceSearchRequest.push({
+                    param: item,
+                    value: request[item],
+                    key: correctItem,
+                  });
                 }
               });
             });
           }
-          this.apiResponse = response;
-          this.allResData = response.data;
-          this.updateDataSource(response.data);
-          this.dataSource.paginator = this.paginator;
-
-          // this.dataSource = new MatTableDataSource<InvoiceModel>(data);
-          // this.dataSource.paginator = this.paginator;
-        })
+          this.advanceSearchRequest = this.advanceSearchRequest.filter(
+            (item, index, self) =>
+              index === self.findIndex(
+                t => t.param === item.param && t.value === item.value
+              )
+          );
+           
+        
+          // backend response comes later
+          if (response) {
+            this.apiResponse = response;
+            this.allResData = response.data;
+            this.updateDataSource(response.data);
+          }
+        }
+      )
     );
     this.checkInvoiceParamUuid();
   }
@@ -550,4 +600,12 @@ export class InvoiceDataTableComponent implements OnInit, OnDestroy, OnChanges {
         
     });
   }
+  makeUniqueCriteria(criteria: any[]): any[] {
+  return criteria.filter(
+    (item, index, self) =>
+      index === self.findIndex(
+        t => t.param === item.param && t.value === item.value
+      )
+  );
+}
 }

@@ -49,11 +49,8 @@
     <div class="col-md-12" style="padding: 0px 40px 10px 40px;">
       <div style="padding: 1px 20px;">
         <ul style="list-style-type: circle;">
-          <li *ngFor="let item of data">
-            {{ item.param }} is <strong>{{ item.value}}</strong>
-            <!-- {{ item.param }} is <strong>{{ (item.value) ? item.name : item.value }}</strong> -->
-          </li>
-        </ul>
+                    <li *ngFor="let item of data">{{item.param}} is <strong>{{item.value}}</strong></li>
+                </ul>
       </div>
 
       <!-- Change Criteria -->

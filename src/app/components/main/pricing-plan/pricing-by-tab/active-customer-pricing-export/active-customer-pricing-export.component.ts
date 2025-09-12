@@ -14,6 +14,7 @@ type AOA = any[][];
   styleUrls: ['./active-customer-pricing-export.component.scss']
 })
 export class ActiveCustomerPricingExportComponent implements OnInit {
+  item_code: any = []
   public extractedData:any;
   @ViewChild('file') fileInput!: ElementRef<HTMLInputElement>;
   pipe = new DatePipe('en-US');
@@ -88,7 +89,9 @@ export class ActiveCustomerPricingExportComponent implements OnInit {
     customer_code: row[0] || "",   // first column
     item_code: row[1] || ""        // second column (if missing, set to "")
   }));
-
+  //   this.item_code: this.export.value.item_code?.length
+  // ? this.export.value.item_code.map((item: any) => item.id)
+  // : [],
     this.apiService
       .exportCustomers({
         module: 'customer-based-price-active',

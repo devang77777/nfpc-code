@@ -194,24 +194,69 @@ export class OrderDataTableComponent implements OnInit, OnDestroy, OnChanges {
       })
     );
 
-    this.subscriptions.push(
-      this.eventService.on(Events.SEARCH_ORDER, ({ request, correctRequest, requestOriginal, response }) => {
-        this.advanceSearchRequest = [];
-        this.requestOriginal = requestOriginal;
-        if (request) {
-          Object.keys(request).forEach(item => {
-            Object.keys(correctRequest).forEach(correctItem => {
-              if (request[item] == correctRequest[correctItem]) {
-                this.advanceSearchRequest.push({ param: item, value: request[item], key: correctItem })
-              }
-            });
+    // this.subscriptions.push(
+    //   this.eventService.on(Events.SEARCH_ORDER, ({ request, correctRequest, requestOriginal, response }) => {
+    //     this.advanceSearchRequest = [];
+    //     this.requestOriginal = requestOriginal;
+    //     if (request) {
+    //       Object.keys(request).forEach(item => {
+    //         Object.keys(correctRequest).forEach(correctItem => {
+    //           if (request[item] == correctRequest[correctItem]) {
+    //             this.advanceSearchRequest.push({ param: item, value: request[item], key: correctItem })
+    //           }
+    //         });
+    //       });
+    //     }
+    //     this.apiResponse = response;
+    //     this.allResData = response.data;
+    //     this.updateDataSource(response.data);
+    //   })
+    // );
+   this.subscriptions.push(
+    
+  this.eventService.on(
+    Events.SEARCH_ORDER,
+    ({ request, correctRequest, requestOriginal, response, criteria }) => {
+      this.advanceSearchRequest = [];
+      
+      this.requestOriginal = requestOriginal;
+
+      // show instantly if criteria was passed
+      if (criteria) {
+        this.advanceSearchRequest = criteria;
+      } else if (request) {
+        // fallback if no criteria provided
+        Object.keys(request).forEach(item => {
+          Object.keys(correctRequest).forEach(correctItem => {
+            if (request[item] == correctRequest[correctItem]) {
+              this.advanceSearchRequest.push({
+                param: item,
+                value: request[item],
+                key: correctItem,
+              });
+            }
           });
-        }
+        });
+      }
+      this.advanceSearchRequest = this.advanceSearchRequest.filter(
+        (item, index, self) =>
+          index === self.findIndex(
+            t => t.param === item.param && t.value === item.value
+          )
+      );
+       
+    
+      // backend response comes later
+      if (response) {
         this.apiResponse = response;
         this.allResData = response.data;
         this.updateDataSource(response.data);
-      })
-    );
+      }
+    }
+  )
+);
+
+
     this.checkOrderParamUuid();
 
     
@@ -580,4 +625,11 @@ export class OrderDataTableComponent implements OnInit, OnDestroy, OnChanges {
   numberFormatWithSymbol(number) {
     return this.apiService.numberFormatWithSymbol(number);
   }
+setAdvanceSearchRequest(request: any) {
+  // request is the mapped object from filterObjectValues
+  this.advanceSearchRequest = Object.entries(request)
+    .filter(([key, value]) => value !== null && value !== undefined && value !== '')
+    .map(([key, value]) => ({ key, value }));
+}
+
 }

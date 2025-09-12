@@ -41,10 +41,10 @@
         </div>
         <div class="col-md-6">
             <div class="form-group row">
-                <label class="col-sm-3 col-form-label">Customer  Name</label>
+                <label class="col-sm-3 col-form-label">Customer</label>
                 <div class="col-sm-9">
                     <!-- <input type="text" formControlName="customerName" class="form-control form-control-sm" placeholder="Customer  Name"> -->
-                      <app-multiautocomplete [options]="customerID" [control]="CustomersFormControl" text="" id="id" formControlName="customer_id"
+                      <app-multiautocomplete [options]="customers" [control]="CustomersFormControl" text="" id="id" formControlName="customer_id"
                 objectName="user-root" param1="customer_code" param2="name" (selectionchanged)="selectionchangedCustomer()" >
               </app-multiautocomplete>
                 </div>
@@ -55,14 +55,15 @@
             <div class="form-group row">
                 <label class="col-sm-3 col-form-label">Salesman</label>
                 <div class="col-sm-9">
-                     <app-multiautocomplete isSingle="true" [options]="salesmanList" (selectionchanged)="selectionchangedSalesman()"
-                                    [control]="SalesmanFormControl" text="salesman_name" id="id"
+                     <app-multiautocomplete isSingle="false" [options]="salesman" (selectionchanged)="selectionchangedSalesman()"
+                                    [control]="SalesmanFormControl" text="" id="id" param1="salesman_code"
+                                    param2="name" objectName="user-root"
                                     placeholder="Search Salesman">
                                 </app-multiautocomplete>
                 </div>
             </div>
         </div>
-        <div class="col-md-6" *ngIf="storageLocation?.length>0">
+        <div class="col-md-6" >
             <div class="form-group row">
               <label class="col-sm-3 col-form-label">Brachplant</label>
               <div class="col-sm-9">
@@ -86,14 +87,14 @@
         </div> -->
         <div class="col-md-6">
             <div class="form-group row">
-              <label class="col-sm-3 col-form-label">Approval Status</label>
-              <div class="col-sm-9">
-                <mat-select class="form-control form-control-sm" formControlName="current_stage">
-                  <mat-option *ngFor="let item of statusList" [value]="item.id">
-                    {{ item.name }}
-                  </mat-option>
-                </mat-select>
-              </div>
+              <label class="col-sm-3 col-form-label">Status</label>
+             <div class="col-sm-9">
+          <mat-select multiple class="form-control form-control-sm" formControlName="status">
+                <mat-option *ngFor="let item of orderStatusList" [value]="item.id">
+                  {{ item.name }}
+                </mat-option>
+              </mat-select>
+        </div>
             </div>
           </div>
           <!-- <div class="col-md-6">

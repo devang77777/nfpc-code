@@ -225,35 +225,3 @@ mat-tab-group{
 // .d-flex{
 //   margin-top: 0px;
 // }
-
-.mat-header-cell {
-   background-color: #000000;
-   color:#e0e0e0;
-    font-size: 14px;
-    font-weight: 600;
-}
-
-::ng-deep mat-row:nth-of-type(even) {
-  background-color: #e3e0e0 !important;
-  color: #000000;
-}
-
-::ng-deep mat-row:nth-of-type(odd) {
-  background-color: #ffffff !important;
-  color: #000000;
-}
-
-::ng-deep mat-row:hover {
-  background-color: #211f1f !important;
-  color: #fafafa !important;
-  cursor: pointer;
-}
-
-::ng-deep .mat-cell, .mat-footer-cell  {
-  color: inherit !important; // or use a different color
-}
-
-::ng-deep mat-row.selected-row {
-  background-color: #211f1f !important;
-  color: #fafafa !important;
-}

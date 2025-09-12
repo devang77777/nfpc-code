@@ -10,6 +10,9 @@ import { MasterService } from 'src/app/components/main/master/master.service';
   styleUrls: ['./advance-search-form-delivery.component.scss']
 })
 export class AdvanceSearchFormDeliveryComponent implements OnInit {
+  @Input() salesman: Array<any> = [];
+  @Input() customers: Array<any> = [];
+  @Input() items: Array<any> = [];
   channelList: any[] = [];
    SalesmanFormControl = new FormControl([]);
   salesmanList: any[] = [];
@@ -20,7 +23,7 @@ export class AdvanceSearchFormDeliveryComponent implements OnInit {
    public filteredItems: any[] = [];
    public itemData: any[] = [];
   orderStatusList: Array<any> = ORDER_STATUS;
-  @Input() salesman: Array<any> = []
+  // @Input() salesman: Array<any> = []
   form: FormGroup
   @Input() storageLocation: Array<any> = [];
   branchplantsFormControl = new FormControl([]);
@@ -58,16 +61,13 @@ export class AdvanceSearchFormDeliveryComponent implements OnInit {
       startrange: new FormControl(),
       endrange: new FormControl(),
       salesman: new FormControl(),
-      current_stage: new FormControl(),
+      status: new FormControl(),
       channel_name: new FormControl(),
       // approval_status: new FormControl(),
       storage_location_id: new FormControl(),
       item_id: new FormControl(),
     })
-    this.ms.customerDetailDDlListTable({}).subscribe((result) => {
-      this.customerID = result.data;
-      // this.filterCustomer = result.data.slice(0, 30);
-    })
+   
   }
   selectionchangedstorageLocation() {
     let storage = this.branchplantsFormControl.value;

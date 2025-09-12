@@ -1,7 +1,11 @@
 <section class="scrolly">
- <ng-container *ngIf="advanceSearchRequest.length>0">
+ <!-- <ng-container *ngIf="advanceSearchRequest.length>0">
     <app-search-criteria [data]="advanceSearchRequest" (change)="onChangeCriteria()" (close)="onCloseCriteria()" [showExportButton]="true" (export)="exportData()">
       
+    </app-search-criteria>
+  </ng-container> -->
+  <ng-container *ngIf="advanceSearchRequest.length>0">
+    <app-search-criteria [data]="makeUniqueCriteria(advanceSearchRequest)" (change)="onChangeCriteria()" (close)="onCloseCriteria()" [showExportButton]="true" (export)="exportData()">
     </app-search-criteria>
   </ng-container>
   <div class="del-margin-bottom">

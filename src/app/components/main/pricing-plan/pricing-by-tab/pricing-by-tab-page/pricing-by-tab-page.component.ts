@@ -19,6 +19,7 @@ import { ColumnConfig } from 'src/app/interfaces/interfaces';
 import { SelectionModel } from '@angular/cdk/collections';
 import { OrderModel} from 'src/app/components/main/transaction/orders/order-models'
 import { ActiveCustomerPricingImportComponent } from '../active-customer-pricing-import/active-customer-pricing-import.component';
+
 @Component({
   selector: 'app-pricing-by-tab-page',
   templateUrl: './pricing-by-tab-page.component.html',
@@ -26,6 +27,7 @@ import { ActiveCustomerPricingImportComponent } from '../active-customer-pricing
 })
 
 export class PricingByTabPageComponent implements OnInit {
+  public customerID: any;
   today: string = new Date().toISOString().split('T')[0];
   list:any = []
    showPopUp = false
@@ -123,7 +125,7 @@ export class PricingByTabPageComponent implements OnInit {
   //   { field: 'End Date', value: 'end_date' },  'exciseTax','modifiedDate',
   // ];
   displayedColumns: string[] = ['item', 'branchplant', 'uom','channel', 'price', 'startDate', 'endDate'];
-  customerDisplayedColumns: string[] = ['customerCode','customerName','itemCode','itemDesc','uom', 'basePrice', 'discountPrice','customerPrice', 'startDate', 'endDate','primaryKey']
+  customerDisplayedColumns: string[] = ['customerCode','customerName','itemCode','itemDesc','uom', 'basePrice', 'discountPrice','exciseTax','customerPrice', 'startDate', 'endDate','primaryKey','modifiedDate','modifyBy','status']
    customerDisplayedColumns2: string[] = ['customerCode','customerName','itemCode','itemDesc','uom', 'basePrice', 'discountPrice','exciseTax','customerPrice', 'startDate', 'endDate','primaryKey','modifiedDate','modifyBy','status']
    customerDisplayedColumns3: string[] = ['customerCode','customerName','itemCode','itemDesc','uom', 'basePrice', 'discountPrice','exciseTax','customerPrice', 'startDate', 'endDate','primaryKey','modifiedDate','modifyBy','status']
   constructor(  public fb: FormBuilder,private api: ApiService, private detChange: ChangeDetectorRef, private masterService: MasterService, private router: Router, private dialog: MatDialog
@@ -137,7 +139,7 @@ export class PricingByTabPageComponent implements OnInit {
     this.filterForm = this.fb.group({
       order_number: [''],
       branch_plant_code: [''],
-      customer_code: [''],
+      customer_code: [[]],
       customer_lpo: [''],
       date: [''],
       due_date: [''],
@@ -160,6 +162,7 @@ export class PricingByTabPageComponent implements OnInit {
     this.getChannelList();
     console.log(this.channelIdList)
     this.settings = {
+      
       classes: "myclass custom-class",
       enableSearchFilter: true,
       badgeShowLimit: 2,
@@ -167,7 +170,7 @@ export class PricingByTabPageComponent implements OnInit {
       autoPosition: false,
       position: 'bottom',
       searchBy: ['item_code', 'item_name'],
-      singleSelection: true
+      singleSelection: false
     };
     this.activeCustomerSettings = {
       classes: "myclass custom-class",
@@ -220,18 +223,18 @@ export class PricingByTabPageComponent implements OnInit {
   this.customerFormControl = new FormControl('', [Validators.required]);
     this.channelFormControl = new FormControl('', [Validators.required]);
     this.statusFormControl = new FormControl('', [Validators.required]);
-    this.api.getMasterDataLists().subscribe((result: any) => {
-      this.filterItem = [...result.data.items];
-      this.items = result.data.items.map(i => {
-        return { id: i.id, itemName: i.item_code + ' - ' + i.item_name }
-      })
-      this.warehouseList = result?.data?.storage_location;
-    });
-    this.api.customerDetailDDlListTable({}).subscribe((result) => {
-      this.customers = result.data;
-      this.filterCustomer = result.data.slice(0, 30);
-      // this.filterChannel = result.data.slice(0, 30);
-    })
+    // this.api.getMasterDataLists().subscribe((result: any) => {
+    //   this.filterItem = [...result.data.items];
+    //   this.items = result.data.items.map(i => {
+    //     return { id: i.id, itemName: i.item_code + ' - ' + i.item_name }
+    //   })
+    //   this.warehouseList = result?.data?.storage_location;
+    // });
+    // this.api.customerDetailDDlListTable({}).subscribe((result) => {
+    //   this.customers = result.data;
+    //   this.filterCustomer = result.data.slice(0, 30);
+    //   // this.filterChannel = result.data.slice(0, 30);
+    // })
     this.lookup$
       .pipe(exhaustMap(() => {
         return this.masterService.customerDetailDDlListTable({ search: this.filterValue.toLowerCase() })
@@ -260,20 +263,20 @@ export class PricingByTabPageComponent implements OnInit {
         // }
 
       })
-    this.keyUp.pipe(
-      map((event: any) => event.target.value),
-      debounceTime(1000),
-      distinctUntilChanged(),
-      mergeMap(search => of(search).pipe(
-        delay(100),
-      )),
-    ).subscribe(res => {
-      if (!res) {
-        res = '';
-      }
-      this.filterCustomers(res);
+    // this.keyUp.pipe(
+    //   map((event: any) => event.target.value),
+    //   debounceTime(1000),
+    //   distinctUntilChanged(),
+    //   mergeMap(search => of(search).pipe(
+    //     delay(100),
+    //   )),
+    // ).subscribe(res => {
+    //   if (!res) {
+    //     res = '';
+    //   }
+    //   this.filterCustomers(res);
       
-    });
+    // });
 
 
     // this.channelKeyUp.pipe(
@@ -293,8 +296,18 @@ export class PricingByTabPageComponent implements OnInit {
    
     
     this.selectedTabChange(this.selectedIndex);
+    this.masterService.customerDetailDDlListTable({}).subscribe((result) => {
+      this.customerID = result.data;
+      // this.filterCustomer = result.data.slice(0, 30);
+    })
+    this.masterService.itemDetailDDllistTable({ page: 1, page_size: 10 }).subscribe((result: any) => {
+        this.items = result.data;
+        // this.items = result.data;
+      })
 
-
+       this.api.getLocationStorageListById().subscribe(res => {
+      this.warehouseList = [...res.data];
+    });
   }
 
   selectedTabChange(index) {
@@ -330,11 +343,20 @@ export class PricingByTabPageComponent implements OnInit {
   showOrder() {
     let value = this.sideFiltersForm.value;
     let body = {
-      warehouse_code: value.warehouse_code?.length > 0 ? value?.warehouse_code[0]?.id : 0,
+      // warehouse_code: value.warehouse_code?.length > 0 ? value?.warehouse_code[0]?.id : 0,
+      warehouse_code: value.warehouse_code?.length > 0 
+      ? value.warehouse_code.map((item: any) => item.id) 
+      : [],
       // channel_id: [[value.channel_code?.length > 0 ? value?.channel_code[0]?.id:0]],
       channel_id: value.channel_code.length > 0 ? value.channel_code.map(i => i.id) : [],
-      uom_code: value.uom_code,
-      item_code: value.item_code?.length > 0 ? value?.item_code[0]?.id : 0,
+      // uom_code: value.uom_code,
+      // item_code: value.item_code?.length > 0 ? value?.item_code[0]?.id : 0,
+  //      item_code: value.item_code?.length
+  // ? value.item_code.map((item: any) => item.id)
+  // : [],
+  item_code: value.item_code?.length > 0 
+      ? value.item_code.map((item: any) => item.id) 
+      : [],
       page: value.page,
       page_size: value.page_size
       // customer_name: this.customerFormControl.value?.name,
@@ -349,15 +371,22 @@ export class PricingByTabPageComponent implements OnInit {
 
   showCustomer() {
     let value = this.sideFiltersForm.value;
+    const selectedCustomers = this.customerFormControl.value || [];
+
+  // extract IDs, codes, names separately
+  const customerIds = selectedCustomers.map((c: any) => c.id);
+  const customerCodes = selectedCustomers.map((c: any) => c.customer_code);
+  const customerNames = selectedCustomers.map((c: any) => c.name);  
     let body = {
       // warehouse_code: value.warehouse_code?.length > 0 ? value?.warehouse_code[0]?.id : 0,
       uom_code: value.uom_code,
-      item_code: value.item_code?.length > 0 ? value?.item_code[0]?.id : 0,
+      // item_code: value.item_code?.length > 0 ? value?.item_code[0]?.id : 0,
+        item_code: value.item_code?.length > 0 
+      ? value.item_code.map((item: any) => item.id) 
+      : [],
       channel_id: value.channel_code.length > 0 ? value.channel_code.map(i => i.id) : [],
       // item_code: value.item_code?.length > 0 ? value?.item_code[0]?.id : 0,
-      customer_name: this.customerFormControl.value?.name,
-      customer_code: this.customerFormControl.value?.customer_code,
-      customer_id: this.customerFormControl.value?.id,
+      customer_id: customerIds,
       key: this.customerForm.value.key,
       page: value.page,
       page_size: value.page_size
@@ -373,7 +402,10 @@ export class PricingByTabPageComponent implements OnInit {
   showCustomerActiveList() {
     let value = this.activeCustomerPriceForm.value;
      const sideFilterValue = this.sideFiltersForm.value;
+     const selectedCustomers = this.customerFormControl.value || [];
 
+  // extract IDs, codes, names separately
+  const customerIds = selectedCustomers.map((c: any) => c.id);
   const statusMap = {
     '1': 'active',
     '2': 'inactive',
@@ -386,16 +418,16 @@ export class PricingByTabPageComponent implements OnInit {
     let body = {
       uom_code: value.uom_code,
     //  item_code: this.sideFiltersForm.value.item_code?.length > 0 ? this.sideFiltersForm.value?.item_code[0]?.id : [],
-    item_code: this.sideFiltersForm.value.item_code?.length > 0 
-  ? [this.sideFiltersForm.value.item_code[0]?.id] 
-  : [],
+     item_code: value.item_code?.length > 0 
+      ? value.item_code.map((item: any) => item.id) 
+      : [],
+
+  
 
     //  item_code: [138],
       // channel_id: this.sideFiltersForm.value.channel_code[0]?.id,
       channel_id: this.sideFiltersForm.value.channel_code.length > 0 ? this.sideFiltersForm.value.channel_code.map(i => i.id) : [],
-      customer_name: this.customerFormControl.value?.name,
-      customer_code: this.customerFormControl.value?.customer_code,
-      customer_id: this.customerFormControl.value?.id,
+      customer_id: customerIds,
       key: this.activeCustomerPriceForm.value.key,
       page: value.page,
       page_size: value.page_size,
@@ -417,8 +449,10 @@ export class PricingByTabPageComponent implements OnInit {
 
    showUpdateEndDate() {
     let value = this.activeCustomerUpdateEndDatePriceForm.value;
-     const sideFilterValue = this.sideFiltersForm.value;
-
+    
+    const sideFilterValue = this.sideFiltersForm.value;
+     const selectedCustomers = this.customerFormControl.value || [];
+     const customerIds = selectedCustomers.map((c: any) => c.id);
   const statusMap = {
     '1': 'active',
     '2': 'inactive',
@@ -431,16 +465,14 @@ export class PricingByTabPageComponent implements OnInit {
     let body = {
       uom_code: value.uom_code,
     //  item_code: this.sideFiltersForm.value.item_code?.length > 0 ? this.sideFiltersForm.value?.item_code[0]?.id : [],
-    item_code: this.sideFiltersForm.value.item_code?.length > 0 
-  ? [this.sideFiltersForm.value.item_code[0]?.id] 
-  : [],
+     item_code: value.item_code?.length > 0 
+      ? value.item_code.map((item: any) => item.id) 
+      : [],
 
     //  item_code: [138],
       // channel_id: this.sideFiltersForm.value.channel_code[0]?.id,
-      channel_id: this.sideFiltersForm.value.channel_code.length > 0 ? this.sideFiltersForm.value.channel_code.map(i => i.id) : [],
-      customer_name: this.customerFormControl.value?.name,
-      customer_code: this.customerFormControl.value?.customer_code,
-      customer_id: this.customerFormControl.value?.id,
+      customer_id: customerIds,
+     
       key: this.activeCustomerUpdateEndDatePriceForm.value.key,
       page: value.page,
       page_size: value.page_size,
@@ -491,15 +523,15 @@ export class PricingByTabPageComponent implements OnInit {
     }
 
   }
-  onScroll() {
+  // onScroll() {
 
-    var totalPages = this.customers.length / 30;
-    if (this.filterCustomer.length == this.customers.length) return;
-    this.page = this.page + 30;
-    var pageEndNumber = 30 + this.page;
-    this.filterCustomer = [...this.filterCustomer, ...this.customers.slice(this.page, pageEndNumber)]
+  //   var totalPages = this.customers.length / 30;
+  //   if (this.filterCustomer.length == this.customers.length) return;
+  //   this.page = this.page + 30;
+  //   var pageEndNumber = 30 + this.page;
+  //   this.filterCustomer = [...this.filterCustomer, ...this.customers.slice(this.page, pageEndNumber)]
 
-  }
+  // }
 
   onChannelScroll(){
     var totalPages = this.channelIdList.length / 30;
@@ -509,42 +541,42 @@ export class PricingByTabPageComponent implements OnInit {
     // this.filterCustomer = [...this.filterCustomer, ...this.customers.slice(this.page, pageEndNumber)]
   }
   
-  getCustomerLobList(customer, editData?) {
-    this.filterValue = "";
-    let paymentTermId
-    if (this.isEditForm && editData) {
-      paymentTermId = editData?.payment_term_id;
-    } else {
-      paymentTermId = customer?.payment_term_id;
-    }
-    if (customer?.is_lob == 1 || editData?.lob) {
-      this.is_lob = true;
-      this.selectedPaymentTermId = paymentTermId
-      // this.customerLobFormControl.setValidators([Validators.required]);
-      // this.customerLobFormControl.updateValueAndValidity();
-      this.api.getLobsByCustomerId(customer?.user_id).subscribe((result) => {
-        this.customerLobList = result.data[0] && result.data[0]?.customerlob || [];
-        if (editData) {
-          // this.paymentTermFormControl.patchValue(this.selectedPaymentTermId);
-          // let customerLob = [{ id: this.orderData?.lob_id, itemName: this.orderData?.lob?.name }];
-          // this.customerLobFormControl.setValue(customerLob);
-        } else {
-          // this.showLob = true;
-          // this.showWareHs = true;
-          // this.customerLobFormControl.setValue([]);
-          // this.warehouseFormControl.setValue([]);
-        }
-      });
-    }
-    else {
-      this.is_lob = false;
-      // this.customerLobFormControl.clearValidators();
-      // this.customerLobFormControl.updateValueAndValidity();
-      // this.selectedPaymentTermId = paymentTermId
-      // this.paymentTermFormControl.patchValue(this.selectedPaymentTermId);
-    }
+// getCustomerLobList  (customer, editData?) {
+//     this.filterValue = "";
+//     let paymentTermId
+//     if (this.isEditForm && editData) {
+//       paymentTermId = editData?.payment_term_id;
+//     } else {
+//       paymentTermId = customer?.payment_term_id;
+//     }
+//     if (customer?.is_lob == 1 || editData?.lob) {
+//       this.is_lob = true;
+//       this.selectedPaymentTermId = paymentTermId
+//       // this.customerLobFormControl.setValidators([Validators.required]);
+//       // this.customerLobFormControl.updateValueAndValidity();
+//       this.api.getLobsByCustomerId(customer?.user_id).subscribe((result) => {
+//         this.customerLobList = result.data[0] && result.data[0]?.customerlob || [];
+//         if (editData) {
+//           // this.paymentTermFormControl.patchValue(this.selectedPaymentTermId);
+//           // let customerLob = [{ id: this.orderData?.lob_id, itemName: this.orderData?.lob?.name }];
+//           // this.customerLobFormControl.setValue(customerLob);
+//         } else {
+//           // this.showLob = true;
+//           // this.showWareHs = true;
+//           // this.customerLobFormControl.setValue([]);
+//           // this.warehouseFormControl.setValue([]);
+//         }
+//       });
+//     }
+//     else {
+//       this.is_lob = false;
+//       // this.customerLobFormControl.clearValidators();
+//       // this.customerLobFormControl.updateValueAndValidity();
+//       // this.selectedPaymentTermId = paymentTermId
+//       // this.paymentTermFormControl.patchValue(this.selectedPaymentTermId);
+//     }
 
-  }
+//   }
   
   
 
@@ -554,7 +586,13 @@ export class PricingByTabPageComponent implements OnInit {
       this.router.navigate(['pricing-plan/pricing', 'copy-pricing']).then();
     }
   }
+  public copyItemPricing() {
+    if (this.selectedIndex === 1) {
+      this.router.navigate(['pricing-plan/pricing', 'item-copy-pricing']).then();
+    }
+  }
   public exportCustomerPricing(type) {
+    let value = this.sideFiltersForm.value;
     if (type === 'csv') {
       type = 'file.csv';
     } else {
@@ -564,11 +602,14 @@ export class PricingByTabPageComponent implements OnInit {
       .exportCustomers({
         module: 'customer-based-price',
         criteria: 'all',
-        start_date: '',
-        end_date: '',
+        channel_id: value.channel_code.length > 0 ? value.channel_code.map(i => i.id) : [],
         file_type: type,
+        key: this.customerForm.value.key,
         is_password_protected: 'no',
-        customer_id: this.customerFormControl.value?.id,
+        customer_id: this.customerFormControl.value?.id || '',
+        item_code: value.item_code?.length
+  ? value.item_code.map((item: any) => item.id)
+  : [],
       })
       .subscribe(
         (result: any) => {
@@ -606,8 +647,8 @@ export class PricingByTabPageComponent implements OnInit {
         customer_id: this.customerFormControl.value?.id,
         channel_id: value.channel_code.length > 0 ? value.channel_code.map(i => i.id) : [],
         // item_code: value.item_code?.length > 0 ? value?.item_code[0]?.id : 0,
-         item_code: this.sideFiltersForm.value.item_code?.length > 0 
-  ? [this.sideFiltersForm.value.item_code[0]?.id] 
+         item_code: value.item_code?.length
+  ? value.item_code.map((item: any) => item.id)
   : [],
    price_status: statusLabel,  
         customer_code: this.customerFormControl.value?.customer_code,
@@ -622,34 +663,34 @@ export class PricingByTabPageComponent implements OnInit {
         }
       );
   }
-  public checkFormValidation(target: string = null): boolean {
-    // if (this.orderTypeFormControl.invalid) {
-    //   Utils.setFocusOn('typeFormField');
-    //   return false;
-    // }
-    // if (!this.isDepotOrder && this.customerFormControl.invalid) {
-    //   Utils.setFocusOn('customerFormField');
-    //   return false;
-    // }
-    // if (!this.isDepotOrder && this.customerLobFormControl.invalid) {
-    //   return false;
-    // }
-    // if (this.isDepotOrder && this.depotFormControl.invalid) {
-    //   Utils.setFocusOn('depotFormField');
-    //   return false;
-    // }
-    // if (target == 'orderDelivery') {
-    //   if (!this.salesmanFormControl.value || this.salesmanFormControl.value.length == 0) {
-    //     Utils.setFocusOn('salesmanFormField');
-    //     return false;
-    //   }
-    // }
-    // if (this.paymentTermFormControl.invalid) {
-    //   Utils.setFocusOn('termFormField');
-    //   return false;
-    // }
-    return true;
-  }
+  // public checkFormValidation(target: string = null): boolean {
+  //   // if (this.orderTypeFormControl.invalid) {
+  //   //   Utils.setFocusOn('typeFormField');
+  //   //   return false;
+  //   // }
+  //   // if (!this.isDepotOrder && this.customerFormControl.invalid) {
+  //   //   Utils.setFocusOn('customerFormField');
+  //   //   return false;
+  //   // }
+  //   // if (!this.isDepotOrder && this.customerLobFormControl.invalid) {
+  //   //   return false;
+  //   // }
+  //   // if (this.isDepotOrder && this.depotFormControl.invalid) {
+  //   //   Utils.setFocusOn('depotFormField');
+  //   //   return false;
+  //   // }
+  //   // if (target == 'orderDelivery') {
+  //   //   if (!this.salesmanFormControl.value || this.salesmanFormControl.value.length == 0) {
+  //   //     Utils.setFocusOn('salesmanFormField');
+  //   //     return false;
+  //   //   }
+  //   // }
+  //   // if (this.paymentTermFormControl.invalid) {
+  //   //   Utils.setFocusOn('termFormField');
+  //   //   return false;
+  //   // }
+  //   return true;
+  // }
 
   public customerControlDisplayValue(customer: any): string {
     if (customer?.user) {
@@ -853,4 +894,89 @@ updateDate()
     this.showPopUp = true
   }
   updated_date:any
+
+
+   selectionchangedCustomer() {
+  const selectedCustomers = this.customerFormControl.value || [];
+
+  // extract only ids
+  const customerIds = selectedCustomers.map((c: any) => c.id);
+
+  // update filterForm with array of ids
+  this.filterForm.patchValue({
+    customer_code: customerIds
+  });
+
+  console.log("Selected Customer IDs:", customerIds);
+}
+
+isActiveCustomerPriceFormValid(): boolean {
+  const sideFilterValue = this.sideFiltersForm.value;
+  const activeCustomerValue = this.activeCustomerPriceForm.value;
+  
+  return !!(
+    (this.customerFormControl.value && this.customerFormControl.value.length > 0) ||
+    (sideFilterValue.channel_code && sideFilterValue.channel_code.length > 0) ||
+    (sideFilterValue.item_code && sideFilterValue.item_code.length > 0) ||
+    (sideFilterValue.price_status && sideFilterValue.price_status.length > 0) ||
+    activeCustomerValue.key ||
+    activeCustomerValue.start_date ||
+    activeCustomerValue.end_date ||
+    activeCustomerValue.created_date
+  );
+}
+
+isItemBasePriceFormValid(): boolean {
+  const value = this.sideFiltersForm.value;
+  return !!(
+    (value.warehouse_code && value.warehouse_code.length > 0) ||
+    (value.channel_code && value.channel_code.length > 0) ||
+    (value.item_code && value.item_code.length > 0) ||
+    value.uom_code
+  );
+}
+
+// Check if any filter in Customer Base Price form has a value
+isCustomerBasePriceFormValid(): boolean {
+  const sideFilterValue = this.sideFiltersForm.value;
+  const customerFormValue = this.customerForm.value;
+  
+  return !!(
+    (this.customerFormControl.value && this.customerFormControl.value.length > 0) ||
+    (sideFilterValue.channel_code && sideFilterValue.channel_code.length > 0) ||
+    (sideFilterValue.item_code && sideFilterValue.item_code.length > 0) ||
+    customerFormValue.key
+  );
+}
+isUpdateEndDateFormValid(): boolean {
+  const sideFilterValue = this.sideFiltersForm.value;
+  const updateEndDateValue = this.activeCustomerUpdateEndDatePriceForm.value;
+  
+  return !!(
+    (this.customerFormControl.value && this.customerFormControl.value.length > 0) ||
+    (sideFilterValue.channel_code && sideFilterValue.channel_code.length > 0) ||
+    (sideFilterValue.item_code && sideFilterValue.item_code.length > 0) ||
+    (sideFilterValue.price_status && sideFilterValue.price_status.length > 0) ||
+    updateEndDateValue.key ||
+    updateEndDateValue.start_date ||
+    updateEndDateValue.end_date ||
+    updateEndDateValue.created_date
+  );
+}
+
+selectionchangedItems() {
+    // let items = this.itemsFormControl.value;
+    // this.form.patchValue({
+    //   item_id: items[0].id
+    // });
+    let items = this.filterForm.value.item_code;
+
+  // Extract the ids from the selected items
+  const itemIds = items.map((item: any) => item.id);
+
+  // Patch the form with the array of item IDs
+  this.filterForm.patchValue({
+    item_id: itemIds
+  });
+  }
 }

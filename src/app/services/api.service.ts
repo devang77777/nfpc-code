@@ -2084,6 +2084,7 @@ export class ApiService {
     return this.http.post(`${this.baseUrl}/customer-copy-price`, body
     );
   }
+
   // delivery note
   public getDeliveryNote(delivery_id): Observable<any> {
     return this.http.get(`${this.baseUrl}/get/delivery/note/${delivery_id}`);
@@ -2102,4 +2103,24 @@ export class ApiService {
     const url = `${this.baseUrl}/palette/palette-report`;
     return this.http.post(url,body);
   }
+  public  getSalesmanDataByType(): Observable<any> {
+    const url = `${this.baseUrl}/salesman/advanced-search-salesman`;
+    return this.http.post(url,{});
+  }
+
+  public uploadCopyItemPricingByImport(body): Observable<any> {
+      const url = `${this.baseUrl}/copy-item-base-price`;
+      return this.http.post(url, body);
+  }
+//   public uploadCopyPricingByItem1(file: File): Observable<any> {
+//   return this.http.post(
+//     `${this.baseUrl}/copy-item-base-price`,
+//     file,   // pure binary
+//     {
+//       headers: { 'Content-Type': 'application/octet-stream' },
+//       responseType: 'json'
+//     }
+//   );
+// }
+
 }

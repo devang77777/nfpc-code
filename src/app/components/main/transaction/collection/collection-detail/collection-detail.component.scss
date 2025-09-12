@@ -210,8 +210,7 @@ table.check-form-col {
       border-top: none;
       text-align: left;
       min-width: 90px;
-       background-color: #000000;
-      color: #e0e0e0;
+      background-color: #f3f3f3;
 
       &:first-child {
         min-width: 0;
@@ -541,16 +540,4 @@ input.form-control.form-control-sm {
   .smhlist li {
     padding: 6px;
   }
-}
-
-
-.item-row:nth-child(even) td {
-  background-color: #e3e0e0 !important;
-  color: #212529;
-}
-
-/* Zebra striping: odd rows */
-.item-row:nth-child(odd) td {
-  background-color: #ffffff !important;
-  color: #212529;
 }

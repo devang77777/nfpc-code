@@ -8,12 +8,21 @@ import { EventBusService } from 'src/app/services/event-bus.service';
 import { EmitEvent, Events } from 'src/app/models/events.model';
 import { DataEditor } from 'src/app/services/data-editor.service';
 import { RouterOutlet } from '@angular/router';
+import { MasterService } from '../../main/master/master.service';
 @Component({
   selector: 'app-advance-search-form',
   templateUrl: './advance-search-form.component.html',
   styleUrls: ['./advance-search-form.component.scss'],
 })
 export class AdvanceSearchFormComponent implements OnInit {
+  customerID: any = [];
+  itemData: any = [];
+  filteredItems: any = [];
+  createdByList : any[] = [];
+  salesmanList : any[] = [];
+  warehouseList: any[] = [];
+  channelList: any=[];
+  customers: any=[];
   oldModule = '';
   intervals: any[] = [];
   selectedModule: string = '';
@@ -29,11 +38,42 @@ export class AdvanceSearchFormComponent implements OnInit {
     private apiService: ApiService,
     private eventService: EventBusService,
     private router: Router,
-    private dataEditor: DataEditor
+    private dataEditor: DataEditor,
+    public ms: MasterService
   ) { }
 
   ngOnInit(): void {
+    this.ms.customerDetailDDlListTable({}).subscribe((result) => {
+      this.customerID = result.data;
+      // this.filterCustomer = result.data.slice(0, 30);
+    })
+     this.ms.itemDetailDDllistTable({ page: 1, page_size: 10 }).subscribe((result: any) => {
+        this.itemData = result.data;
+        this.filteredItems = result.data;
+      })
+    this.getCreatedByList();
+     this.apiService.getLocationStorageListById().subscribe(res => {
+      this.warehouseList = [...res.data];
+    });
     this.getData();
+    // this.ms.customerDetailDDlListTable({}).subscribe((result) => {
+    //   this.customers = result.data;
+    //   // this.filterCustomer = result.data.slice(0, 30);
+    // })
+    this.apiService.getAllCustomerCategory().subscribe((res: any) => {
+      this.channelList = res.data;
+    });
+    this.apiService.getSalesmanDataByType().subscribe((res:any)=>{
+      this.salesmanList = res.data
+      .map((item: any) => {
+      return {
+        id: item.id,
+        salesman_code: item.salesman_code,
+        name: `${item.user.firstname} ${item.user.lastname}`
+      };
+    });
+    console.log("the new salesman data is here",this.salesmanList)
+    });
   }
   getData() {
     this.service.getCustomerMasterData().subscribe(
@@ -69,6 +109,7 @@ export class AdvanceSearchFormComponent implements OnInit {
     model.page = 1;
     model.page_size = 10;
     model.export = 0;
+     this.dialogRef.close();
     this.apiService.onSearch(model).subscribe((response) => {
       this.eventService.emit(new EmitEvent(model.module, {
         request: request,
@@ -76,7 +117,7 @@ export class AdvanceSearchFormComponent implements OnInit {
         requestOriginal: model,
         response: response
       }));
-      this.dialogRef.close();
+     
     });
   }
   snakeToCamelObject = (data) => {
@@ -112,22 +153,83 @@ export class AdvanceSearchFormComponent implements OnInit {
             model[propName] = names;
           }
           break;
+        // case "salesman":
+        //   filterdata = this.masterData.salesmans.filter((x) => x.id == model[propName])[0];
+        //   model[propName] = filterdata.firstname + ' ' + filterdata.lastname;
+        //   // model[propName] = `${filterdata.salesman_code} - ${filterdata.firstname} ${filterdata.lastname}`
+        //   break;
+        // case "salesman":
+        //     const salesman = this.salesmanList.find(x => x.id == model[propName]);
+        //     if (salesman) {
+        //       model[propName] = `${salesman.user.firstname} ${salesman.user.lastname ?? ''}`;
+        //     } else {
+        //       model[propName] = '';
+        //     }
+        //   break;
         case "salesman":
-          filterdata = this.masterData.salesmans.filter((x) => x.id == model[propName])[0];
-          model[propName] = filterdata.firstname + ' ' + filterdata.lastname;
-          // model[propName] = `${filterdata.salesman_code} - ${filterdata.firstname} ${filterdata.lastname}`
-          break;
-        case "channel":
-          filterdata = this.masterData.channel.filter((x) => x.id == model[propName]);
-          if (filterdata.length > 0) {
-            model[propName] = filterdata[0].name;
-          } else {
-            let subfilterdata = this.masterData.channel.filter((x) => x.children.some((y) => y.id == model[propName]));
-            if (subfilterdata.length > 0) {
-              model[propName] = subfilterdata[0].children[0].name;
-            }
-          }
-          break;
+  if (Array.isArray(model[propName])) {
+    // If it's an array of salesman IDs
+    const selectedSalesmen = this.salesmanList.filter(s =>
+      model[propName].includes(s.id)
+    );
+    if (selectedSalesmen.length > 0) {
+      // Join multiple salesman names
+      model[propName] = selectedSalesmen
+        .map(s => `${s.salesman_code} - ${s.name}`)
+        .join(", ");
+    } else {
+      model[propName] = "";
+    }
+  } else if (typeof model[propName] === "number") {
+    // If it's a single salesman ID
+    const salesman = this.salesmanList.find(s => s.id === model[propName]);
+    if (salesman) {
+      model[propName] = `${salesman.salesman_code} - ${salesman.name}`;
+    } else {
+      model[propName] = "";
+    }
+  }
+  break;
+
+      //  case 'salesman':
+      //     if (Array.isArray(model[propName])) {
+      //       // If it's an array of IDs
+      //       const filterdata = this.masterData.order_created_user.filter(user =>
+      //         model[propName].includes(user.id)
+      //       );
+
+      //       if (filterdata.length > 0) {
+      //         const mapArray = filterdata.map(
+      //           i => `${i.code} - ${i.firstname}${i.lastname ? ' ' + i.lastname : ''}`
+      //         );
+      //         model[propName] = mapArray.join(', ');
+      //       } else {
+      //         model[propName] = '';
+      //       }
+      //     } else if (typeof model[propName] === 'number') {
+      //       // If it's a single ID
+      //       const user = this.masterData.order_created_user.find(
+      //         x => x.id === model[propName]
+      //       );
+      //       if (user) {
+      //         model[propName] = `${user.firstname}${user.lastname ? ' ' + user.lastname : ''}`;
+      //       } else {
+      //         model[propName] = '';
+      //       }
+      //     }
+      //     break;
+
+        // case "channel":
+        //   filterdata = this.masterData.channel.filter((x) => x.id == model[propName]);
+        //   if (filterdata.length > 0) {
+        //     model[propName] = filterdata[0].name;
+        //   } else {
+        //     let subfilterdata = this.masterData.channel.filter((x) => x.children.some((y) => y.id == model[propName]));
+        //     if (subfilterdata.length > 0) {
+        //       model[propName] = subfilterdata[0].children[0].name;
+        //     }
+        //   }
+        //   break;
         // case "channel_name":
         //   filterdata = this.masterData.channel.filter((x) => x.id == model[propName]);
           
@@ -231,17 +333,89 @@ export class AdvanceSearchFormComponent implements OnInit {
           break
         case 'user_created':
           if (typeof model[propName] == 'number') {
-            filterdata = this.masterData.order_created_user.filter((x) => x.id == model[propName])[0];
+            filterdata = this.createdByList.find((x) => x.id == model[propName])[0];
             model[propName] = filterdata.firstname + ' - ' + filterdata.lastname;
           }
           break
+  //         case 'user_created':
+  // if (typeof model[propName] === 'number') {
+  //   // Single user id
+  //   const filterdata = this.createdByList.find(
+  //     (x) => x.id === model[propName]
+  //   );
+  //   if (filterdata) {
+  //     model[propName] = `${filterdata.firstname} ${filterdata.lastname || ''}`;
+  //   }
+  // } else if (Array.isArray(model[propName])) {
+  //   // Multiple user ids
+  //   const filterdata = this.createdByList.filter((x) =>
+  //     model[propName].includes(x.id)
+  //   );
+  //   if (filterdata.length > 0) {
+  //     model[propName] = filterdata
+  //       .map((i) => `${i.firstname} ${i.lastname || ''}`)
+  //       .join(', ');
+  //   } else {
+  //     model[propName] = '';
+  //   }
+  // }
+  // break;
+
+          // if (typeof model[propName] == 'number') {
+          //   filterdata = this.masterData.order_created_user.filter((x) => x.id == model[propName])[0];
+          //   model[propName] = filterdata.firstname + ' - ' + filterdata.lastname;
+          // } else if (typeof model[propName] == 'object') {
+          //   filterdata = this.masterData.order_created_user.filter((x) => model[propName].some(o => x.id == o));
+          //   let mapArray= filterdata.map(i => i.firstname + i.lastname);
+          //   model[propName]=mapArray.toString();
+          // }
+          // break
         case 'storage_location_id':
           if (typeof model[propName] == 'number') {
-            filterdata = this.masterData.storage_location.filter((x) => x.id == model[propName])[0];
+            filterdata = this.warehouseList.filter((x) => x.id == model[propName])[0];
             model[propName] = filterdata.code + ' - ' + filterdata.name;
           } else if (typeof model[propName] == 'object') {
-            filterdata = this.masterData.storage_location.filter((x) => model[propName].some(o => x.id == o));
+            filterdata = this.warehouseList.filter((x) => model[propName].some(o => x.id == o));
             let mapArray= filterdata.map(i => i.code + '-' + i.name);
+            model[propName]=mapArray.toString();
+          }
+          break
+        // case 'customer_id':
+        //   if (typeof model[propName] == 'number') {
+        //     filterdata = this.customers.filter((x) => x.id == model[propName])[0];
+        //     model[propName] = filterdata.customer_code + ' - ' + filterdata.name;
+        //   } else if (typeof model[propName] == 'object') {
+        //     filterdata = this.customers.filter((x) => model[propName].some(o => x.id == o));
+        //     let mapArray= filterdata.map(i => i.customer_code + '-' + i.name);
+        //     model[propName]=mapArray.toString();
+        //   }
+        //   break
+        case 'customer_id':
+          if (typeof model[propName] == 'number') {
+            filterdata = this.customerID.find((x) => x.id == model[propName]);
+            if (filterdata) {
+              model[propName] = `${filterdata.customer_code} - ${filterdata.name}`;
+            }
+          } else if (Array.isArray(model[propName])) {
+            const filterdata = this.customerID.filter((x) =>
+              model[propName].includes(x.id)
+            );
+            if (filterdata.length > 0) {
+              model[propName] = filterdata
+                .map((i) => `${i.customer_code} - ${i.name}`)
+                .join(', ');
+            } else {
+              model[propName] = '';
+            }
+          }
+          break;
+        case 'channel_name':
+          if (typeof model[propName] == 'number') {
+            filterdata = this.channelList.filter((x) => x.id == model[propName])[0];
+            model[propName] =  filterdata.name;
+          } else if (typeof model[propName] == 'object') {
+            filterdata = this.channelList.filter((x) => model[propName].some(o => x.id == o));
+            let mapArray= filterdata.map(i =>  i.name);
             model[propName]=mapArray.toString();
           }
           break
@@ -252,5 +426,59 @@ export class AdvanceSearchFormComponent implements OnInit {
     return model;
   }
 
-
+getCreatedByList(name: string = '') {
+    
+    this.apiService.getAllCreatedByUserList(name).subscribe((res: any) => {
+      this.createdByList = res.data;
+    });
+  }
 }
+
+
+export const ORDER_STATUS_ADVANCE_SEARCH = [
+  {
+    id: 'Created',
+    name: 'Created',
+  },
+  {
+    id: 'Updated',
+    name: 'Updated',
+  },
+  {
+    id: 'In-Process',
+    name: 'In-Process',
+  },
+  {
+    id: 'Delivered',
+    name: 'Delivered',
+  },
+  {
+    id: 'Shipment',
+    name: 'Shipment',
+  },
+  {
+    id: 'Cancelled',
+    name: 'Cancelled',
+  },
+  {
+    id: 'Deleted',
+    name: 'Deleted',
+  },
+  {
+    id: 'Completed',
+    name: 'Completed',
+  },
+  {
+    id: 'Picking Confirmed',
+    name: 'Picking Confirmed',
+  },
+  {
+    id: 'Picked',
+    name: 'Picked',
+  },
+  {
+    id: 'Truck Allocated',
+    name: 'Truck Allocated',
+  },
+
+];

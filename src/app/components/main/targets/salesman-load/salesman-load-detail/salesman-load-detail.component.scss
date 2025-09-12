@@ -39,8 +39,7 @@ button:active {
       padding: 4px 10px;
       border-top: none;
       text-align: center;
-      background-color: #000000;
-      color: #e0e0e0;
+      background-color: #f3f3f3;
     }
   
     td {
@@ -52,15 +51,4 @@ button:active {
       }
     }
   }
-}
-
-.item-row:nth-child(even) td {
-  background-color: #e3e0e0 !important;
-  color: #212529;
-}
-
-/* Zebra striping: odd rows */
-.item-row:nth-child(odd) td {
-  background-color: #ffffff !important;
-  color: #212529;
 }

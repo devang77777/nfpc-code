@@ -15,14 +15,17 @@ import { DataEditor } from 'src/app/services/data-editor.service';
 import { CommonToasterService } from 'src/app/services/common-toaster.service';
 import { ToastrService } from 'ngx-toastr';
 import { RouteService } from '../sidenav/route-active.service';
+
 @Component({
   selector: 'app-navbar',
   templateUrl: './navbar.component.html',
   styleUrls: ['./navbar.component.scss'],
 })
 export class NavbarComponent implements OnInit {
+  searchText: string = '';
   org_name: string;
   checkedOption = '';
+  advanceSearchConfig1 = [];
   advanceSearchConfig = [];
   sidebar = [];
   private subscriptions: Subscription[] = [];
@@ -42,6 +45,7 @@ export class NavbarComponent implements OnInit {
     private dataEditor: DataEditor,
     private toastrService: ToastrService,
     public routeService: RouteService,
+    public cts: CommonToasterService,
   ) { 
     this.checkedOption = this.router.url;
   }
@@ -226,6 +230,8 @@ export class NavbarComponent implements OnInit {
   getAdvanceSearch() {
     this.sidenavService.getAdvanceSearch().subscribe((res) => {
       this.advanceSearchConfig = res;
+      this.advanceSearchConfig1 = res.map(item => '/' + item.routeTo);  // only routeTo values
+    console.log(this.advanceSearchConfig1);
     });
   }
 
@@ -247,14 +253,16 @@ export class NavbarComponent implements OnInit {
     this.fds.setFormName(s);
     this.fds.openNav();
   }
-  openAdvanceSearch() {
-    this.menuTrigger.closeMenu()
-    const dialogRef = this.dialog.open(AdvanceSearchFormComponent, {
-      width: '1200px',
-      position: { top: '0px' },
-      data: this.checkedOption,
-    });
+openAdvanceSearch() {
+  // this.menuTrigger.closeMenu()
+  if(this.checkedOption === this.checkedOption){
+  const dialogRef = this.dialog.open(AdvanceSearchFormComponent, {
+    width: '1200px',
+    position: { top: '0px' },
+    data: this.checkedOption,
+  });
   }
+}
 
  check(route: string) {
   this.router.navigateByUrl(route);
@@ -263,3 +271,4 @@ export class NavbarComponent implements OnInit {
     return this.checkedOption === '/' + route;
   }
 }
+

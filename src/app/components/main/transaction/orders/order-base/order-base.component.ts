@@ -32,7 +32,7 @@ export class OrderBaseComponent extends BaseComponent {
   public allOrderList = [];
   currentRole = '';
   @ViewChild('formDrawer') fromDrawer: MatDrawer;
-  @ViewChild(HistoryComponent) history: HistoryComponent;
+  // @ViewChild(HistoryComponent) history: HistoryComponent;
   private fds: FormDrawerService;
   module: any;
   constructor(
@@ -64,12 +64,12 @@ export class OrderBaseComponent extends BaseComponent {
   public openOrderView() {
     this.router.navigate(['transaction/order', 'view']);
   }
-  openHistoryView() {
-    this.fds.setFormName('History');
-    this.fds.setFormType('Add');
-    this.fds.open();
-    this.history.getHistory();
-  }
+  // openHistoryView() {
+  //   this.fds.setFormName('History');
+  //   this.fds.setFormType('Add');
+  //   this.fds.open();
+  //   // this.history.getHistory();
+  // }
 
   public itemClicked(data: OrderModel): void {
     if (data) {

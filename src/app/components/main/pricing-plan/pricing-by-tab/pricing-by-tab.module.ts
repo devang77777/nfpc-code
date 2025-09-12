@@ -16,11 +16,12 @@ import { CustomerPricingExportComponent } from './customer-pricing-export/custom
 import { ActiveCustomerPricingExportComponent } from './active-customer-pricing-export/active-customer-pricing-export.component';
 import { CopyPricingComponent } from './copy-pricing/copy-pricing.component';
 import { ActiveCustomerPricingImportComponent } from './active-customer-pricing-import/active-customer-pricing-import.component';
+import { ItemCopyPriceComponent } from './item-copy-price/item-copy-price.component';
 
 
 
 @NgModule({
-  declarations: [PricingByTabPageComponent, PricingByTabDtComponent, PricingByTabDetailsComponent, PricingByTabImportComponent, PricingExportComponent, PricingByItemBaseTabImportComponent, CustomerPricingExportComponent, ActiveCustomerPricingExportComponent, CopyPricingComponent, ActiveCustomerPricingImportComponent],
+  declarations: [PricingByTabPageComponent, PricingByTabDtComponent, PricingByTabDetailsComponent, PricingByTabImportComponent, PricingExportComponent, PricingByItemBaseTabImportComponent, CustomerPricingExportComponent, ActiveCustomerPricingExportComponent, CopyPricingComponent, ActiveCustomerPricingImportComponent, ItemCopyPriceComponent],
 
   imports: [
     CommonModule,
