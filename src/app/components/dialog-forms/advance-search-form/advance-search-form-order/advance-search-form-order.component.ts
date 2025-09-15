@@ -198,9 +198,20 @@ export class AdvanceSearchFormOrderComponent implements OnInit {
   // }
 
   getCreatedByList(name: string = '') {
-    
+
     this.apiService.getAllCreatedByUserList(name).subscribe((res: any) => {
       this.createdByList = res.data;
     });
+  }
+
+  resetForm() {
+    if (this.form) {
+      this.form.reset();
+      // Clear any additional form controls that might not be part of the main form
+      this.itemsFormControl.reset();
+      this.branchplantsFormControl.reset();
+      this.customersFormControl.reset();
+      this.CustomersFormControl.reset();
+    }
   }
 }

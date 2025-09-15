@@ -100,6 +100,10 @@ export class AdvanceSearchFormComponent implements OnInit {
           model[key] = null;
         }
       })
+      // Reset the form controls in the child component
+      if (this.childComponent && this.childComponent.resetForm) {
+        this.childComponent.resetForm();
+      }
     }
     let correctRequest = this.clean({ ...model });
     let request = this.clean({ ...model });
