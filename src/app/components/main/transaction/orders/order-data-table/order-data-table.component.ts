@@ -93,7 +93,8 @@ export class OrderDataTableComponent implements OnInit, OnDestroy, OnChanges {
   private subscriptions: Subscription[] = [];
   private allColumns: ColumnConfig[] = [
     { def: 'select', title: 'Select', show: true },
-    { def: 'date', title: 'Order Date', show: true },
+    { def: 'order_date', title: 'Order Date', show: true },
+    { def: 'date', title: 'Created Date', show: true },
     { def: 'code', title: 'Order Number', show: true },
     { def: 'branch_plant_code', title: 'Branch Plant', show: true },
     { def: 'customer_code', title: 'Customer Code', show: true },
@@ -147,6 +148,7 @@ export class OrderDataTableComponent implements OnInit, OnDestroy, OnChanges {
       customer_code: [''],
       customer_lpo: [''],
       date: [''],
+      order_date: [''],
       due_date: [''],
       delivery_date: [''],
       current_stage: [''],
@@ -224,6 +226,8 @@ export class OrderDataTableComponent implements OnInit, OnDestroy, OnChanges {
       // show instantly if criteria was passed
       if (criteria) {
         this.advanceSearchRequest = criteria;
+        // Patch the filter form with criteria values to pre-fill the form
+        this.patchFilterFormWithCriteria(criteria);
       } else if (request) {
         // fallback if no criteria provided
         Object.keys(request).forEach(item => {
@@ -313,7 +317,79 @@ export class OrderDataTableComponent implements OnInit, OnDestroy, OnChanges {
 }
 
   onChangeCriteria() {
-    this.eventService.emit(new EmitEvent(Events.CHANGE_CRITERIA, { route: '/transaction/order' }));
+    // Map keys from advanceSearchRequest to filterForm control names
+    const keyMap = {
+      orderNo: 'order_number',
+      order_number: 'order_number',
+      branchPlantCode: 'branch_plant_code',
+      branch_plant_code: 'branch_plant_code',
+      customerCode: 'customer_code',
+      customer_code: 'customer_code',
+      customerLpo: 'customer_lpo',
+      customer_lpo: 'customer_lpo',
+      orderDate: 'date',
+      date: 'date',
+      dueDate: 'due_date',
+      due_date: 'due_date',
+      deliveryDate: 'delivery_date',
+      delivery_date: 'delivery_date',
+      currentStage: 'current_stage',
+      current_stage: 'current_stage',
+      customerName: 'customer_name',
+      customer_name: 'customer_name',
+      channelName: 'channel_name',
+      channel_name: 'channel_name',
+      createdId: 'created_id',
+      created_id: 'created_id',
+      name: 'name',
+      routeCode: 'route_code',
+      route_code: 'route_code',
+      routeName: 'route_name',
+      route_name: 'route_name',
+      salesmanCode: 'salesman_code',
+      salesman_code: 'salesman_code',
+      salesman: 'salesman',
+      page: 'page',
+      page_size: 'page_size',
+      approvalStatus: 'approval_status',
+      approval_status: 'approval_status',
+      invoiceNumber: 'invoice_number',
+      invoice_number: 'invoice_number'
+    };
+
+    const formValues = {};
+    this.advanceSearchRequest.forEach(item => {
+      const formKey = keyMap[item.key] || item.key;
+      let value = item.value;
+
+      // Convert date strings to Date objects for date fields
+      if (['date', 'due_date', 'delivery_date'].includes(formKey) && typeof value === 'string') {
+        const parsedDate = new Date(value);
+        if (!isNaN(parsedDate.getTime())) {
+          value = parsedDate;
+        }
+      }
+
+      if (this.filterForm.contains(formKey)) {
+        formValues[formKey] = value;
+      }
+    });
+
+    this.filterForm.patchValue(formValues);
+
+    this.eventService.emit(new EmitEvent(Events.CHANGE_CRITERIA, {
+      route: '/transaction/order',
+      currentSearchCriteria: this.advanceSearchRequest,
+      requestOriginal: this.requestOriginal
+    }));
+  }
+
+  openAdvanceSearchDialog() {
+    this.eventService.emit(new EmitEvent(Events.CHANGE_CRITERIA, {
+      route: '/transaction/order',
+      currentSearchCriteria: this.advanceSearchRequest,
+      requestOriginal: this.requestOriginal
+    }));
   }
   exportData(){
     const exportRequest = { ...this.requestOriginal, export: 1 };
@@ -630,6 +706,78 @@ setAdvanceSearchRequest(request: any) {
   this.advanceSearchRequest = Object.entries(request)
     .filter(([key, value]) => value !== null && value !== undefined && value !== '')
     .map(([key, value]) => ({ key, value }));
+}
+
+private patchFilterFormWithCriteria(criteria: any[]) {
+  if (!criteria || !Array.isArray(criteria)) return;
+
+  const formValues: any = {};
+
+  criteria.forEach(c => {
+    const key = c.key;
+    let value = c.value;
+
+    // Handle date fields - convert string dates to Date objects
+    if (['date', 'due_date', 'delivery_date'].includes(key) && typeof value === 'string') {
+      const parsedDate = new Date(value);
+      if (!isNaN(parsedDate.getTime())) {
+        value = parsedDate;
+      }
+    }
+
+    // Handle array fields (dropdowns)
+    if (['channel_name', 'created_id'].includes(key)) {
+      if (!Array.isArray(value)) {
+        value = value ? [value] : [];
+      }
+    }
+
+    // Map criteria keys to form control names
+    const keyMap: { [key: string]: string } = {
+      orderNo: 'order_number',
+      order_number: 'order_number',
+      branchPlantCode: 'branch_plant_code',
+      branch_plant_code: 'branch_plant_code',
+      customerCode: 'customer_code',
+      customer_code: 'customer_code',
+      customerLpo: 'customer_lpo',
+      customer_lpo: 'customer_lpo',
+      orderDate: 'date',
+      date: 'date',
+      dueDate: 'due_date',
+      due_date: 'due_date',
+      deliveryDate: 'delivery_date',
+      delivery_date: 'delivery_date',
+      currentStage: 'current_stage',
+      current_stage: 'current_stage',
+      customerName: 'customer_name',
+      customer_name: 'customer_name',
+      channelName: 'channel_name',
+      channel_name: 'channel_name',
+      createdId: 'created_id',
+      created_id: 'created_id',
+      name: 'name',
+      routeCode: 'route_code',
+      route_code: 'route_code',
+      routeName: 'route_name',
+      route_name: 'route_name',
+      salesmanCode: 'salesman_code',
+      salesman_code: 'salesman_code',
+      salesman: 'salesman',
+      approvalStatus: 'approval_status',
+      approval_status: 'approval_status',
+      invoiceNumber: 'invoice_number',
+      invoice_number: 'invoice_number'
+    };
+
+    const formKey = keyMap[key] || key;
+
+    if (this.filterForm.contains(formKey)) {
+      formValues[formKey] = value;
+    }
+  });
+
+  this.filterForm.patchValue(formValues);
 }
 
 }

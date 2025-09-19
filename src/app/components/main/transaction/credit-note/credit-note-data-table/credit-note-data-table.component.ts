@@ -264,7 +264,7 @@ export class CreditNoteDataTableComponent implements OnInit, OnDestroy {
   window.location.href = '/transaction/credit-note';
   }
   onChangeCriteria() {
-    this.eventService.emit(new EmitEvent(Events.CHANGE_CRITERIA, { route: '/transaction/credit-note' }));
+    this.eventService.emit(new EmitEvent(Events.CHANGE_CRITERIA, { route: '/transaction/credit-note', currentSearchCriteria: this.advanceSearchRequest }));
   }
   exportData(){
     const exportRequest = { ...this.requestOriginal, export: 1 };

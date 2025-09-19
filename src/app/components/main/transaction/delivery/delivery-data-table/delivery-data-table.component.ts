@@ -209,7 +209,7 @@ export class DeliveryDataTableComponent implements OnInit, OnDestroy {
   window.location.href = '/transaction/delivery';
   }
   onChangeCriteria() {
-    this.eventService.emit(new EmitEvent(Events.CHANGE_CRITERIA, { route: '/transaction/delivery' }));
+    this.eventService.emit(new EmitEvent(Events.CHANGE_CRITERIA, { route: '/transaction/delivery', currentSearchCriteria: this.advanceSearchRequest }));
   }
    exportData(){
      const exportRequest = { ...this.requestOriginal, export: 1 };

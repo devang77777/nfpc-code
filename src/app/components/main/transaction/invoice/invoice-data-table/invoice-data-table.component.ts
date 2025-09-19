@@ -221,6 +221,12 @@ export class InvoiceDataTableComponent implements OnInit, OnDestroy, OnChanges {
           // show instantly if criteria was passed
           if (criteria) {
             this.advanceSearchRequest = criteria;
+            // Patch the filter form with criteria values to pre-fill the form
+            criteria.forEach(c => {
+              if (this.filterForm.controls[c.key]) {
+                this.filterForm.controls[c.key].setValue(c.value);
+              }
+            });
           } else if (request) {
             // fallback if no criteria provided
             Object.keys(request).forEach(item => {
@@ -241,6 +247,7 @@ export class InvoiceDataTableComponent implements OnInit, OnDestroy, OnChanges {
                 t => t.param === item.param && t.value === item.value
               )
           );
+
            
         
           // backend response comes later
@@ -589,7 +596,7 @@ export class InvoiceDataTableComponent implements OnInit, OnDestroy, OnChanges {
 
   }
   onChangeCriteria() {
-    this.eventService.emit(new EmitEvent(Events.CHANGE_CRITERIA, { route: '/transaction/invoice' }));
+    this.eventService.emit(new EmitEvent(Events.CHANGE_CRITERIA, { route: '/transaction/invoice', currentSearchCriteria: this.advanceSearchRequest }));
   }
   exportData(){
      const exportRequest = { ...this.requestOriginal, export: 1 };

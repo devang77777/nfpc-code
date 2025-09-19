@@ -21,6 +21,26 @@ filteredSalesmen: any[] = [];
   form:FormGroup
   constructor() { }
 
+  setFormValues(criteria: any) {
+    if (!criteria) return;
+    // Patch the form controls with the values from criteria
+    this.form.patchValue({
+      startdate: criteria.startdate || null,
+      enddate: criteria.enddate || null,
+      debit_note_no: criteria.debit_note_no || null,
+      customerName: criteria.customerName || null,
+      startrange: criteria.startrange || null,
+      endrange: criteria.endrange || null,
+      salesman: criteria.salesman || null,
+      current_stage: criteria.current_stage || null,
+    });
+
+    // Patch the FormControls for multi-select dropdowns if applicable
+    if (criteria.salesman && criteria.salesman.length > 0) {
+      this.SalesmanFormControl.setValue(criteria.salesman);
+    }
+  }
+
   ngOnInit(): void {
    this.filteredSalesmen = this.salesman;
 
