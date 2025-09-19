@@ -231,15 +231,20 @@ export class OrderDataTableComponent implements OnInit, OnDestroy, OnChanges {
       } else if (request) {
         // fallback if no criteria provided
         Object.keys(request).forEach(item => {
-          Object.keys(correctRequest).forEach(correctItem => {
-            if (request[item] == correctRequest[correctItem]) {
-              this.advanceSearchRequest.push({
-                param: item,
-                value: request[item],
-                key: correctItem,
-              });
-            }
-          });
+          // Only include fields that have meaningful values
+          const value = request[item];
+          if (value !== null && value !== undefined && value !== '' && 
+              !(Array.isArray(value) && value.length === 0)) {
+            Object.keys(correctRequest).forEach(correctItem => {
+              if (request[item] == correctRequest[correctItem]) {
+                this.advanceSearchRequest.push({
+                  param: item,
+                  value: request[item],
+                  key: correctItem,
+                });
+              }
+            });
+          }
         });
       }
       this.advanceSearchRequest = this.advanceSearchRequest.filter(
