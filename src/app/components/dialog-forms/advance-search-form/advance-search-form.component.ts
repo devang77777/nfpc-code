@@ -41,187 +41,90 @@
 //     private service: AdvanceSearchService,
 //     public dialogRef: MatDialogRef<AdvanceSearchFormComponent>,
 //     private apiService: ApiService,
-//     private eventService: EventBusService,
-//     private router: Router,
-//     private dataEditor: DataEditor,
-//     public ms: MasterService
-//   ) {
-//     // Extract criteria from data if provided
-//     this.currentCriteria = data?.currentSearchCriteria || [];
-//   }
-
-//   ngOnInit(): void {
-//     // Load customer data
-//     this.subscriptions.push(
-//       this.ms.customerDetailDDlListTable({}).subscribe((result) => {
-//         this.customerID = result.data;
-//         console.log('Customer data loaded:', this.customerID);
-//       })
-//     );
-
-//     // Load item data
-//     this.subscriptions.push(
-//       this.ms.itemDetailDDllistTable({ page: 1, page_size: 10 }).subscribe((result: any) => {
-//         this.itemData = result.data;
-//         this.filteredItems = result.data;
-//         console.log('Item data loaded:', this.itemData);
-//       })
-//     );
-
-//     // Load created by user list
-//     this.subscriptions.push(
-//       this.apiService.getAllCreatedByUserList('').subscribe((res: any) => {
-//         this.createdByList = res.data;
-//         console.log('Created by list loaded:', this.createdByList);
-//       })
-//     );
-
-//     // Load warehouse/storage location data
-//     this.subscriptions.push(
-//       this.apiService.getLocationStorageListById().subscribe(res => {
-//         this.warehouseList = [...res.data];
-//         console.log('Warehouse list loaded:', this.warehouseList);
-//       })
-//     );
-
-//     // Load master data
-//     this.subscriptions.push(
-//       this.service.getCustomerMasterData().subscribe(
-//         (response) => {
-//           this.masterData = response.data;
-//           console.log('Master data loaded:', this.masterData);
-//         },
-//         (error) => {
-//           console.error('Error loading master data:', error);
-//         }
-//       )
-//     );
-
-//     // Load customer category/channel data
-//     this.subscriptions.push(
-//       this.apiService.getAllCustomerCategory().subscribe((res: any) => {
-//         this.channelList = res.data;
-//         console.log('Channel list loaded:', this.channelList);
-//       })
-//     );
-
-//     // Load salesman data
-//     this.subscriptions.push(
-//       this.apiService.getSalesmanDataByType().subscribe((res:any)=>{
-//         this.salesmanList = res.data
-//         .map((item: any) => {
-//           return {
-//             id: item.id,
-//             salesman_code: item.salesman_code,
-//             name: `${item.user.firstname} ${item.user.lastname}`
-//           };
-//         });
-//         console.log("Salesman data loaded:", this.salesmanList);
-//       })
-//     );
-
-//     // Subscribe to CHANGE_CRITERIA event to update active form component criteria dynamically
-//     this.subscriptions.push(
-//       this.eventService.on(Events.CHANGE_CRITERIA, (event) => {
-//         if (this.childComponent && event.value && event.value.criteria) {
-//           const criteriaArray = event.value.criteria;
-//           const criteriaObject = {};
-//           criteriaArray.forEach(criterion => {
-//             if (criterion.key && criterion.value !== null && criterion.value !== undefined) {
-//               criteriaObject[criterion.key] = criterion.value;
-//             }
-//           });
-//           if (this.childComponent.setFormValues) {
-//             this.childComponent.setFormValues(criteriaObject);
-//           } else if (this.childComponent.initialCriteria !== undefined) {
-//             this.childComponent.initialCriteria = criteriaObject;
-//             if (this.childComponent.populateFormWithInitialCriteria) {
-//               this.childComponent.populateFormWithInitialCriteria();
-//             }
-//           }
-//         }
-//       })
-//     );
-//   }
-
-//   ngAfterViewInit(): void {
-//     // Apply current search criteria to the child component form
-//     if (this.childComponent && this.currentCriteria && this.currentCriteria.length > 0) {
-//       // Transform criteria array to object format expected by setFormValues
-//       const criteriaObject = {};
-//       this.currentCriteria.forEach(criterion => {
-//         if (criterion.key && criterion.value !== null && criterion.value !== undefined) {
-//           criteriaObject[criterion.key] = criterion.value;
-//         }
-//       });
-
-//       // Set initialCriteria input if the child component supports it
-//       if (this.childComponent.initialCriteria !== undefined) {
-//         this.childComponent.initialCriteria = criteriaObject;
-//         // Wait for data to be loaded before populating form
-//         this.waitForDataAndPopulate(criteriaObject);
-//       } else {
-//         // Fallback to setFormValues method
-//         this.childComponent.setFormValues(criteriaObject);
-//       }
-//     }
-//   }
-
-//   private waitForDataAndPopulate(criteriaObject: any): void {
-//     // Check if all required data is loaded
-//     const checkDataLoaded = () => {
-//       const hasCustomerData = this.customerID && this.customerID.length > 0;
-//       const hasItemData = this.itemData && this.itemData.length > 0;
-//       const hasCreatedByData = this.createdByList && this.createdByList.length > 0;
-//       const hasWarehouseData = this.warehouseList && this.warehouseList.length > 0;
-//       const hasChannelData = this.channelList && this.channelList.length > 0;
-//       const hasMasterData = this.masterData && Object.keys(this.masterData).length > 0;
-
-//       return hasCustomerData && hasItemData && hasCreatedByData && hasWarehouseData && hasChannelData && hasMasterData;
-//     };
-
-//     // If data is already loaded, populate immediately
-//     if (checkDataLoaded()) {
-//       if (this.childComponent.populateFormWithInitialCriteria) {
-//         this.childComponent.populateFormWithInitialCriteria();
-//       }
-//       return;
-//     }
-
-//     // Otherwise, wait for data to load using a simple interval check
-//     const checkInterval = setInterval(() => {
-//       if (checkDataLoaded()) {
-//         clearInterval(checkInterval);
-//         if (this.childComponent.populateFormWithInitialCriteria) {
-//           this.childComponent.populateFormWithInitialCriteria();
-//         }
-//       }
-//     }, 100); // Check every 100ms
-
-//     // Clean up interval after 10 seconds to prevent infinite checking
-//     setTimeout(() => {
-//       clearInterval(checkInterval);
-//     }, 10000);
-//   }
-
-//   clean(model) {
-//     for (var propName in model) {
-//       if (model[propName] === null || model[propName] === undefined || propName === 'module' || propName === "page" || propName === "page_size" || propName === 'export') {
-//         delete model[propName];
-//       }
-//     }
-//     return model
-//   }
-//   search(isReset) {
-//     const model = { ...this.childComponent.form.value };
-//     if (isReset) {
-//       Object.keys(model).forEach(function (key) {
-//         if (model[key] !== '') {
-//           model[key] = null;
-//         }
-//       })
-//       // Reset the form controls in the child component
-//       if (this.childComponent && this.childComponent.resetForm) {
+  //   for (var propName in model) {
+  //     let filterdata;
+  //     switch (propName) {
+  //       case 'customer_id':
+  //         if (Array.isArray(model[propName])) {
+  //           const filterdata = this.customerID.filter((x) => model[propName].includes(x.id));
+  //           if (filterdata.length > 0) {
+  //             model[propName] = filterdata.map(i => `${i.customer_code} ${i.name}`).join(', ');
+  //           } else {
+  //             model[propName] = '';
+  //           }
+  //         } else if (typeof model[propName] === 'number' || typeof model[propName] === 'string') {
+  //           filterdata = this.customerID.find((x) => x.id == model[propName]);
+  //           if (filterdata) {
+  //             model[propName] = `${filterdata.customer_code} ${filterdata.name}`;
+  //           }
+  //         }
+  //         break;
+  //       case 'item_id':
+  //         if (Array.isArray(model[propName])) {
+  //           const filterdata = this.itemData.filter((x) => model[propName].includes(x.id));
+  //           if (filterdata.length > 0) {
+  //             model[propName] = filterdata.map(i => `${i.item_code}-${i.item_name}`).join(', ');
+  //           } else {
+  //             model[propName] = '';
+  //           }
+  //         } else if (typeof model[propName] === 'number' || typeof model[propName] === 'string') {
+  //           filterdata = this.itemData.find((x) => x.id == model[propName]);
+  //           if (filterdata) {
+  //             model[propName] = `${filterdata.item_code}-${filterdata.item_name}`;
+  //           }
+  //         }
+  //         break;
+  //       case 'channel_name':
+  //         if (Array.isArray(model[propName])) {
+  //           const filterdata = this.channelList.filter((x) => model[propName].includes(x.id));
+  //           if (filterdata.length > 0) {
+  //             model[propName] = filterdata.map(i => i.name).join(', ');
+  //           } else {
+  //             model[propName] = '';
+  //           }
+  //         } else if (typeof model[propName] === 'number' || typeof model[propName] === 'string') {
+  //           filterdata = this.channelList.find((x) => x.id == model[propName]);
+  //           if (filterdata) {
+  //             model[propName] = filterdata.name;
+  //           }
+  //         }
+  //         break;
+  //       case 'user_created':
+  //         if (Array.isArray(model[propName])) {
+  //           const filterdata = this.createdByList.filter((x) => model[propName].includes(x.id));
+  //           if (filterdata.length > 0) {
+  //             model[propName] = filterdata.map(i => `${i.firstname} ${i.lastname}`).join(', ');
+  //           } else {
+  //             model[propName] = '';
+  //           }
+  //         } else if (typeof model[propName] === 'number' || typeof model[propName] === 'string') {
+  //           filterdata = this.createdByList.find((x) => x.id == model[propName]);
+  //           if (filterdata) {
+  //             model[propName] = `${filterdata.firstname} ${filterdata.lastname}`;
+  //           }
+  //         }
+  //         break;
+  //       case 'storage_location_id':
+  //         if (Array.isArray(model[propName])) {
+  //           const filterdata = this.warehouseList.filter((x) => model[propName].includes(x.id));
+  //           if (filterdata.length > 0) {
+  //             model[propName] = filterdata.map(i => `${i.code}-${i.name}`).join(', ');
+  //           } else {
+  //             model[propName] = '';
+  //           }
+  //         } else if (typeof model[propName] === 'number' || typeof model[propName] === 'string') {
+  //           filterdata = this.warehouseList.find((x) => x.id == model[propName]);
+  //           if (filterdata) {
+  //             model[propName] = `${filterdata.code}-${filterdata.name}`;
+  //           }
+  //         }
+  //         break;
+  //       default:
+  //         break;
+  //     }
+  //   }
+  //   return model;
+  // }
 //         this.childComponent.resetForm();
 //       }
 //     }
@@ -687,7 +590,46 @@ export class AdvanceSearchFormComponent implements OnInit, AfterViewInit, OnDest
   ngOnDestroy(): void {
     this.subscriptions.forEach(sub => sub.unsubscribe());
   }
-}
+
+    // get displaySearchCriteria() {
+    //   // Only map for display, do not mutate advanceSearchRequest
+      
+    //     let value = item.value;
+    //     // Map for display only (not payload)
+    //     if (['customer_id'].includes(item.key || item.param)) {
+    //       if (this.customerID && Array.isArray(this.customerID)) {
+    //         const ids = String(item.value).split(',').map(v => v.trim());
+    //         const found = this.customerID.filter(c => ids.includes(String(c.id)) || ids.includes(String(c.code)));
+    //         if (found.length) value = found.map(c => `${c.code || c.id} ${c.name || ''}`.trim()).join(', ');
+    //       }
+    //     } else if (['item_id'].includes(item.key || item.param)) {
+    //       if (this.itemList && Array.isArray(this.itemList)) {
+    //         const ids = String(item.value).split(',').map(v => v.trim());
+    //         const found = this.itemList.filter(i => ids.includes(String(i.id)) || ids.includes(String(i.item_code)));
+    //         if (found.length) value = found.map(i => `${i.item_code || i.id}-${i.item_name || ''}`.trim()).join(', ');
+    //       }
+    //     } else if (['channel_name', 'channel_id'].includes(item.key || item.param)) {
+    //       if (this.channelList && Array.isArray(this.channelList)) {
+    //         const ids = String(item.value).split(',').map(v => v.trim());
+    //         const found = this.channelList.filter(c => ids.includes(String(c.id)) || ids.includes(String(c.code)));
+    //         if (found.length) value = found.map(c => c.name || '').join(', ');
+    //       }
+    //     } else if (['user_created', 'created_id'].includes(item.key || item.param)) {
+    //       if (this.createdByList && Array.isArray(this.createdByList)) {
+    //         const ids = String(item.value).split(',').map(v => v.trim());
+    //         const found = this.createdByList.filter(u => ids.includes(String(u.id)) || ids.includes(String(u.code)));
+    //         if (found.length) value = found.map(u => `${u.firstname || u.name || ''} ${u.lastname || ''}`.trim()).join(', ');
+    //       }
+    //     } else if (['storage_location_id', 'storage_location'].includes(item.key || item.param)) {
+    //       if (this.storageLocationList && Array.isArray(this.storageLocationList)) {
+    //         const ids = String(item.value).split(',').map(v => v.trim());
+    //         const found = this.storageLocationList.filter(s => ids.includes(String(s.id)) || ids.includes(String(s.code)));
+    //         if (found.length) value = found.map(s => `${s.code || s.id}-${s.name || ''}`.trim()).join(', ');
+    //       }
+    //     }
+    //     return { ...item, value };
+    //   };
+    }
 
 
 export const ORDER_STATUS_ADVANCE_SEARCH = [

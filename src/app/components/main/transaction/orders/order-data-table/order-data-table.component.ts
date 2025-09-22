@@ -35,6 +35,7 @@ import {
 } from 'src/app/services/constants';
 import { ApiService } from 'src/app/services/api.service';
 import { DataEditor } from 'src/app/services/data-editor.service';
+import { MasterService } from '../../../master/master.service';
 import { FormDrawerService } from 'src/app/services/form-drawer.service';
 import { Utils } from 'src/app/services/utils';
 import { OrderService } from '../order.service';
@@ -50,6 +51,11 @@ import { NgxSpinnerService } from 'ngx-spinner';
   styleUrls: ['./order-data-table.component.scss'],
 })
 export class OrderDataTableComponent implements OnInit, OnDestroy, OnChanges {
+  customerList: any[] = [];
+  itemList: any[] = [];
+  storageLocationList: any[] = [];
+  // Display-mapped search criteria for UI only
+
   @Output() public itemClicked: EventEmitter<any> = new EventEmitter<any>();
   @Output() public selectedRows: EventEmitter<any> = new EventEmitter<any>();
   @Input() public isDetailVisible: boolean;
@@ -142,6 +148,7 @@ export class OrderDataTableComponent implements OnInit, OnDestroy, OnChanges {
   public ngOnInit(): void {
     this.getChannelList();
     this.getCreatedByList();
+    
     this.filterForm = this.fb.group({
       order_number: [''],
       branch_plant_code: [''],

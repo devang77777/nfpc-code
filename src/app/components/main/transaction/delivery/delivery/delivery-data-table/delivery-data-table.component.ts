@@ -1,5 +1,5 @@
 import { ApiService } from 'src/app/services/api.service';
-import { getCurrency, getCurrencyDecimalFormat } from './../../../../../services/constants';
+import { getCurrency, getCurrencyDecimalFormat } from '../../../../../../services/constants';
 import {
   Component,
   EventEmitter,
