@@ -1,30 +1,23 @@
-import { Component, OnInit, Input, ChangeDetectorRef, OnChanges, SimpleChanges } from '@angular/core';
+import { Component, OnInit, Input, ChangeDetectorRef,SimpleChanges } from '@angular/core';
 import { FormGroup, FormControl,Validators } from '@angular/forms';
 import { STATUS, INVOICE_STATUS } from 'src/app/app.constant';
 import { ApiService } from 'src/app/services/api.service';
 import { Subscription,Subject } from 'rxjs';
 import { MasterService } from 'src/app/components/main/master/master.service';
+import { SavedSearchValues } from '../services/advance-search-state.service';
 @Component({
   selector: 'app-advance-search-form-invoice',
   templateUrl: './advance-search-form-invoice.component.html',
   styleUrls: ['./advance-search-form-invoice.component.scss']
 })
-export class AdvanceSearchFormInvoiceComponent implements OnInit, OnChanges {
-  @Input() salesman: Array<any> = [];
-  @Input() initialCriteria: any = {};
-  ngOnChanges(changes: SimpleChanges): void {
-    if (changes.initialCriteria && this.initialCriteria && Object.keys(this.initialCriteria).length > 0) {
-      this.setFormValues(this.initialCriteria);
-    }
-  }
+export class AdvanceSearchFormInvoiceComponent implements OnInit {
    SalesmanFormControl = new FormControl([]);
   salesmanList: any[] = [];
   channelList: any[] = [];
   @Input() items: Array<any> = [];
-  @Input() customers: Array<any> = [];
   itemsFormControl = new FormControl([]);
    selectedItems = [];
-  //  customers: any=[];
+   customers: any=[];
    public filterItem = [];
    settings = {};
    itemfilterValue = '';
@@ -34,7 +27,7 @@ export class AdvanceSearchFormInvoiceComponent implements OnInit, OnChanges {
     uomList: any = [];
   form: FormGroup;
   statusList: Array<any> = INVOICE_STATUS;
-  // @Input() salesman: Array<any> = [];
+  @Input() salesman: Array<any> = [];
   @Input() storageLocation: Array<any> = [];
   customersFormControl = new FormControl([]);
 
@@ -42,123 +35,32 @@ export class AdvanceSearchFormInvoiceComponent implements OnInit, OnChanges {
   private subscriptions: Subscription[] = [];
     customerID: any = [];
     CustomersFormControl = new FormControl([]);
+  private pendingSavedState: any = null; // Store pending saved state
+  
   constructor(private detChange: ChangeDetectorRef,private apiService: ApiService,private ms: MasterService
   ) { }
 
-  setFormValues(criteria: any) {
-    if (!criteria) return;
-    // Patch primitive fields
-    this.form.patchValue({
-      startdate: criteria.startdate || null,
-      enddate: criteria.enddate || null,
-      invoice_no: criteria.invoice_no || null,
-      order_no: criteria.order_no || null,
-      customer_lpo_no: criteria.customer_lpo_no || null,
-      erp_status: criteria.erp_status || null,
-      syncdate: criteria.syncdate || null,
-      creationDate: criteria.creationDate || null,
-    });
-
-    // Branch plants (storage_location_id)
-    if (criteria.storage_location_id && this.storageLocation?.length) {
-      const ids = Array.isArray(criteria.storage_location_id) ? criteria.storage_location_id.map(String) : [String(criteria.storage_location_id)];
-      const selected = this.storageLocation.filter(l => ids.includes(String(l.id)) || ids.includes(String(l.storage_location_id)));
-      this.branchplantsFormControl.setValue(selected);
-      this.form.patchValue({ storage_location_id: selected.map(l => l.id) });
-    }
-
-    // Customers
-    if (criteria.customer_id && this.customers?.length) {
-      const mappedCustomers = this.customers.map(c => ({
-        id: c.id,
-        itemName: (c.customer_code ? c.customer_code + ' ' : '') + (c.firstname || c.first_name || '') + (c.lastname || c.last_name ? ' ' + (c.lastname || c.last_name) : '')
-      }));
-      const ids = Array.isArray(criteria.customer_id) ? criteria.customer_id.map(String) : [String(criteria.customer_id)];
-      const selected = mappedCustomers.filter(c => ids.includes(String(c.id)));
-      this.CustomersFormControl.setValue(selected);
-      this.form.patchValue({ customer_id: selected.map(c => c.id) });
-    }
-
-    // Items
-    if (criteria.item_id && this.filteredItems?.length) {
-      const mappedItems = this.filteredItems.map(i => ({
-        id: i.id,
-        itemName: (i.item_code ? i.item_code + ' - ' : '') + (i.item_name || '')
-      }));
-      const ids = Array.isArray(criteria.item_id) ? criteria.item_id.map(String) : [String(criteria.item_id)];
-      const selected = mappedItems.filter(i => ids.includes(String(i.id)));
-      this.itemsFormControl.setValue(selected);
-      this.form.patchValue({ item_id: selected.map(i => i.id) });
-    }
-
-    // Salesman (use @Input() salesman for mapping, as used in the template)
-    if (criteria.salesman && this.salesman?.length) {
-      const mappedSalesmen = this.salesman.map(s => ({
-        id: s.id,
-        salesman_name: s.salesman_name || s.name || `${s.salesman_code || ''} ${s.firstname || ''} ${s.lastname || ''}`
-      }));
-      const ids = Array.isArray(criteria.salesman) ? criteria.salesman.map(String) : [String(criteria.salesman)];
-      const selected = mappedSalesmen.filter(s => ids.includes(String(s.id)));
-      this.SalesmanFormControl.setValue(selected);
-      this.form.patchValue({ salesman: selected.map(s => s.id) });
-    }
-
-    // Channel (Service Channel)
-    if (criteria.channel_name && this.channelList?.length) {
-      const mappedChannels = this.channelList.map(ch => ({
-        id: ch.id,
-        itemName: ch.channel_name || ch.name || ''
-      }));
-      const ids = Array.isArray(criteria.channel_name) ? criteria.channel_name.map(String) : [String(criteria.channel_name)];
-      const selected = mappedChannels.filter(ch => ids.includes(String(ch.id)));
-      this.form.patchValue({ channel_name: selected.map(ch => ch.id) });
-    }
-
-    this.detChange.detectChanges();
-  }
-
   ngOnInit(): void {
-    // Async prefill logic for dropdowns (robust, like order form)
-    let itemsLoaded = false;
-    let channelsLoaded = false;
-    let salesmenLoaded = false;
-
-    const tryPrefill = () => {
-      if (
-        itemsLoaded &&
-        channelsLoaded &&
-        salesmenLoaded &&
-        this.initialCriteria &&
-        Object.keys(this.initialCriteria).length > 0
-      ) {
-        this.setFormValues(this.initialCriteria);
-      }
-    };
-
-    this.subscriptions.push(
+     this.subscriptions.push(
       this.ms.itemDetailDDllistTable({ page: 1, page_size: 10 }).subscribe((result: any) => {
         this.itemData = result.data;
         this.filteredItems = result.data;
-        itemsLoaded = true;
-        tryPrefill();
       })
     );
-    this.apiService.getAllCustomerCategory().subscribe((res: any) => {
+     this.apiService.getAllCustomerCategory().subscribe((res: any) => {
       this.channelList = res.data;
-      channelsLoaded = true;
-      tryPrefill();
     });
-    this.apiService.getMasterDataLists().subscribe((result: any) => {
+     this.apiService.getMasterDataLists().subscribe((result: any) => {
+      
       this.salesmanList = result.data.salesmans;
+      
       for (let salesman of this.salesmanList) {
         salesman['salesman_name'] = `${salesman.salesman_info.salesman_code} - ${salesman.firstname} ${salesman.lastname}`;
       }
-      salesmenLoaded = true;
-      tryPrefill();
     });
     this.ItemCodeFormControl = new FormControl([], [Validators.required]);
     this.form = new FormGroup({
-      module: new FormControl('invoice'),
+     module: new FormControl('invoice'),
       startdate: new FormControl(),
       enddate: new FormControl(),
       invoice_no: new FormControl(),
@@ -173,12 +75,210 @@ export class AdvanceSearchFormInvoiceComponent implements OnInit, OnChanges {
       syncdate: new FormControl(),
       creationDate: new FormControl(),
     });
+     this.ms.customerDetailDDlListTable({}).subscribe((result) => {
+      this.customers = result.data;
+      // this.filterCustomer = result.data.slice(0, 30);
+      
+      // Try to restore saved state if it was pending
+      if (this.pendingSavedState) {
+        this.restoreFormValues(this.pendingSavedState);
+        this.pendingSavedState = null;
+      }
+    })
+   
   }
-  
 
+  /**
+   * Restore form values from saved state
+   * @param savedState - The saved search state containing form and control values
+   */
+  restoreFormValues(savedState: SavedSearchValues) {
+    // If data is not loaded yet, store the state for later restoration
+    if (!this.customers || this.customers.length === 0) {
+      this.pendingSavedState = savedState;
+      return;
+    }
 
+    if (savedState.formValues) {
+      // Restore basic form values
+      this.form.patchValue(savedState.formValues);
+    }
 
-  selectionchangedstorageLocation() {
+    if (savedState.controlValues) {
+      // Restore multi-select control values with mapped objects for correct display
+      if (savedState.controlValues.items && this.itemData.length > 0) {
+        const savedItems = this.itemData
+          .filter(item => savedState.controlValues.items.includes(item.id))
+          .map(item => ({
+            ...item,
+            itemName: (item.item_code ? item.item_code + ' - ' : '') + (item.item_name || '')
+          }));
+        this.itemsFormControl.setValue(savedItems);
+      }
+
+      if (savedState.controlValues.customers && this.customers && this.customers.length > 0) {
+        const savedCustomers = this.customers
+          .filter(customer => savedState.controlValues.customers.includes(customer.id))
+          .map(customer => ({
+            ...customer,
+            itemName: (customer.customer_code ? customer.customer_code + ' - ' : '') + (customer.customer_name || customer.name || '')
+          }));
+        this.CustomersFormControl.setValue(savedCustomers);
+      }
+
+      if (savedState.controlValues.storage && this.storageLocation && this.storageLocation.length > 0) {
+        // Debug logs to help diagnose selection issues
+        console.log('storageLocation:', this.storageLocation);
+        console.log('savedState.controlValues.storage:', savedState.controlValues.storage);
+        // Ensure type match for IDs
+        const savedStorage = this.storageLocation
+          .filter(storage => savedState.controlValues.storage.map(String).includes(String(storage.id)))
+          .map(storage => ({
+            ...storage,
+            itemName: (storage.storage_location_code ? storage.storage_location_code + ' - ' : '') + (storage.storage_location_name || storage.name || '')
+          }));
+        console.log('savedStorage to set:', savedStorage);
+        this.branchplantsFormControl.setValue(savedStorage);
+        this.selectionchangedstorageLocation();
+      }
+
+      if (savedState.controlValues.salesman && this.salesmanList && this.salesmanList.length > 0) {
+        const savedSalesmen = this.salesmanList
+          .filter(salesman => savedState.controlValues.salesman.includes(salesman.id))
+          .map(salesman => ({
+            ...salesman,
+            salesman_name: (salesman.salesman_info?.salesman_code ? salesman.salesman_info.salesman_code + ' - ' : '') + (salesman.firstname || '') + ' ' + (salesman.lastname || '')
+          }));
+        this.SalesmanFormControl.setValue(savedSalesmen);
+      }
+    }
+  }
+
+  /**
+   * Get current control values for saving state
+   * @returns Object containing current control values
+   */
+  getControlValues() {
+    return {
+      items: this.itemsFormControl.value?.map((item: any) => item.id) || [],
+      customers: this.CustomersFormControl.value?.map((customer: any) => customer.id) || [],
+      storage: this.branchplantsFormControl.value?.map((storage: any) => storage.id) || [],
+      salesman: this.SalesmanFormControl.value?.map((salesman: any) => salesman.id) || []
+    };
+  }
+
+    ngOnChanges(changes: SimpleChanges) {
+      if (changes.items?.currentValue != changes.items?.previousValue) {
+        this.filterItem = [...this.items];
+        this.items = this.items.map(i => {
+          return { id: i.id, itemName: i.item_code + ' - ' + i.item_name }
+        });
+      }
+
+      // Check if storage location or other input properties have changed and we have pending saved state
+      if (this.pendingSavedState) {
+        if ((changes.storageLocation && changes.storageLocation.currentValue?.length > 0) ||
+            (changes.salesman && changes.salesman.currentValue?.length > 0)) {
+          this.restoreFormValues(this.pendingSavedState);
+          this.pendingSavedState = null;
+        }
+      }
+    };
+
+  //   selectionchangedItems() {
+  //   let items = this.itemsFormControl.value;
+  //   this.form.patchValue({
+  //     item_id: items[0].id
+  //   });
+    
+  // }
+//   selectionchangedItems() {
+//   const item = this.itemsFormControl.value;
+
+//   if (item && item.id) {
+//     this.form.patchValue({
+//       item_id: item.id
+//     });
+//   } else {
+//     this.form.patchValue({
+//       item_id: null
+//     });
+//   }
+// }
+  // onChange(event) {
+  //   let uomLists = this.filteredItems.find(i => i.id === event.id);
+  //   // this.uomList.push(uomLists.item_uom_lower_unit);
+  //   this.getItemDetailByName(event.item_name).subscribe(res => {
+  //     var _items = res.data || [];
+
+  //     const selectedItem: any = _items.find((res: any) => res.id === event.id);
+  //     this.setItemRelatedUOM(selectedItem);
+  //   });
+  // }
+
+  // getItemDetailByName(name) {
+  //   return this.ms
+  //     .itemDetailListTable({ item_name: name.toLowerCase(), })
+
+  // }
+  // setItemRelatedUOM(selectedItem: any) {
+  //   // const uomControl = formGroup.controls.item_uom_id;
+  //   let lowerUnitUOM = [selectedItem.item_uom_lower_unit];
+  //   let baseUnitUOM = [];
+  //   let itemUOMArray = [];
+  //   if (selectedItem.item_main_price.length > 0) {
+  //     selectedItem.item_main_price.forEach(element => {
+  //       baseUnitUOM.push(element.item_uom);
+  //     });
+  //     itemUOMArray = [...baseUnitUOM, ...lowerUnitUOM];
+  //   } else {
+  //     itemUOMArray = lowerUnitUOM;
+  //   }
+  //   this.uomList = itemUOMArray
+  //   // formGroup.controls.item_uom_list.setValue(itemUOMArray);
+  //   // if (isEdit) {
+
+  //   //   uomControl.setValue(selectedItem?.uom_info?.id);
+  //   // } else {
+
+  //   //   uomControl.setValue(selectedItem?.lower_unit_uom_id);
+  //   // }
+
+  // }
+
+  //  onItemSelect(item: any) {
+  //   let items = this.itemsFormControl.value;
+  //   this.form.patchValue({
+  //     item_id: items[0].id
+  //   });
+  // }
+  // OnItemDeSelect(item: any) {
+  //   //console.log(item);
+  //   //console.log(this.selectedItems);
+  // }
+  // onSelectAll(items: any) {
+
+  // }
+  // onDeSelectAll(items: any) {
+
+  // }
+
+  //  onSearch(evt: any) {
+  //   let value = evt.target.value
+  //   if (value !== '') {
+  //     this.itemfilterValue = value.toLowerCase().trim() || "";
+  //     this.items = this.filterItem.filter(x => x.item_code.toLowerCase().trim() === this.itemfilterValue || x.item_name.toLowerCase().trim() === this.itemfilterValue);
+  //     this.items = this.items.map(i => {
+  //       return { id: i.id, itemName: i.item_code + ' - ' + i.item_name }
+  //     });
+  //   } else {
+  //     this.items = this.filterItem.map(i => {
+  //       return { id: i.id, itemName: i.item_code + ' - ' + i.item_name }
+  //     })
+  //   }
+  //   this.detChange.detectChanges();
+  // }
+   selectionchangedstorageLocation() {
     const storage = this.branchplantsFormControl.value;
     let storageIds = storage.map((item: any) => item.id);
     this.form.patchValue({
@@ -236,12 +336,4 @@ export class AdvanceSearchFormInvoiceComponent implements OnInit, OnChanges {
     // });
   }
 
-  resetForm() {
-    this.form.reset();
-    this.SalesmanFormControl.reset();
-    this.CustomersFormControl.reset();
-    this.itemsFormControl.reset();
-    this.branchplantsFormControl.reset();
-    this.ItemCodeFormControl.reset();
-  }
 }

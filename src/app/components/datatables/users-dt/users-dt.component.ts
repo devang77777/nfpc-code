@@ -50,6 +50,7 @@ advanceSearchRequest: any[] = [];
   private allColumns: ColumnConfig[] = [
     { def: 'user_details', title: 'Details', show: true },
     { def: 'role', title: 'Role', show: true },
+    { def: 'status', title: 'Status', show: true },
     { def: 'actions', title: 'Actions', show: true },
 
   ]
@@ -72,6 +73,7 @@ advanceSearchRequest: any[] = [];
        page: [this.page],
       page_size: [this.pageSize],
       role_name: [''],
+      status: [''],
       user_name: [''],
       email: ['']
     });
@@ -80,6 +82,7 @@ advanceSearchRequest: any[] = [];
  const filters = {
     name: this.filterForm.get('user_name')?.value || this.filterForm.get('email')?.value || '',
     role: this.filterForm.get('role_name')?.value || '',
+    status: this.filterForm.get('sttaus')?.value || '',
     // email: this.filterForm.get('email')?.value || '',
   };
     this.fds.formType.subscribe(x => {
@@ -194,6 +197,7 @@ advanceSearchRequest: any[] = [];
      const filters = {
     name: this.filterForm.get('user_name')?.value || '',
     role: this.filterForm.get('role_name')?.value || '',
+    status: this.filterForm.get('status')?.value || '',
     // email: this.filterForm.get('email')?.value || '',
   };
     // this.getDisplayedColumns();
@@ -207,6 +211,7 @@ advanceSearchRequest: any[] = [];
      const filters = {
     name: this.filterForm.get('user_name')?.value || '',
     role: this.filterForm.get('role_name')?.value || '',
+    status: this.filterForm.get('status')?.value || '',
     // email: this.filterForm.get('email')?.value || '',
   };
       if (this.advanceSearchRequest.length > 0) {

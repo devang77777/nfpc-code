@@ -9,7 +9,7 @@ export const environment = {
   // baseApiUrl: 'https://devmobiato.nfpc.net/merchandising/public/api',
 //  baseApiUrl: 'https://presales-dev.nfpc.net/production/public/api',
 //   nfpcApiUrl: 'https://presales-dev.nfpc.net/production/public/api',
-//   host: 'https://presales-dev.nfpc',
+//   host: 'https://presales-dev.nfpc.net',
 //   production: false
 //  baseApiUrl: 'https://devmobiato.nfpc.net/merchandising/public/api',
   baseApiUrl: 'https://prodmobiato.nfpc.net/production/public/api',
