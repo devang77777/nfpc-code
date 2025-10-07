@@ -182,7 +182,6 @@ advanceSearchRequest: any[] = [];
       
     if (!status) {
       // Find the selected control and reset its value only (not others)
-      // this.filterForm.patchValue({ date: null })
       this.isColumnFilter = status;
       this.filterForm.get(this.selectedColumnFilter).setValue(null);
       sessionStorage.clear();
@@ -194,14 +193,20 @@ advanceSearchRequest: any[] = [];
       });
       sessionStorage.setItem('columnfilter', JSON.stringify(this.filterForm.value));
     }
-     const filters = {
-    name: this.filterForm.get('user_name')?.value || '',
-    role: this.filterForm.get('role_name')?.value || '',
-    status: this.filterForm.get('status')?.value || '',
-    // email: this.filterForm.get('email')?.value || '',
-  };
-    // this.getDisplayedColumns();
-     this.subscriptions.push(this.apiService.getAllInviteUser(filters).subscribe((users: any) => {
+    // Build filters object from all filterForm values, always include status if set
+    const formVals = this.filterForm.value;
+    let filters: any = {
+      name: formVals.user_name || '',
+      role: formVals.role_name || '',
+      email: formVals.email || ''
+    };
+    // Always include status if set (even if other fields are empty)
+    if (formVals.status) {
+      if (formVals.status === 'active') filters.status = 1;
+      else if (formVals.status === 'inactive') filters.status = 0;
+      else filters.status = formVals.status;
+    }
+    this.subscriptions.push(this.apiService.getAllInviteUser(filters).subscribe((users: any) => {
       this.dataSource = new MatTableDataSource<Users>(users.data);
       this.dataSource.paginator = this.paginator;
     }));

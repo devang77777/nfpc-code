@@ -1,5 +1,5 @@
 import { Component, OnInit, Input, ChangeDetectorRef, SimpleChanges, ViewChild, ElementRef, OnDestroy } from '@angular/core';
-import { FormGroup, FormControl, Validators } from '@angular/forms';
+import { FormGroup, FormControl } from '@angular/forms';
 import { STATUS, ORDER_STATUS } from 'src/app/app.constant';
 import { Subscription,Subject } from 'rxjs';
 import { ApiService } from 'src/app/services/api.service';

@@ -61,7 +61,7 @@
                                         <mat-autocomplete appOptionScroll (optionsScroll)="onScroll()"
                                             (optionSelected)="getCustomerLobList($event.option.value)"
                                             #auto="matAutocomplete" (opened)="checkFormValidation('order')"
-                                            [displayWith]="customerControlDisplayValue" required>
+                                            [displayWith]="customerControlDisplayValue">
                                             <mat-option *ngFor="let customer of filterCustomer" [value]="customer">
                                                 {{ customer.customer_code }} - {{ customer.name }} </mat-option>
                                             <hr class="customerHr">
@@ -69,9 +69,7 @@
                                            
 
                                         </mat-autocomplete>
-                                        <mat-error *ngIf="customerFormControl.hasError('required')">Please select a
-                                            customer
-                                        </mat-error>
+                                        <!-- <mat-error *ngIf="customerFormControl.hasError('required')">Please select a customer</mat-error>
                                     </mat-form-field> -->
         </div>
       </div>

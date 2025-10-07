@@ -236,21 +236,35 @@ export class AdvanceSearchFormComponent implements OnInit, AfterViewInit {
       }
     }
 
-    let correctRequest = this.clean({ ...model });
-    let request = this.clean({ ...model });
+    // Remove allData from payload for order, invoice, delivery, and credit_note
+    let moduleName = this.currentModule;
+    let payload = { ...model };
+    if (["order", "invoice", "delivery", "credit_note"].includes(moduleName)) {
+      delete payload.allData;
+    }
+
+    let correctRequest = this.clean({ ...payload });
+    let request = this.clean({ ...payload });
     // For display summary, use filterObjectValues to get user-friendly values
-    const displaySummary = this.filterObjectValues({ ...model });
+    // Always use this mapping for summary bar, including order and invoice
+    const filtered = this.filterObjectValues({ ...payload });
+    const displaySummary = Object.keys(filtered)
+      .filter(key => filtered[key] !== '' && filtered[key] !== null && filtered[key] !== undefined)
+      .map(key => ({
+        param: this.snakeToCamelObject({ [key]: '' })[key],
+        value: filtered[key]
+      }));
     request = this.filterObjectValues(request);
     request = this.snakeToCamelObject(request);
-    model.module = this.childComponent.form.value.module;
-    model.page = 1;
-    model.page_size = 10;
-    model.export = 0;
-    this.apiService.onSearch(model).subscribe((response) => {
-      this.eventService.emit(new EmitEvent(model.module, {
+    payload.module = this.childComponent.form.value.module;
+    payload.page = 1;
+    payload.page_size = 10;
+    payload.export = 0;
+    this.apiService.onSearch(payload).subscribe((response) => {
+      this.eventService.emit(new EmitEvent(payload.module, {
         request: request,
         correctRequest: correctRequest,
-        requestOriginal: model,
+        requestOriginal: payload,
         response: response,
         displaySummary: displaySummary // Add display summary to event payload
       }));
@@ -285,34 +299,29 @@ export class AdvanceSearchFormComponent implements OnInit, AfterViewInit {
             } else {
               model[propName] = 'Unknown Customer';
             }
-          } else {
-            let names = '';
-            model[propName].forEach(element => {
-              filterdata = this.masterData.customers.filter((x) => x.id == element);
-              if (filterdata && filterdata.length > 0 && filterdata[0].customer_code && filterdata[0].name) {
-                names += filterdata[0].customer_code + ' - ' + filterdata[0].name + ', ';
-              }
-            });
-            model[propName] = names.replace(/, $/, '');
-          }
+          } 
           break;
         case "customer_id":
           if (typeof model[propName] == 'number') {
-            filterdata = this.masterData.customers.filter((x) => x.id == model[propName])[0];
-            if (filterdata && filterdata.customer_code && filterdata.name) {
-              model[propName] = filterdata.customer_code + ' - ' + filterdata.name;
+            filterdata = this.masterData.customers.find((x) => x.id == model[propName]);
+            if (filterdata && filterdata.customer_info && filterdata.customer_info.customer_code && filterdata.firstname) {
+              model[propName] = filterdata.customer_info.customer_code + ' - ' + filterdata.firstname;
             } else {
               model[propName] = 'Unknown Customer';
             }
-          } else {
+          } else if (Array.isArray(model[propName]) && model[propName].length > 0) {
             let names = '';
             model[propName].forEach(element => {
-              filterdata = this.masterData.customers.filter((x) => x.id == element);
-              if (filterdata && filterdata.length > 0 && filterdata[0].customer_code && filterdata[0].name) {
-                names += filterdata[0].customer_code + ' - ' + filterdata[0].name + ', ';
+              const cust = this.masterData.customers.find((x) => x.id == element);
+              if (cust && cust.customer_info && cust.customer_info.customer_code && cust.firstname) {
+                names += cust.customer_info.customer_code + ' - ' + cust.firstname + ', ';
+              } else {
+                names += '';
               }
             });
             model[propName] = names.replace(/, $/, '');
+          } else if (model[propName] == null || (Array.isArray(model[propName]) && model[propName].length === 0)) {
+            model[propName] = '';
           }
           break;
         case "salesman":
@@ -323,16 +332,7 @@ export class AdvanceSearchFormComponent implements OnInit, AfterViewInit {
             } else {
               model[propName] = 'Unknown Salesman';
             }
-          } else {
-            let names = '';
-            model[propName].forEach(element => {
-              filterdata = this.masterData.salesmans.filter((x) => x.id == element);
-              if (filterdata && filterdata.length > 0 && filterdata[0].salesman_info && filterdata[0].salesman_info.salesman_code && filterdata[0].firstname && filterdata[0].lastname) {
-                names += filterdata[0].salesman_info.salesman_code + ' - ' + filterdata[0].firstname + ' ' + filterdata[0].lastname + ', ';
-              }
-            });
-            model[propName] = names.replace(/, $/, '');
-          }
+          } 
           // model[propName] = `${filterdata.salesman_code} - ${filterdata.firstname} ${filterdata.lastname}`
           break;
         case "channel":
@@ -354,16 +354,7 @@ export class AdvanceSearchFormComponent implements OnInit, AfterViewInit {
             } else {
               model[propName] = 'Unknown Channel';
             }
-          } else {
-            let names = '';
-            model[propName].forEach(element => {
-              filterdata = this.channelList.filter((x) => x.id == element);
-              if (filterdata && filterdata.length > 0 && filterdata[0].name) {
-                names += filterdata[0].name + ', ';
-              }
-            });
-            model[propName] = names.replace(/, $/, '');
-          }
+          } 
           break;
         case "sales_organisation":
           filterdata = this.masterData.sales_organisation.filter((x) => x.id == model[propName]);
@@ -404,16 +395,7 @@ export class AdvanceSearchFormComponent implements OnInit, AfterViewInit {
             } else {
               model[propName] = 'Unknown Merchandiser';
             }
-          } else {
-            let names = '';
-            model[propName].forEach(element => {
-              filterdata = this.masterData.merchandiser.filter((x) => x.user.id == element);
-              if (filterdata && filterdata.length > 0 && filterdata[0].user && filterdata[0].user.firstname && filterdata[0].user.lastname) {
-                names += filterdata[0].user.firstname + ' ' + filterdata[0].user.lastname + ', ';
-              }
-            });
-            model[propName] = names.replace(/, $/, '');
-          }
+          } 
           break;
         case "category":
           if (typeof model[propName] == 'number') {
@@ -423,16 +405,7 @@ export class AdvanceSearchFormComponent implements OnInit, AfterViewInit {
             } else {
               model[propName] = 'Unknown Category';
             }
-          } else {
-            let names = '';
-            model[propName].forEach(element => {
-              filterdata = this.masterData.item_major_category_list.filter((x) => x.id == element);
-              if (filterdata && filterdata.length > 0 && filterdata[0].name) {
-                names += filterdata[0].name + ', ';
-              }
-            });
-            model[propName] = names.replace(/, $/, '');
-          }
+          } 
           break;
         case "item_major_category_id":
           if (typeof model[propName] == 'number') {
@@ -442,15 +415,6 @@ export class AdvanceSearchFormComponent implements OnInit, AfterViewInit {
             } else {
               model[propName] = 'Unknown Major Category';
             }
-          } else {
-            let names = '';
-            model[propName].forEach(element => {
-              filterdata = this.masterData.item_major_category_list.filter((x) => x.id == element);
-              if (filterdata && filterdata.length > 0 && filterdata[0].name) {
-                names += filterdata[0].name + ', ';
-              }
-            });
-            model[propName] = names.replace(/, $/, '');
           }
           break;
         case "brand":
@@ -461,16 +425,7 @@ export class AdvanceSearchFormComponent implements OnInit, AfterViewInit {
             } else {
               model[propName] = 'Unknown Brand';
             }
-          } else {
-            let names = '';
-            model[propName].forEach(element => {
-              filterdata = this.masterData.brand_list.filter((x) => x.id == element);
-              if (filterdata && filterdata.length > 0 && filterdata[0].brand_name) {
-                names += filterdata[0].brand_name + ', ';
-              }
-            });
-            model[propName] = names.replace(/, $/, '');
-          }
+          } 
           break;
         case "brand_id":
           if (typeof model[propName] == 'number') {
@@ -480,16 +435,7 @@ export class AdvanceSearchFormComponent implements OnInit, AfterViewInit {
             } else {
               model[propName] = 'Unknown Brand';
             }
-          } else {
-            let names = '';
-            model[propName].forEach(element => {
-              filterdata = this.masterData.brand_list.filter((x) => x.id == element);
-              if (filterdata && filterdata.length > 0 && filterdata[0].brand_name) {
-                names += filterdata[0].brand_name + ', ';
-              }
-            });
-            model[propName] = names.replace(/, $/, '');
-          }
+          } 
           break;
         case 'item_id':
           if (typeof model[propName] == 'number') {
@@ -499,15 +445,6 @@ export class AdvanceSearchFormComponent implements OnInit, AfterViewInit {
             } else {
               model[propName] = 'Unknown Item';
             }
-          } else {
-            let names = '';
-            model[propName].forEach(element => {
-              filterdata = this.masterData.items.filter((x) => x.id == element);
-              if (filterdata && filterdata.length > 0 && filterdata[0].item_code && filterdata[0].item_name) {
-                names += filterdata[0].item_code + ' - ' + filterdata[0].item_name + ', ';
-              }
-            });
-            model[propName] = names.replace(/, $/, '');
           }
           break
         case 'user_created':
@@ -518,16 +455,7 @@ export class AdvanceSearchFormComponent implements OnInit, AfterViewInit {
             } else {
               model[propName] = 'Unknown User';
             }
-          } else {
-            let names = '';
-            model[propName].forEach(element => {
-              filterdata = this.masterData.order_created_user.filter((x) => x.id == element);
-              if (filterdata && filterdata.length > 0 && filterdata[0].firstname && filterdata[0].lastname) {
-                names += filterdata[0].firstname + ' - ' + filterdata[0].lastname + ', ';
-              }
-            });
-            model[propName] = names.replace(/, $/, '');
-          }
+          } 
           break
         case 'storage_location_id':
           if (typeof model[propName] == 'number') {
@@ -537,7 +465,7 @@ export class AdvanceSearchFormComponent implements OnInit, AfterViewInit {
             } else {
               model[propName] = 'Unknown Storage Location';
             }
-          } else if (typeof model[propName] == 'object') {
+          } else if (Array.isArray(model[propName]) && model[propName].length > 0) {
             filterdata = this.masterData.storage_location.filter((x) => model[propName].some(o => x.id == o));
             let mapArray = filterdata.map(i => {
               if (i && i.code && i.name) {
@@ -547,6 +475,8 @@ export class AdvanceSearchFormComponent implements OnInit, AfterViewInit {
               }
             });
             model[propName] = mapArray.toString();
+          } else if (model[propName] == null || (Array.isArray(model[propName]) && model[propName].length === 0)) {
+            model[propName] = '';
           }
           break
         case 'current_stage':

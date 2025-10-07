@@ -58,7 +58,7 @@ export class AdvanceSearchFormInvoiceComponent implements OnInit {
         salesman['salesman_name'] = `${salesman.salesman_info.salesman_code} - ${salesman.firstname} ${salesman.lastname}`;
       }
     });
-    this.ItemCodeFormControl = new FormControl([], [Validators.required]);
+  this.ItemCodeFormControl = new FormControl([]);
     this.form = new FormGroup({
      module: new FormControl('invoice'),
       startdate: new FormControl(),
