@@ -6,6 +6,7 @@
         </div>
     </mat-drawer>
     <section>
+        
         <div class="table-box position-relative" [ngClass]="{ 'collapsed': isDetailVisible }">
             <mat-tab-group (selectedTabChange)="tabChange($event)">
                 <mat-tab label="All Users">
@@ -17,10 +18,13 @@
                     <app-org-role-dt [newRoleData]="newRoleData"></app-org-role-dt>
                 </mat-tab>
             </mat-tab-group>
-            <button *ngIf="!isDetailVisible && !roles" class="btn btn-p invite-btn" (click)="openAddUser()">Invite
-                User</button>
-            <button *ngIf="!isDetailVisible && roles" class="btn btn-p invite-btn" (click)="openAddRole()">New
-                Role</button>
+           <div *ngIf="!isDetailVisible && !roles" class="action-buttons">
+  <button class="btn btn-p">Export User</button>
+  <button class="btn btn-p" (click)="openAddUser()">Invite User</button>
+</div>
+
+<button *ngIf="!isDetailVisible && roles" class="btn btn-p invite-btn" (click)="openAddRole()">New Role</button>
+
         </div>
         <div class="details-box" [ngClass]="{ 'expanded': isDetailVisible }">
             <app-user-detail  (detailsClosed)="closeClicked()" [isDetailVisible]="isDetailVisible" [user]="user">

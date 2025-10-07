@@ -112,11 +112,12 @@ export class ApiService {
     const url = `${this.baseUrl}/invite-user/edit/${uuid}`;
     return this.http.post(url, data);
   }
-  getAllInviteUser(filters?: { name?: string, role?: string }): Observable<any> {
+  getAllInviteUser(filters?: { name?: string, role?: string,status?: string }): Observable<any> {
      let params = new HttpParams();
 
   if (filters?.name) params = params.set('name', filters.name);
   if (filters?.role) params = params.set('role', filters.role);
+  if (filters?.status) params = params.set('status', filters.status);
   // if (filters?.email) params = params.set('email', filters.email);
 
     const url = `${this.baseUrl}/invite-user/list`;

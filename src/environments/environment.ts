@@ -7,6 +7,11 @@ export const environment = {
   // nfpcApiUrl: 'https://prodmobiato.nfpc.net/production/public/api',
   // baseApiUrl: 'https://devmobiato.nfpc.net/merchandising/public/api',
   // baseApiUrl: 'https://devmobiato.nfpc.net/merchandising/public/api',
+//  baseApiUrl: 'https://presales-dev.nfpc.net/production/public/api',
+//   nfpcApiUrl: 'https://presales-dev.nfpc.net/production/public/api',
+//   host: 'https://presales-dev.nfpc.net',
+//   production: false
+//  baseApiUrl: 'https://devmobiato.nfpc.net/merchandising/public/api',
   baseApiUrl: 'https://prodmobiato.nfpc.net/production/public/api',
   nfpcApiUrl: 'https://devmobiato.nfpc.net/merchandising/public/api',
   host: 'https://devmobiato.nfpc.net',

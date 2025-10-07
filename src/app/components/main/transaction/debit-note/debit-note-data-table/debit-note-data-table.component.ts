@@ -31,7 +31,7 @@ import { FormDrawerService } from 'src/app/services/form-drawer.service';
 import { Utils } from 'src/app/services/utils';
 import { DebitNoteService } from '../debit-note.service';
 import { EventBusService } from 'src/app/services/event-bus.service';
-import { Events } from 'src/app/models/events.model';
+import { Events, EmitEvent } from 'src/app/models/events.model';
 import { OrderModel } from '../../orders/order-models';
 import { PAGE_SIZE_10 } from 'src/app/app.constant';
 import { FormGroup, FormControl, FormBuilder } from '@angular/forms';
@@ -91,6 +91,7 @@ export class DebitNoteDataTableComponent implements OnInit, OnDestroy {
   pageSize = PAGE_SIZE_10;
   selectedColumnFilter: string;
   filterForm: FormGroup;
+  advanceSearchRequest: any[] = [];
 
   constructor(
     private debitNoteService: DebitNoteService,
@@ -184,6 +185,10 @@ export class DebitNoteDataTableComponent implements OnInit, OnDestroy {
       });
     }
     this.getDebitNoteList();
+  }
+
+  onChangeCriteria() {
+    this.eventService.emit(new EmitEvent(Events.CHANGE_CRITERIA, { route: '/transaction/debit-note', currentSearchCriteria: this.advanceSearchRequest }));
   }
 
   public ngOnDestroy() {

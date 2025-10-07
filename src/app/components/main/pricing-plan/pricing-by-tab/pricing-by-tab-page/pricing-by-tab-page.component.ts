@@ -400,6 +400,7 @@ export class PricingByTabPageComponent implements OnInit {
  
   
   showCustomerActiveList() {
+    let value1 = this.sideFiltersForm.value;
     let value = this.activeCustomerPriceForm.value;
      const sideFilterValue = this.sideFiltersForm.value;
      const selectedCustomers = this.customerFormControl.value || [];
@@ -418,10 +419,12 @@ export class PricingByTabPageComponent implements OnInit {
     let body = {
       uom_code: value.uom_code,
     //  item_code: this.sideFiltersForm.value.item_code?.length > 0 ? this.sideFiltersForm.value?.item_code[0]?.id : [],
-     item_code: value.item_code?.length > 0 
-      ? value.item_code.map((item: any) => item.id) 
+    //  item_code: value.item_code?.length > 0 
+    //   ? value.item_code.map((item: any) => item.id) 
+    //   : [],
+      item_code: value1.item_code?.length > 0 
+      ? value1.item_code.map((item: any) => item.id) 
       : [],
-
   
 
     //  item_code: [138],
@@ -449,7 +452,7 @@ export class PricingByTabPageComponent implements OnInit {
 
    showUpdateEndDate() {
     let value = this.activeCustomerUpdateEndDatePriceForm.value;
-    
+    let value1 = this.sideFiltersForm.value;
     const sideFilterValue = this.sideFiltersForm.value;
      const selectedCustomers = this.customerFormControl.value || [];
      const customerIds = selectedCustomers.map((c: any) => c.id);
@@ -465,8 +468,8 @@ export class PricingByTabPageComponent implements OnInit {
     let body = {
       uom_code: value.uom_code,
     //  item_code: this.sideFiltersForm.value.item_code?.length > 0 ? this.sideFiltersForm.value?.item_code[0]?.id : [],
-     item_code: value.item_code?.length > 0 
-      ? value.item_code.map((item: any) => item.id) 
+      item_code: value1.item_code?.length > 0 
+      ? value1.item_code.map((item: any) => item.id) 
       : [],
 
     //  item_code: [138],

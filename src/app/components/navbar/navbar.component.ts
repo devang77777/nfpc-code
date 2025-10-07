@@ -34,6 +34,8 @@ export class NavbarComponent implements OnInit {
   isNotification: any = '';
   @ViewChild('clickMenuTrigger') menuTrigger: MatMenuTrigger;
   public avatarImage: string = 'https://secure.gravatar.com/avatar/1aedb8d9dc4751e229a335e371db8058?&amp;d=mm';
+  public currentSearchCriteria: any[] = [];
+  public showSearchCriteria: boolean = false;
   constructor(
     private fds: FormDrawerService,
     private dialog: MatDialog,
@@ -61,12 +63,17 @@ export class NavbarComponent implements OnInit {
       this.isNotification = message.export;
     });
     this.subscriptions.push(
-      this.eventService.on(Events.CHANGE_CRITERIA, ({ reset, module, route }) => {
+      this.eventService.on(Events.CHANGE_CRITERIA, ({ reset, module, route, currentSearchCriteria, requestOriginal }) => {
         this.checkedOption = route;
         if (reset) {
           this.resetFilter({ module });
-        } else
-          this.openAdvanceSearch()
+          this.currentSearchCriteria = [];
+          this.showSearchCriteria = false;
+        } else {
+          this.currentSearchCriteria = currentSearchCriteria || [];
+          this.showSearchCriteria = this.currentSearchCriteria.length > 0;
+          this.openAdvanceSearch(currentSearchCriteria, requestOriginal);
+        }
       })
     );
 
@@ -239,7 +246,6 @@ export class NavbarComponent implements OnInit {
     return this.sidenavService.featureCheck(value);
   }
   resetFilter(model) {
-    model['allData'] = true;
     model['page'] = 1;
     model['page_size'] = PAGE_SIZE_10;
     this.apiService.onSearch(model).subscribe((response) => {
@@ -253,13 +259,17 @@ export class NavbarComponent implements OnInit {
     this.fds.setFormName(s);
     this.fds.openNav();
   }
-openAdvanceSearch() {
+openAdvanceSearch(currentSearchCriteria?: any[], requestOriginal?: any) {
   // this.menuTrigger.closeMenu()
   if(this.checkedOption === this.checkedOption){
   const dialogRef = this.dialog.open(AdvanceSearchFormComponent, {
     width: '1200px',
     position: { top: '0px' },
-    data: this.checkedOption,
+    data: {
+      route: this.checkedOption,
+      currentSearchCriteria: currentSearchCriteria,
+      requestOriginal: requestOriginal
+    },
   });
   }
 }

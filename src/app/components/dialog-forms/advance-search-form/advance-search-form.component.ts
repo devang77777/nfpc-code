@@ -1,28 +1,21 @@
 import { filter } from 'rxjs/operators';
-import { Component, OnInit, Inject, ViewChild } from '@angular/core';
+import { Component, OnInit, Inject, ViewChild, AfterViewInit } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { Router } from '@angular/router';
 import { ApiService } from 'src/app/services/api.service';
 import { AdvanceSearchService } from './services/advance-serach.service';
+import { AdvanceSearchStateService } from './services/advance-search-state.service';
 import { EventBusService } from 'src/app/services/event-bus.service';
 import { EmitEvent, Events } from 'src/app/models/events.model';
 import { DataEditor } from 'src/app/services/data-editor.service';
 import { RouterOutlet } from '@angular/router';
-import { MasterService } from '../../main/master/master.service';
 @Component({
   selector: 'app-advance-search-form',
   templateUrl: './advance-search-form.component.html',
   styleUrls: ['./advance-search-form.component.scss'],
 })
-export class AdvanceSearchFormComponent implements OnInit {
-  customerID: any = [];
-  itemData: any = [];
-  filteredItems: any = [];
-  createdByList : any[] = [];
-  salesmanList : any[] = [];
-  warehouseList: any[] = [];
-  channelList: any=[];
-  customers: any=[];
+export class AdvanceSearchFormComponent implements OnInit, AfterViewInit {
+  channelList : any[] = [];
   oldModule = '';
   intervals: any[] = [];
   selectedModule: string = '';
@@ -30,58 +23,188 @@ export class AdvanceSearchFormComponent implements OnInit {
   dataPath: string = '';
   @ViewChild('activeComponent') childComponent: any;
   masterData: any;
+  currentModule: string = '';
   // data: string = '';
   constructor(
     @Inject(MAT_DIALOG_DATA) public data: any,
     private service: AdvanceSearchService,
+    private stateService: AdvanceSearchStateService,
     public dialogRef: MatDialogRef<AdvanceSearchFormComponent>,
     private apiService: ApiService,
     private eventService: EventBusService,
     private router: Router,
-    private dataEditor: DataEditor,
-    public ms: MasterService
+    private dataEditor: DataEditor
   ) { }
 
   ngOnInit(): void {
-    this.ms.customerDetailDDlListTable({}).subscribe((result) => {
-      this.customerID = result.data;
-      // this.filterCustomer = result.data.slice(0, 30);
-    })
-     this.ms.itemDetailDDllistTable({ page: 1, page_size: 10 }).subscribe((result: any) => {
-        this.itemData = result.data;
-        this.filteredItems = result.data;
-      })
-    this.getCreatedByList();
-     this.apiService.getLocationStorageListById().subscribe(res => {
-      this.warehouseList = [...res.data];
-    });
     this.getData();
-    // this.ms.customerDetailDDlListTable({}).subscribe((result) => {
-    //   this.customers = result.data;
-    //   // this.filterCustomer = result.data.slice(0, 30);
-    // })
-    this.apiService.getAllCustomerCategory().subscribe((res: any) => {
+    // Extract module name from the data path
+    this.currentModule = this.extractModuleName(this.data.route);
+    
+    // Check if we have current search criteria passed from "Change Criteria" button
+    if (this.data.currentSearchCriteria && this.data.requestOriginal) {
+      console.log('Change Criteria data received:', this.data.currentSearchCriteria, this.data.requestOriginal);
+      // We'll restore from this data instead of saved state
+    }
+     this.apiService.getAllCustomerCategory().subscribe((res: any) => {
       this.channelList = res.data;
+      console.log('Channel data loaded:', this.channelList?.length, 'channels');
+    }, (error) => {
+      console.error('Error loading channel data:', error);
     });
-    this.apiService.getSalesmanDataByType().subscribe((res:any)=>{
-      this.salesmanList = res.data
-      .map((item: any) => {
-      return {
-        id: item.id,
-        salesman_code: item.salesman_code,
-        name: `${item.user.firstname} ${item.user.lastname}`
-      };
-    });
-    console.log("the new salesman data is here",this.salesmanList)
-    });
+  }
+
+  ngAfterViewInit(): void {
+    // ViewChild is now available, try to restore state
+    setTimeout(() => {
+      if (this.childComponent) {
+        console.log('ngAfterViewInit: Child component available');
+        this.handleFormRestoration();
+      }
+    }, 100);
+  }
+
+  extractModuleName(dataPath: string): string {
+    // Extract module name from paths like '/transaction/order', '/transaction/delivery', etc.
+    if (dataPath && typeof dataPath === 'string') {
+      if (dataPath.includes('/transaction/order')) return 'order';
+      if (dataPath.includes('/transaction/delivery')) return 'delivery';  
+      if (dataPath.includes('/transaction/invoice')) return 'invoice';
+      if (dataPath.includes('/transaction/credit-note')) return 'credit_note';
+    }
+    return '';
   }
   getData() {
     this.service.getCustomerMasterData().subscribe(
       (response) => {
         this.masterData = response.data;
+        console.log('Master data loaded:', this.masterData);
+        
+        // After data is loaded, restore saved state if exists
+        // Use setTimeout to ensure DOM is updated and ViewChild is available
+        setTimeout(() => {
+          this.handleFormRestoration();
+        }, 500);
       },
       (response) => { }
     );
+  }
+
+  handleFormRestoration() {
+    // Priority 1: Use data from "Change Criteria" if available
+    if (this.data.currentSearchCriteria && this.data.requestOriginal) {
+      console.log('Restoring from Change Criteria data');
+      this.restoreFromChangeCriteria();
+    }
+    // Priority 2: Use saved state if no Change Criteria data
+    else if (this.currentModule && this.stateService.hasSavedState(this.currentModule)) {
+      console.log('Restoring from saved state');
+      // For delivery, use restoreFromRequestOriginal if available for full dropdown restoration
+      const savedState = this.stateService.getSavedSearchState(this.currentModule);
+      if (
+        this.currentModule === 'delivery' &&
+        this.childComponent &&
+        typeof this.childComponent.restoreFromRequestOriginal === 'function' &&
+        savedState && savedState.formValues
+      ) {
+        // Compose a requestOriginal-like object from savedState.formValues
+        const requestOriginal = { ...savedState.formValues };
+        // Also add controlValues if needed (for multi-selects)
+        if (savedState.controlValues) {
+          if (savedState.controlValues.customers) requestOriginal.customer_id = savedState.controlValues.customers;
+          if (savedState.controlValues.items) requestOriginal.item_id = savedState.controlValues.items;
+          if (savedState.controlValues.storage) requestOriginal.storage_location_id = savedState.controlValues.storage;
+          if (savedState.controlValues.salesman) requestOriginal.salesman = savedState.controlValues.salesman;
+        }
+        // Use multiple attempts to ensure async data is loaded
+        setTimeout(() => this.childComponent.restoreFromRequestOriginal(requestOriginal), 100);
+        setTimeout(() => this.childComponent.restoreFromRequestOriginal(requestOriginal), 1000);
+        setTimeout(() => this.childComponent.restoreFromRequestOriginal(requestOriginal), 2000);
+      } else {
+        this.restoreSavedState();
+      }
+    }
+  }
+
+  restoreFromChangeCriteria() {
+    if (!this.childComponent || !this.data.requestOriginal) {
+      console.log('Child component or requestOriginal not ready, retrying...', {
+        childComponent: !!this.childComponent,
+        requestOriginal: !!this.data.requestOriginal
+      });
+      setTimeout(() => this.restoreFromChangeCriteria(), 500);
+      return;
+    }
+
+    try {
+      console.log('Converting requestOriginal to form values:', this.data.requestOriginal);
+      
+      // Convert the requestOriginal data to form values
+      const formValues = { ...this.data.requestOriginal };
+      
+      // Remove pagination and module fields
+      delete formValues.page;
+      delete formValues.page_size;
+      delete formValues.module;
+      delete formValues.export;
+      delete formValues.allData;
+      
+      // Restore the form with multiple attempts
+      this.childComponent.form.patchValue(formValues);
+      this.childComponent.form.markAsDirty();
+      
+      // For order component, also try to restore dropdown selections
+      if (this.currentModule === 'order' && this.childComponent.restoreFromRequestOriginal) {
+        // Use multiple attempts to ensure data is loaded
+        setTimeout(() => {
+          if (this.childComponent.restoreFromRequestOriginal) {
+            this.childComponent.restoreFromRequestOriginal(this.data.requestOriginal);
+          }
+        }, 100);
+        
+        setTimeout(() => {
+          if (this.childComponent.restoreFromRequestOriginal) {
+            this.childComponent.restoreFromRequestOriginal(this.data.requestOriginal);
+          }
+        }, 1000);
+        
+        setTimeout(() => {
+          if (this.childComponent.restoreFromRequestOriginal) {
+            this.childComponent.restoreFromRequestOriginal(this.data.requestOriginal);
+          }
+        }, 2000);
+      }
+      
+      console.log('Form restored from Change Criteria data');
+    } catch (error) {
+      console.error('Error restoring from Change Criteria data:', error);
+      // Fallback to saved state
+      this.restoreSavedState();
+    }
+  }
+
+  restoreSavedState() {
+    if (this.currentModule && this.stateService.hasSavedState(this.currentModule)) {
+      // Use multiple timing strategies to ensure restoration works
+      const attemptRestore = () => {
+        const savedState = this.stateService.getSavedSearchState(this.currentModule);
+        if (savedState && this.childComponent && this.childComponent.restoreFormValues) {
+          console.log('Attempting to restore saved state:', savedState);
+          this.childComponent.restoreFormValues(savedState);
+        }
+      };
+
+      // Try immediately if component is ready
+      if (this.childComponent) {
+        attemptRestore();
+      }
+
+      // Also try with progressive delays to catch async loading
+      setTimeout(attemptRestore, 500);
+      setTimeout(attemptRestore, 1000);
+      setTimeout(attemptRestore, 2000);
+      setTimeout(attemptRestore, 3000);
+    }
   }
   clean(model) {
     for (var propName in model) {
@@ -93,31 +216,59 @@ export class AdvanceSearchFormComponent implements OnInit {
   }
   search(isReset) {
     const model = { ...this.childComponent.form.value };
-    module['allData'] = isReset;
+    model['allData'] = isReset;
     if (isReset) {
       Object.keys(model).forEach(function (key) {
         if (model[key] !== '') {
           model[key] = null;
         }
-      })
+      });
+      // Clear saved state when reset is clicked
+      if (this.currentModule) {
+        this.stateService.clearSavedState(this.currentModule);
+      }
+    } else {
+      // Save current form state before searching (only if not reset)
+      if (this.currentModule && this.childComponent) {
+        const formValues = this.childComponent.form.value;
+        const controlValues = this.childComponent.getControlValues ? this.childComponent.getControlValues() : {};
+        this.stateService.saveSearchState(this.currentModule, formValues, controlValues);
+      }
     }
-    let correctRequest = this.clean({ ...model });
-    let request = this.clean({ ...model });
+
+    // Remove allData from payload for order, invoice, delivery, and credit_note
+    let moduleName = this.currentModule;
+    let payload = { ...model };
+    if (["order", "invoice", "delivery", "credit_note"].includes(moduleName)) {
+      delete payload.allData;
+    }
+
+    let correctRequest = this.clean({ ...payload });
+    let request = this.clean({ ...payload });
+    // For display summary, use filterObjectValues to get user-friendly values
+    // Always use this mapping for summary bar, including order and invoice
+    const filtered = this.filterObjectValues({ ...payload });
+    const displaySummary = Object.keys(filtered)
+      .filter(key => filtered[key] !== '' && filtered[key] !== null && filtered[key] !== undefined)
+      .map(key => ({
+        param: this.snakeToCamelObject({ [key]: '' })[key],
+        value: filtered[key]
+      }));
     request = this.filterObjectValues(request);
     request = this.snakeToCamelObject(request);
-    model.module = this.childComponent.form.value.module;
-    model.page = 1;
-    model.page_size = 10;
-    model.export = 0;
-     this.dialogRef.close();
-    this.apiService.onSearch(model).subscribe((response) => {
-      this.eventService.emit(new EmitEvent(model.module, {
+    payload.module = this.childComponent.form.value.module;
+    payload.page = 1;
+    payload.page_size = 10;
+    payload.export = 0;
+    this.apiService.onSearch(payload).subscribe((response) => {
+      this.eventService.emit(new EmitEvent(payload.module, {
         request: request,
         correctRequest: correctRequest,
-        requestOriginal: model,
-        response: response
+        requestOriginal: payload,
+        response: response,
+        displaySummary: displaySummary // Add display summary to event payload
       }));
-     
+      this.dialogRef.close();
     });
   }
   snakeToCamelObject = (data) => {
@@ -143,100 +294,68 @@ export class AdvanceSearchFormComponent implements OnInit {
         case "customer":
           if (typeof model[propName] == 'number') {
             filterdata = this.masterData.customers.filter((x) => x.id == model[propName])[0];
-            model[propName] = filterdata.firstname + ' ' + filterdata.lastname;
-          } else {
+            if (filterdata && filterdata.customer_code && filterdata.name) {
+              model[propName] = filterdata.customer_code + ' - ' + filterdata.name;
+            } else {
+              model[propName] = 'Unknown Customer';
+            }
+          } 
+          break;
+        case "customer_id":
+          if (typeof model[propName] == 'number') {
+            filterdata = this.masterData.customers.find((x) => x.id == model[propName]);
+            if (filterdata && filterdata.customer_info && filterdata.customer_info.customer_code && filterdata.firstname) {
+              model[propName] = filterdata.customer_info.customer_code + ' - ' + filterdata.firstname;
+            } else {
+              model[propName] = 'Unknown Customer';
+            }
+          } else if (Array.isArray(model[propName]) && model[propName].length > 0) {
             let names = '';
             model[propName].forEach(element => {
-              filterdata = this.masterData.customers.filter((x) => x.id == element);
-              names += filterdata[0].firstname + ' ' + filterdata[0].lastname + ', ';
+              const cust = this.masterData.customers.find((x) => x.id == element);
+              if (cust && cust.customer_info && cust.customer_info.customer_code && cust.firstname) {
+                names += cust.customer_info.customer_code + ' - ' + cust.firstname + ', ';
+              } else {
+                names += '';
+              }
             });
-            model[propName] = names;
+            model[propName] = names.replace(/, $/, '');
+          } else if (model[propName] == null || (Array.isArray(model[propName]) && model[propName].length === 0)) {
+            model[propName] = '';
           }
           break;
-        // case "salesman":
-        //   filterdata = this.masterData.salesmans.filter((x) => x.id == model[propName])[0];
-        //   model[propName] = filterdata.firstname + ' ' + filterdata.lastname;
-        //   // model[propName] = `${filterdata.salesman_code} - ${filterdata.firstname} ${filterdata.lastname}`
-        //   break;
-        // case "salesman":
-        //     const salesman = this.salesmanList.find(x => x.id == model[propName]);
-        //     if (salesman) {
-        //       model[propName] = `${salesman.user.firstname} ${salesman.user.lastname ?? ''}`;
-        //     } else {
-        //       model[propName] = '';
-        //     }
-        //   break;
         case "salesman":
-  if (Array.isArray(model[propName])) {
-    // If it's an array of salesman IDs
-    const selectedSalesmen = this.salesmanList.filter(s =>
-      model[propName].includes(s.id)
-    );
-    if (selectedSalesmen.length > 0) {
-      // Join multiple salesman names
-      model[propName] = selectedSalesmen
-        .map(s => `${s.salesman_code} - ${s.name}`)
-        .join(", ");
-    } else {
-      model[propName] = "";
-    }
-  } else if (typeof model[propName] === "number") {
-    // If it's a single salesman ID
-    const salesman = this.salesmanList.find(s => s.id === model[propName]);
-    if (salesman) {
-      model[propName] = `${salesman.salesman_code} - ${salesman.name}`;
-    } else {
-      model[propName] = "";
-    }
-  }
-  break;
-
-      //  case 'salesman':
-      //     if (Array.isArray(model[propName])) {
-      //       // If it's an array of IDs
-      //       const filterdata = this.masterData.order_created_user.filter(user =>
-      //         model[propName].includes(user.id)
-      //       );
-
-      //       if (filterdata.length > 0) {
-      //         const mapArray = filterdata.map(
-      //           i => `${i.code} - ${i.firstname}${i.lastname ? ' ' + i.lastname : ''}`
-      //         );
-      //         model[propName] = mapArray.join(', ');
-      //       } else {
-      //         model[propName] = '';
-      //       }
-      //     } else if (typeof model[propName] === 'number') {
-      //       // If it's a single ID
-      //       const user = this.masterData.order_created_user.find(
-      //         x => x.id === model[propName]
-      //       );
-      //       if (user) {
-      //         model[propName] = `${user.firstname}${user.lastname ? ' ' + user.lastname : ''}`;
-      //       } else {
-      //         model[propName] = '';
-      //       }
-      //     }
-      //     break;
-
-        // case "channel":
-        //   filterdata = this.masterData.channel.filter((x) => x.id == model[propName]);
-        //   if (filterdata.length > 0) {
-        //     model[propName] = filterdata[0].name;
-        //   } else {
-        //     let subfilterdata = this.masterData.channel.filter((x) => x.children.some((y) => y.id == model[propName]));
-        //     if (subfilterdata.length > 0) {
-        //       model[propName] = subfilterdata[0].children[0].name;
-        //     }
-        //   }
-        //   break;
-        // case "channel_name":
-        //   filterdata = this.masterData.channel.filter((x) => x.id == model[propName]);
-          
-        //     model[propName] = filterdata[0].name;
-         
-          
-        //   break;
+          if (typeof model[propName] == 'number') {
+            filterdata = this.masterData.salesmans.filter((x) => x.id == model[propName])[0];
+            if (filterdata && filterdata.salesman_info && filterdata.salesman_info.salesman_code && filterdata.firstname && filterdata.lastname) {
+              model[propName] = filterdata.salesman_info.salesman_code + ' - ' + filterdata.firstname + ' ' + filterdata.lastname;
+            } else {
+              model[propName] = 'Unknown Salesman';
+            }
+          } 
+          // model[propName] = `${filterdata.salesman_code} - ${filterdata.firstname} ${filterdata.lastname}`
+          break;
+        case "channel":
+          filterdata = this.masterData.channel.filter((x) => x.id == model[propName]);
+          if (filterdata.length > 0) {
+            model[propName] = filterdata[0].name;
+          } else {
+            let subfilterdata = this.masterData.channel.filter((x) => x.children.some((y) => y.id == model[propName]));
+            if (subfilterdata.length > 0) {
+              model[propName] = subfilterdata[0].children[0].name;
+            }
+          }
+          break;
+        case "channel_name":
+          if (typeof model[propName] == 'number') {
+            filterdata = this.channelList.filter((x) => x.id == model[propName])[0];
+            if (filterdata && filterdata.name) {
+              model[propName] = filterdata.name;
+            } else {
+              model[propName] = 'Unknown Channel';
+            }
+          } 
+          break;
         case "sales_organisation":
           filterdata = this.masterData.sales_organisation.filter((x) => x.id == model[propName]);
           if (filterdata.length > 0) {
@@ -254,170 +373,116 @@ export class AdvanceSearchFormComponent implements OnInit {
         //   break;
         case "region":
           filterdata = this.masterData.region.filter((x) => x.id == model[propName])[0];
-          model[propName] = filterdata.region_name;
+          if (filterdata && filterdata.region_name) {
+            model[propName] = filterdata.region_name;
+          } else {
+            model[propName] = 'Unknown Region';
+          }
           break;
         case "route":
           filterdata = this.masterData.route.filter((x) => x.id == model[propName])[0];
-          model[propName] = filterdata.route_name;
+          if (filterdata && filterdata.route_name) {
+            model[propName] = filterdata.route_name;
+          } else {
+            model[propName] = 'Unknown Route';
+          }
           break;
         case "merchandiser":
           if (typeof model[propName] == 'number') {
             filterdata = this.masterData.merchandiser.filter((x) => x.id == model[propName])[0];
-            model[propName] = filterdata.user.firstname + ' ' + filterdata.user.lastname;
-          } else {
-            let names = '';
-            model[propName].forEach(element => {
-              filterdata = this.masterData.merchandiser.filter((x) => x.user.id == element);
-              names += filterdata[0].user.firstname + ' ' + filterdata[0].user.lastname + ', ';
-            });
-            model[propName] = names;
-          }
+            if (filterdata && filterdata.user && filterdata.user.firstname && filterdata.user.lastname) {
+              model[propName] = filterdata.user.firstname + ' ' + filterdata.user.lastname;
+            } else {
+              model[propName] = 'Unknown Merchandiser';
+            }
+          } 
           break;
         case "category":
           if (typeof model[propName] == 'number') {
             filterdata = this.masterData.item_major_category_list.filter((x) => x.id == model[propName])[0];
-            model[propName] = filterdata.name;
-          } else {
-            let names = '';
-            model[propName].forEach(element => {
-              filterdata = this.masterData.item_major_category_list.filter((x) => x.id == element);
-              names += filterdata[0].name + ', ';
-            });
-            model[propName] = names;
-          }
+            if (filterdata && filterdata.name) {
+              model[propName] = filterdata.name;
+            } else {
+              model[propName] = 'Unknown Category';
+            }
+          } 
           break;
         case "item_major_category_id":
           if (typeof model[propName] == 'number') {
             filterdata = this.masterData.item_major_category_list.filter((x) => x.id == model[propName])[0];
-            model[propName] = filterdata.name;
-          } else {
-            let names = '';
-            model[propName].forEach(element => {
-              filterdata = this.masterData.item_major_category_list.filter((x) => x.id == element);
-              names += filterdata[0].name + ', ';
-            });
-            model[propName] = names;
+            if (filterdata && filterdata.name) {
+              model[propName] = filterdata.name;
+            } else {
+              model[propName] = 'Unknown Major Category';
+            }
           }
           break;
         case "brand":
           if (typeof model[propName] == 'number') {
             filterdata = this.masterData.brand_list.filter((x) => x.id == model[propName])[0];
-            model[propName] = filterdata.brand_name;
-          } else {
-            let names = '';
-            model[propName].forEach(element => {
-              filterdata = this.masterData.brand_list.filter((x) => x.id == element);
-              names += filterdata[0].brand_name + ', ';
-            });
-            model[propName] = names;
-          }
+            if (filterdata && filterdata.brand_name) {
+              model[propName] = filterdata.brand_name;
+            } else {
+              model[propName] = 'Unknown Brand';
+            }
+          } 
           break;
         case "brand_id":
           if (typeof model[propName] == 'number') {
             filterdata = this.masterData.brand_list.filter((x) => x.id == model[propName])[0];
-            model[propName] = filterdata.brand_name;
-          } else {
-            let names = '';
-            model[propName].forEach(element => {
-              filterdata = this.masterData.brand_list.filter((x) => x.id == element);
-              names += filterdata[0].brand_name + ', ';
-            });
-            model[propName] = names;
-          }
+            if (filterdata && filterdata.brand_name) {
+              model[propName] = filterdata.brand_name;
+            } else {
+              model[propName] = 'Unknown Brand';
+            }
+          } 
           break;
         case 'item_id':
           if (typeof model[propName] == 'number') {
             filterdata = this.masterData.items.filter((x) => x.id == model[propName])[0];
-            model[propName] = filterdata.item_code + ' - ' + filterdata.item_name;
+            if (filterdata && filterdata.item_code && filterdata.item_name) {
+              model[propName] = filterdata.item_code + ' - ' + filterdata.item_name;
+            } else {
+              model[propName] = 'Unknown Item';
+            }
           }
           break
         case 'user_created':
           if (typeof model[propName] == 'number') {
-            filterdata = this.createdByList.find((x) => x.id == model[propName])[0];
-            model[propName] = filterdata.firstname + ' - ' + filterdata.lastname;
-          }
+            filterdata = this.masterData.order_created_user.filter((x) => x.id == model[propName])[0];
+            if (filterdata && filterdata.firstname && filterdata.lastname) {
+              model[propName] = filterdata.firstname + ' - ' + filterdata.lastname;
+            } else {
+              model[propName] = 'Unknown User';
+            }
+          } 
           break
-  //         case 'user_created':
-  // if (typeof model[propName] === 'number') {
-  //   // Single user id
-  //   const filterdata = this.createdByList.find(
-  //     (x) => x.id === model[propName]
-  //   );
-  //   if (filterdata) {
-  //     model[propName] = `${filterdata.firstname} ${filterdata.lastname || ''}`;
-  //   }
-  // } else if (Array.isArray(model[propName])) {
-  //   // Multiple user ids
-  //   const filterdata = this.createdByList.filter((x) =>
-  //     model[propName].includes(x.id)
-  //   );
-  //   if (filterdata.length > 0) {
-  //     model[propName] = filterdata
-  //       .map((i) => `${i.firstname} ${i.lastname || ''}`)
-  //       .join(', ');
-  //   } else {
-  //     model[propName] = '';
-  //   }
-  // }
-  // break;
-
-          // if (typeof model[propName] == 'number') {
-          //   filterdata = this.masterData.order_created_user.filter((x) => x.id == model[propName])[0];
-          //   model[propName] = filterdata.firstname + ' - ' + filterdata.lastname;
-          // } else if (typeof model[propName] == 'object') {
-          //   filterdata = this.masterData.order_created_user.filter((x) => model[propName].some(o => x.id == o));
-          //   let mapArray= filterdata.map(i => i.firstname + i.lastname);
-          //   model[propName]=mapArray.toString();
-          // }
-          // break
         case 'storage_location_id':
           if (typeof model[propName] == 'number') {
-            filterdata = this.warehouseList.filter((x) => x.id == model[propName])[0];
-            model[propName] = filterdata.code + ' - ' + filterdata.name;
-          } else if (typeof model[propName] == 'object') {
-            filterdata = this.warehouseList.filter((x) => model[propName].some(o => x.id == o));
-            let mapArray= filterdata.map(i => i.code + '-' + i.name);
-            model[propName]=mapArray.toString();
+            filterdata = this.masterData.storage_location.filter((x) => x.id == model[propName])[0];
+            if (filterdata && filterdata.code && filterdata.name) {
+              model[propName] = filterdata.code + ' - ' + filterdata.name;
+            } else {
+              model[propName] = 'Unknown Storage Location';
+            }
+          } else if (Array.isArray(model[propName]) && model[propName].length > 0) {
+            filterdata = this.masterData.storage_location.filter((x) => model[propName].some(o => x.id == o));
+            let mapArray = filterdata.map(i => {
+              if (i && i.code && i.name) {
+                return i.code + '-' + i.name;
+              } else {
+                return 'Unknown Storage Location';
+              }
+            });
+            model[propName] = mapArray.toString();
+          } else if (model[propName] == null || (Array.isArray(model[propName]) && model[propName].length === 0)) {
+            model[propName] = '';
           }
           break
-        // case 'customer_id':
-        //   if (typeof model[propName] == 'number') {
-        //     filterdata = this.customers.filter((x) => x.id == model[propName])[0];
-        //     model[propName] = filterdata.customer_code + ' - ' + filterdata.name;
-        //   } else if (typeof model[propName] == 'object') {
-        //     filterdata = this.customers.filter((x) => model[propName].some(o => x.id == o));
-        //     let mapArray= filterdata.map(i => i.customer_code + '-' + i.name);
-        //     model[propName]=mapArray.toString();
-        //   }
-        //   break
-        case 'customer_id':
-          if (typeof model[propName] == 'number') {
-            filterdata = this.customerID.find((x) => x.id == model[propName]);
-            if (filterdata) {
-              model[propName] = `${filterdata.customer_code} - ${filterdata.name}`;
-            }
-          } else if (Array.isArray(model[propName])) {
-            const filterdata = this.customerID.filter((x) =>
-              model[propName].includes(x.id)
-            );
-            if (filterdata.length > 0) {
-              model[propName] = filterdata
-                .map((i) => `${i.customer_code} - ${i.name}`)
-                .join(', ');
-            } else {
-              model[propName] = '';
-            }
-          }
-          break;
-        case 'channel_name':
-          if (typeof model[propName] == 'number') {
-            filterdata = this.channelList.filter((x) => x.id == model[propName])[0];
-            model[propName] =  filterdata.name;
-          } else if (typeof model[propName] == 'object') {
-            filterdata = this.channelList.filter((x) => model[propName].some(o => x.id == o));
-            let mapArray= filterdata.map(i =>  i.name);
-            model[propName]=mapArray.toString();
-          }
+        case 'current_stage':
+        case 'erp_status':
+        case 'approval_status':
+          // Status fields are already in readable format, no transformation needed
           break
         default:
           break;
@@ -426,13 +491,18 @@ export class AdvanceSearchFormComponent implements OnInit {
     return model;
   }
 
-getCreatedByList(name: string = '') {
+  onActiveComponent(component) {
+    this.childComponent = component;
+    console.log('Child component set:', this.childComponent);
     
-    this.apiService.getAllCreatedByUserList(name).subscribe((res: any) => {
-      this.createdByList = res.data;
-    });
+    // Try to restore state immediately when component is ready
+    setTimeout(() => {
+      this.handleFormRestoration();
+    }, 100);
   }
+
 }
+
 
 
 export const ORDER_STATUS_ADVANCE_SEARCH = [
@@ -480,5 +550,4 @@ export const ORDER_STATUS_ADVANCE_SEARCH = [
     id: 'Truck Allocated',
     name: 'Truck Allocated',
   },
-
 ];

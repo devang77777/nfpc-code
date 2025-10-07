@@ -47,7 +47,7 @@
             <div class="form-group row">
                 <label class="col-sm-3 col-form-label">Customer Name</label>
                 <div class="col-sm-9">
-                     <app-multiautocomplete [options]="customers" [control]="CustomersFormControl" text="" id="id" formControlName="customer_id"
+                     <app-multiautocomplete [options]="customerID" [control]="CustomersFormControl" text="" id="id" formControlName="customer_id"
                 objectName="user-root" param1="customer_code" param2="name" (selectionchanged)="selectionchangedCustomer()" >
               </app-multiautocomplete>
                 </div>
@@ -75,11 +75,15 @@
                                     formControlName="salesman" text="salesman_name" id="id" objectName="code-root"
                                     placeholder="Search Salesman">
                                 </app-multiautocomplete> -->
-                                <app-multiautocomplete isSingle="false" [options]="salesman" (selectionchanged)="selectionchangedSalesman()"
+                                 <app-multiautocomplete isSingle="false" [options]="salesmanList" (selectionchanged)="selectionchangedSalesman()"
+                                    [control]="SalesmanFormControl" text="salesman_name" id="id"
+                                    placeholder="Search Salesman">
+                                </app-multiautocomplete>
+                                <!-- <app-multiautocomplete isSingle="false" [options]="salesmanList" (selectionchanged)="selectionchangedSalesman()"
                                     [control]="SalesmanFormControl" text="" id="id" param1="salesman_code"
                                     param2="name" objectName="user-root"
                                     placeholder="Search Salesman">
-                                </app-multiautocomplete>
+                                </app-multiautocomplete> -->
                                  <!-- <app-multiautocomplete  isSingle="false" [options]="salesman" [control]="selectionchangedSalesman" text="" id="id" formControlName="customer_id"
                 objectName="user-root" param1="customer_code" param2="name" (selectionchanged)="selectionchangedCustomer()" >
               </app-multiautocomplete> -->

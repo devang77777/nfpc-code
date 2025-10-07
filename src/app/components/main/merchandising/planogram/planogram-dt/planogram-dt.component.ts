@@ -104,7 +104,12 @@ export class PlanogramDtComponent implements OnInit {
         this.requestOriginal = requestOriginal;
         if (request) {
           Object.keys(request).forEach(item => {
-            this.advanceSearchRequest.push({ param: item, value: request[item] })
+            // Only include fields that have meaningful values (not null, undefined, empty string, or empty array)
+            const value = request[item];
+            if (value !== null && value !== undefined && value !== '' && 
+                !(Array.isArray(value) && value.length === 0)) {
+              this.advanceSearchRequest.push({ param: item, value: request[item] })
+            }
           })
         }
         this.apiResponse = response;

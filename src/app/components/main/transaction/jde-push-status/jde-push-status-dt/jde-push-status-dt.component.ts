@@ -10,6 +10,7 @@ import { map, startWith, distinctUntilChanged, filter, switchMap, exhaustMap, ta
 import { MasterService } from '../../../master/master.service';
 import { Router } from '@angular/router';
 import { PAGE_SIZE_10 } from 'src/app/app.constant';
+import { STATUS, ORDER_STATUS } from 'src/app/app.constant';
 import { SelectionModel } from '@angular/cdk/collections';
 import { OrderModel} from 'src/app/components/main/transaction/orders/order-models'
 import { PushStatusFailComponent } from '../push-status-fail/push-status-fail.component';
@@ -21,6 +22,7 @@ import { JdePushStatusService } from '../jde-push-status.service';
 })
 export class JdePushStatusDtComponent implements OnInit {
   selectedRow: any;
+   statusList: Array<any> = STATUS;
   passData : any;
   selectedCode: any ;
   selectedDate: any ;
@@ -130,6 +132,7 @@ expandedRow: any;
    }
 
   ngOnInit(): void {
+    console.log("THe warehouse list data is here 133:",this.warehouseList)
     // this.toggleRow();
     // console.log("line number 574 pass the data:",this.passData)
     // this.customerDisplayedColumns = [...this.customerDisplayedColumns];
@@ -147,6 +150,7 @@ expandedRow: any;
       customer_name: [''],
       channel_name: [[]],
       created_id: [''],
+      status: [[]],
       route_code: [''],
       route_name: [''],
       salesman_code: [''],
@@ -185,6 +189,7 @@ expandedRow: any;
       division  : new FormControl(),
       warehouse : new FormControl(),
       channel_code: new FormControl(),
+      status: new FormControl(),
       page: new FormControl(this.page),
       page_size: new FormControl(this.pageSize),
 
@@ -198,6 +203,7 @@ expandedRow: any;
       page: new FormControl(this.page),
       page_size: new FormControl(this.pageSize),
       start_date: new FormControl(),
+      status: new FormControl([]),
       end_date: new FormControl(),
       created_date: new FormControl(),
     });
@@ -288,17 +294,26 @@ expandedRow: any;
         || x.name?.toLowerCase().trim().indexOf(this.filterValue) > -1)
   }
   showCustomerActiveList() {
+    // Always reset page to 1 before every search
+    this.activeCustomerPriceForm.patchValue({ page: 1 });
     let value = this.activeCustomerPriceForm.value;
-     const sideFilterValue = this.sideFiltersForm.value;
+    // Always send status as array of selected strings, never [null,null] or [undefined]
+    let statusArr = this.sideFiltersForm.value.status;
+    if (!Array.isArray(statusArr)) {
+      statusArr = statusArr ? [statusArr] : [];
+    }
+    // Remove null, undefined, and empty string values
+    statusArr = (statusArr || []).filter(s => s != null && s !== '');
     let body = {
-      salesman_id:  this.sideFiltersForm.value.salesman.length > 0 ? this.sideFiltersForm.value.salesman.map(i => i.id) : [],
-      channel_id: this.sideFiltersForm.value.channel_code.length > 0 ? this.sideFiltersForm.value.channel_code.map(i => i.id) : [],
-      division_id: this.sideFiltersForm.value.division.length > 0 ? this.sideFiltersForm.value.division.map(i => i.id) : [],
-      warehouse_id: this.sideFiltersForm.value.warehouse.length > 0 ? this.sideFiltersForm.value.warehouse.map(i => i.id) : [],
-      page: value.page,
+      salesman_id: this.sideFiltersForm.value.salesman && this.sideFiltersForm.value.salesman.length > 0 ? this.sideFiltersForm.value.salesman.map(i => i.id) : [],
+      channel_id: this.sideFiltersForm.value.channel_code && this.sideFiltersForm.value.channel_code.length > 0 ? this.sideFiltersForm.value.channel_code.map(i => i.id) : [],
+      division_id: this.sideFiltersForm.value.division && this.sideFiltersForm.value.division.length > 0 ? this.sideFiltersForm.value.division.map(i => i.id) : [],
+      warehouse_id: this.sideFiltersForm.value.warehouse && this.sideFiltersForm.value.warehouse.length > 0 ? this.sideFiltersForm.value.warehouse.map(i => i.id) : [],
+      page: 1,
       page_size: value.page_size,
       start_date: value.start_date,
       end_date: value.end_date,
+      status: statusArr,
       "export": 0,
     };
     // pricing_status: this.sideFiltersForm.get('price_status').value
@@ -539,6 +554,12 @@ toggleRow(element: any): void {
   const sideFilterValue = this.sideFiltersForm.value;
 
   let body = {
+    salesman_id: this.sideFiltersForm.value.salesman && this.sideFiltersForm.value.salesman.length > 0 ? this.sideFiltersForm.value.salesman.map(i => i.id) : [],
+    channel_id: this.sideFiltersForm.value.channel_code && this.sideFiltersForm.value.channel_code.length > 0 ? this.sideFiltersForm.value.channel_code.map(i => i.id) : [],
+    division_id: this.sideFiltersForm.value.division && this.sideFiltersForm.value.division.length > 0 ? this.sideFiltersForm.value.division.map(i => i.id) : [],
+    warehouse_id: this.sideFiltersForm.value.warehouse && this.sideFiltersForm.value.warehouse.length > 0 ? this.sideFiltersForm.value.warehouse.map(i => i.id) : [],
+    page: value.page,
+    page_size: value.page_size,
     date: this.selectedDate,
     "export": 0,
   };
@@ -604,17 +625,17 @@ scrollToExpandedRow(): void {
  exportDateWiseTotalInvoice(){
   let type = 'file.csv';
    let value = this.activeCustomerPriceForm.value;
-   let body = {
-      salesman_id:  this.sideFiltersForm.value.salesman.length > 0 ? this.sideFiltersForm.value.salesman.map(i => i.id) : [],
-      channel_id: this.sideFiltersForm.value.channel_code.length > 0 ? this.sideFiltersForm.value.channel_code.map(i => i.id) : [],
-      division_id: this.sideFiltersForm.value.division.length > 0 ? this.sideFiltersForm.value.division.map(i => i.id) : [],
-      warehouse_id: this.sideFiltersForm.value.warehouse.length > 0 ? this.sideFiltersForm.value.warehouse.map(i => i.id) : [],
-      page: value.page,
-      page_size: value.page_size,
-      start_date: value.start_date,
-      end_date: value.end_date,
-      "export": 1,
-    };
+  let body = {
+    salesman_id: this.sideFiltersForm.value.salesman && this.sideFiltersForm.value.salesman.length > 0 ? this.sideFiltersForm.value.salesman.map(i => i.id) : [],
+    channel_id: this.sideFiltersForm.value.channel_code && this.sideFiltersForm.value.channel_code.length > 0 ? this.sideFiltersForm.value.channel_code.map(i => i.id) : [],
+    division_id: this.sideFiltersForm.value.division && this.sideFiltersForm.value.division.length > 0 ? this.sideFiltersForm.value.division.map(i => i.id) : [],
+    warehouse_id: this.sideFiltersForm.value.warehouse && this.sideFiltersForm.value.warehouse.length > 0 ? this.sideFiltersForm.value.warehouse.map(i => i.id) : [],
+    page: value.page,
+    page_size: value.page_size,
+    start_date: value.start_date,
+    end_date: value.end_date,
+    "export": 1,
+   };
     // pricing_status: this.sideFiltersForm.get('price_status').value
     this.api.exportJdePushStatus(body).subscribe(
         (result: any) => {
@@ -627,10 +648,18 @@ scrollToExpandedRow(): void {
  }
  exportSalesmanDateWiseTotalInvoice(element: any){
   const selectedDate = element.date;
-   let body = {
+   let value = this.activeCustomerPriceForm.value;
+  const sideFilterValue = this.sideFiltersForm.value;
+
+  let body = {
+    salesman_id: this.sideFiltersForm.value.salesman && this.sideFiltersForm.value.salesman.length > 0 ? this.sideFiltersForm.value.salesman.map(i => i.id) : [],
+    channel_id: this.sideFiltersForm.value.channel_code && this.sideFiltersForm.value.channel_code.length > 0 ? this.sideFiltersForm.value.channel_code.map(i => i.id) : [],
+    division_id: this.sideFiltersForm.value.division && this.sideFiltersForm.value.division.length > 0 ? this.sideFiltersForm.value.division.map(i => i.id) : [],
+    warehouse_id: this.sideFiltersForm.value.warehouse && this.sideFiltersForm.value.warehouse.length > 0 ? this.sideFiltersForm.value.warehouse.map(i => i.id) : [],
     date: selectedDate,
     "export": 1,
   };
+   
 
     // console.log('the payload date is:',selectedCode)
    this.api.exportJdePushStatusByDate(body).subscribe(
