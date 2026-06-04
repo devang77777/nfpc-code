@@ -499,17 +499,18 @@ export class ReportMasterComponent extends BaseComponent implements OnInit, OnCh
     if (!this.reportNavOptions) {
       this.apiService.getReportNavOptions().subscribe((res: any[]) => {
         // this.reportNavOptions = res.filter(i => i.domain == 'presales-prodmobiato' || i.domain == '');
-        if (this.domain.split('.')[0] == 'presales-prodmobiato') {
-          this.reportNavOptions = res.filter(i => i.domain == 'presales-prodmobiato' || i.domain == '');
-        } else if (this.domain.split('.')[0] == 'prodmobiato') {
-          this.reportNavOptions = res.filter(i => i.domain == 'prodmobiato' || i.domain == '');
-        } else if (this.domain.split('.')[0] == 'devmobiato') {
-          this.reportNavOptions = res
-        } else if (this.domain.split('.')[0] == 'presales-devmobiato') {
-          this.reportNavOptions = res.filter(i => i.domain == 'presales-prodmobiato' || i.domain == '');
-        } else if (this.domain.split(':')[0] == 'localhost') {
-          this.reportNavOptions = res;
-        }
+        // if (this.domain.split('.')[0] == 'presales.nfpc.net') {
+        //   this.reportNavOptions = res.filter(i => i.domain == 'presales.nfpc.net' || i.domain == '');
+        // } else if (this.domain.split('.')[0] == 'presales.nfpc.net') {
+        //   this.reportNavOptions = res.filter(i => i.domain == 'presales.nfpc.net' || i.domain == '');
+        // } else if (this.domain.split('.')[0] == 'presales.nfpc.net') {
+        //   this.reportNavOptions = res
+        // } else if (this.domain.split('.')[0] == 'presales.nfpc.net') {
+        //   this.reportNavOptions = res.filter(i => i.domain == 'presales.nfpc.net' || i.domain == '');
+        // } else if (this.domain.split(':')[0] == 'localhost') {
+        //   this.reportNavOptions = res;
+        // }
+        this.reportNavOptions = res;
         this.mapReportOptions();
         this.detChange.detectChanges();
         localStorage.setItem('reportbar', JSON.stringify(res));
@@ -1610,7 +1611,7 @@ export class ReportMasterComponent extends BaseComponent implements OnInit, OnCh
         // module: this.getModuleType()
       };
     } else if (this.activeRoute == 'jp-compliance') {
-      if (this.domain.split('.')[0] == 'presales-prodmobiato') {
+      if (this.domain.split('.')[0] == 'presales.nfpc.net') {
         body = {
           start_date: sideFilter.start_date,
           end_date: sideFilter.end_date,
@@ -1782,7 +1783,7 @@ export class ReportMasterComponent extends BaseComponent implements OnInit, OnCh
         if (this.intervalSelected.value == 'today' || this.oldModule !== module) {
           this.intervalSelected.setValue('today');
         }
-        module = this.domain.split('.')[0] == 'presales-prodmobiato' ? 'delivery_driver_journey_plan' : 'merchandiser/route-visit';
+        module = this.domain.split('.')[0] == 'presales.nfpc.net' ? 'delivery_driver_journey_plan' : 'merchandiser/route-visit';
         break;
       case 'merchandiser-login-log':
         module = 'merchandiser/salesman-login-log';

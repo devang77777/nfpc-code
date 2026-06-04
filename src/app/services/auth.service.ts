@@ -8,11 +8,11 @@ import { environment } from '../../environments/environment';
 export class AuthService {
   public token: string;
   public domain = window.location.host;
-  public baseUrl: string = this.domain == 'devmobiato.nfpc.net' ? environment.nfpcApiUrl : environment.baseApiUrl;
+  public baseUrl: string = this.domain == 'presales.nfpc.net' ? environment.nfpcApiUrl : environment.baseApiUrl;
   // public baseUrl: string = 'https://mobiato-msfa.com/application-backend/public/api';
 
   private http: HttpClient;
-  public imageUrl = 'https://presales-prodmobiato.nfpc.net/';
+  public imageUrl = 'https://presales.nfpc.net/';
   constructor(http: HttpClient) {
     Object.assign(this, { http });
   }
@@ -50,7 +50,8 @@ export class AuthService {
 
   public logout(): Observable<any> {
     const url = `${this.baseUrl}/logout`;
-    return this.http.get(url);
+    // Use withCredentials: true to send cookies/session info
+    return this.http.get(url, { withCredentials: true });
   }
 
   get avatar_img() {

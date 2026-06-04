@@ -219,8 +219,8 @@ export class DeliveryDataTableComponent implements OnInit, OnDestroy {
    exportData(){
      const exportRequest = { ...this.requestOriginal, export: 1 };
    this.apiService.onSearch(exportRequest).subscribe((response) => {
-      
             this.apiService.downloadFile(response.data.file_url, 'csv');
+            // this.apiService.downloadFile(response.data.file_url, 'csv');
             // this.dataEditor.sendMessage({ export: '' });
         
     });

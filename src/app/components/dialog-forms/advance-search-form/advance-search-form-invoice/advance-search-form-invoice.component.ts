@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, ChangeDetectorRef,SimpleChanges } from '@angular/core';
+import { Component, OnInit, Input, ChangeDetectorRef, SimpleChanges } from '@angular/core';
 import { FormGroup, FormControl,Validators } from '@angular/forms';
 import { STATUS, INVOICE_STATUS } from 'src/app/app.constant';
 import { ApiService } from 'src/app/services/api.service';
@@ -114,6 +114,9 @@ export class AdvanceSearchFormInvoiceComponent implements OnInit {
             itemName: (item.item_code ? item.item_code + ' - ' : '') + (item.item_name || '')
           }));
         this.itemsFormControl.setValue(savedItems);
+        this.itemsFormControl.markAsDirty();
+        this.itemsFormControl.updateValueAndValidity();
+        this.selectionchangedItems();
       }
 
       if (savedState.controlValues.customers && this.customers && this.customers.length > 0) {
@@ -121,9 +124,12 @@ export class AdvanceSearchFormInvoiceComponent implements OnInit {
           .filter(customer => savedState.controlValues.customers.includes(customer.id))
           .map(customer => ({
             ...customer,
-            itemName: (customer.customer_code ? customer.customer_code + ' - ' : '') + (customer.customer_name || customer.name || '')
+            itemName: (customer.customer_code ? customer.customer_code + ' - ' : '') + (customer.customer_name || customer.name || customer.firstname + ' ' + customer.lastname || '')
           }));
         this.CustomersFormControl.setValue(savedCustomers);
+        this.CustomersFormControl.markAsDirty();
+        this.CustomersFormControl.updateValueAndValidity();
+        this.selectionchangedCustomer();
       }
 
       if (savedState.controlValues.storage && this.storageLocation && this.storageLocation.length > 0) {
@@ -139,6 +145,7 @@ export class AdvanceSearchFormInvoiceComponent implements OnInit {
           }));
         console.log('savedStorage to set:', savedStorage);
         this.branchplantsFormControl.setValue(savedStorage);
+        this.branchplantsFormControl.updateValueAndValidity();
         this.selectionchangedstorageLocation();
       }
 
@@ -150,8 +157,13 @@ export class AdvanceSearchFormInvoiceComponent implements OnInit {
             salesman_name: (salesman.salesman_info?.salesman_code ? salesman.salesman_info.salesman_code + ' - ' : '') + (salesman.firstname || '') + ' ' + (salesman.lastname || '')
           }));
         this.SalesmanFormControl.setValue(savedSalesmen);
+        this.SalesmanFormControl.markAsDirty();
+        this.SalesmanFormControl.updateValueAndValidity();
+        this.selectionchangedSalesman();
       }
     }
+
+    this.detChange.detectChanges();
   }
 
   /**
@@ -334,6 +346,93 @@ export class AdvanceSearchFormInvoiceComponent implements OnInit {
     //   customerName: user[0].id
     //   // customerName: user[0].name
     // });
+  }
+
+  /**
+   * Restore form values from requestOriginal data (used when "Change Criteria" is clicked)
+   * @param requestOriginal - The original request data from the search
+   */
+  restoreFromRequestOriginal(requestOriginal: any) {
+    if (!requestOriginal) return;
+    
+    // Remove fields that shouldn't be in the form
+    const formValues = { ...requestOriginal };
+    delete formValues.page;
+    delete formValues.page_size;
+    delete formValues.export;
+    delete formValues.allData;
+    
+    // Patch simple form fields
+    this.form.patchValue(formValues);
+
+    // Restore customer dropdown with mapped objects for correct display
+    if (requestOriginal.customer_id && this.customers) {
+      const customerIds = Array.isArray(requestOriginal.customer_id)
+        ? requestOriginal.customer_id.map(String)
+        : [String(requestOriginal.customer_id)];
+      const selectedCustomers = this.customers
+        .filter(customer => customerIds.includes(String(customer.id)))
+        .map(customer => ({
+          ...customer,
+          itemName: (customer.customer_code ? customer.customer_code + ' - ' : '') + (customer.customer_name || customer.name || customer.firstname + ' ' + customer.lastname || '')
+        }));
+      this.CustomersFormControl.setValue(selectedCustomers);
+      this.CustomersFormControl.markAsDirty();
+      this.CustomersFormControl.updateValueAndValidity();
+      this.selectionchangedCustomer();
+    }
+
+    // Restore items dropdown with mapped objects for correct display
+    if (requestOriginal.item_id && this.itemData && this.itemData.length > 0) {
+      const itemIds = Array.isArray(requestOriginal.item_id)
+        ? requestOriginal.item_id.map(String)
+        : [String(requestOriginal.item_id)];
+      const selectedItems = this.itemData
+        .filter(item => itemIds.includes(String(item.id)))
+        .map(item => ({
+          ...item,
+          itemName: (item.item_code ? item.item_code + ' - ' : '') + (item.item_name || '')
+        }));
+      this.itemsFormControl.setValue(selectedItems);
+      this.itemsFormControl.markAsDirty();
+      this.itemsFormControl.updateValueAndValidity();
+      this.selectionchangedItems();
+    }
+
+    // Restore storage/branchplant dropdown with mapped objects for correct display
+    if (requestOriginal.storage_location_id && this.storageLocation) {
+      const storageIds = Array.isArray(requestOriginal.storage_location_id)
+        ? requestOriginal.storage_location_id.map(String)
+        : [String(requestOriginal.storage_location_id)];
+      const selectedStorage = this.storageLocation
+        .filter(storage => storageIds.includes(String(storage.id)))
+        .map(storage => ({
+          ...storage,
+          itemName: (storage.storage_location_code ? storage.storage_location_code + ' - ' : '') + (storage.storage_location_name || storage.name || '')
+        }));
+      this.branchplantsFormControl.setValue(selectedStorage);
+      this.branchplantsFormControl.updateValueAndValidity();
+      this.selectionchangedstorageLocation();
+    }
+
+    // Restore salesman dropdown with mapped objects for correct display
+    if (requestOriginal.salesman && this.salesmanList && this.salesmanList.length > 0) {
+      const salesmanIds = Array.isArray(requestOriginal.salesman)
+        ? requestOriginal.salesman.map(String)
+        : [String(requestOriginal.salesman)];
+      const selectedSalesmen = this.salesmanList
+        .filter(salesman => salesmanIds.includes(String(salesman.id)))
+        .map(salesman => ({
+          ...salesman,
+          itemName: (salesman.salesman_info?.salesman_code ? salesman.salesman_info.salesman_code + ' - ' : '') + (salesman.firstname || '') + ' ' + (salesman.lastname || '')
+        }));
+      this.SalesmanFormControl.setValue(selectedSalesmen);
+      this.SalesmanFormControl.markAsDirty();
+      this.SalesmanFormControl.updateValueAndValidity();
+      this.selectionchangedSalesman();
+    }
+
+    this.detChange.detectChanges();
   }
 
 }

@@ -39,7 +39,7 @@ export class SignupPageComponent implements OnInit {
       { id: '2', image: '/assets/img/mar-l-3.png', text: 'Visual verification', textClass: 'banner-text-logins', active: false },
       { id: '3', image: '/assets/img/mar-l-4.png', text: 'Personalised ad', textClass: 'banner-text-logins', active: false },
     ],
-    'presales-prodmobiato.nfpc.net': [
+    'presales.nfpc.net': [
       { id: '0', image: '/assets/img/mar-l-1.png', text: 'Customer mapping', textClass: 'banner-text-logins', active: true },
       { id: '1', image: '/assets/img/mar-l-2.png', text: 'Configure retail audit', textClass: 'banner-text-logins', active: false },
       { id: '2', image: '/assets/img/mar-l-3.png', text: 'Visual verification', textClass: 'banner-text-logins', active: false },

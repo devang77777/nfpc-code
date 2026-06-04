@@ -76,7 +76,7 @@ export class JourneyPlanFormScheduleComponent implements OnInit, OnDestroy {
     });
     this.merchandiserIdFormControl = new FormControl('');
     this.baseFormControl = new FormControl('day', [Validators.required]);
-    this.journeyTypeFormControl = new FormControl(this.domain !== 'merchandising' && this.domain !== 'devmobiato.nfpc.net' ? 'route' : 'merchandiser', [Validators.required]);
+    this.journeyTypeFormControl = new FormControl(this.domain !== 'merchandising' && this.domain !== 'presales.nfpc.net' ? 'route' : 'merchandiser', [Validators.required]);
     this.isEnforceFormControl = new FormControl('0');
     this.startDayFormControl = new FormControl('monday', [Validators.required]);
     this.weeksFormControl = new FormControl({});
@@ -118,7 +118,7 @@ export class JourneyPlanFormScheduleComponent implements OnInit, OnDestroy {
     this.subscriptions.push(this.wkFormGroup.valueChanges.subscribe(value => {
       // this.routesFormControl.reset();
     }));
-    if (this.domain !== 'devmobiato.nfpc.net' && this.domain !== "merchandising") {
+    if (this.domain !== 'presales.nfpc.net' && this.domain !== "merchandising") {
       this.subscriptions.push(this.apiService.getAllRoute().subscribe(result => {
         this.routes = result.data;
       }));

@@ -45,6 +45,14 @@ const routes: Routes = [
       )
   },
   {
+    path: 'customer-caps',
+    canActivate: [AuthGuard],
+    loadChildren: () =>
+      import('./customer-caps/caps.module').then(
+        (module) => module.CapsModule
+      )
+  },
+  {
     path: 'collection',
     canActivate: [AuthGuard],
     loadChildren: () =>

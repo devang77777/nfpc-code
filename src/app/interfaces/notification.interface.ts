@@ -12,6 +12,15 @@ export interface NotificationModel {
     is_read: number;
     other:any
     approval_status: string
+    objectid?: string;
+    expanded?: boolean;
+    work_flow_obj_uuid: any;
+    merchandiser_image_1?: any;
+    customer_amount?: any;
+    customer_name?: any;
+    customer_code?: any;
+    merchandiser_name?: any;
+    customer_grv?: any;
 }
 
 

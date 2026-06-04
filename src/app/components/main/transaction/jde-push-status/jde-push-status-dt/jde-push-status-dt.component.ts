@@ -311,8 +311,8 @@ expandedRow: any;
       warehouse_id: this.sideFiltersForm.value.warehouse && this.sideFiltersForm.value.warehouse.length > 0 ? this.sideFiltersForm.value.warehouse.map(i => i.id) : [],
       page: 1,
       page_size: value.page_size,
-      start_date: value.start_date,
-      end_date: value.end_date,
+      start_date: value.start_date || "",
+      end_date: value.end_date || "",
       status: statusArr,
       "export": 0,
     };
@@ -640,7 +640,8 @@ scrollToExpandedRow(): void {
     this.api.exportJdePushStatus(body).subscribe(
         (result: any) => {
           if (result.status) {
-            this.api.downloadFile(result.data.file_url,'csv');
+            this.api.downloadFile(result.data.file_url, 'csv');
+            // this.api.downloadFile(result.data.file_url,'csv');
           }
         }
       );
@@ -665,7 +666,8 @@ scrollToExpandedRow(): void {
    this.api.exportJdePushStatusByDate(body).subscribe(
         (result: any) => {
           if (result.status) {
-            this.api.downloadFile(result.data.file_url,'csv');
+            this.api.downloadFile(result.data.file_url, 'csv');
+            // this.api.downloadFile(result.data.file_url,'csv');
           }
         }
       );
@@ -683,7 +685,8 @@ scrollToExpandedRow(): void {
    this.api.exportJdePushStatusBySalesman(body).subscribe(
         (result: any) => {
           if (result.status) {
-            this.api.downloadFile(result.data.file_url,'csv');
+            this.api.downloadFile(result.data.file_url, 'csv');
+            // this.api.downloadFile(result.data.file_url,'csv');
           }
         }
       );

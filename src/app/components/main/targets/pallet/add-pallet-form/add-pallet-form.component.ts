@@ -50,7 +50,7 @@ interface Customertype {
 export class AddPalletFormComponent extends BaseComponent implements OnInit {
   @Output() public updateTableData: EventEmitter<any> = new EventEmitter<any>();
   // domain = window.location.host.split('.')[0];
-  domain = 'presales-prodmobiato.nfpc.net';
+  domain = 'presales.nfpc.net';
   public palletFormGroup: FormGroup;
   public formType: string;
   public isEdit: boolean = false;

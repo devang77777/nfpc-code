@@ -130,6 +130,10 @@
                       <strong>{{ item?.lower_unit_item_upc }}</strong>
                     </li>
                     <li>
+                      <span>Item Barcode</span>
+                      <strong>{{ item?.item_uom_lower_name?.item_barcode }}</strong>
+                    </li>
+                    <li>
                       <span> Base Price</span>
                       <strong> {{ item?.lower_unit_item_price }}</strong>
                     </li>
@@ -246,6 +250,10 @@
                   <li>
                     <span> Item UPC</span>
                     <strong> {{ uom?.item_upc }}</strong>
+                  </li>
+                  <li>
+                    <span> Item Barcode</span>
+                    <strong> {{ uom?.item_barcode }}</strong>
                   </li>
                   <li>
                     <span> Item Price</span>

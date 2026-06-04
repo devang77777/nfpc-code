@@ -94,6 +94,7 @@ export class OrderDetailComponent extends BaseComponent
   private sanitizer: DomSanitizer;
   public ShowGenerateInvoice: boolean = true;
   currentRole = '';
+  public showCapsApproveWarning: boolean = false;
   constructor(
     private commonToasterService: CommonToasterService,
     private orderService: OrderService,
@@ -124,6 +125,11 @@ export class OrderDetailComponent extends BaseComponent
     this.lastname = localStorage.getItem("lastname");
     this.itemTableHeaders = ITEM_DETAILS_TABLE_HEADS;
     this.currentRole = localStorage.getItem('roleName');
+
+    // Show warning if need_to_caps_approve is 'yes'
+    if (this.orderData && this.orderData.need_to_caps_approve === 'yes') {
+      this.showCapsApproveWarning = true;
+    }
 
     // this.subscriptions.push(
     //   this.apiService.getItemUom().subscribe((result) => {
@@ -189,7 +195,7 @@ export class OrderDetailComponent extends BaseComponent
       //   })
       // );
       this.hasApprovalPending =
-        this.orderData.need_to_approve == 'yes' ? true : false;
+        this.orderData.need_to_approve == 'yes' ? true : false || this.orderData.need_to_caps_approve == 'yes' ? true : false;
       this.isDepotOrder = Boolean(this.orderData.depot);
       // this.setTermsTitle();
       this.getOrderStatus(this.orderData.current_stage);
@@ -352,7 +358,9 @@ export class OrderDetailComponent extends BaseComponent
           const link = document.createElement('a');
           link.setAttribute('target', '_blank');
           link.setAttribute('href', `${res.data.file_url}`);
-          link.setAttribute('download', `statement.pdf`);
+          // Extract filename from URL
+          const filename = res.data.file_url.substring(res.data.file_url.lastIndexOf('/') + 1);
+          link.setAttribute('download', filename);
           document.body.appendChild(link);
           link.click();
           link.remove();
@@ -484,43 +492,136 @@ export class OrderDetailComponent extends BaseComponent
   }
 
   approve() {
-    if (this.orderData && this.orderData.objectid) {
-      this.apiService
-        .approveItem(this.orderData.objectid)
-        .subscribe((res: any) => {
+      // Check if CAPS approval is pending and need_to_caps_approve is 'no'
+      if (this.orderData?.caps_approval === 'Pending' && this.orderData?.need_to_caps_approve === 'no') {
+        this.dialogRef.open(DeleteConfirmModalComponent, {
+          width: '500px',
+          data: {
+            title: 'Cannot Approve Order',
+            message: 'You cannot approve or reject the order until CAPS approval is completed.',
+            btnText: 'OK',
+            showCancelButton: false
+          },
+        });
+        return;
+      }
+
+      console.log(this.orderData,this.orderData.objectid,"494");
+      let payload: any = this.orderData.objectid;
+      console.log(this.orderData,this.orderData.objectid,"495");
+      // If need_to_caps_approve is 'yes', pass caps_approval: true
+      if (this.orderData.need_to_caps_approve === 'yes') {
+        payload = { action: true };
+        this.apiService.capsApproval(this.orderData.uuid,payload).subscribe((res: any) => {
           const approvedStatus: boolean = res.data.approved_or_rejected;
           if (res.status && approvedStatus) {
             this.commonToasterService.showSuccess(
-              'Approved',
-              'Order has been Approved'
+              'Success',
+              'Approved Successfully'
             );
             this.hasApprovalPending = false;
             this.dataService.sendData({
               type: CompDataServiceType.GET_NEW_DATA,
               data: { id: this.orderData.id }
             });
+            setTimeout(() => {
+              window.location.reload();
+            }, 1500);
+          }
+        });
+      }else{
+
+      this.apiService
+        .approveItem(payload)
+        .subscribe((res: any) => {
+          const approvedStatus: boolean = res.data.approved_or_rejected;
+          if (res.status && approvedStatus) {
+            this.commonToasterService.showSuccess(
+              'Success',
+              'Approved Successfully'
+            );
+            this.hasApprovalPending = false;
+            this.dataService.sendData({
+              type: CompDataServiceType.GET_NEW_DATA,
+              data: { id: this.orderData.id }
+            });
+            setTimeout(() => {
+              window.location.reload();
+            }, 1500);
           }
         });
     }
-  }
-  reject() {
-    if (this.orderData && this.orderData.objectid) {
+}
+  // reject() {
+  //   if (this.orderData && this.orderData.objectid) {
+  //     // this.apiService
+  //     //   .rejectItemApproval(this.orderData.objectid)
+  //     //   .subscribe((res: any) => {
+  //     //     this.commonToasterService.showSuccess(
+  //     //       'Reject',
+  //     //       'Order Approval has been Rejected'
+  //     //     );
+  //     //     this.hasApprovalPending = false;
+  //     //     this.dataService.sendData({
+  //     //       type: CompDataServiceType.GET_NEW_DATA,
+  //     //       data: { id: this.orderData.id }
+  //     //     });
+  //     //   });
+      
+  //   }
+  // }
+    reject() {
+      // Check if CAPS approval is pending and need_to_caps_approve is 'no'
+      if (this.orderData?.caps_approval === 'Pending' && this.orderData?.need_to_caps_approve === 'no') {
+        this.dialogRef.open(DeleteConfirmModalComponent, {
+          width: '500px',
+          data: {
+            title: 'Cannot Reject Order',
+            message: 'You cannot approve or reject the order until CAPS approval is completed.',
+            btnText: 'OK',
+            showCancelButton: false
+          },
+        });
+        return;
+      }
+
+      if (this.orderData.need_to_caps_approve === 'yes'){
       this.apiService
-        .rejectItemApproval(this.orderData.objectid)
+        .capsApproval(this.orderData.uuid,{action:false})
         .subscribe((res: any) => {
           this.commonToasterService.showSuccess(
-            'Reject',
-            'Order Approval has been Rejected'
+            'Success',
+            'Rejected Successfully'
           );
           this.hasApprovalPending = false;
           this.dataService.sendData({
             type: CompDataServiceType.GET_NEW_DATA,
             data: { id: this.orderData.id }
           });
+          setTimeout(() => {
+            window.location.reload();
+          }, 1500);
         });
     }
+  else {
+    this.apiService
+        .rejectItemApproval(this.orderData.objectid)
+        .subscribe((res: any) => {
+          this.commonToasterService.showSuccess(
+            'Success',
+            'Rejected Successfully'
+          );
+          this.hasApprovalPending = false;
+          this.dataService.sendData({
+            type: CompDataServiceType.GET_NEW_DATA,
+            data: { id: this.orderData.id }
+          });
+          setTimeout(() => {
+            window.location.reload();
+          }, 1500);
+        });
   }
-
+  }
   numberFormat(number) {
     return this.apiService.numberFormatType(number);
   }

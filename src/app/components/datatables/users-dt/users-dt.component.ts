@@ -79,14 +79,23 @@ advanceSearchRequest: any[] = [];
     });
     this.displayedColumns = this.allColumns;
     this.filterColumns = [...this.allColumns].splice(1);
- const filters = {
-    name: this.filterForm.get('user_name')?.value || this.filterForm.get('email')?.value || '',
-    role: this.filterForm.get('role_name')?.value || '',
-    status: this.filterForm.get('sttaus')?.value || '',
-    // email: this.filterForm.get('email')?.value || '',
-  };
+    // Always pass status as string for API
+    let statusValue = this.filterForm.get('status')?.value;
+    if (statusValue !== 'active' && statusValue !== 'inactive') statusValue = '';
+    const filters = {
+      name: this.filterForm.get('user_name')?.value || this.filterForm.get('email')?.value || '',
+      role: this.filterForm.get('role_name')?.value || '',
+      status: statusValue
+    };
     this.fds.formType.subscribe(x => {
       if (x == 'user') {
+        let statusValue = this.filterForm.get('status')?.value;
+        if (statusValue !== 'active' && statusValue !== 'inactive') statusValue = '';
+        const filters = {
+          name: this.filterForm.get('user_name')?.value || this.filterForm.get('email')?.value || '',
+          role: this.filterForm.get('role_name')?.value || '',
+          status: statusValue
+        };
         this.subscriptions.push(this.apiService.getAllInviteUser(filters).subscribe((users: any) => {
           this.dataSource = new MatTableDataSource<Users>(users.data);
           this.dataSource.paginator = this.paginator;
@@ -193,19 +202,16 @@ advanceSearchRequest: any[] = [];
       });
       sessionStorage.setItem('columnfilter', JSON.stringify(this.filterForm.value));
     }
-    // Build filters object from all filterForm values, always include status if set
+    // Build filters object from all filterForm values, always include status as string
     const formVals = this.filterForm.value;
+    let statusValue = formVals.status;
+    if (statusValue !== 'active' && statusValue !== 'inactive') statusValue = '';
     let filters: any = {
       name: formVals.user_name || '',
       role: formVals.role_name || '',
-      email: formVals.email || ''
+      email: formVals.email || '',
+      status: statusValue
     };
-    // Always include status if set (even if other fields are empty)
-    if (formVals.status) {
-      if (formVals.status === 'active') filters.status = 1;
-      else if (formVals.status === 'inactive') filters.status = 0;
-      else filters.status = formVals.status;
-    }
     this.subscriptions.push(this.apiService.getAllInviteUser(filters).subscribe((users: any) => {
       this.dataSource = new MatTableDataSource<Users>(users.data);
       this.dataSource.paginator = this.paginator;
@@ -213,13 +219,16 @@ advanceSearchRequest: any[] = [];
   }
   
   getUserData(){
-     const filters = {
-    name: this.filterForm.get('user_name')?.value || '',
-    role: this.filterForm.get('role_name')?.value || '',
-    status: this.filterForm.get('status')?.value || '',
-    // email: this.filterForm.get('email')?.value || '',
-  };
-      if (this.advanceSearchRequest.length > 0) {
+    // Build filters object and always include status as string query param
+    const formVals = this.filterForm.value;
+    let statusValue = formVals.status;
+    if (statusValue !== 'active' && statusValue !== 'inactive') statusValue = '';
+    const filters = {
+      name: formVals.user_name || '',
+      role: formVals.role_name || '',
+      status: statusValue
+    };
+    if (this.advanceSearchRequest.length > 0) {
       this.advanceSearch();
     } else {
       this.advanceSearchRequest.forEach(element => {
@@ -231,15 +240,14 @@ advanceSearchRequest: any[] = [];
         const data = JSON.parse(sessionStorage.getItem('columnfilter'));
         this.filterForm.patchValue(data);
       }
-      
       this.subscriptions.push(this.apiService.getAllInviteUser(filters).subscribe((users: any) => {
         this.dataSource = new MatTableDataSource<Users>(users.data);
         this.dataSource.paginator = this.paginator;
         this.page = users.pagination.current_page;
         this.pageSize = users.pagination.page_size;
       }))
+    }
   }
-}
  advanceSearch() {
     this.apiService.onSearch(this.requestOriginal).subscribe((response) => {
       this.requestOriginal = this.requestOriginal;
@@ -248,6 +256,8 @@ advanceSearchRequest: any[] = [];
       // this.updateDataSource(response.data);
     });
   }
+
+
 }
 
 export interface Users {

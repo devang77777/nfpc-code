@@ -21,7 +21,7 @@
             <label for="">NAME</label>
             <input class="form-control form-control-sm" type="text" [formControl]="NameFormControl">
           </div>
-          <div class="form-group" *ngIf="domain !== 'merchandising' && domain !== 'presales-prodmobiato.nfpc.net'">
+          <div class="form-group" *ngIf="domain !== 'merchandising' && domain !== 'presales.nfpc.net'">
             <label for="">ROUTE</label>
             <mat-select class="form-control form-control-sm" [formControl]="RouteFormControl">
               <mat-option *ngFor="let item of routeID " [value]="item.id">
@@ -29,7 +29,7 @@
               </mat-option>
             </mat-select>
           </div>
-          <div class="form-group" *ngIf="domain == 'merchandising' || domain == 'presales-prodmobiato.nfpc.net'">
+          <div class="form-group" *ngIf="domain == 'merchandising' || domain == 'presales.nfpc.net'">
             <label for="">Merchandiser</label>
             <app-multiautocomplete isSingle="true" [options]="merchandisers" [control]="merchandiserFormControl" text=""
               id="user_id" objectName="user" param1="firstname" param2="lastname">

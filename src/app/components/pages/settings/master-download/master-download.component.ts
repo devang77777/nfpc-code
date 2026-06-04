@@ -55,10 +55,10 @@ export interface PeriodicElement {
 }
 
 const ELEMENT_DATA: PeriodicElement[] = [
-  { position: 1, name: 'Customer Master', description: 'Customer Master', module: 'https://devmobiato.nfpc.net/merchandising/odbc_customer_master_prd.php' },
-  { position: 2, name: 'Item Master', description: 'Item Maste', module: 'https://devmobiato.nfpc.net/merchandising/odbc_item_prd.php' },
-  { position: 3, name: 'Item branch Plant', description: 'Item branch Plant', module: 'https://devmobiato.nfpc.net/merchandising/odbc_item_branch_prd.php' },
-  { position: 4, name: 'Warehouse Stock', description: 'Warehouse Stock', module: 'https://devmobiato.nfpc.net/merchandising/odbc_stock_date_prd.php' },
+  { position: 1, name: 'Customer Master', description: 'Customer Master', module: 'https://presales.nfpc.net/production/odbc_customer_master_prd.php' },
+  { position: 2, name: 'Item Master', description: 'Item Maste', module: 'https://presales.nfpc.net/production/odbc_item_prd.php' },
+  { position: 3, name: 'Item branch Plant', description: 'Item branch Plant', module: 'https://presales.nfpc.net/production/odbc_item_branch_prd.php' },
+  { position: 4, name: 'Warehouse Stock', description: 'Warehouse Stock', module: 'https://presales.nfpc.net/production/odbc_stock_date_prd.php' },
 ];
 
 

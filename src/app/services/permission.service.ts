@@ -9,11 +9,7 @@ export class PermissionService {
   public permission = [];
   public userRole;
   public domain = window.location.host;
-<<<<<<< HEAD
-  public baseUrl: string = this.domain == 'devmobiato.nfpc.net' ? environment.nfpcApiUrl : environment.baseApiUrl;
-=======
-  public baseUrl: string = this.domain == 'devmobiato.nfpc.net' ? environment.nfpcApiUrl : environment.baseApiUrl;
->>>>>>> master
+  public baseUrl: string = this.domain == 'presales.nfpc.net' ? environment.nfpcApiUrl : environment.baseApiUrl;
   constructor(private http: HttpClient) {
     this.getRolesPermission().subscribe((res: any) => {
       this.allPermissions = res.data;

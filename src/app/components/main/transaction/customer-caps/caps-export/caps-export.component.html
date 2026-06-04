@@ -1,0 +1,64 @@
+<div class="card">
+  <div class="card-header pt-4">
+    <span class="h6 font-weight-bold">Export Customer CAPS</span>
+    <a [mat-dialog-close]="true" class="closeicon settingclose"><i class="os-icon os-icon-x"></i></a>
+  </div>
+  <div class="card-body">
+    <p>Customer CAPS Display can export data from Customer CAPS in CSV or XLS format.</p>
+    <mat-divider></mat-divider>
+
+    <form [formGroup]="exportForm">
+      <div>
+        <section class="full-w">
+          <mat-radio-group formControlName="type" name="type" [(ngModel)]="export.type">
+            <mat-radio-button class="example-margin full-w" value="all">All Customer CAPS</mat-radio-button>
+            <mat-radio-button class="example-margin full-w" value="1">Specific Customer CAPS</mat-radio-button>
+          </mat-radio-group>
+        </section>
+       
+        
+        <div class="half-w row" *ngIf="export.type === '1'">
+            <div class="col-6">
+              <label class="full-w">Year</label>
+              <select class="form-control form-control-sm" formControlName="year">
+                <option value="" disabled selected>Select Year</option>
+                <option *ngFor="let y of years" [value]="y">{{ y }}</option>
+              </select>
+            </div>
+            <div class="col-6">
+              <label class="full-w">Month</label>
+              <select class="form-control form-control-sm" formControlName="month">
+                <option value="" disabled selected>Select Month</option>
+                <option *ngFor="let m of months" [value]="m">{{ m }}</option>
+              </select>
+            </div>
+        </div>
+
+
+        
+
+
+
+
+
+
+
+        <section class="full-w">
+          <label>Export As : </label>
+          <mat-radio-group formControlName="fileType" name="fileType" [(ngModel)]="export.fileType">
+            <mat-radio-button class="example-margin full-w" value="csv">CSV (Comma Separated Value)</mat-radio-button>
+            <mat-radio-button class="example-margin full-w" value="xlsx">XLS (Microsoft Excel Compatible)
+            </mat-radio-button>
+          </mat-radio-group>
+        </section>
+      </div>
+    </form>
+  </div>
+  <div class="card-footer">
+    <div class="d-inline float-right">
+      <button class="btn btn-sm btn-p" [mat-dialog-close]="true" (click)="exportCredit()">
+        Export
+      </button>
+      <button class="btn btn-sm btn-white mr-2" mat-dialog-close>Cancel</button>
+    </div>
+  </div>

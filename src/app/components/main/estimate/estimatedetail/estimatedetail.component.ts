@@ -148,7 +148,9 @@ export class EstimatedetailComponent extends BaseComponent implements OnInit {
           const link = document.createElement('a');
           link.setAttribute('target', '_blank');
           link.setAttribute('href', `${res.data.file_url}`);
-          link.setAttribute('download', `statement.pdf`);
+          // Extract filename from URL
+          const filename = res.data.file_url.substring(res.data.file_url.lastIndexOf('/') + 1);
+          link.setAttribute('download', filename);
           document.body.appendChild(link);
           link.click();
           link.remove();

@@ -7,7 +7,7 @@ import { environment } from '../../environments/environment';
 })
 export class ApiKeySelectionService {
   public domain = window.location.host;
-  public baseUrl: string = this.domain == 'devmobiato.nfpc.net' ? environment.nfpcApiUrl : environment.baseApiUrl;
+  public baseUrl: string = this.domain == 'presales.nfpc.net' ? environment.nfpcApiUrl : environment.baseApiUrl;
   // baseUrl: string = 'https://mobiato-msfa.com/application-backend/public/api';
   constructor(private http: HttpClient) { }
 

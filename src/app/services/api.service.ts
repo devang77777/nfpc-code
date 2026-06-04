@@ -37,7 +37,7 @@ import { environment } from '../../environments/environment';
 })
 export class ApiService {
   public domain = window.location.host;
-  public baseUrl: string = this.domain == 'devmobiato.nfpc.net' ? environment.nfpcApiUrl : environment.baseApiUrl;
+  public baseUrl: string = this.domain == 'presales.nfpc.net' ? environment.nfpcApiUrl : environment.baseApiUrl;
   // baseUrl = 'https://mobiato-msfa.com/application-backend/public/api';
   constructor(private http: HttpClient, private currencyPipe: CurrencyPipe) { }
 
@@ -156,6 +156,10 @@ export class ApiService {
     const url = `${this.baseUrl}/date-wise-total-invoice`;
     return this.http.post(url, body);
   }
+  exportUsersData(body): Observable<any> {
+    const url = `${this.baseUrl}/invite-user/list-export`;
+    return this.http.post(url, body);
+  }
   getJdePushStatusByDate(body): Observable<any> {
     const url = `${this.baseUrl}/salesman-date-wise-total-invoice`;
     return this.http.post(url, body);
@@ -174,6 +178,22 @@ export class ApiService {
   }
   exportJdePushStatusBySalesman(body): Observable<any> {
     const url = `${this.baseUrl}/salesman-and-date-wise-total-invoice`;
+    return this.http.post(url, body);
+  }
+  capsList(body): Observable<any> {
+    const url = `${this.baseUrl}/customer-caps`;
+    return this.http.post(url, body);
+  }
+  capsExport(body): Observable<any> {
+    const url = `${this.baseUrl}/customer-caps/export`;
+    return this.http.post(url, body);
+  }
+  capsImport(body): Observable<any> {
+    const url = `${this.baseUrl}/customer-caps/import`;
+    return this.http.post(url, body);
+  }
+  capsApproval(uuid:any,body): Observable<any> {
+    const url = `${this.baseUrl}/caps-approve/${uuid}`;
     return this.http.post(url, body);
   }
 
@@ -1126,9 +1146,16 @@ export class ApiService {
       `${this.baseUrl}/notifications`, model
     );
   }
+  
   readAllNotification(): Observable<any> {
     return this.http.get(
       `${this.baseUrl}/notification/read-all`
+    );
+  }
+
+  deleteAllNotification(): Observable<any> {
+    return this.http.get(
+      `${this.baseUrl}/notification/delete-all`
     );
   }
 
@@ -1707,17 +1734,38 @@ export class ApiService {
     return this.http.post(url, data);
   }
 
-  public downloadFile(fileurl, type) {
-    const link = document.createElement('a');
-    link.setAttribute('target', '_blank');
-    link.setAttribute('href', fileurl);
-    link.setAttribute('download', type);
-    document.body.appendChild(link);
-    link.click();
-    link.remove();
+  public downloadFile(fileurl, type?) {
+    const filename = type || fileurl.substring(fileurl.lastIndexOf('/') + 1);
+
+    // Use fetch + blob to properly download the file content
+    // This prevents the Angular SPA from serving index.html instead of the actual file
+    fetch(fileurl)
+      .then(response => {
+        if (!response.ok) {
+          throw new Error(`Download failed: ${response.statusText}`);
+        }
+        return response.blob();
+      })
+      .then(blob => {
+        const blobUrl = window.URL.createObjectURL(blob);
+        const link = document.createElement('a');
+        link.href = blobUrl;
+        link.setAttribute('download', filename);
+        document.body.appendChild(link);
+        link.click();
+        link.remove();
+        window.URL.revokeObjectURL(blobUrl);
+      })
+      .catch(error => {
+        console.error('File download error:', error);
+        // Fallback: open in new tab
+        window.open(fileurl, '_blank');
+      });
   }
   public downloadPDFFile(fileName: any, url: any) {
-    return this.http.get(url, { params: fileName, responseType: 'blob', reportProgress: true, observe: 'events', headers: new HttpHeaders({ 'Content-Type': 'application/octet-stream' }) });
+    // Extract filename from URL if fileName is not provided
+    const extractedFileName = fileName || url.substring(url.lastIndexOf('/') + 1);
+    return this.http.get(url, { params: extractedFileName, responseType: 'blob', reportProgress: true, observe: 'events', headers: new HttpHeaders({ 'Content-Type': 'application/octet-stream' }), withCredentials: true });
   }
   public exportCommonFiles(payload): Observable<any> {
     return this.http.post(
@@ -1878,12 +1926,12 @@ export class ApiService {
   // }
   postCreditNoteOdooData(id): Observable<any> {
     return this.http.post(
-      `https://devmobiato.nfpc.net/merchandising/odbc_order_return_posting_prd.php?orderid=${id}`, null
+      `https://presales.nfpc.net/production/odbc_order_return_posting_prd.php?orderid=${id}`, null
     );
   }
   postDebitNoteOdooData(id): Observable<any> {
     return this.http.post(
-      `https://devmobiato.nfpc.net/merchandising/odbc_order_return_posting_drebit_prd.php?orderid=${id}`, null
+      `https://presales.nfpc.net/production/odbc_order_return_posting_drebit_prd.php?orderid=${id}`, null
     );
   }
   updateImport(data): Observable<any> {
@@ -1903,7 +1951,7 @@ export class ApiService {
   // }
   postInvoiceOdooData(id): Observable<any> {
     return this.http.post(
-      `https://devmobiato.nfpc.net/merchandising/odbc_order_posting_prd.php?orderid=${id}`, null
+      `https://presales.nfpc.net/production/odbc_order_posting_prd.php?orderid=${id}`, null
     );
   }
   public isStockCheck(body): Observable<any> {
@@ -2055,7 +2103,7 @@ export class ApiService {
   }
   infiniteOrder(model): Observable<any> {
     return this.http.post(
-      `https://devmobiato.nfpc.net/merchandising/public/api/orderpostingprd/add`, model
+      `https://presales.nfpc.net/production/public/api/orderpostingprd/add`, model
     );
   }
   groupPDfDownload(model): Observable<any> {

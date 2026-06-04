@@ -35,7 +35,7 @@
         <th mat-header-cell *matHeaderCellDef>   
           <app-column-filter title="Status" (changeSelected)="onColumnFilterOpen($event)"
               [selected]="selectedColumnFilter" controlName="status" (close)="onColumnFilter($event)">
-              <mat-select class="form-control form-control-sm" formControlName="status">
+              <mat-select class="form-control form-control-sm"  [formControl]="filterForm.get('status')">
               <mat-option value="active">Active</mat-option>
               <mat-option value="inactive">In Active</mat-option>
             </mat-select>

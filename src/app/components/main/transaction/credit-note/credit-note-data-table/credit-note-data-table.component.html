@@ -147,13 +147,13 @@
       <ng-container matColumnDef="self_assigned">
         <th mat-header-cell *matHeaderCellDef>
           <app-column-filter title="Assigned" (changeSelected)="onColumnFilterOpen($event)"
-            [selected]="selectedColumnFilter" (close)="onColumnFilter($event)">
+            [selected]="selectedColumnFilter" controlName="branch_plant_code"  (close)="onColumnFilter($event)">
             <input class="form-control form-control-sm" [formControl]="filterForm.get('self_assigned')"
               placeholder="Enter Self Assigned" type="text">
           </app-column-filter>
         </th>
         <td mat-cell *matCellDef="let element">
-          {{ element?.self_assigned === "1" ? 'Self' : 'Logistic' }}
+          {{ element?.self_assigned === "1" ? 'Self' : element?.self_assigned === "2" ? "Out Of Stock" : 'Logistic' }}
         </td>
       </ng-container>
 
@@ -367,6 +367,22 @@
         <th mat-header-cell *matHeaderCellDef>Customer Amount</th>
         <td mat-cell *matCellDef="let element" (click)="openDetailView(element)">
           {{ numberFormatWithSymbol(element.customer_amount) }}
+        </td>
+      </ng-container>
+      <ng-container matColumnDef="merch_image">
+        <th mat-header-cell *matHeaderCellDef>Merchandiser Image</th>
+        <td mat-cell *matCellDef="let element" (click)="openDetailView(element)">
+          <ng-container *ngIf="element?.merchandiser_image_1; else noMerchImage">
+            <img
+              class="merch-image-preview"
+              [src]="element.merchandiser_image_1"
+              alt="Merchandiser Image"
+              (click)="openMerchImageViewer(element, $event)"
+            />
+          </ng-container>
+          <ng-template #noMerchImage>
+            <span class="no-image-text">No image</span>
+          </ng-template>
         </td>
       </ng-container>
       <ng-container matColumnDef="approval">

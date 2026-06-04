@@ -51,7 +51,7 @@ export class DashboardPageComponent implements OnInit {
   //     },
   //   ];
 
-  //   if (this.domain !== 'presales-prodmobiato.nfpc.net') {
+  //   if (this.domain !== 'presales.nfpc.net') {
   //     this.navLinks.push({
   //       label: 'Dashboard 5',
   //       link: './board5',
@@ -95,7 +95,7 @@ export class DashboardPageComponent implements OnInit {
 
   }
   ngOnInit(): void {
-    if (this.domain != 'presales-devmobiato.nfpc.net' && this.domain != 'presales-prodmobiato.nfpc.net' && this.domain !== 'localhost:4200' && this.domain !== 'presales.nfpc.net') {
+    if (this.domain != 'presales.nfpc.net' && this.domain != 'presales.nfpc.net' && this.domain !== 'localhost:4200' && this.domain !== 'presales.nfpc.net') {
       this.navLinks.push(
         {
           label: 'Dashboard 1',
@@ -149,9 +149,9 @@ export class DashboardPageComponent implements OnInit {
     }
     this.router.events.subscribe((res) => {
       this.activeLinkIndex = this.navLinks.indexOf(this.navLinks.find(tab => tab.link === '.' + this.router.url));
-      console.log(this.activeLinkIndex,"presales-devmobiato.nfpc.net")
+      console.log(this.activeLinkIndex,"presales.nfpc.net")
     });
-    if (this.router.url.includes('/dashboard/board1') && this.domain == 'presales-prodmobiato.nfpc.net') {
+    if (this.router.url.includes('/dashboard/board1') && this.domain == 'presales.nfpc.net') {
       this.router.navigate(['/dashboard/monthly-kpi']);
     }
   }

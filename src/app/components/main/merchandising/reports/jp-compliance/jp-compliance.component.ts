@@ -34,7 +34,7 @@ export class JpComplianceComponent implements OnInit {
 
   filterForm: FormGroup;
   constructor(public fb: FormBuilder, private merService: ReportService, public dataEditor: DataEditor) {
-    if (this.domain.split('.')[0] == 'presales-prodmobiato') {
+    if (this.domain.split('.')[0] == 'presales.nfpc.net') {
       this.columns.push(
         { title: 'Date', columnDef: 'date', isFilter: true },
         { title: 'Salesman Code', columnDef: 'merchandiser_code', isFilter: true },

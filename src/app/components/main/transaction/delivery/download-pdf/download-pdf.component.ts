@@ -62,10 +62,31 @@ export class DownloadPdfComponent implements OnInit {
         (result: any) => {
           if (result.status == true) {
             if (result.data.length > 0) {
-              result.data.forEach(element => {
-                this.apiService.downloadFile(element, type);
-
-                // this.apiService.downloadFile(result.data.file_url, type);
+              result.data.forEach((element: any, index: any) => {
+                setTimeout(() => {
+      // window.open(⁠ /download-pdf?mode=auto&file=${file} ⁠, '_blank');
+        const link = document.createElement('a');
+                link.setAttribute('target', '_self');
+                link.setAttribute('href', element);
+                // Extract filename from URL
+                const filename = element.substring(element.lastIndexOf('/') + 1);
+                link.setAttribute('download', filename);
+                document.body.appendChild(link);
+                link.click();
+                console.log('File downloaded successfully');
+                link.remove();
+    }, index * 150)
+                // Download file using anchor element
+                // const link = document.createElement('a');
+                // link.setAttribute('target', '_blank');
+                // link.setAttribute('href', element);
+                // // Extract filename from URL
+                // const filename = element.substring(element.lastIndexOf('/') + 1);
+                // link.setAttribute('download', filename);
+                // document.body.appendChild(link);
+                // link.click();
+                // console.log('File downloaded successfully');
+                // link.remove();
               });
             }
             this.dataEditorService.sendMessage({ export: '' });

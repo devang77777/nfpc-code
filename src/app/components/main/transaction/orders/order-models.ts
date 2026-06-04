@@ -478,7 +478,21 @@ export const enum OrderUpdateProcess {
   Cancel = 'Cancel',
   Cancelled = 'Cancelled',
 }
+export const enum CapsApprovalStatus {
+  Pending = 'Pending',
+  Rejected = 'Rejected',
+  Approved = 'Approved',
+  CapsApproved = 'Caps Approved',
+  CapsRejected = 'Caps Rejected',
+}
 
+export const enum CapsProcessColor {
+  Rejected = '#d9534f',
+  Pending = '#a5621b',
+  Approved = '#0f8801',
+  CapsApproved = '#0f8801',
+  CapsRejected = '#d9534f',
+}
 export const enum OrderUpdateProcessColor {
   Rejected = '#d9534f',
   Pending = '#a5621b',

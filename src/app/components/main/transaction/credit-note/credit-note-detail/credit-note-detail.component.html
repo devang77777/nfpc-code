@@ -33,9 +33,9 @@
                 <button (click)="onToggleHistory()" class="btn" type="button">
                     <mat-icon [inline]="true">textsms</mat-icon>
                 </button>
-                <button class="btn" type="button" (click)="openImages()">
+                <!-- <button class="btn" type="button" (click)="openImages()">
                     <mat-icon [inline]="true">collections</mat-icon>
-                </button>
+                </button> -->
             </div>
             <span>
 
@@ -255,7 +255,60 @@
                 </table>
             </div>
             <div class="footer-overview-container">
+  <div class="row align-items-start justify-content-between">
+
+    <!-- Merchandiser Image -->
+    <div
+      class="col-lg-4 col-md-5 col-sm-12"
+      
+    >
+      <div class="merchandiser-image-holder" *ngIf="creditNoteData?.merchandiser_image_1">
+        <label>Merchandiser Image</label>
+        <img
+          [src]="creditNoteData?.merchandiser_image_1"
+          alt="Merchandiser Image"
+          class="merchandiser-image"
+          (click)="openMerchImageViewer(creditNoteData, $event)"
+        />
+      </div>
+    </div>
+
+    <!-- Summary -->
+    <div class="col-lg-4 col-md-5 col-sm-12">
+      <div class="overall-stats-table">
+        <div *ngFor="let stat of orderStats.slice(0, orderStats.length - 1)">
+          <span class="stat-label">{{ stat.label }}</span>
+          <span class="stat-value">
+            {{ creditNoteData && numberFormatWithSymbol(creditNoteData[stat.key]) }}
+          </span>
+        </div>
+
+        <div>
+          <span class="stat-label final-total">Total</span>
+          <span class="stat-value final-total">
+            {{ numberFormatWithSymbol(creditNoteData?.grand_total) }}
+          </span>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+            <!-- <div class="footer-overview-container">
+                <div class="row justify-content-start">
+                    <div class="col-sm-4" *ngIf="creditNoteData?.merchandiser_image_1">
+                        <div class="merchandiser-image-holder">
+                            <label>Merchandiser Image</label>
+                            <img
+                                [src]="creditNoteData?.merchandiser_image_1"
+                                alt="Merchandiser Image"
+                                class="merchandiser-image"
+                            />
+                        </div>
+                    </div>
+                </div>
                 <div class="row justify-content-end">
+
                     <div class="col-sm-4">
                         <div class="overall-stats-table">
                             <div *ngFor="let stat of orderStats.slice(0, orderStats.length - 1)">
@@ -274,7 +327,7 @@
                         </div>
                     </div>
                 </div>
-            </div>
+            </div> -->
         </div>
     </form>
     <!-- <div class="footer-block"></div> -->

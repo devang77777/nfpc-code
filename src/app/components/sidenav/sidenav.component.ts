@@ -28,7 +28,7 @@ export class SidenavComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
-    if (this.router.url.includes('/dashboard/board1') && this.domain == 'presales-prodmobiato.nfpc.net') {
+    if (this.router.url.includes('/dashboard/board1') && this.domain == 'presales.nfpc.net') {
       this.router.navigate(['/dashboard/monthly-kpi']);
     }
   }

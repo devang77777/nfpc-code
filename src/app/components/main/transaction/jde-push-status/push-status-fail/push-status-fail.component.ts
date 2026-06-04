@@ -145,7 +145,8 @@ expandedRow: any;
    this.api.getJdePushStatusFailedOrder(body).subscribe(
         (result: any) => {
           if (result.status) {
-            this.api.downloadFile(result.data.file_url,'csv');
+            this.api.downloadFile(result.data.file_url, 'csv');
+            // this.api.downloadFile(result.data.file_url,'csv');
           }
         }
       );

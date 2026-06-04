@@ -88,6 +88,7 @@ export class PalletExportComponent implements OnInit {
         (result: any) => {
           if (result.status) {
             this.apiService.downloadFile(result.data.file_url, 'csv');
+            // this.apiService.downloadFile(result.data.file_url, 'csv');
             this.dataEditorService.sendMessage({ export: '' });
           }
         }

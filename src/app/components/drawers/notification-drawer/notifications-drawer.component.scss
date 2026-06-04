@@ -1,3 +1,264 @@
+// .card-header {
+//   background-color: #f1f5fa;
+//   border: 0;
+// }
+
+// a {
+//   cursor: pointer;
+// }
+
+// .menus {
+//   display: block;
+//   padding: 8px 20px;
+//   text-decoration: none;
+//   font-size: 14px;
+//   font-weight: 400;
+//   color: #000000;
+// }
+
+// .menus:hover {
+//   color: #fff;
+//   background-color: #268ddd;
+// }
+
+// .arrow-up {
+//   right: 122px;
+//   top: -10px;
+//   position: absolute;
+//   z-index: 10;
+//   width: 0;
+//   height: 0;
+//   border-left: 10px solid transparent;
+//   border-right: 10px solid transparent;
+//   // color: #ffffff;
+//   // border-bottom: 10px solid black;
+// }
+
+// .card {
+//   position: relative;
+// }
+
+// input:focus {
+//   outline: none;
+// }
+
+// .mat-expansion-panel {
+//   box-shadow: none;
+// }
+
+// // .mat-expansion-panel-header{
+// //     height: 35px !important;
+// // }
+// ::ng-deep .mat-expansion-panel-body {
+//   padding: 0 0px 16px 24px !important;
+// }
+
+// .settingmenuholder {
+//   overflow-y: scroll;
+//   overflow-x: visible;
+//   height: calc(100vh - 160px);
+// }
+
+// .notification-unread{
+//   background-color: #f5f5f5;
+// }
+
+// // .mat-list-base {
+// //   padding-top: 49px;
+// //   width: 100%;
+// //   clear: both;
+// //   /* float: left; */
+// //   position: absolute;
+// //   margin: 0 auto;
+// // }
+
+// .mat-raised-button{
+//   line-height: 15px !important;
+// }
+// button.mat-focus-indicator.mat-raised-button.mat-button-base.mat-warn {
+//   padding: 0;
+// }
+// button.mat-focus-indicator.mat-raised-button.mat-button-base.mat-primary {
+//   padding: 0;
+// }
+
+// button.btn-approve {
+//   background-color: green;
+//   margin-right: 20px;
+//   color: #fff;
+//   padding: 0px 8px 0px 4px;
+// }
+
+// button.btn-reject{
+//   background-color: red;
+//   margin-right: 20px;
+//   color: #fff;
+//   padding: 0px 8px 0px 4px
+// }
+
+
+// mat-icon.icon-done {
+//   font-size: 20px;
+// }
+// .credit-note-fields {
+//   margin-top: 10px;
+//   padding: 12px 0;
+//   border-top: 1px solid #e5e5e5;
+//   border-bottom: 1px solid #e5e5e5;
+// }
+// .credit-note-row {
+//   display: flex;
+//   flex-wrap: wrap;
+//   margin-bottom: 8px;
+// }
+// .credit-note-col {
+//   width: 50%;
+//   padding-right: 10px;
+//   margin-bottom: 8px;
+// }
+// .field-label {
+//   display: block;
+//   font-size: 12px;
+//   color: #6c757d;
+//   margin-bottom: 3px;
+// }
+// .field-value {
+//   display: block;
+//   font-size: 14px;
+//   color: #222;
+// }
+// .notification-image-preview {
+//   max-width: 100%;
+//   height: auto;
+//   border-radius: 4px;
+//   border: 1px solid #ddd;
+// }
+// .mat-list-base .mat-list-item {
+//   display: flex !important;
+//   flex-wrap: wrap;
+//   align-items: flex-start;
+// }
+// .mat-list-base .mat-list-item.expanded-row {
+//   min-height: 360px;
+// }
+// .notification-row-header,
+// .credit-note-expanded,
+// .mat-list-base .btn-block,
+// .mat-divider {
+//   width: 100%;
+//   display: block;
+// }
+// .notification-row-header {
+//   flex: 1 1 100%;
+// }
+// .credit-note-expanded,
+// .mat-list-base .btn-block {
+//   flex: 1 1 100%;
+// }
+// .credit-note-expanded {
+//   margin-top: 12px;
+//   padding: 16px;
+//   border-top: 1px solid #e5e5e5;
+//   max-height: 360px;
+//   overflow-y: auto;
+//   background: #fff;
+//   border-radius: 4px;
+//   box-sizing: border-box;
+// }
+// .credit-note-expanded::-webkit-scrollbar {
+//   width: 8px;
+// }
+// .credit-note-expanded::-webkit-scrollbar-thumb {
+//   background: rgba(0,0,0,0.15);
+//   border-radius: 4px;
+// }
+// .expanded-details-table {
+//   width: 100%;
+//   border-collapse: collapse;
+//   margin-bottom: 8px;
+// }
+// .expanded-details-table th,
+// .expanded-details-table td {
+//   padding: 6px 8px;
+//   vertical-align: top;
+//   border-bottom: 1px solid #f0f0f0;
+// }
+// .expanded-details-table th {
+//   width: 32%;
+//   text-align: left;
+//   color: #6c757d;
+//   font-weight: 600;
+//   white-space: nowrap;
+// }
+// .expanded-details-table td {
+//   word-break: break-word;
+// }
+// .credit-note-expanded .btn-block {
+//   text-align: right;
+//   padding-top: 10px;
+//   position: sticky;
+//   bottom: 0;
+//   background: #fff;
+// }
+// .credit-note-expanded .btn-approve,
+// .credit-note-expanded .btn-reject {
+//   min-width: 90px;
+//   padding: 4px 10px;
+// }
+// .mat-list-base .btn-block{
+//   text-align:right;
+//   padding-top: 16px;
+// }
+// .mat-list-base .mat-list-item .mat-list-item-content, .mat-list-base .mat-list-option .mat-list-item-content{
+//   flex-flow:wrap !important;
+// }
+// .mat-form-field + .mat-form-field {
+//   margin-left: 8px;
+// }
+
+// .mat-accordion>.mat-expansion-panel-spacing:last-child, .mat-accordion>*:last-child:not(.mat-expansion-panel) .mat-expansion-panel-spacing {
+//   float: left;
+// }
+
+// .mat-accordion .mat-expansion-panel:last-of-type {
+//   float: left;
+// }
+// .mat-list-base {
+//  padding-top: 0px; 
+// }
+// .mat-list-item .mat-list-item-content {
+//   display: block !important;
+// }
+
+// .mat-list-base .mat-list-item .mat-list-item-content{
+//   display: block !important;
+// }
+
+// .mat-list-base .mat-list-item .mat-line{
+//   margin-bottom:4px;
+// }
+
+// .mat-list-base .btn-block{
+//   text-align:right;
+//   padding-top: 48px;
+// }
+// .mat-list-base .mat-list-item .mat-list-item-content, .mat-list-base .mat-list-option .mat-list-item-content{
+//   flex-flow:wrap !important;
+// }
+
+// .mat-form-field + .mat-form-field {
+//   margin-left: 8px;
+// }
+
+// .mat-accordion>.mat-expansion-panel-spacing:last-child, .mat-accordion>*:last-child:not(.mat-expansion-panel) .mat-expansion-panel-spacing {
+//   float: left;
+// }
+
+// .mat-accordion .mat-expansion-panel:last-of-type {
+//   float: left;
+// }
+
+
 .card-header {
   background-color: #f1f5fa;
   border: 0;
@@ -30,8 +291,6 @@ a {
   height: 0;
   border-left: 10px solid transparent;
   border-right: 10px solid transparent;
-  // color: #ffffff;
-  // border-bottom: 10px solid black;
 }
 
 .card {
@@ -46,9 +305,6 @@ input:focus {
   box-shadow: none;
 }
 
-// .mat-expansion-panel-header{
-//     height: 35px !important;
-// }
 ::ng-deep .mat-expansion-panel-body {
   padding: 0 0px 16px 24px !important;
 }
@@ -59,25 +315,18 @@ input:focus {
   height: calc(100vh - 160px);
 }
 
-.notification-unread{
+.notification-unread {
   background-color: #f5f5f5;
 }
 
-// .mat-list-base {
-//   padding-top: 49px;
-//   width: 100%;
-//   clear: both;
-//   /* float: left; */
-//   position: absolute;
-//   margin: 0 auto;
-// }
-
-.mat-raised-button{
+.mat-raised-button {
   line-height: 15px !important;
 }
+
 button.mat-focus-indicator.mat-raised-button.mat-button-base.mat-warn {
   padding: 0;
 }
+
 button.mat-focus-indicator.mat-raised-button.mat-button-base.mat-primary {
   padding: 0;
 }
@@ -89,51 +338,140 @@ button.btn-approve {
   padding: 0px 8px 0px 4px;
 }
 
-button.btn-reject{
+button.btn-reject {
   background-color: red;
   margin-right: 20px;
   color: #fff;
-  padding: 0px 8px 0px 4px
+  padding: 0px 8px 0px 4px;
 }
-
 
 mat-icon.icon-done {
   font-size: 20px;
 }
-.mat-list-base .mat-list-item.mat-2-line, .mat-list-base .mat-list-option.mat-2-line {
-  height: 95px;
+
+/* ─── Notification row layout ─── */
+
+/* Make the list item a block so children stack vertically */
+.mat-list-base .mat-list-item {
+  height: auto !important;
+  min-height: 48px;
 }
+
+.mat-list-base .mat-list-item .mat-list-item-content,
+.mat-list-base .mat-list-option .mat-list-item-content {
+  display: block !important;
+  flex-flow: unset !important;
+  padding: 8px 16px !important;
+  height: auto !important;
+}
+
+/* Row header: message + timestamp + reason + geo accordion */
+.notification-row-header {
+  display: block;
+  width: 100%;
+}
+
+.mat-list-base .mat-list-item .mat-line {
+  margin-bottom: 4px;
+  white-space: normal;
+}
+
+/* ─── Expanded credit note / return details ─── */
+
+/* Sits directly below the timestamp, full width, no floating */
+.credit-note-expanded {
+  display: block;
+  width: 100%;
+  margin-top: 10px;
+  padding: 12px 0 4px 0;
+  border-top: 1px solid #e5e5e5;
+  box-sizing: border-box;
+  background: transparent;
+}
+
+.expanded-details-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-bottom: 8px;
+}
+
+.expanded-details-table th,
+.expanded-details-table td {
+  padding: 6px 8px;
+  vertical-align: top;
+  border-bottom: 1px solid #f0f0f0;
+  font-size: 13px;
+}
+
+.expanded-details-table th {
+  width: 38%;
+  text-align: left;
+  color: #6c757d;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.expanded-details-table td {
+  word-break: break-word;
+  color: #222;
+}
+
+.notification-image-preview {
+  max-width: 100%;
+  height: auto;
+  border-radius: 4px;
+  border: 1px solid #ddd;
+  margin-top: 4px;
+}
+
+.field-value {
+  display: inline-block;
+  font-size: 13px;
+  color: #222;
+}
+
+/* Approve / Reject button block inside expanded section */
+.credit-note-expanded .btn-block {
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
+  padding-top: 10px;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+/* Approve / Reject button block for Geo / Route Deviation (outside row header) */
+.mat-list-base .btn-block {
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
+  padding-top: 12px;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+/* Divider full width */
+mat-divider,
+.mat-divider {
+  width: 100%;
+  display: block;
+}
+
+/* mat-list padding reset */
 .mat-list-base {
- padding-top: 0px; 
-}
-.mat-list-item .mat-list-item-content {
-  display: block !important;
+  padding-top: 0px;
 }
 
-.mat-list-base .mat-list-item .mat-list-item-content{
-  display: block !important;
-}
-
-.mat-list-base .mat-list-item .mat-line{
-  margin-bottom:4px;
-}
-
-.mat-list-base .btn-block{
-  text-align:right;
-  padding-top: 48px;
-}
-.mat-list-base .mat-list-item .mat-list-item-content, .mat-list-base .mat-list-option .mat-list-item-content{
-  flex-flow:wrap !important;
-}
-
-.mat-form-field + .mat-form-field {
-  margin-left: 8px;
-}
-
-.mat-accordion>.mat-expansion-panel-spacing:last-child, .mat-accordion>*:last-child:not(.mat-expansion-panel) .mat-expansion-panel-spacing {
+/* Accordion float fix */
+.mat-accordion > .mat-expansion-panel-spacing:last-child,
+.mat-accordion > *:last-child:not(.mat-expansion-panel) .mat-expansion-panel-spacing {
   float: left;
 }
 
 .mat-accordion .mat-expansion-panel:last-of-type {
   float: left;
+}
+
+.mat-form-field + .mat-form-field {
+  margin-left: 8px;
 }

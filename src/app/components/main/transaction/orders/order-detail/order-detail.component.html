@@ -80,7 +80,7 @@
     <div class="separator"></div>
 
     <div class="approval-holder" *ngIf="hasApprovalPending">
-        <div class="approval-box">
+        <div class="approval-box" *ngIf="!(orderData?.caps_approval === 'Pending' &&  orderData?.need_to_caps_approve === 'no')">
             <div class="approve-icon">
                 <i class="fa fa-check-square-o"></i>
             </div>
@@ -94,6 +94,9 @@
                 <button mat-button class="approve" (click)="approve()">Approve</button>
                 <button mat-button class="reject" (click)="reject()">Reject</button>
             </div>
+        </div>
+        <div *ngIf="orderData?.caps_approval === 'Pending' &&  orderData?.need_to_caps_approve === 'no'" class="alert alert-warning mt-2">
+            <strong>You cannot approve or reject the order until CAPS approval is completed.</strong>
         </div>
     </div>
 

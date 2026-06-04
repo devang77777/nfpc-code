@@ -24,17 +24,17 @@ export class ProfileDrawerComponent implements OnInit {
   ngOnInit(): void {
     if (this.domain.split(':')[0] == 'localhost') {
       this.subdomains.push(
-        // { name: 'Pre Sale', url: 'https://prodmobiato.nfpc.net', img: '/assets/img/pre-logo.png' },
+        // { name: 'Pre Sale', url: 'https://presales.nfpc.net', img: '/assets/img/pre-logo.png' },
         // { name: 'Vansales Hybrid', url: 'https://vansales.mobiato-msfa.com', img: '/assets/img/van-logo.png' },
         // { name: 'Invoice', url: 'https://invoice.mobiato-msfa.com', img: '/assets/img/invoice.png' },
-        { name: 'Merchandising', url: 'https://prodmobiato.nfpc.net', img: '/assets/img/mar-logo@2x.png' }
+        { name: 'Merchandising', url: 'https://presales.nfpc.net', img: '/assets/img/mar-logo@2x.png' }
       )
-    } else if (this.domain.split('.')[0] == 'presales-prodmobiato') {
-      this.subdomains.push({ name: 'Merchandising', url: 'https://presales-prodmobiato.nfpc.net', img: '/assets/img/mar-logo@2x.png' },
+    } else if (this.domain.split('.')[0] == 'presales-nfpc.net') {
+      this.subdomains.push({ name: 'Merchandising', url: 'https://presales.nfpc.net', img: '/assets/img/mar-logo@2x.png' },
       )
     } else {
       this.subdomains.push(
-        { name: 'Pre Sale', url: 'https://presales-prodmobiato.nfpc.net/', img: '/assets/img/pre-logo.png' }
+        { name: 'Pre Sale', url: 'https://presales.nfpc.net/', img: '/assets/img/pre-logo.png' }
       )
     }
     this.avatarImage = this.authService.avatar_img ? this.authService.avatar_img : this.avatarImage;

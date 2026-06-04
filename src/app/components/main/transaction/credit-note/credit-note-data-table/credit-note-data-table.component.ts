@@ -15,7 +15,7 @@ import { SelectionModel } from '@angular/cdk/collections';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { MatDialog } from '@angular/material/dialog';
-import { map } from 'rxjs/operators';
+import { map, finalize } from 'rxjs/operators';
 import {
   getCurrency,
   getCurrencyDecimalFormat,
@@ -36,8 +36,11 @@ import { FormDrawerService } from 'src/app/services/form-drawer.service';
 import { Utils } from 'src/app/services/utils';
 import { EventBusService } from 'src/app/services/event-bus.service';
 import { EmitEvent, Events } from 'src/app/models/events.model';
+import { CommonSpinnerService } from 'src/app/components/shared/common-spinner/common-spinner.service';
 import { CollectionModel } from '../../collection/collection-models';
 import { PAGE_SIZE_10 } from 'src/app/app.constant';
+import { CreditNoteImagesComponent } from '../credit-note-images/credit-note-images.component';
+import { Lightbox } from 'ngx-lightbox';
 import { FormGroup, FormControl, FormBuilder } from '@angular/forms';
 import {
   OrderUpdateProcess,
@@ -114,6 +117,7 @@ export class CreditNoteDataTableComponent implements OnInit, OnDestroy {
     // { def: 'salesman_name', title: 'Salesman Name', show: true },
     { def: 'amount', title: 'Credit Amount', show: true },
     { def: 'customer_amount', title: 'Customer Amount', show: true },
+    { def: 'merch_image', title: 'Merchandiser Image', show: true },
     { def: 'approval', title: 'Approval', show: true },
     { def: 'status', title: 'Status', show: true },
     { def: 'ERP_status', title: 'Odoo Status', show: true },
@@ -134,7 +138,9 @@ export class CreditNoteDataTableComponent implements OnInit, OnDestroy {
     private deleteDialog: MatDialog,
     public fb: FormBuilder,
     private eventService: EventBusService,
+    private spinnerService: CommonSpinnerService,
     router: Router,
+    private lightbox: Lightbox,
     private routerParam: ActivatedRoute,
 
   ) {
@@ -144,6 +150,8 @@ export class CreditNoteDataTableComponent implements OnInit, OnDestroy {
       fds,
       deleteDialog,
       router,
+      spinnerService,
+      lightbox
     });
     this.dataSource = new MatTableDataSource<OrderModel>();
     // this.channelList = Channel;
@@ -188,6 +196,7 @@ export class CreditNoteDataTableComponent implements OnInit, OnDestroy {
       approval: [''],
       customer_reference_number: [''],
       branch_plant_code: [''],
+      self_assigned: [''],
       erp_status: [''],
       approval_status: [''],
       merchandiser_name: [''],
@@ -209,6 +218,7 @@ export class CreditNoteDataTableComponent implements OnInit, OnDestroy {
         }
         if (value.type === CompDataServiceType.CLOSE_DETAIL_PAGE) {
           this.closeDetailView();
+          this.getCreditNotes();
         }
         if (value.uuid) {
           const clone = JSON.parse(JSON.stringify(this.orders));
@@ -274,8 +284,8 @@ export class CreditNoteDataTableComponent implements OnInit, OnDestroy {
   exportData(){
     const exportRequest = { ...this.requestOriginal, export: 1 };
    this.apiService.onSearch(exportRequest).subscribe((response) => {
-      
             this.apiService.downloadFile(response.data.file_url, 'csv');
+            // this.apiService.downloadFile(response.data.file_url, 'csv');
             // this.dataEditor.sendMessage({ export: '' });
         
     });
@@ -287,8 +297,9 @@ export class CreditNoteDataTableComponent implements OnInit, OnDestroy {
       requestOriginal['export'] = this.is_export;
       requestOriginal['page'] = this.page;
       requestOriginal['page_size'] = this.pageSize;
+      this.spinnerService.show();
       this.subscriptions.push(
-        this.apiService.onSearch(requestOriginal).subscribe((res) => {
+        this.apiService.onSearch(requestOriginal).pipe(finalize(() => this.spinnerService.hide())).subscribe((res) => {
           this.apiResponse = res;
           this.allResData = res.data;
           this.updateDataSource(res.data);
@@ -302,9 +313,11 @@ export class CreditNoteDataTableComponent implements OnInit, OnDestroy {
       return false;
     }
     console.log(this.filterForm.value);
+    this.spinnerService.show();
     this.subscriptions.push(
       this.creditNoteService
         .getCreditNotes(this.filterForm.value)
+        .pipe(finalize(() => this.spinnerService.hide()))
         .subscribe((result) => {
           this.orders = result.data;
           this.apiResponse = result;
@@ -472,6 +485,22 @@ export class CreditNoteDataTableComponent implements OnInit, OnDestroy {
     this.itemClicked.emit(data);
     this.updateCollapsedColumns();
   }
+
+  public openMerchImageViewer(data: any, event: MouseEvent): void {
+    event.stopPropagation();
+    if (!data?.merchandiser_image_1) {
+      return;
+    }
+    const album = [
+      {
+        src: data.merchandiser_image_1,
+        caption: 'Merchandiser Image',
+        thumb: data.merchandiser_image_1,
+      },
+    ];
+    this.lightbox.open(album, 0);
+  }
+
   public checkboxLabel(row?: OrderModel): string {
     if (!row) {
       return `${this.isAllSelected() ? 'select' : 'deselect'} all`;

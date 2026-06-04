@@ -102,8 +102,8 @@ export function MSALInstanceFactory(): IPublicClientApplication {
       authority: 'https://login.microsoftonline.com/5cf0967b-05f4-4641-8af3-fde2ad2162eb', // 'https://login.microsoftonline.com/215ab0ac-0f0a-48c5-aebf-72afee0f95ba', // Prod environment. Uncomment to use.
       // authority: 'https://login.windows-ppe.net/common', // PPE testing environment.
       // authority: '215ab0ac-0f0a-48c5-aebf-72afee0f95ba', // '5cf0967b-05f4-4641-8af3-fde2ad2162eb',
-      redirectUri: 'https://presales-prodmobiato.nfpc.net/auth/login', // 'http://localhost:4200',
-      postLogoutRedirectUri: 'https://presales-prodmobiato.nfpc.net/auth/login',  // 'http://localhost:4200'
+      redirectUri: 'https://presales.nfpc.net/auth/login', // 'http://localhost:4200',
+      postLogoutRedirectUri: 'https://presales.nfpc.net/auth/login',  // 'http://localhost:4200'
     },
   });
 }

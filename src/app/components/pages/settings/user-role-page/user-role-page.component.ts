@@ -2,6 +2,7 @@ import { Component, OnInit, OnDestroy, ViewEncapsulation, ViewChild, AfterViewIn
 import { FormDrawerService } from 'src/app/services/form-drawer.service';
 import { Users } from 'src/app/components/datatables/users-dt/users-dt.component';
 import { MatDrawer } from '@angular/material/sidenav';
+import { ApiService } from 'src/app/services/api.service';
 
 @Component({
   selector: 'app-user-role-page',
@@ -18,9 +19,10 @@ export class UserRolePageComponent implements OnInit, AfterViewInit {
   public newRoleData = {};
 
   private fds: FormDrawerService;
+  private apiService: ApiService;
 
-  constructor(fds: FormDrawerService) {
-    Object.assign(this, { fds });
+  constructor(fds: FormDrawerService, apiService: ApiService) {
+    Object.assign(this, { fds, apiService });
   }
   ngOnInit(): void {
     this.fds.formName.subscribe(res => {
@@ -68,4 +70,14 @@ export class UserRolePageComponent implements OnInit, AfterViewInit {
     }
 
   }
+
+      exportData(){
+     this.apiService.exportUsersData({}).subscribe((response) => {
+          this.apiService.downloadFile(response.data.file_url, 'csv');
+              // this.apiService.downloadFile(response.data.file_url, 'csv');
+              // this.dataEditor.sendMessage({ export: '' });
+          
+      });
+      // this.eventService.emit(new EmitEvent(Events.CHANGE_CRITERIA, { reset: true, module: Events.SEARCH_ORDER, route: '/transaction/order' }));
+    }
 }

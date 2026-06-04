@@ -126,3 +126,16 @@ td.mat-column-code {
   text-align: center;
   padding: 12px 0px 19px 0px !important;
 }
+
+.merch-image-preview {
+  width: 60px;
+  height: 60px;
+  object-fit: cover;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.no-image-text {
+  color: #777;
+  font-size: 12px;
+}

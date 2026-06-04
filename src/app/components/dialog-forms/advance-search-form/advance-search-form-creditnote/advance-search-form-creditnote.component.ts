@@ -1,4 +1,4 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, ChangeDetectorRef } from '@angular/core';
 import { FormGroup, FormControl } from '@angular/forms';
 import { STATUS } from 'src/app/app.constant';
 import { ApiService } from 'src/app/services/api.service';
@@ -29,13 +29,21 @@ export class AdvanceSearchFormCreditnoteComponent implements OnInit {
     SalesmanFormControl = new FormControl([]);
   private pendingSavedState: any = null; // Store pending saved state
   
-  constructor(private apiService: ApiService,private ms : MasterService) { }
+  // Flags to track async data loading
+  private _customerLoaded = false;
+  private _itemLoaded = false;
+  private _salesmanLoaded = false;
+  private _pendingRestore: any = null;
+  
+  constructor(private detChange: ChangeDetectorRef, private apiService: ApiService,private ms : MasterService) { }
 
   ngOnInit(): void {
     this.subscriptions.push(
       this.ms.itemDetailDDllistTable({ page: 1, page_size: 10 }).subscribe((result: any) => {
         this.itemData = result.data;
         this.filteredItems = result.data;
+        this._itemLoaded = true;
+        this._tryRestoreDropdowns();
       })
     );
      this.apiService.getAllCustomerCategory().subscribe((res: any) => {
@@ -44,10 +52,12 @@ export class AdvanceSearchFormCreditnoteComponent implements OnInit {
       this.apiService.getMasterDataLists().subscribe((result: any) => {
       
       this.salesmanList = result.data.salesmans;
+      this._salesmanLoaded = true;
       
       for (let salesman of this.salesmanList) {
         salesman['salesman_name'] = `${salesman.salesman_info.salesman_code} - ${salesman.firstname} ${salesman.lastname}`;
       }
+      this._tryRestoreDropdowns();
     });
     this.form = new FormGroup({
        module: new FormControl('credit_note'),
@@ -67,6 +77,7 @@ export class AdvanceSearchFormCreditnoteComponent implements OnInit {
     })
     this.ms.customerDetailDDlListTable({}).subscribe((result) => {
       this.customerID = result.data;
+      this._customerLoaded = true;
       // this.filterCustomer = result.data.slice(0, 30);
       
       // Try to restore saved state if it was pending
@@ -74,7 +85,66 @@ export class AdvanceSearchFormCreditnoteComponent implements OnInit {
         this.restoreFormValues(this.pendingSavedState);
         this.pendingSavedState = null;
       }
+      this._tryRestoreDropdowns();
     })
+  }
+
+  // Try to restore dropdowns if all data is loaded and pending restore exists
+  private _tryRestoreDropdowns() {
+    if (this._customerLoaded && this._itemLoaded && this._salesmanLoaded && this._pendingRestore) {
+      this._restoreDropdownSelections(this._pendingRestore);
+      this._pendingRestore = null;
+    }
+  }
+
+  // New restore method, only for dropdowns
+  private _restoreDropdownSelections(requestOriginal: any) {
+    // Customers
+    if (requestOriginal.customer_id && this.customerID) {
+      const customerIds = Array.isArray(requestOriginal.customer_id)
+        ? requestOriginal.customer_id.map(String)
+        : [String(requestOriginal.customer_id)];
+      const selectedCustomers = this.customerID
+        .filter(customer => customerIds.includes(String(customer.id)))
+        .map(customer => ({
+          ...customer,
+          itemName: (customer.customer_code ? customer.customer_code + ' - ' : '') + (customer.customer_name || customer.name || customer.firstname + ' ' + customer.lastname || '')
+        }));
+      this.CustomersFormControl.setValue(selectedCustomers);
+      this.CustomersFormControl.updateValueAndValidity();
+      this.selectionchangedCustomer();
+    }
+    // Items
+    if (requestOriginal.item_id && this.itemData) {
+      const itemIds = Array.isArray(requestOriginal.item_id)
+        ? requestOriginal.item_id.map(String)
+        : [String(requestOriginal.item_id)];
+      const selectedItems = this.itemData
+        .filter(item => itemIds.includes(String(item.id)))
+        .map(item => ({
+          ...item,
+          itemName: (item.item_code ? item.item_code + ' - ' : '') + (item.item_name || '')
+        }));
+      this.itemsFormControl.setValue(selectedItems);
+      this.itemsFormControl.updateValueAndValidity();
+      this.selectionchangedItems();
+    }
+    // Salesman
+    if (requestOriginal.salesman && this.salesmanList) {
+      const salesmanIds = Array.isArray(requestOriginal.salesman)
+        ? requestOriginal.salesman.map(String)
+        : [String(requestOriginal.salesman)];
+      const selectedSalesmen = this.salesmanList
+        .filter(salesman => salesmanIds.includes(String(salesman.id)))
+        .map(salesman => ({
+          ...salesman,
+          itemName: (salesman.salesman_info?.salesman_code ? salesman.salesman_info.salesman_code + ' - ' : '') + (salesman.firstname || '') + ' ' + (salesman.lastname || '')
+        }));
+      this.SalesmanFormControl.setValue(selectedSalesmen);
+      this.SalesmanFormControl.updateValueAndValidity();
+      this.selectionchangedSalesman();
+    }
+    this.detChange.detectChanges();
   }
 
   ngOnChanges(changes: SimpleChanges) {
@@ -85,6 +155,11 @@ export class AdvanceSearchFormCreditnoteComponent implements OnInit {
         this.pendingSavedState = null;
       }
     }
+    
+    if (changes.salesman && changes.salesman.currentValue?.length > 0) {
+      this._salesmanLoaded = true;
+    }
+    this._tryRestoreDropdowns();
   }
 
   /**
@@ -113,6 +188,9 @@ export class AdvanceSearchFormCreditnoteComponent implements OnInit {
             itemName: (item.item_code ? item.item_code + ' - ' : '') + (item.item_name || '')
           }));
         this.itemsFormControl.setValue(savedItems);
+        this.itemsFormControl.markAsDirty();
+        this.itemsFormControl.updateValueAndValidity();
+        this.selectionchangedItems();
       }
 
       if (savedState.controlValues.customers && this.customerID && this.customerID.length > 0) {
@@ -120,9 +198,12 @@ export class AdvanceSearchFormCreditnoteComponent implements OnInit {
           .filter(customer => savedState.controlValues.customers.includes(customer.id))
           .map(customer => ({
             ...customer,
-            itemName: (customer.customer_code ? customer.customer_code + ' - ' : '') + (customer.customer_name || customer.name || '')
+            itemName: (customer.customer_code ? customer.customer_code + ' - ' : '') + (customer.customer_name || customer.name || customer.firstname + ' ' + customer.lastname || '')
           }));
         this.CustomersFormControl.setValue(savedCustomers);
+        this.CustomersFormControl.markAsDirty();
+        this.CustomersFormControl.updateValueAndValidity();
+        this.selectionchangedCustomer();
       }
 
       if (savedState.controlValues.salesman && this.salesmanList && this.salesmanList.length > 0) {
@@ -133,8 +214,38 @@ export class AdvanceSearchFormCreditnoteComponent implements OnInit {
             salesman_name: (salesman.salesman_info?.salesman_code ? salesman.salesman_info.salesman_code + ' - ' : '') + (salesman.firstname || '') + ' ' + (salesman.lastname || '')
           }));
         this.SalesmanFormControl.setValue(savedSalesmen);
+        this.SalesmanFormControl.markAsDirty();
+        this.SalesmanFormControl.updateValueAndValidity();
+        this.selectionchangedSalesman();
       }
     }
+
+    this.detChange.detectChanges();
+  }
+
+  /**
+   * Restore form values from requestOriginal data (used when "Change Criteria" is clicked)
+   * @param requestOriginal - The original request data from the search
+   */
+  restoreFromRequestOriginal(requestOriginal: any) {
+    if (!requestOriginal) return;
+    // Remove fields that shouldn't be in the form
+    const formValues = { ...requestOriginal };
+    delete formValues.page;
+    delete formValues.page_size;
+    delete formValues.export;
+    delete formValues.allData;
+    
+    // Patch all simple fields directly
+    this.form.patchValue(formValues);
+
+    // Restore dropdowns with mapped objects for correct display
+    this._restoreDropdownSelections(requestOriginal);
+    
+    this.detChange.detectChanges();
+    // Save for later restore if data not loaded (for async cases)
+    this._pendingRestore = requestOriginal;
+    this._tryRestoreDropdowns();
   }
 
   /**

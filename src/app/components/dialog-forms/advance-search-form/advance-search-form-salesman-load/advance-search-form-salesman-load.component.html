@@ -3,7 +3,7 @@
     <div class="row">
         <div class="col-md-6">
             <div class="form-group row">
-                <label class="col-sm-3 col-form-label">{{(domain == 'merchandising' || domain == 'presales-prodmobiato.nfpc.net'
+                <label class="col-sm-3 col-form-label">{{(domain == 'merchandising' || domain == 'presales.nfpc.net'
                     ? 'Merchandiser Code' : 'Salesman Code' )}}</label>
                 <div class="col-sm-9">
                     <input type="text" formControlName="salesman_code" class="form-control form-control-sm"
@@ -49,7 +49,7 @@
                 </div>
             </div>
         </div>
-        <div class="col-md-6" *ngIf="domain !== 'presales-prodmobiato.nfpc.net' && domain !== 'merchandising'">
+        <div class="col-md-6" *ngIf="domain !== 'presales.nfpc.net' && domain !== 'merchandising'">
             <div class="form-group row">
                 <label class="col-sm-3 col-form-label">Role</label>
                 <div class="col-sm-9">

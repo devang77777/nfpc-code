@@ -234,6 +234,7 @@ export class AdvanceSearchFormComponent implements OnInit, AfterViewInit {
         const controlValues = this.childComponent.getControlValues ? this.childComponent.getControlValues() : {};
         this.stateService.saveSearchState(this.currentModule, formValues, controlValues);
       }
+      // Do not restore filled values from saved state when clicking Advance Search
     }
 
     // Remove allData from payload for order, invoice, delivery, and credit_note
@@ -302,19 +303,94 @@ export class AdvanceSearchFormComponent implements OnInit, AfterViewInit {
           } 
           break;
         case "customer_id":
+            // Support both single and array values
+            if (Array.isArray(model[propName]) && model[propName].length > 0) {
+              const names = model[propName]
+                .map(id => {
+                  const cust = this.masterData.customers.find(x => String(x.id) === String(id));
+                  if (cust && cust.customer_info && cust.customer_info.customer_code && cust.firstname && cust.lastname) {
+                    return cust.customer_info.customer_code + ' - ' + cust.firstname + ' ' + cust.lastname;
+                  } else if (cust && cust.customer_info && cust.customer_info.customer_code && cust.firstname) {
+                    return cust.customer_info.customer_code + ' - ' + cust.firstname;
+                  } else {
+                    return 'Unknown Customer';
+                  }
+                })
+                .filter(name => !!name);
+              model[propName] = names.join(', ');
+            } else if (typeof model[propName] === 'number' || typeof model[propName] === 'string') {
+              const cust = this.masterData.customers.find(x => String(x.id) === String(model[propName]));
+              if (cust && cust.customer_info && cust.customer_info.customer_code && cust.firstname && cust.lastname) {
+                model[propName] = cust.customer_info.customer_code + ' - ' + cust.firstname + ' ' + cust.lastname;
+              } else if (cust && cust.customer_info && cust.customer_info.customer_code && cust.firstname) {
+                model[propName] = cust.customer_info.customer_code + ' - ' + cust.firstname;
+              } else {
+                model[propName] = 'Unknown Customer';
+              }
+            } else if (model[propName] == null || (Array.isArray(model[propName]) && model[propName].length === 0)) {
+              model[propName] = '';
+            }
+            break;
+        case "item_id":
           if (typeof model[propName] == 'number') {
-            filterdata = this.masterData.customers.find((x) => x.id == model[propName]);
-            if (filterdata && filterdata.customer_info && filterdata.customer_info.customer_code && filterdata.firstname) {
-              model[propName] = filterdata.customer_info.customer_code + ' - ' + filterdata.firstname;
+            filterdata = this.masterData.items.find((x) => x.id == model[propName]);
+            if (filterdata && filterdata.item_code && filterdata.item_name) {
+              model[propName] = filterdata.item_code + ' - ' + filterdata.item_name;
             } else {
-              model[propName] = 'Unknown Customer';
+              model[propName] = 'Unknown Item';
             }
           } else if (Array.isArray(model[propName]) && model[propName].length > 0) {
             let names = '';
             model[propName].forEach(element => {
-              const cust = this.masterData.customers.find((x) => x.id == element);
-              if (cust && cust.customer_info && cust.customer_info.customer_code && cust.firstname) {
-                names += cust.customer_info.customer_code + ' - ' + cust.firstname + ', ';
+              const item = this.masterData.items.find((x) => x.id == element);
+              if (item && item.item_code && item.item_name) {
+                names += item.item_code + ' - ' + item.item_name + ', ';
+              } else {
+                names += '';
+              }
+            });
+            model[propName] = names.replace(/, $/, '');
+          } else if (model[propName] == null || (Array.isArray(model[propName]) && model[propName].length === 0)) {
+            model[propName] = '';
+          }
+          break;
+        case "storage_location_id":
+          if (typeof model[propName] == 'number') {
+            filterdata = this.masterData.storage_location.find((x) => x.id == model[propName]);
+            if (filterdata && filterdata.code && filterdata.name) {
+              model[propName] = filterdata.code + ' - ' + filterdata.name;
+            } else {
+              model[propName] = 'Unknown Storage Location';
+            }
+          } else if (Array.isArray(model[propName]) && model[propName].length > 0) {
+            let names = '';
+            model[propName].forEach(element => {
+              const storage = this.masterData.storage_location.find((x) => x.id == element);
+              if (storage && storage.code && storage.name) {
+                names += storage.code + ' - ' + storage.name + ', ';
+              } else {
+                names += '';
+              }
+            });
+            model[propName] = names.replace(/, $/, '');
+          } else if (model[propName] == null || (Array.isArray(model[propName]) && model[propName].length === 0)) {
+            model[propName] = '';
+          }
+          break;
+        case "user_created":
+          if (typeof model[propName] == 'number') {
+            filterdata = this.masterData.order_created_user.find((x) => x.id == model[propName]);
+            if (filterdata && filterdata.firstname && filterdata.lastname) {
+              model[propName] = filterdata.firstname + ' - ' + filterdata.lastname;
+            } else {
+              model[propName] = 'Unknown User';
+            }
+          } else if (Array.isArray(model[propName]) && model[propName].length > 0) {
+            let names = '';
+            model[propName].forEach(element => {
+              const user = this.masterData.order_created_user.find((x) => x.id == element);
+              if (user && user.firstname && user.lastname) {
+                names += user.firstname + ' - ' + user.lastname + ', ';
               } else {
                 names += '';
               }
@@ -347,14 +423,23 @@ export class AdvanceSearchFormComponent implements OnInit, AfterViewInit {
           }
           break;
         case "channel_name":
-          if (typeof model[propName] == 'number') {
-            filterdata = this.channelList.filter((x) => x.id == model[propName])[0];
-            if (filterdata && filterdata.name) {
-              model[propName] = filterdata.name;
+          // Support both single and array values
+          if (Array.isArray(model[propName])) {
+            const names = model[propName]
+              .map(id => {
+                const found = this.channelList.find(x => String(x.id) === String(id));
+                return found ? found.name : id;
+              })
+              .filter(name => !!name);
+            model[propName] = names.join(', ');
+          } else if (typeof model[propName] === 'number' || typeof model[propName] === 'string') {
+            const found = this.channelList.find(x => String(x.id) === String(model[propName]));
+            if (found && found.name) {
+              model[propName] = found.name;
             } else {
               model[propName] = 'Unknown Channel';
             }
-          } 
+          }
           break;
         case "sales_organisation":
           filterdata = this.masterData.sales_organisation.filter((x) => x.id == model[propName]);

@@ -624,8 +624,11 @@ export class PricingByTabPageComponent implements OnInit {
   }
   public exportActiveCustomerPricing(type) {
     let value = this.sideFiltersForm.value;
+    // let value1 = this.sideFiltersForm.value;
+    let value1 = this.activeCustomerPriceForm.value;
      const sideFilterValue = this.sideFiltersForm.value;
-
+     const selectedCustomers = this.customerFormControl.value || [];
+    const customerIds = selectedCustomers.map((c: any) => c.id);
   const statusMap = {
     '1': 'active',
     '2': 'inactive',
@@ -643,11 +646,12 @@ export class PricingByTabPageComponent implements OnInit {
       .exportCustomers({
         module: 'customer-based-price-active',
         criteria: 'all',
-        start_date: '',
-        end_date: '',
+       customer_id: customerIds,
+      start_date: value1.start_date,
+      end_date: value1.end_date,
         file_type: type,
         is_password_protected: 'no',
-        customer_id: this.customerFormControl.value?.id,
+        // customer_id: this.customerFormControl.value?.id,
         channel_id: value.channel_code.length > 0 ? value.channel_code.map(i => i.id) : [],
         // item_code: value.item_code?.length > 0 ? value?.item_code[0]?.id : 0,
          item_code: value.item_code?.length

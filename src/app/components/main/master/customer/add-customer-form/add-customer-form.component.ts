@@ -49,7 +49,7 @@ export class AddCustomerFormComponent extends BaseComponent implements OnInit {
   @ViewChild('officeSrch') public officeSrch: ElementRef;
   @ViewChild('homeSrch') public homeSrch: ElementRef;
   // domain = window.location.host.split('.')[0];
-  domain = 'devmobiato.nfpc.net';
+  domain = 'presales.nfpc.net';
   customer: Customertype[] = [];
   customerLobList = [];
   public customerFormGroup: FormGroup;

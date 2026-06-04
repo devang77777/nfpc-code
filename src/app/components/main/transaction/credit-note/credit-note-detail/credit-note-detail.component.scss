@@ -260,13 +260,44 @@ textarea {
   min-height: 100px;
   max-height: 150px;
 }
-
 .footer-overview-container {
   max-width: 100%;
   padding: 0 25px;
   margin: 32px 0 80px;
 }
 
+.merchandiser-image-holder {
+  label {
+    display: block;
+    margin-bottom: 6px;
+    color: #495057;
+    font-weight: 600;
+  }
+}
+
+.merchandiser-image {
+  width: 100%;
+  max-width: 350px;
+  height: 250px;
+  object-fit: contain;
+  border: 1px solid #ced4da;
+  background-color: #f3f3f3;
+}
+
+.overall-stats-table {
+  width: 100%;
+}
+
+@media (max-width: 767px) {
+  .footer-overview-container .row {
+    flex-direction: column;
+    gap: 20px;
+  }
+
+  .overall-stats-table {
+    margin-top: 0;
+  }
+}
 // New Styles
 
 :host {

@@ -60,36 +60,84 @@ export class NotificationsDrawerComponent implements OnInit {
   close() {
     this.fds.closeNav();
   }
-  onApprove(notification) {
-    if (notification.type == 'Route Deviation') {
-      let data = {
-        route_approval: "Approve",
-        reason: ""
+
+  onNotificationItemClick(notification: NotificationModel) {
+    const type = (notification.type || '').toLowerCase();
+    if (type === 'credit note' || type === 'return') {
+      notification.expanded = !notification.expanded;
+      if (notification.expanded && notification.is_read === 0) {
+        this.markNotificationRead(notification);
       }
+      return;
+    }
+
+    this.readNotification(notification);
+  }
+
+  private markNotificationRead(notification: NotificationModel) {
+    this.apiService.readNotification(notification.id, null).subscribe((res) => {
+      if (res.status) {
+        if (notification.is_read === 0) {
+          notification.is_read = 1;
+          if (this.paginationModel?.unread_count != null) {
+            this.paginationModel.unread_count = Math.max(0, this.paginationModel.unread_count - 1);
+            this.dataEditor.updateNotificationCount(this.paginationModel.unread_count);
+          }
+        }
+      }
+    });
+  }
+
+  private getApprovalObjectId(notification: NotificationModel): string {
+    // Check root level first
+    if (notification.work_flow_obj_uuid) {
+      return notification.work_flow_obj_uuid;
+    }
+    // Check parsed message
+    const parsedMessage = this.parseNotificationMessage(notification);
+    if (parsedMessage?.work_flow_obj_uuid) {
+      return parsedMessage.work_flow_obj_uuid;
+    }
+    // Fallback
+    return notification.other?.objectid || notification.objectid || notification.uuid;
+  }
+
+  onApprove(notification: NotificationModel) {
+    const type = (notification.type || '').toLowerCase();
+    if (type === 'route deviation') {
+      let data = {
+        route_approval: 'Approve',
+        reason: ''
+      };
       this.apiService.approveRouteNotification(notification.uuid, data).subscribe((res) => {
         if (res.status) {
-          this.statusText = "Approved successfully";
+          this.statusText = 'Approved successfully';
           this.toaster.showSuccess(this.statusText);
-
-          //this.getNotifications();
           this.updateRecord(res.data);
         }
-      })
-    }
-    else {
+      });
+    } else if (type === 'credit note' || type === 'return') {
+      const approvalId = this.getApprovalObjectId(notification);
+      this.apiService.approveItem(approvalId).subscribe((res: any) => {
+        if (res.status) {
+          this.statusText = 'Approved successfully';
+          this.toaster.showSuccess(this.statusText);
+          this.updateRecord(res.data);
+        }
+      });
+    } else {
       let data = {
         uuid: notification.uuid,
-        status: "Approve",
-        reason: ""
-      }
+        status: 'Approve',
+        reason: ''
+      };
       this.apiService.approveNotification(data).subscribe((res) => {
         if (res.status) {
-          this.statusText = "Approved successfully";
+          this.statusText = 'Approved successfully';
           this.toaster.showSuccess(this.statusText);
           this.updateRecord(res.data);
-          //this.getNotifications();
         }
-      })
+      });
     }
   }
 
@@ -121,6 +169,62 @@ export class NotificationsDrawerComponent implements OnInit {
     // }
   }
 
+  private parseNotificationMessage(notification: NotificationModel): any {
+    if (!notification?.message) {
+      return null;
+    }
+    try {
+      return JSON.parse(notification.message);
+    } catch (error) {
+      return null;
+    }
+  }
+
+  getCreditNoteInfo(notification: NotificationModel) {
+    const parsedMessage = this.parseNotificationMessage(notification);
+    
+    // Extract from root level first, then parsed message
+    const image = notification.url || 
+                  notification.merchandiser_image_1 || 
+                  notification.other?.image || 
+                  notification.other?.image_url || 
+                  notification.other?.url || 
+                  parsedMessage?.merchandiser_image_1 || 
+                  parsedMessage?.image || 
+                  parsedMessage?.image_url;
+    
+    const amount = notification.customer_amount || 
+                   parsedMessage?.customer_amount || 
+                   parsedMessage?.amount || 
+                   notification.other?.grv_amount || 
+                   notification.other?.amount || '';
+    
+    const customer = notification.customer_name || 
+                     parsedMessage?.customer_name || 
+                     parsedMessage?.customer || '';
+    
+    const customerCode = notification.customer_code || parsedMessage?.customer_code || '';
+    
+    const merchandiserName = notification.merchandiser_name || parsedMessage?.merchandiser_name || '';
+    
+    const grvNo = notification.customer_grv || 
+                  parsedMessage?.customer_grv || 
+                  parsedMessage?.grvNo || 
+                  notification.other?.grv_amount || '';
+    
+    const workflowUuid = notification.work_flow_obj_uuid || parsedMessage?.work_flow_obj_uuid || '';
+
+    return {
+      grvNo,
+      customer,
+      amount,
+      image,
+      merchandiserName,
+      customerCode,
+      workflowUuid
+    };
+  }
+
   updateRecord(notification) {
     this.notifications.map(x => {
       if (x.uuid == notification.uuid) {
@@ -130,7 +234,8 @@ export class NotificationsDrawerComponent implements OnInit {
     })
   }
 
-  onReject(notification) {
+  onReject(notification: NotificationModel) {
+    const type = (notification.type || '').toLowerCase();
     const dialogRef = this.dialog.open(RejectReasonComponent, {
       width: '500px',
       data: { name: this.name, reason: '' },
@@ -144,42 +249,65 @@ export class NotificationsDrawerComponent implements OnInit {
     });
   }
 
-  onRejecting(notification, reason) {
-    if (notification.type == 'Route Deviation') {
+  onRejecting(notification: NotificationModel, reason: string) {
+    const type = (notification.type || '').toLowerCase();
+    if (type === 'route deviation') {
       let data = {
-        route_approval: "Reject",
+        route_approval: 'Reject',
         reason: reason
-      }
+      };
       this.apiService.approveRouteNotification(notification.uuid, data).subscribe((res) => {
         if (res.status) {
-          this.statusText = "Rejected successfully";
+          this.statusText = 'Rejected successfully';
           this.toaster.showWarning(this.statusText);
           this.updateRecord(res.data);
-          //this.getNotifications();
         }
-      })
-    }
-    else {
+      });
+    } else if (type === 'credit note' || type === 'return') {
+      const approvalId = this.getApprovalObjectId(notification);
+      this.apiService.rejectItemApproval2(approvalId, reason).subscribe((res: any) => {
+        if (res.status) {
+          this.statusText = 'Rejected successfully';
+          this.toaster.showWarning(this.statusText);
+          this.updateRecord(res.data);
+        }
+      });
+    } else {
       let data = {
         uuid: notification.uuid,
-        status: "Reject",
+        status: 'Reject',
         reason: reason
-      }
+      };
       this.apiService.rejectNotification(data).subscribe((res) => {
         if (res.status) {
-          this.statusText = "Rejected successfully";
+          this.statusText = 'Rejected successfully';
           this.toaster.showWarning(this.statusText);
           this.updateRecord(res.data);
-          //this.getNotifications();
         }
-      })
+      });
     }
   }
   deleteAll() {
-
+    this.apiService.deleteAllNotification().subscribe(() => {
+      this.notifications = [];
+      if (this.paginationModel) {
+        this.paginationModel.total_records = 0;
+        this.paginationModel.unread_count = 0;
+      }
+      this.dataEditor.updateNotificationCount(0);
+    });
   }
   markAsRead() {
-
+    this.apiService.readAllNotification().subscribe(() => {
+      this.notifications = this.notifications.map(notification => ({
+        ...notification,
+        is_read: 1
+      }));
+      if (this.paginationModel) {
+        this.paginationModel.unread_count = 0;
+      }
+      this.dataEditor.updateNotificationCount(0);
+    });
   }
   readNotification(notification: NotificationModel) {
     this.apiService.readNotification(notification.id, null).subscribe((res) => {

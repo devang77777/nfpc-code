@@ -8,10 +8,10 @@ export const endpoints = {
   },
   site: {
     get url() {
-      return 'https://devmobiato.nfpc.net';
+      return 'htpps://presales.nfpc.net';
     },
     get apiurl() {
-      return domain == 'devmobiato.nfpc.net' ? environment.nfpcApiUrl : environment.baseApiUrl;
+      return domain == 'presales.nfpc.net' ? environment.nfpcApiUrl : environment.baseApiUrl;
     },
   },
   apiendpoint: {

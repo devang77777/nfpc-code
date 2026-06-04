@@ -91,9 +91,8 @@ export class DeliveryExportComponent implements OnInit {
       .subscribe(
         (result: any) => {
           if (result.status) {
-            // console.log(result);
-            this.apiService.downloadFile(result.data.file_url, type);
-            this.dataEditorService.sendMessage({ export: '' });
+            const urls: string[] = Array.isArray(result.data) ? result.data : [result.data.file_url];
+            this.apiService.downloadFile(result.data.file_url,this.export.fileType)
           }
         }
       );
@@ -104,6 +103,27 @@ export class DeliveryExportComponent implements OnInit {
       storage_location_id: storage[0].id
     });
   }
+
+  // async downloadAllFiles(urls: string[]) {
+  //   for (const url of urls) {
+  //     try {
+  //       const response = await fetch(url);
+  //       const blob = await response.blob();
+  //       const blobUrl = window.URL.createObjectURL(blob);
+  //       const link = document.createElement('a');
+  //       link.href = blobUrl;
+  //       link.download = url.substring(url.lastIndexOf('/') + 1);
+  //       document.body.appendChild(link);
+  //       link.click();
+  //       document.body.removeChild(link);
+  //       window.URL.revokeObjectURL(blobUrl);
+  //       await new Promise(resolve => setTimeout(resolve, 300));
+  //     } catch (error) {
+  //       console.error('Failed to download:', url, error);
+  //     }
+  //   }
+  //   this.dataEditorService.sendMessage({ export: '' });
+  // }
   applyFilter() {
     const zone = this.zoneFormControl.value;
     const channel = this.channelFormControl.value;

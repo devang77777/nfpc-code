@@ -90,7 +90,6 @@ export class OrderExportComponent implements OnInit {
       storage_location_id: this.exportForm.value.storage_location_id ? this.exportForm.value.storage_location_id : 0,
       region_id: this.exportForm.value.name ? this.exportForm.value.name : 0,
     })
-    
       .subscribe(
         (result: any) => {
           if (result.status) {

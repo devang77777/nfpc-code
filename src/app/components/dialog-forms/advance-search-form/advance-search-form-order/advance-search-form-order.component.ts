@@ -17,7 +17,7 @@ export class AdvanceSearchFormOrderComponent implements OnInit, OnDestroy {
   public filteredItems: any[] = [];
   statusList: Array<any> = STATUS;
   orderStatusList: Array<any> = ORDER_STATUS_ADVANCE_SEARCH;
-  public customerID: any;
+  public customerID: any = [];
   @Input() storageLocation: Array<any> = [];
   @Input() items: Array<any> = [];
   @Input() orderCreatedUser: Array<any> = [];
@@ -94,6 +94,12 @@ export class AdvanceSearchFormOrderComponent implements OnInit, OnDestroy {
     this.ms.customerDetailDDlListTable({}).subscribe((result) => {
       this.customerID = result.data;
       this._customerLoaded = true;
+      
+      // Try to restore saved state if it was pending
+      if (this.pendingSavedState) {
+        this.restoreFormValues(this.pendingSavedState);
+        this.pendingSavedState = null;
+      }
       this._tryRestoreDropdowns();
     }, (error) => {
       console.error('Error loading customer data:', error);
@@ -122,7 +128,7 @@ export class AdvanceSearchFormOrderComponent implements OnInit, OnDestroy {
         .filter(customer => customerIds.includes(String(customer.id)))
         .map(customer => ({
           ...customer,
-          itemName: (customer.customer_info.customer_code ? customer.customer_info.customer_code + ' - ' : '') + (customer.firstname || customer.firstname || '')
+          itemName: (customer.customer_code ? customer.customer_code + ' - ' : '') + (customer.customer_name || customer.name || customer.firstname + ' ' + customer.lastname || '')
         }));
       this.CustomersFormControl.setValue(selectedCustomers);
       this.CustomersFormControl.updateValueAndValidity();
@@ -213,66 +219,8 @@ export class AdvanceSearchFormOrderComponent implements OnInit, OnDestroy {
     this.form.patchValue(formValues);
 
     // Restore dropdowns with mapped objects for correct display
-    // Customers
-    if (requestOriginal.customer_id && this.customerID) {
-      const customerIds = Array.isArray(requestOriginal.customer_id)
-        ? requestOriginal.customer_id.map(String)
-        : [String(requestOriginal.customer_id)];
-      const selectedCustomers = this.customerID
-        .filter(customer => customerIds.includes(String(customer.id)))
-        .map(customer => ({
-          ...customer,
-          itemName: (customer.customer_code ? customer.customer_code + ' - ' : '') + (customer.customer_name || customer.name || '')
-        }));
-      this.CustomersFormControl.setValue(selectedCustomers);
-      this.CustomersFormControl.updateValueAndValidity();
-      this.selectionchangedCustomer();
-    }
-    // Items
-    if (requestOriginal.item_id && this.itemData) {
-      const itemIds = Array.isArray(requestOriginal.item_id)
-        ? requestOriginal.item_id.map(String)
-        : [String(requestOriginal.item_id)];
-      const selectedItems = this.itemData
-        .filter(item => itemIds.includes(String(item.id)))
-        .map(item => ({
-          ...item,
-          itemName: (item.item_code ? item.item_code + ' - ' : '') + (item.item_name || '')
-        }));
-      this.itemsFormControl.setValue(selectedItems);
-      this.itemsFormControl.updateValueAndValidity();
-      this.selectionchangedItems();
-    }
-    // Storage/branchplant
-    if (requestOriginal.storage_location_id && this.storageLocation) {
-      const storageIds = Array.isArray(requestOriginal.storage_location_id)
-        ? requestOriginal.storage_location_id.map(String)
-        : [String(requestOriginal.storage_location_id)];
-      const selectedStorage = this.storageLocation
-        .filter(storage => storageIds.includes(String(storage.id)))
-        .map(storage => ({
-          ...storage,
-          itemName: (storage.storage_location_code ? storage.storage_location_code + ' - ' : '') + (storage.storage_location_name || storage.name || '')
-        }));
-      this.branchplantsFormControl.setValue(selectedStorage);
-      this.branchplantsFormControl.updateValueAndValidity();
-      this.selectionchangedstorageLocation();
-    }
-    // User created
-    if (requestOriginal.user_created && this.orderCreatedUser) {
-      const userIds = Array.isArray(requestOriginal.user_created)
-        ? requestOriginal.user_created.map(String)
-        : [String(requestOriginal.user_created)];
-      const selectedUsers = this.orderCreatedUser
-        .filter(user => userIds.includes(String(user.id)))
-        .map(user => ({
-          ...user,
-          itemName: (user.user_code ? user.user_code + ' - ' : '') + (user.name || user.username || '')
-        }));
-      this.customersFormControl.setValue(selectedUsers);
-      this.customersFormControl.updateValueAndValidity();
-      this.selectionchangedorderCreatedUser();
-    }
+    this._restoreDropdownSelections(requestOriginal);
+    
     this.detChange.detectChanges();
     // Save for later restore if data not loaded (for async cases)
     this._pendingRestore = requestOriginal;

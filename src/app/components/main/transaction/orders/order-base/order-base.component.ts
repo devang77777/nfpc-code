@@ -84,6 +84,17 @@ export class OrderBaseComponent extends BaseComponent {
   selectedRows(data: any) {
     this.checkedRows = data;
   }
+
+  public canShowBulkActions(): boolean {
+    // Hide bulk actions if any selected row has caps_approval as 'Pending' or 'Rejected'
+    if (this.checkedRows && this.checkedRows.length > 0) {
+      return !this.checkedRows.some(row => 
+        row.caps_approval === 'Pending' || row.caps_approval === 'Rejected'
+      );
+    }
+    return true;
+  }
+
   public closeClicked(): void {
     this.isDetailVisible = false;
   }

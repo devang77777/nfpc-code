@@ -92,6 +92,12 @@
         "icon": "fa fa-credit-card-alt"
     },
     {
+        "label": "Customer CAPS",
+        "routeTo": "transaction/customer-caps",
+        "active": "/customer-caps",
+        "icon": "fa fa-credit-card-alt"
+    },
+    {
         "label": "Cashier Receipt",
         "routeTo": "finance/cashier-reciept",
         "active": "/cashier-reciept",

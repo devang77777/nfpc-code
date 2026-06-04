@@ -23,6 +23,7 @@ import {
   apiOrderMapper,
   OrderUpdateProcess,
   OrderUpdateProcessColor,
+  CapsProcessColor,
 } from '../order-models';
 import { ColumnConfig } from 'src/app/interfaces/interfaces';
 import {
@@ -55,7 +56,28 @@ export class OrderDataTableComponent implements OnInit, OnDestroy, OnChanges {
   itemList: any[] = [];
   storageLocationList: any[] = [];
   // Display-mapped search criteria for UI only
-
+  caps_status = [
+    {
+      id: 'Pending',
+      name: 'Pending',
+    },
+    {
+      id: 'Rejected',
+      name: 'Rejected',
+    },
+    {
+      id: 'CAPS Rejected',
+      name: 'CAPS Rejected',
+    },
+    {
+      id: 'Approved',
+      name: 'Approved',
+    },
+    {
+      id: 'CAPS Approved',
+      name: 'CAPS Approved',
+    },
+  ];
   @Output() public itemClicked: EventEmitter<any> = new EventEmitter<any>();
   @Output() public selectedRows: EventEmitter<any> = new EventEmitter<any>();
   @Input() public isDetailVisible: boolean;
@@ -66,6 +88,7 @@ export class OrderDataTableComponent implements OnInit, OnDestroy, OnChanges {
   public allResData = [];
   selectedColumnFilter: string;
   approvalStatusList: any;
+  capsStatusList: any;
   orderStatusList: any;
   advanceSearchRequest: any[] = [];
   channelList : any= [];
@@ -93,6 +116,10 @@ export class OrderDataTableComponent implements OnInit, OnDestroy, OnChanges {
     color: '',
     label: '',
   };
+  public capsStatus = {
+    color: '',
+    label: '',
+  };
   private router: Router;
   private apiService: ApiService;
   private dataEditor: DataEditor;
@@ -114,6 +141,7 @@ export class OrderDataTableComponent implements OnInit, OnDestroy, OnChanges {
     // { def: 'due', title: 'Due Date', show: true },
     { def: 'invoice', title: 'Invoice', show: true },
     { def: 'amount', title: 'Amount', show: true },
+    { def: 'caps_approval', title: 'CAPS Approval', show: true },
     { def: 'approval', title: 'Approval', show: true },
     { def: 'created', title: 'Created By', show: true },
     { def: 'status', title: 'Status', show: true, showInfo: true },
@@ -141,6 +169,7 @@ export class OrderDataTableComponent implements OnInit, OnDestroy, OnChanges {
     Object.assign(this, { apiService, dataEditor, fds, deleteDialog, router });
     this.dataSource = new MatTableDataSource<OrderModel>();
     this.approvalStatusList = STATUS;
+    this.capsStatusList = this.caps_status;
     this.orderStatusList = ORDER_STATUS;
     // this.channelList = Channel;
   }
@@ -159,6 +188,7 @@ export class OrderDataTableComponent implements OnInit, OnDestroy, OnChanges {
       due_date: [''],
       delivery_date: [''],
       current_stage: [''],
+      caps_approval: [''],
       customer_name: [''],
       channel_name: [[]],
       created_id: [[]],
@@ -225,20 +255,22 @@ export class OrderDataTableComponent implements OnInit, OnDestroy, OnChanges {
     
   this.eventService.on(
     Events.SEARCH_ORDER,
-    ({ request, correctRequest, requestOriginal, response, criteria }) => {
+    ({ request, correctRequest, requestOriginal, response, criteria, displaySummary }) => {
       this.advanceSearchRequest = [];
-      
       this.requestOriginal = requestOriginal;
 
-      // show instantly if criteria was passed
-      if (criteria) {
+      // Use displaySummary if present (already mapped with filterObjectValues)
+      if (displaySummary && Array.isArray(displaySummary) && displaySummary.length > 0) {
+        this.advanceSearchRequest = displaySummary.map(item => ({
+          key: item.param,
+          value: item.value
+        }));
+        this.patchFilterFormWithCriteria(this.advanceSearchRequest);
+      } else if (criteria) {
         this.advanceSearchRequest = criteria;
-        // Patch the filter form with criteria values to pre-fill the form
         this.patchFilterFormWithCriteria(criteria);
       } else if (request) {
-        // fallback if no criteria provided
         Object.keys(request).forEach(item => {
-          // Only include fields that have meaningful values
           const value = request[item];
           if (value !== null && value !== undefined && value !== '' && 
               !(Array.isArray(value) && value.length === 0)) {
@@ -260,13 +292,18 @@ export class OrderDataTableComponent implements OnInit, OnDestroy, OnChanges {
             t => t.param === item.param && t.value === item.value
           )
       );
-       
-    
+
       // backend response comes later
       if (response) {
         this.apiResponse = response;
         this.allResData = response.data;
         this.updateDataSource(response.data);
+        // Set channel names from pagination.channel
+        if (response.pagination && response.pagination.channel) {
+          this.selectedChannelNames = response.pagination.channel.join(', ');
+        } else {
+          this.selectedChannelNames = '';
+        }
       }
     }
   )
@@ -406,8 +443,8 @@ export class OrderDataTableComponent implements OnInit, OnDestroy, OnChanges {
   exportData(){
     const exportRequest = { ...this.requestOriginal, export: 1 };
    this.apiService.onSearch(exportRequest).subscribe((response) => {
-      
             this.apiService.downloadFile(response.data.file_url, 'csv');
+            // this.apiService.downloadFile(response.data.file_url, 'csv');
             // this.dataEditor.sendMessage({ export: '' });
         
     });
@@ -695,15 +732,76 @@ export class OrderDataTableComponent implements OnInit, OnDestroy, OnChanges {
         break;
     }
   }
+  getCapsStatus(status: any) {
+    let capsStatus = {
+      color: CapsProcessColor.Pending,
+      label: status,
+    };
+    switch (status) {
+      case 'Pending':
+        capsStatus = {
+          color: CapsProcessColor.Pending,
+          label: status,
+        };
+        this.capsStatus = capsStatus;
+        break;
+     
+      case 'Approved':
+        capsStatus = {
+          color: CapsProcessColor.Approved,
+          label: status,
+        };
+        this.capsStatus = capsStatus;
+        break;
+     
+      case 'Caps Approved':
+        capsStatus = {
+          color: CapsProcessColor.CapsApproved,
+          label: status,
+        };
+        this.capsStatus = capsStatus;
+        break;
+      
+      case 'Rejected':
+        capsStatus = {
+          color: CapsProcessColor.Rejected,
+          label: status,
+        };
+        this.capsStatus = capsStatus;
+        break;
+      case 'Caps Rejected':
+        capsStatus = {
+          color: CapsProcessColor.CapsRejected,
+          label: status,
+        };
+        this.capsStatus = capsStatus;
+        break;
+      default:
+        capsStatus = {
+          color: CapsProcessColor.Pending,
+          label: status,
+        };
+        this.capsStatus = capsStatus;
+        break;
+    }
+  }
 
   getOrderStatusValue(status: any) {
     this.getOrderStatus(status);
     return this.orderStatus.label;
   }
+  getCapsStatusValue(status: any) {
+    this.getCapsStatus(status);
+    return this.capsStatus.label;
+  }
 
   orderStatusColor(status: any) {
     this.getOrderStatus(status);
     return this.orderStatus.color;
+  }
+  capsStatusColor(status: any) {
+    this.getCapsStatus(status);
+    return this.capsStatus.color;
   }
 
   numberFormat(number) {

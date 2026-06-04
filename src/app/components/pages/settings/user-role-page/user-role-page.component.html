@@ -19,7 +19,7 @@
                 </mat-tab>
             </mat-tab-group>
            <div *ngIf="!isDetailVisible && !roles" class="action-buttons">
-  <button class="btn btn-p">Export User</button>
+  <button class="btn btn-p" (click)="exportData()">Export User</button>
   <button class="btn btn-p" (click)="openAddUser()">Invite User</button>
 </div>
 

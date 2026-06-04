@@ -5,7 +5,13 @@
     </app-search-criteria>
   </ng-container> -->
   <ng-container *ngIf="advanceSearchRequest.length>0">
-    <app-search-criteria [data]="advanceSearchRequest" (change)="onChangeCriteria()" (close)="onCloseCriteria()" [showExportButton]="true" (export)="exportData()">
+    <app-search-criteria
+      [data]="advanceSearchRequest"
+      (change)="onChangeCriteria()"
+      (close)="onCloseCriteria()"
+      [showExportButton]="true"
+      (export)="exportData()"
+    >
     </app-search-criteria>
   </ng-container>
   <div class="del-margin-bottom">
@@ -272,6 +278,25 @@
 
           </td>
         </ng-container>
+        <ng-container matColumnDef="caps_approval">
+          <th mat-header-cell *matHeaderCellDef>
+            <app-column-filter title="CAPS Approval" (changeSelected)="onColumnFilterOpen($event)"
+              [selected]="selectedColumnFilter" controlName="caps_approval" (close)="onColumnFilter($event)">
+              <mat-select class="form-control form-control-sm" [formControl]="filterForm.get('caps_approval')">
+                <mat-option *ngFor="let item of capsStatusList" [value]="item.id">
+                  {{ item.name }}
+                </mat-option>
+              </mat-select>
+            </app-column-filter>
+          </th>
+          <td mat-cell *matCellDef="let element" (click)="openDetailView(element)">
+            <ng-container *ngIf="element.caps_approval; else defaultMessageTemplate">
+              <span [style.color]="capsStatusColor(element.caps_approval)">
+                {{ getCapsStatusValue(element.caps_approval) }}
+              </span>
+            </ng-container>
+</td>
+ </ng-container>
         <ng-container matColumnDef="approval">
           <th mat-header-cell *matHeaderCellDef>
             <app-column-filter title="Approval" (changeSelected)="onColumnFilterOpen($event)"

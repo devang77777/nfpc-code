@@ -21,7 +21,7 @@
                     <button type="button" class="btn btn-sm btn-p" (click)="openOrderView()">
                         <i class="os-icon os-icon-eye mr-2" aria-hidden="true"></i>&nbsp;View
                     </button>&nbsp;
-                    <button *ngIf="(checkedRows.length > 0) && (currentRole=='Storekeeper'  || currentRole=='Warehouse')" class="btn btn-sm btn-white dropdown-toggle ml-2" mat-button [matMenuTriggerFor]="menu2">
+                    <button *ngIf="(checkedRows.length > 0) && (currentRole=='Storekeeper'  || currentRole=='Warehouse') && canShowBulkActions()" class="btn btn-sm btn-white dropdown-toggle ml-2" mat-button [matMenuTriggerFor]="menu2">
                         Bulk Actions
                     </button>
                     <mat-menu #menu2="matMenu">

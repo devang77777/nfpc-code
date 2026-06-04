@@ -78,7 +78,7 @@ export class AddRouteGroupFormComponent implements OnInit {
     });
     this.CodeFormControl = new FormControl('', [Validators.required]);
     this.NameFormControl = new FormControl('', [Validators.required]);
-    if (this.domain == "merchandising" || this.domain == 'presales-prodmobiato.nfpc.net') {
+    if (this.domain == "merchandising" || this.domain == 'presales.nfpc.net') {
       this.merchandiserFormControl = new FormControl('', [Validators.required]);
       this.RouteFormControl = new FormControl('');
     } else {
@@ -142,7 +142,7 @@ export class AddRouteGroupFormComponent implements OnInit {
           this.CodeFormControl.setValue(data.code);
           this.CodeFormControl.disable();
           this.NameFormControl.setValue(data.name);
-          if (this.domain == 'merchandising' || this.domain == 'presales-prodmobiato.nfpc.net') {
+          if (this.domain == 'merchandising' || this.domain == 'presales.nfpc.net') {
             let salesman = [{ id: data.merchandiser_id, itemName: `${data.salesman?.firstname} ${data.salesman?.lastname}` }]
             this.merchandiserFormControl.setValue(salesman);
           } else {

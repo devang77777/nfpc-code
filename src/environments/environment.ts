@@ -3,18 +3,15 @@
 // The list of file replacements can be found in `angular.json`.
 
 export const environment = {
-  // baseApiUrl: 'https://prodmobiato.nfpc.net/production/public/api',
-  // nfpcApiUrl: 'https://prodmobiato.nfpc.net/production/public/api',
-  // baseApiUrl: 'https://devmobiato.nfpc.net/merchandising/public/api',
-  // baseApiUrl: 'https://devmobiato.nfpc.net/merchandising/public/api',
-//  baseApiUrl: 'https://presales-dev.nfpc.net/production/public/api',
-//   nfpcApiUrl: 'https://presales-dev.nfpc.net/production/public/api',
-//   host: 'https://presales-dev.nfpc.net',
+
+//  baseApiUrl: 'https://presales.nfpc.net/production/public/api',
+//   nfpcApiUrl: 'https://presales.nfpc.net/production/public/api',
+//   host: 'https://presales.nfpc.net',
+ baseApiUrl: 'https://presales-dev.nfpc.net/production/public/api',
+  nfpcApiUrl: 'https://presales-dev.nfpc.net/production/public/api',
+  host: 'https://presales-dev.nfpc.net',
 //   production: false
-//  baseApiUrl: 'https://devmobiato.nfpc.net/merchandising/public/api',
-  baseApiUrl: 'https://prodmobiato.nfpc.net/production/public/api',
-  nfpcApiUrl: 'https://devmobiato.nfpc.net/merchandising/public/api',
-  host: 'https://devmobiato.nfpc.net',
+
   production: false
 };
 

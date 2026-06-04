@@ -5,8 +5,9 @@ import { Component, Input, OnInit, Output, EventEmitter } from '@angular/core';
     templateUrl: './search-criteria.component.html',
 })
 export class SearchCriteriaComponent implements OnInit {
-    @Input() data: any[] = []
+    @Input() data: any[] = [];
     @Input() showExportButton: boolean = false;
+    @Input() channelNames: string = '';
     @Output() close: EventEmitter<any> = new EventEmitter()
     @Output() change: EventEmitter<any> = new EventEmitter()
     @Output() export: EventEmitter<any> = new EventEmitter()

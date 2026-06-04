@@ -10,7 +10,7 @@ export class BaseComponent {
   domain = window.location.host;
   constructor(private moduleName?: String) {
     if (moduleName == 'Salesman') {
-      moduleName = this.domain == 'merchandising' || this.domain == 'devmobiato.nfpc.net' || this.domain == 'presales-prodmobiato.nfpc.net' ? 'Merchandiser' : 'Salesman'
+      moduleName = this.domain == 'merchandising' || this.domain == 'presales.nfpc.net' || this.domain == 'presales.nfpc.net' ? 'Merchandiser' : 'Salesman'
     }
 
     let data: any = localStorage.getItem('permissions');

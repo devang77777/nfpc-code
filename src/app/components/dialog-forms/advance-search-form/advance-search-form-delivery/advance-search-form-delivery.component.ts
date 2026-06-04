@@ -2,7 +2,7 @@
    * Restore dropdowns from requestOriginal (Change Criteria) for delivery module
    */
  
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, ChangeDetectorRef } from '@angular/core';
 import { FormGroup, FormControl } from '@angular/forms';
 import { STATUS, DELIVERY_STATUS, ORDER_STATUS } from 'src/app/app.constant';
 import { ApiService } from 'src/app/services/api.service';
@@ -34,7 +34,15 @@ export class AdvanceSearchFormDeliveryComponent implements OnInit {
    CustomersFormControl = new FormControl([]);
   private pendingSavedState: any = null; // Store pending saved state
   
+  // Flags to track async data loading
+  private _customerLoaded = false;
+  private _itemLoaded = false;
+  private _salesmanLoaded = false;
+  private _storageLoaded = false;
+  private _pendingRestore: any = null;
+  
   constructor(
+    private detChange: ChangeDetectorRef,
     private apiService: ApiService,
     private ms: MasterService
   ) { 
@@ -45,6 +53,8 @@ export class AdvanceSearchFormDeliveryComponent implements OnInit {
       this.ms.itemDetailDDllistTable({ page: 1, page_size: 10 }).subscribe((result: any) => {
         this.itemData = result.data;
         this.filteredItems = result.data;
+        this._itemLoaded = true;
+        this._tryRestoreDropdowns();
       })
     );
      this.apiService.getAllCustomerCategory().subscribe((res: any) => {
@@ -53,10 +63,12 @@ export class AdvanceSearchFormDeliveryComponent implements OnInit {
      this.apiService.getMasterDataLists().subscribe((result: any) => {
       
       this.salesmanList = result.data.salesmans;
+      this._salesmanLoaded = true;
       
       for (let salesman of this.salesmanList) {
         salesman['salesman_name'] = `${salesman.salesman_info.salesman_code} - ${salesman.firstname} ${salesman.lastname}`;
       }
+      this._tryRestoreDropdowns();
     });
     this.form = new FormGroup({
       module: new FormControl('delivery'),
@@ -74,6 +86,7 @@ export class AdvanceSearchFormDeliveryComponent implements OnInit {
     })
     this.ms.customerDetailDDlListTable({}).subscribe((result) => {
       this.customerID = result.data;
+      this._customerLoaded = true;
       // this.filterCustomer = result.data.slice(0, 30);
       
       // Try to restore saved state if it was pending
@@ -81,7 +94,81 @@ export class AdvanceSearchFormDeliveryComponent implements OnInit {
         this.restoreFormValues(this.pendingSavedState);
         this.pendingSavedState = null;
       }
+      this._tryRestoreDropdowns();
     })
+  }
+
+  // Try to restore dropdowns if all data is loaded and pending restore exists
+  private _tryRestoreDropdowns() {
+    if (this._customerLoaded && this._itemLoaded && this._salesmanLoaded && this._storageLoaded && this._pendingRestore) {
+      this._restoreDropdownSelections(this._pendingRestore);
+      this._pendingRestore = null;
+    }
+  }
+
+  // New restore method, only for dropdowns
+  private _restoreDropdownSelections(requestOriginal: any) {
+    // Customers
+    if (requestOriginal.customer_id && this.customerID) {
+      const customerIds = Array.isArray(requestOriginal.customer_id)
+        ? requestOriginal.customer_id.map(String)
+        : [String(requestOriginal.customer_id)];
+      const selectedCustomers = this.customerID
+        .filter(customer => customerIds.includes(String(customer.id)))
+        .map(customer => ({
+          ...customer,
+          itemName: (customer.customer_code ? customer.customer_code + ' - ' : '') + (customer.customer_name || customer.name || customer.firstname + ' ' + customer.lastname || '')
+        }));
+      this.CustomersFormControl.setValue(selectedCustomers);
+      this.CustomersFormControl.updateValueAndValidity();
+      this.selectionchangedCustomer();
+    }
+    // Items
+    if (requestOriginal.item_id && this.itemData) {
+      const itemIds = Array.isArray(requestOriginal.item_id)
+        ? requestOriginal.item_id.map(String)
+        : [String(requestOriginal.item_id)];
+      const selectedItems = this.itemData
+        .filter(item => itemIds.includes(String(item.id)))
+        .map(item => ({
+          ...item,
+          itemName: (item.item_code ? item.item_code + ' - ' : '') + (item.item_name || '')
+        }));
+      this.itemsFormControl.setValue(selectedItems);
+      this.itemsFormControl.updateValueAndValidity();
+      this.selectionchangedItems();
+    }
+    // Storage/branchplant
+    if (requestOriginal.storage_location_id && this.storageLocation) {
+      const storageIds = Array.isArray(requestOriginal.storage_location_id)
+        ? requestOriginal.storage_location_id.map(String)
+        : [String(requestOriginal.storage_location_id)];
+      const selectedStorage = this.storageLocation
+        .filter(storage => storageIds.includes(String(storage.id)))
+        .map(storage => ({
+          ...storage,
+          itemName: (storage.storage_location_code ? storage.storage_location_code + ' - ' : '') + (storage.storage_location_name || storage.name || '')
+        }));
+      this.branchplantsFormControl.setValue(selectedStorage);
+      this.branchplantsFormControl.updateValueAndValidity();
+      this.selectionchangedstorageLocation();
+    }
+    // Salesman
+    if (requestOriginal.salesman && this.salesmanList) {
+      const salesmanIds = Array.isArray(requestOriginal.salesman)
+        ? requestOriginal.salesman.map(String)
+        : [String(requestOriginal.salesman)];
+      const selectedSalesmen = this.salesmanList
+        .filter(salesman => salesmanIds.includes(String(salesman.id)))
+        .map(salesman => ({
+          ...salesman,
+          itemName: (salesman.salesman_info?.salesman_code ? salesman.salesman_info.salesman_code + ' - ' : '') + (salesman.firstname || '') + ' ' + (salesman.lastname || '')
+        }));
+      this.SalesmanFormControl.setValue(selectedSalesmen);
+      this.SalesmanFormControl.updateValueAndValidity();
+      this.selectionchangedSalesman();
+    }
+    this.detChange.detectChanges();
   }
 
   ngOnChanges(changes: SimpleChanges) {
@@ -93,6 +180,14 @@ export class AdvanceSearchFormDeliveryComponent implements OnInit {
         this.pendingSavedState = null;
       }
     }
+    
+    if (changes.storageLocation && changes.storageLocation.currentValue?.length > 0) {
+      this._storageLoaded = true;
+    }
+    if (changes.salesman && changes.salesman.currentValue?.length > 0) {
+      this._salesmanLoaded = true;
+    }
+    this._tryRestoreDropdowns();
   }
 
   /**
@@ -114,35 +209,59 @@ export class AdvanceSearchFormDeliveryComponent implements OnInit {
     if (savedState.controlValues) {
       // Restore multi-select control values
       if (savedState.controlValues.items && this.itemData.length > 0) {
-        const savedItems = this.itemData.filter(item => 
-          savedState.controlValues.items.includes(item.id)
-        );
+        const savedItems = this.itemData
+          .filter(item => savedState.controlValues.items.includes(item.id))
+          .map(item => ({
+            ...item,
+            itemName: (item.item_code ? item.item_code + ' - ' : '') + (item.item_name || '')
+          }));
         this.itemsFormControl.setValue(savedItems);
+        this.itemsFormControl.markAsDirty();
+        this.itemsFormControl.updateValueAndValidity();
+        this.selectionchangedItems();
       }
 
       if (savedState.controlValues.customers && this.customerID && this.customerID.length > 0) {
-        const savedCustomers = this.customerID.filter(customer => 
-          savedState.controlValues.customers.includes(customer.id)
-        );
+        const savedCustomers = this.customerID
+          .filter(customer => savedState.controlValues.customers.includes(customer.id))
+          .map(customer => ({
+            ...customer,
+            itemName: (customer.customer_code ? customer.customer_code + ' - ' : '') + (customer.customer_name || customer.name || customer.firstname + ' ' + customer.lastname || '')
+          }));
         this.CustomersFormControl.setValue(savedCustomers);
+        this.CustomersFormControl.markAsDirty();
+        this.CustomersFormControl.updateValueAndValidity();
+        this.selectionchangedCustomer();
       }
 
       if (savedState.controlValues.storage && this.storageLocation && this.storageLocation.length > 0) {
-        const savedStorage = this.storageLocation.filter(storage => 
-          savedState.controlValues.storage.includes(storage.id)
-        );
+        const savedStorage = this.storageLocation
+          .filter(storage => savedState.controlValues.storage.includes(storage.id))
+          .map(storage => ({
+            ...storage,
+            itemName: (storage.storage_location_code ? storage.storage_location_code + ' - ' : '') + (storage.storage_location_name || storage.name || '')
+          }));
         this.branchplantsFormControl.setValue(savedStorage);
-        // Patch the form value and trigger UI update
+        this.branchplantsFormControl.markAsDirty();
+        this.branchplantsFormControl.updateValueAndValidity();
         this.selectionchangedstorageLocation();
       }
 
       if (savedState.controlValues.salesman && this.salesmanList && this.salesmanList.length > 0) {
-        const savedSalesmen = this.salesmanList.filter(salesman => 
-          savedState.controlValues.salesman.includes(salesman.id)
-        );
+        const savedSalesmen = this.salesmanList
+          .filter(salesman => savedState.controlValues.salesman.includes(salesman.id))
+          .map(salesman => ({
+            ...salesman,
+            itemName: (salesman.salesman_info?.salesman_code ? salesman.salesman_info.salesman_code + ' - ' : '') + (salesman.firstname || '') + ' ' + (salesman.lastname || '')
+          }));
         this.SalesmanFormControl.setValue(savedSalesmen);
+        this.SalesmanFormControl.markAsDirty();
+        this.SalesmanFormControl.updateValueAndValidity();
+        this.selectionchangedSalesman();
       }
     }
+
+    this.detChange.detectChanges();
   }
 
   /**
@@ -223,92 +342,22 @@ export class AdvanceSearchFormDeliveryComponent implements OnInit {
 
  restoreFromRequestOriginal(requestOriginal: any) {
     if (!requestOriginal) return;
+    // Remove fields that shouldn't be in the form
+    const formValues = { ...requestOriginal };
+    delete formValues.page;
+    delete formValues.page_size;
+    delete formValues.export;
+    delete formValues.allData;
+    
     // Patch all simple fields directly
-    const patchFields = [
-      'channel_name',
-      'delivery_no',
-      'startdate',
-      'enddate',
-      'startrange',
-      'endrange',
-      'status',
-      'current_stage'
-    ];
-    const patchObj: any = {};
-    patchFields.forEach(field => {
-      if (requestOriginal[field] !== undefined) {
-        patchObj[field] = requestOriginal[field];
-      }
-    });
-    this.form.patchValue(patchObj);
+    this.form.patchValue(formValues);
 
-    // Restore customer dropdown (use mapped options with itemName)
-    if (requestOriginal.customer_id && this.customerID) {
-      const customerIds = Array.isArray(requestOriginal.customer_id)
-        ? requestOriginal.customer_id.map(String)
-        : [String(requestOriginal.customer_id)];
-      const mappedCustomers = this.customerID.map(x => ({
-        id: x.id,
-        itemName: x.customer_code ? (x.customer_code + ' - ' + x.name) : (x.name || x.firstname + ' ' + x.lastname)
-      }));
-      const selectedCustomers = mappedCustomers.filter(customer =>
-        customerIds.includes(String(customer.id))
-      );
-      this.CustomersFormControl.setValue(selectedCustomers);
-      this.CustomersFormControl.markAsDirty();
-      this.CustomersFormControl.updateValueAndValidity();
-      this.selectionchangedCustomer();
-    }
-    // Restore items dropdown (use mapped options with itemName)
-    if (requestOriginal.item_id && this.itemData && this.itemData.length > 0) {
-      const itemIds = Array.isArray(requestOriginal.item_id)
-        ? requestOriginal.item_id.map(String)
-        : [String(requestOriginal.item_id)];
-      const mappedItems = this.itemData.map(x => ({
-        id: x.id,
-        itemName: x.item_code + ' - ' + x.item_name
-      }));
-      const selectedItems = mappedItems.filter(item =>
-        itemIds.includes(String(item.id))
-      );
-      this.itemsFormControl.setValue(selectedItems);
-      this.itemsFormControl.markAsDirty();
-      this.itemsFormControl.updateValueAndValidity();
-      this.selectionchangedItems();
-    }
-    // Restore storage/branchplant dropdown (use mapped options with itemName)
-    if (requestOriginal.storage_location_id && this.storageLocation) {
-      const storageIds = Array.isArray(requestOriginal.storage_location_id)
-        ? requestOriginal.storage_location_id.map(String)
-        : [String(requestOriginal.storage_location_id)];
-      const mappedStorage = this.storageLocation.map(x => ({
-        id: x.id,
-        itemName: x.code + ' - ' + x.name
-      }));
-      const selectedStorage = mappedStorage.filter(storage =>
-        storageIds.includes(String(storage.id))
-      );
-      this.branchplantsFormControl.setValue(selectedStorage);
-      this.branchplantsFormControl.markAsDirty();
-      this.branchplantsFormControl.updateValueAndValidity();
-      this.selectionchangedstorageLocation();
-    }
-    // Restore salesman dropdown (use mapped options with itemName)
-    if (requestOriginal.salesman && this.salesmanList && this.salesmanList.length > 0) {
-      const salesmanIds = Array.isArray(requestOriginal.salesman)
-        ? requestOriginal.salesman.map(String)
-        : [String(requestOriginal.salesman)];
-      const mappedSalesmen = this.salesmanList.map(x => ({
-        id: x.id,
-        itemName: (x.salesman_info?.salesman_code ? (x.salesman_info.salesman_code + ' - ') : '') + x.firstname + ' ' + x.lastname
-      }));
-      const selectedSalesmen = mappedSalesmen.filter(salesman =>
-        salesmanIds.includes(String(salesman.id))
-      );
-      this.SalesmanFormControl.setValue(selectedSalesmen);
-      this.SalesmanFormControl.markAsDirty();
-      this.SalesmanFormControl.updateValueAndValidity();
-      this.selectionchangedSalesman();
-    }
+    // Restore dropdowns with mapped objects for correct display
+    this._restoreDropdownSelections(requestOriginal);
+    
+    this.detChange.detectChanges();
+    // Save for later restore if data not loaded (for async cases)
+    this._pendingRestore = requestOriginal;
+    this._tryRestoreDropdowns();
   }
 }

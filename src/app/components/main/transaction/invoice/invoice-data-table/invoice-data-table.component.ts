@@ -213,24 +213,37 @@ export class InvoiceDataTableComponent implements OnInit, OnDestroy, OnChanges {
         
       this.eventService.on(
         Events.SEARCH_INVOICE,
-        ({ request, correctRequest, requestOriginal, response, criteria }) => {
+        ({ request, correctRequest, requestOriginal, response, criteria, displaySummary }) => {
           this.advanceSearchRequest = [];
-          
           this.requestOriginal = requestOriginal;
-    
-          // show instantly if criteria was passed
-          if (criteria) {
-            this.advanceSearchRequest = criteria;
-            // Patch the filter form with criteria values to pre-fill the form
-            criteria.forEach(c => {
+
+          // Use displaySummary if present (already mapped with filterObjectValues)
+          if (displaySummary && Array.isArray(displaySummary) && displaySummary.length > 0) {
+            this.advanceSearchRequest = displaySummary.map(item => ({
+              param: item.param,
+              value: item.value,
+              key: item.param // Use param as key for displaySummary
+            }));
+            // Patch the filter form with displaySummary values
+            this.advanceSearchRequest.forEach(c => {
+              if (this.filterForm.controls[c.key]) {
+                this.filterForm.controls[c.key].setValue(c.value);
+              }
+            });
+          } else if (criteria && Array.isArray(criteria)) {
+            this.advanceSearchRequest = criteria.map(item => ({
+              param: item.param ,
+              value: item.value,
+              key: item.key || item.param
+            }));
+            // Patch the filter form with criteria values
+            this.advanceSearchRequest.forEach(c => {
               if (this.filterForm.controls[c.key]) {
                 this.filterForm.controls[c.key].setValue(c.value);
               }
             });
           } else if (request) {
-            // fallback if no criteria provided
             Object.keys(request).forEach(item => {
-              // Only include fields that have meaningful values
               const value = request[item];
               if (value !== null && value !== undefined && value !== '' && 
                   !(Array.isArray(value) && value.length === 0)) {
@@ -253,8 +266,6 @@ export class InvoiceDataTableComponent implements OnInit, OnDestroy, OnChanges {
               )
           );
 
-           
-        
           // backend response comes later
           if (response) {
             this.apiResponse = response;
@@ -606,8 +617,8 @@ export class InvoiceDataTableComponent implements OnInit, OnDestroy, OnChanges {
   exportData(){
      const exportRequest = { ...this.requestOriginal, export: 1 };
    this.apiService.onSearch(exportRequest).subscribe((response) => {
-      
             this.apiService.downloadFile(response.data.file_url, 'csv');
+            // this.apiService.downloadFile(response.data.file_url, 'csv');
             // this.dataEditor.sendMessage({ export: '' });
         
     });

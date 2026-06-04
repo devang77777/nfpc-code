@@ -41,7 +41,7 @@ import { OrderService } from '../../orders/order.service';
 import { FormDrawerService } from 'src/app/services/form-drawer.service';
 import { CreditNoteImagesComponent } from '../credit-note-images/credit-note-images.component';
 import { AllocatedGrvComponent } from 'src/app/components/dialogs/allocated-grv/allocated-grv.component';
-
+import { Lightbox } from 'ngx-lightbox';
 @Component({
   selector: 'app-credit-note-detail',
   templateUrl: './credit-note-detail.component.html',
@@ -105,7 +105,8 @@ export class CreditNoteDetailComponent extends BaseComponent
     sanitizer: DomSanitizer,
     private orderService: OrderService,
     private commonToasterService: CommonToasterService,
-    private fds: FormDrawerService
+    private fds: FormDrawerService,
+    private lightbox: Lightbox,
   ) {
     super('Credit Note');
     Object.assign(this, {
@@ -117,7 +118,8 @@ export class CreditNoteDetailComponent extends BaseComponent
       route,
       sanitizer,
       apiService,
-      fds
+      fds,
+      lightbox
     });
     this.currentRole = localStorage.getItem('roleName');
   }
@@ -298,7 +300,9 @@ export class CreditNoteDetailComponent extends BaseComponent
           const link = document.createElement('a');
           link.setAttribute('target', '_blank');
           link.setAttribute('href', `${res.data.file_url}`);
-          link.setAttribute('download', `statement.pdf`);
+          // Extract filename from URL
+          const filename = res.data.file_url.substring(res.data.file_url.lastIndexOf('/') + 1);
+          link.setAttribute('download', filename);
           document.body.appendChild(link);
           link.click();
           link.remove();
@@ -420,6 +424,21 @@ export class CreditNoteDetailComponent extends BaseComponent
       width: '600px',
       data: { data: this.creditNoteData },
     });
+  }
+
+  public openMerchImageViewer(data: any, event: MouseEvent): void {
+    event.stopPropagation();
+    if (!data?.merchandiser_image_1) {
+      return;
+    }
+    const album = [
+      {
+        src: data.merchandiser_image_1,
+        caption: 'Merchandiser Image',
+        thumb: data.merchandiser_image_1,
+      },
+    ];
+    this.lightbox.open(album, 0);
   }
 
 }

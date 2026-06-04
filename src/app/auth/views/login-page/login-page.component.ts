@@ -172,7 +172,7 @@ export class LoginPageComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
-    if (localStorage.getItem('isLoggedIn') == "true" && this.domain !== 'presales-prodmobiato.nfpc.net') {
+    if (localStorage.getItem('isLoggedIn') == "true" && this.domain !== 'presales.nfpc.net') {
       this.router.navigate(['/dashboard/board1']);
     } else {
       this.router.navigate(['/dashboard/monthly-kpi']);
@@ -284,7 +284,7 @@ export class LoginPageComponent implements OnInit {
               JSON.stringify(setting.data.allSoftware)
             );
             localStorage.setItem('isLoggedIn', 'true');
-            if (this.domain !== 'presales-prodmobiato.nfpc.net') {
+            if (this.domain !== 'presales.nfpc.net') {
               this.router.navigate(['/dashboard/board1']).then(() => {
                 this.submitting = false;
               });
@@ -368,7 +368,7 @@ export class LoginPageComponent implements OnInit {
               JSON.stringify(setting.data.allSoftware)
             );
             localStorage.setItem('isLoggedIn', 'true');
-            if (this.domain !== 'presales-prodmobiato.nfpc.net') {
+            if (this.domain !== 'presales.nfpc.net') {
               this.router.navigate(['/dashboard/board1']).then(() => {
                 this.submitting = false;
               });

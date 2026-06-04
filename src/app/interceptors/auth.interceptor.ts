@@ -28,14 +28,14 @@ export class AuthInterceptor implements HttpInterceptor {
           'Content-Type': 'application/pdf',
           Accept: 'application/pdf',
           Authorization: `Bearer ${this.authService.getToken()}`,
-          'x-domain': 'presales.prodmobiato.nfpc.net',
+          'x-domain': 'presales.nfpc.net',
         },
       });
     } else if (req.url.includes('import') || req.url.includes('customer-warehouse-mapping') || req.url.includes('customer-region-mapping') || req.url.includes('customer-ksm-kam-mapping') || req.url.includes('item-base-price-mapping') || req.url.includes('customer-copy-price') || req.url.includes('copy-item-base-price')) {
       req = req.clone({
         setHeaders: {
           Authorization: `Bearer ${this.authService.getToken()}`,
-          'x-domain': 'presales.prodmobiato.nfpc.net',
+          'x-domain': 'presales.nfpc.net',
         },
       });
     } else if (req.url.includes('ZGETMIGO_DETAILS_SRV')) {
@@ -50,10 +50,10 @@ export class AuthInterceptor implements HttpInterceptor {
         setHeaders: {
           // 'Content-Type': 'multipart/form-data;boundary=----WebKitFormBoundary7MA4YWxkTrZu0gW"',
           Authorization: `Bearer ${this.authService.getToken()}`,
-          'x-domain': 'presales.prodmobiato.nfpc.net',
+          'x-domain': 'presales.nfpc.net',
         },
       });
-    } else if (req.url.includes('https://devmobiato.nfpc.net/merchandising/odbc_customer_master_prd.php') || req.url.includes('https://devmobiato.nfpc.net/merchandising/odbc_item_prd.php') || req.url.includes('https://devmobiato.nfpc.net/merchandising/odbc_item_branch_prd.php') || req.url.includes('https://devmobiato.nfpc.net/merchandising/odbc_stock_date_prd.php') || req.url.includes('https://devmobiato.nfpc.net/merchandising/odbc_order_posting_prd.php') || req.url.includes('https://devmobiato.nfpc.net/merchandising/odbc_order_return_posting_prd.php') || req.url.includes('https://devmobiato.nfpc.net/merchandising/public/api/orderpostingprd/add') || req.url.includes('https://devmobiato.nfpc.net/merchandising/odbc_order_return_posting_drebit_prd.php')) {
+    } else if (req.url.includes('https://presales.nfpc.net/production/odbc_customer_master_prd.php') || req.url.includes('https://presales.nfpc.net/production/public/odbc_item_prd.php') || req.url.includes('https://presales.nfpc.net/production/public/odbc_item_branch_prd.php') || req.url.includes('https://presales.nfpc.net/production/public/odbc_stock_date_prd.php') || req.url.includes('https://presales.nfpc.net/production/public/odbc_order_posting_prd.php') || req.url.includes('https://presales.nfpc.net/production/public/odbc_order_return_posting_prd.php') || req.url.includes('https://presales.nfpc.net/production/public/public/api/orderpostingprd/add') || req.url.includes('https://presales.nfpc.net/production/public/odbc_order_return_posting_drebit_prd.php')) {
       // req = req.clone({
       //   setHeaders: {
       //     // 'Content-Type': 'multipart/form-data;boundary=----WebKitFormBoundary7MA4YWxkTrZu0gW"',
@@ -62,25 +62,25 @@ export class AuthInterceptor implements HttpInterceptor {
       //   },
       // });
     }
-    // else if (req.url.includes('https://prodmobiato.nfpc.net/production/public/api/salesman/list')) {
+    // else if (req.url.includes('https://presales.nfpc.net/production/public/api/salesman/list')) {
     //   req = req.clone({
     //     setHeaders: {
     //       // 'Content-Type': 'multipart/form-data;boundary=----WebKitFormBoundary7MA4YWxkTrZu0gW"',
     //       Authorization: `Bearer ${this.authService.getToken()}`,
-    //       'x-domain': 'merchandising.prodmobiato.nfpc.net',
+    //       'x-domain': 'merchandising.presales.nfpc.net',
     //     },
     //   });
     // }
     else {
       let domain = window.location.host;
       if (domain.split(':')[0] == 'localhost' || domain.split('.')[0] == 'mobiato-msfa') {
-        domain = 'merchandising.prodmobiato.nfpc.net'
+        domain = 'merchandising.nfpc.net'
       }
       req = req.clone({
         setHeaders: {
           'Content-Type': 'application/json; charset=utf-8',
           Accept: 'application/json',
-          'x-domain': 'presales.prodmobiato.nfpc.net',
+          'x-domain': 'presales.nfpc.net',
           Authorization: `Bearer ${this.authService.getToken()}`,
         },
       });

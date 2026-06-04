@@ -15,8 +15,10 @@
                 <mat-list>
                         <mat-list-item *ngFor="let notification of notifications"
                                 [class.notification-unread]="notification.is_read==0"
-                                (click)="readNotification(notification)">
-                                <div style="display: block;">
+                                [class.expanded-row]="notification.expanded"
+                                (click)="onNotificationItemClick(notification)">
+
+                                <div class="notification-row-header">
                                         <p matLine>
                                                 <span class="demo-2"
                                                         style="display: block;">{{notification.message}}</span>
@@ -41,42 +43,67 @@
                                                                 {{notification?.salesman_long}}</div>
                                                 </mat-expansion-panel>
                                         </mat-accordion>
-                                        <!-- <div class="accordion" id="accordionExample">
-                                                <div class="card">
-                                                        <div class="card-header" id="headingOne">
-                                                                <h2 class="mb-0">
-                                                                        <button class="btn btn-link" type="button" data-toggle="collapse" data-target="#collapseOne"
-                                                                                aria-expanded="true" aria-controls="collapseOne">
-                                                                                Collapsible Group Item #1
+
+                                        <!-- Credit Note / Return expanded details — rendered inline below the timestamp -->
+                                        <ng-container *ngIf="notification.type == 'Return' && notification.expanded">
+                                                <div class="credit-note-expanded" (click)="$event.stopPropagation()">
+                                                        <ng-container *ngIf="getCreditNoteInfo(notification) as creditNoteInfo">
+                                                                <table class="expanded-details-table">
+                                                                        <tbody>
+                                                                                <tr>
+                                                                                        <th>Merchandiser</th>
+                                                                                        <td>{{creditNoteInfo.merchandiserName || '-'}}</td>
+                                                                                </tr>
+                                                                                <tr>
+                                                                                        <th>Customer GRV</th>
+                                                                                        <td>{{creditNoteInfo.grvNo || '-'}}</td>
+                                                                                </tr>
+                                                                                <tr>
+                                                                                        <th>Customer</th>
+                                                                                        <td>{{creditNoteInfo.customer || ''}} - {{creditNoteInfo.customerCode || ''}}</td>
+                                                                                </tr>
+                                                                                <tr>
+                                                                                        <th>GRV Amount</th>
+                                                                                        <td>{{creditNoteInfo.amount || '-'}}</td>
+                                                                                </tr>
+                                                                                <tr>
+                                                                                        <th>Image</th>
+                                                                                        <td>
+                                                                                                <ng-container *ngIf="creditNoteInfo.image; else noImage">
+                                                                                                        <img class="notification-image-preview" [src]="creditNoteInfo.image" alt="Credit Note Image" />
+                                                                                                </ng-container>
+                                                                                                <ng-template #noImage>
+                                                                                                        <span class="field-value">No image</span>
+                                                                                                </ng-template>
+                                                                                        </td>
+                                                                                </tr>
+                                                                        </tbody>
+                                                                </table>
+                                                                <div class="btn-block" *ngIf="creditNoteInfo.workflowUuid">
+                                                                        <button mat-flat-button class="btn-approve" (click)="onApprove(notification); $event.stopPropagation()">
+                                                                                <mat-icon class="icon-done">done</mat-icon> Approve
                                                                         </button>
-                                                                </h2>
-                                                        </div>
-                                                
-                                                        <div id="collapseOne" class="collapse show" aria-labelledby="headingOne" data-parent="#accordionExample">
-                                                                <div class="card-body">
-                                                                        Anim pariatur cliche reprehenderit, enim eiusmod high life accusamus terry richardson ad squid.
-                                                                        3 wolf moon officia aute, non cupidatat skateboard dolor brunch. Food truck quinoa nesciunt
-                                                                        laborum eiusmod. Brunch 3 wolf moon tempor, sunt aliqua put a bird on it squid single-origin
-                                                                        coffee nulla assumenda shoreditch et. Nihil anim keffiyeh helvetica, craft beer labore wes
-                                                                        anderson cred nesciunt sapiente ea proident. Ad vegan excepteur butcher vice lomo. Leggings
-                                                                        occaecat craft beer farm-to-table, raw denim aesthetic synth nesciunt you probably haven't heard
-                                                                        of them accusamus labore sustainable VHS.
+                                                                        <button mat-flat-button class="btn-reject" (click)="onReject(notification); $event.stopPropagation()">
+                                                                                <mat-icon class="icon-done">close</mat-icon> Reject
+                                                                        </button>
                                                                 </div>
-                                                        </div>
+                                                        </ng-container>
                                                 </div>
-                                        </div> -->
+                                        </ng-container>
                                 </div>
+
                                 <mat-divider></mat-divider>
+
                                 <div class="btn-block"
                                         *ngIf="(notification.type == 'Geo Approval' || notification.type == 'Route Deviation') && (notification.approval_status== 'Pending' || !notification.approval_status)">
-                                        <!-- <div class="btn-block"> -->
-                                        <button mat-flat-button class="btn-approve" (click)="onApprove(notification)">
+                                        <button mat-flat-button class="btn-approve" (click)="onApprove(notification); $event.stopPropagation()">
                                                 <mat-icon class="icon-done">done</mat-icon> Approve
                                         </button>
-                                        <button mat-flat-button class="btn-reject" (click)="onReject(notification)">
+                                        <button mat-flat-button class="btn-reject" (click)="onReject(notification); $event.stopPropagation()">
                                                 <mat-icon class="icon-done">close</mat-icon> Reject
                                         </button>
                                 </div>
+
                                 <mat-divider></mat-divider>
                         </mat-list-item>
                         <mat-list-item (click)="loadNotification()"
@@ -88,11 +115,4 @@
                         </mat-list-item>
                 </mat-list>
         </div>
-        <!-- <div class="settingmenu settingmenuholder">
-                <a *ngFor="let notification of notifications;" (click)="readNotification(notification.id)"
-                        class="menus">
-                        <span>{{notification.message}}</span>
-                </a>
-
-        </div> -->
 </div>

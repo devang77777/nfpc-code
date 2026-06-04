@@ -22,7 +22,7 @@ export class SidenavService {
   constructor(private http: HttpClient, public network: NetworkService, public apiService: ApiService,) {
     if (
       this.domain.split(':')[0] == 'localhost' ||
-      this.domain.split('.')[0] == 'mobiato-msfa' || this.domain == 'https://presales-prodmobiato.nfpc.net'
+      this.domain.split('.')[0] == 'mobiato-msfa' || this.domain == 'https://presales.nfpc.net'
     ) {
       this.sidebar = JSON.parse(localStorage.getItem('sidebar'));
       if (!this.sidebar) return;
@@ -258,7 +258,7 @@ export class SidenavService {
   checkDomain() {
     if (
       this.domain.split(':')[0] == 'localhost' ||
-      this.domain.split('.')[0] == 'mobiato-msfa' || this.domain == 'https://presales-prodmobiato.nfpc.net'
+      this.domain.split('.')[0] == 'mobiato-msfa' || this.domain == 'https://presales.nfpc.net'
     ) {
       return false;
     }
