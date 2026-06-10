@@ -108,5 +108,10 @@
         "label": "Pallet Report",
         "routeTo": "reports/pallet-report",
         "domain": "presales.nfpc.net"
+    },
+    {
+        "label": "Customer GRV Report",
+        "routeTo": "reports/grv-report",
+        "domain": "presales.nfpc.net"
     }
 ]

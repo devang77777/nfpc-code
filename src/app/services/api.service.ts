@@ -2152,6 +2152,10 @@ export class ApiService {
     const url = `${this.baseUrl}/palette/palette-report`;
     return this.http.post(url,body);
   }
+  public  customerGrvReport(body): Observable<any> {
+    const url = `${this.baseUrl}/report/out-of-stock-creditnote`;
+    return this.http.post(url,body);
+  }
   public  getSalesmanDataByType(): Observable<any> {
     const url = `${this.baseUrl}/salesman/advanced-search-salesman`;
     return this.http.post(url,{});

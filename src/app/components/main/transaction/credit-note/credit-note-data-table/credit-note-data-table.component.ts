@@ -36,7 +36,7 @@ import { FormDrawerService } from 'src/app/services/form-drawer.service';
 import { Utils } from 'src/app/services/utils';
 import { EventBusService } from 'src/app/services/event-bus.service';
 import { EmitEvent, Events } from 'src/app/models/events.model';
-import { CommonSpinnerService } from 'src/app/components/shared/common-spinner/common-spinner.service';
+import { NgxSpinnerService } from 'ngx-spinner';
 import { CollectionModel } from '../../collection/collection-models';
 import { PAGE_SIZE_10 } from 'src/app/app.constant';
 import { CreditNoteImagesComponent } from '../credit-note-images/credit-note-images.component';
@@ -138,7 +138,7 @@ export class CreditNoteDataTableComponent implements OnInit, OnDestroy {
     private deleteDialog: MatDialog,
     public fb: FormBuilder,
     private eventService: EventBusService,
-    private spinnerService: CommonSpinnerService,
+    private spinnerService: NgxSpinnerService,
     router: Router,
     private lightbox: Lightbox,
     private routerParam: ActivatedRoute,
@@ -297,9 +297,9 @@ export class CreditNoteDataTableComponent implements OnInit, OnDestroy {
       requestOriginal['export'] = this.is_export;
       requestOriginal['page'] = this.page;
       requestOriginal['page_size'] = this.pageSize;
-      this.spinnerService.show();
+      // this.spinnerService.show();
       this.subscriptions.push(
-        this.apiService.onSearch(requestOriginal).pipe(finalize(() => this.spinnerService.hide())).subscribe((res) => {
+        this.apiService.onSearch(requestOriginal).subscribe((res) => {
           this.apiResponse = res;
           this.allResData = res.data;
           this.updateDataSource(res.data);
@@ -308,22 +308,24 @@ export class CreditNoteDataTableComponent implements OnInit, OnDestroy {
             this.openDetailView(filterData)
             this.filterObjectId = null;
           };
+          this.spinnerService.hide();
         })
       );
       return false;
     }
     console.log(this.filterForm.value);
-    this.spinnerService.show();
+    // this.spinnerService.show();
     this.subscriptions.push(
       this.creditNoteService
         .getCreditNotes(this.filterForm.value)
-        .pipe(finalize(() => this.spinnerService.hide()))
+        // .pipe(finalize(() => this.spinnerService.hide()))
         .subscribe((result) => {
           this.orders = result.data;
           this.apiResponse = result;
           this.allResData = result.data;
           this.dataSource = new MatTableDataSource<OrderModel>(this.orders);
           // this.dataSource.paginator = this.paginator;
+          this.spinnerService.hide();
         })
     );
   };

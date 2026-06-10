@@ -1,7 +1,7 @@
 <div class="card">
     <div class="card-header">
         <p class="h4 font-weight-light d-inline">
-            Item Base Price
+            Customer Geo Code
         </p>
     </div>
     <div class="row">
@@ -30,7 +30,7 @@
                                         <mat-chip-list #chipList aria-label="selection" *ngIf='(filesList.length > 0)'>
                                             <mat-chip *ngFor="let file of filesList" [removable]="removable"
                                                 (removed)="remove(file)">
-                                                {{file.name}}
+                                                {{file?.name}}
                                                 <mat-icon matChipRemove *ngIf="removable">Cancel</mat-icon>
                                             </mat-chip>
                                         </mat-chip-list>

@@ -1,3 +1,124 @@
+<!-- <div class="card">
+        <div class="arrow-up"></div>
+        <div class="card-header">
+                <span class="h6 font-weight-bold text-secondary">Notifications</span>
+                <button mat-flat-button class="btn" type="button"  (click)="deleteAll()">
+                        Delete All
+                </button>
+                <button mat-flat-button class="btn" type="button"  (click)="markAsRead()">
+                        Mark As Read
+                </button>
+                <a (click)="close()" class="closeicon settingclose"><i class="os-icon os-icon-x"></i></a>
+
+        </div>
+        <div class="settingmenu settingmenuholder">
+                <mat-list>
+                        <mat-list-item *ngFor="let notification of notifications"
+                                [class.notification-unread]="notification.is_read==0"
+                                [class.expanded-row]="notification.expanded"
+                                (click)="onNotificationItemClick(notification)">
+
+                                <div class="notification-row-header">
+                                        <p matLine style="margin-top: 4px;">
+                                                <span class="demo-2"
+                                                        style="display: block;">{{notification.message}}</span>
+                                        </p>
+                                        <div mat-line class="col-12"> {{notification?.postTiming}} <b
+                                                        style="margin-right: 2px;" *ngIf="notification.approval_status"
+                                                        [ngStyle]="{'color': getColor(notification)}">{{getNotificationStatus(notification)}}</b>
+                                        </div>
+                                        <div mat-line class="col-12" *ngIf="notification.reason"><b>Reason:</b>
+                                                {{notification.reason}}</div>
+                                        <mat-accordion *ngIf="notification.type=='Geo Approval'"> 
+                                                <mat-expansion-panel (opened)="panelOpenState = true"
+                                                        (closed)="panelOpenState = false">
+                                                        <mat-expansion-panel-header>
+                                                                <mat-panel-title> More Details </mat-panel-title>
+                                                        </mat-expansion-panel-header>
+                                                        <div mat-line class="col-12"><b>Customer : lat:</b>
+                                                                {{notification?.customer_lat}} <b>long:</b>
+                                                                {{notification?.customer_long}}</div>
+                                                        <div mat-line class="col-12"><b>Salesman : lat:</b>
+                                                                {{notification?.salesman_lat}} <b>long:</b>
+                                                                {{notification?.salesman_long}}</div>
+                                                </mat-expansion-panel>
+                                        </mat-accordion>
+
+                                       
+                                        <ng-container *ngIf="notification.type == 'Return' && notification.expanded">
+                                                <div class="credit-note-expanded" (click)="$event.stopPropagation()">
+                                                        <ng-container *ngIf="getCreditNoteInfo(notification) as creditNoteInfo">
+                                                                <table class="expanded-details-table">
+                                                                        <tbody>
+                                                                                <tr>
+                                                                                        <th>Merchandiser</th>
+                                                                                        <td>{{creditNoteInfo.merchandiserName || '-'}}</td>
+                                                                                </tr>
+                                                                                <tr>
+                                                                                        <th>Customer GRV</th>
+                                                                                        <td>{{creditNoteInfo.grvNo || '-'}}</td>
+                                                                                </tr>
+                                                                                <tr>
+                                                                                        <th>Customer</th>
+                                                                                        <td>{{creditNoteInfo.customer || ''}} - {{creditNoteInfo.customerCode || ''}}</td>
+                                                                                </tr>
+                                                                                <tr>
+                                                                                        <th>GRV Amount</th>
+                                                                                        <td>{{creditNoteInfo.amount || '-'}}</td>
+                                                                                </tr>
+                                                                                <tr>
+                                                                                        <th>Image</th>
+                                                                                        <td>
+                                                                                                <ng-container *ngIf="creditNoteInfo.image; else noImage">
+                                                                                                        <img class="notification-image-preview" [src]="creditNoteInfo.image" alt="Credit Note Image" />
+                                                                                                </ng-container>
+                                                                                                <ng-template #noImage>
+                                                                                                        <span class="field-value">-</span>
+                                                                                                </ng-template>
+                                                                                        </td>
+                                                                                </tr>
+                                                                        </tbody>
+                                                                </table>
+                                                                <div class="btn-block" *ngIf="creditNoteInfo.workflowUuid">
+                                                                        <button mat-flat-button class="btn-approve" (click)="onApprove(notification); $event.stopPropagation()">
+                                                                                <mat-icon class="icon-done">done</mat-icon> Approve
+                                                                        </button>
+                                                                        <button mat-flat-button class="btn-reject" (click)="onReject(notification); $event.stopPropagation()">
+                                                                                <mat-icon class="icon-done">close</mat-icon> Reject
+                                                                        </button>
+                                                                </div>
+                                                        </ng-container>
+                                                </div>
+                                        </ng-container>
+                                </div>
+
+                                <mat-divider></mat-divider>
+
+                                <div class="btn-block"
+                                        *ngIf="(notification.type == 'Geo Approval' || notification.type == 'Route Deviation') && (notification.approval_status== 'Pending' || !notification.approval_status)">
+                                        <button mat-flat-button class="btn-approve" (click)="onApprove(notification); $event.stopPropagation()">
+                                                <mat-icon class="icon-done">done</mat-icon> Approve
+                                        </button>
+                                        <button mat-flat-button class="btn-reject" (click)="onReject(notification); $event.stopPropagation()">
+                                                <mat-icon class="icon-done">close</mat-icon> Reject
+                                        </button>
+                                </div>
+
+                                <mat-divider></mat-divider>
+                        </mat-list-item>
+                        <mat-list-item (click)="loadNotification()"
+                                *ngIf="paginationModel.total_records != notifications.length">
+                                <p matLine class="text-center">
+                                        <span class="demo-2"> <strong> Load More </strong></span>
+                                </p>
+                                <mat-divider></mat-divider>
+                        </mat-list-item>
+                </mat-list>
+        </div>
+</div> -->
+
+
+
 <div class="card">
         <div class="arrow-up"></div>
         <div class="card-header">
@@ -19,7 +140,7 @@
                                 (click)="onNotificationItemClick(notification)">
 
                                 <div class="notification-row-header">
-                                        <p matLine>
+                                        <p matLine style="margin-top: 4px;" *ngIf="notification.type != 'Return'">
                                                 <span class="demo-2"
                                                         style="display: block;">{{notification.message}}</span>
                                         </p>
@@ -70,10 +191,10 @@
                                                                                         <th>Image</th>
                                                                                         <td>
                                                                                                 <ng-container *ngIf="creditNoteInfo.image; else noImage">
-                                                                                                        <img class="notification-image-preview" [src]="creditNoteInfo.image" alt="Credit Note Image" />
+                                                                                                        <img class="notification-image-preview" [src]="creditNoteInfo.image" alt="Credit Note Image" (click)="openMerchImageViewer(creditNoteInfo, $event)" />
                                                                                                 </ng-container>
                                                                                                 <ng-template #noImage>
-                                                                                                        <span class="field-value">No image</span>
+                                                                                                        <span class="field-value">-</span>
                                                                                                 </ng-template>
                                                                                         </td>
                                                                                 </tr>
