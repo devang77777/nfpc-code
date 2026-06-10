@@ -146,6 +146,9 @@ export class ReportMasterComponent extends BaseComponent implements OnInit, OnCh
     } else if (this.activeRoute === 'daily-operation') {
       this.getDailyOperation();
     }
+    else if (this.activeRoute === 'grv-report') {
+      this.getGRVReport();
+    }
     else if (this.activeRoute === 'delivery-report') {
       this.getDeliveryOperation();
     }
@@ -221,7 +224,23 @@ export class ReportMasterComponent extends BaseComponent implements OnInit, OnCh
       "module": "orderSCReport",
       
     };
-    this.ReportService.dailyOperationReportsData(body).subscribe((res) => {
+  }
+  getGRVReport() {
+    const sideFilter = this.sideFiltersForm.value;
+    let del_start_date = sideFilter.del_start_date ? sideFilter.del_start_date : null;
+    let del_end_date = sideFilter.del_end_date ? sideFilter.del_end_date : null;
+    const body = {
+      "warehouse_id": sideFilter?.warehouse_id ? sideFilter?.warehouse_id?.length > 0 ? sideFilter.warehouse_id.map(i => i.id) : [] : [],
+      // "warehouse_id": [9],
+      "start_date": sideFilter.value?.start_date,
+        "end_date": sideFilter.value?.end_date,
+      "channel_id": sideFilter.channel_code.length > 0 ? sideFilter.channel_code.map(i => i.id) : [],
+      "export": 1,
+      "export_type": "CSV",
+      "module": "grv-report",
+      
+    };
+    this.apiService.customerGrvReport(body).subscribe((res) => {
       if (res?.status == true) {
         const filetype = '.file' + body.export_type.toUpperCase();
         this.apiService.downloadFile(res.data.file_url, filetype);
@@ -1387,6 +1406,17 @@ export class ReportMasterComponent extends BaseComponent implements OnInit, OnCh
         export_type: "CSV",
         module: this.getModuleType(),
       }
+    } else if (this.activeRoute == 'grv-report') {
+      let del_start_date1 = sideFilter.del_start_date ? sideFilter.del_start_date : null;
+      let del_end_date2 = sideFilter.del_end_date ? sideFilter.del_end_date : null;
+      body = {
+        warehouse_id: sideFilter?.warehouse_id ? sideFilter?.warehouse_id?.length > 0 ? sideFilter.warehouse_id.map(i => i.id) : [] : [],
+        start_date: sideFilter.start_date,
+        end_date: sideFilter.end_date,
+        export: 1,
+        export_type: "CSV",
+        module: this.getModuleType(),
+      }
     }else if (this.activeRoute == 'delivery-report') {
     let del_start_date1 = sideFilter.del_start_date ? sideFilter.del_start_date : null;
     let del_end_date2 = sideFilter.del_end_date ? sideFilter.del_end_date : null;
@@ -1681,6 +1711,13 @@ export class ReportMasterComponent extends BaseComponent implements OnInit, OnCh
         }
       });
     } else if (this.activeRoute == 'daily-operation') {
+      this.ReportService.dailyOperationReportsData(body).subscribe((res) => {
+        if (res?.status == true) {
+          this.apiService.downloadFile(res.data.file_url, filetype);
+        }
+      });
+    }
+     else if (this.activeRoute == 'grv-return') {
       this.ReportService.dailyOperationReportsData(body).subscribe((res) => {
         if (res?.status == true) {
           this.apiService.downloadFile(res.data.file_url, filetype);
@@ -2000,7 +2037,7 @@ export class ReportMasterComponent extends BaseComponent implements OnInit, OnCh
     return true;
   }
   checkIsActiveRoute() {
-    if (this.activeRoute == 'consolidated-load' || this.activeRoute == 'consolidated-return-load' || this.activeRoute == 'loading-chart-by-warehouse' || this.activeRoute == 'order-details' || this.activeRoute == 'daily-operation' ||this.activeRoute == 'delivery-report'||this.activeRoute == 'delivery-export-report' || this.activeRoute == 'pallet-report'  || this.activeRoute == 'geo-approvals' || this.activeRoute == 'sales-quantity' || this.activeRoute == 'sales-vs-grv' || this.activeRoute == 'loading-chart-final-by-route') {
+    if (this.activeRoute == 'consolidated-load' || this.activeRoute == 'consolidated-return-load' || this.activeRoute == 'loading-chart-by-warehouse' || this.activeRoute == 'order-details' || this.activeRoute == 'daily-operation' ||this.activeRoute == 'delivery-report'||this.activeRoute == 'delivery-export-report' || this.activeRoute == 'pallet-report'  || this.activeRoute == 'geo-approvals' || this.activeRoute == 'sales-quantity' || this.activeRoute == 'sales-vs-grv' || this.activeRoute == 'loading-chart-final-by-route' || this.activeRoute == 'grv-report') {
       return 1;
     } else {
       if (this.activeRoute == 'truck-utilisation' || this.activeRoute == 'monthly-kpi' || this.activeRoute == 'ytd-kpi' || this.activeRoute == 'daily-crf' || this.activeRoute == 'difot' || this.activeRoute == 'daily-grv' || this.activeRoute == 'daily-spot-return' || this.activeRoute == 'daily-cancel-order' || this.activeRoute == 'timesheets' ||  this.activeRoute == 'salesman-performance' || this.activeRoute == 'driver-loaded-qty') {

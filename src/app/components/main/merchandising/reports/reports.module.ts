@@ -58,6 +58,7 @@ import { DeliveryReport } from './delivery-report/delivery-report.component';
 import { GeoApprovalsComponent } from './geo-approvals/geo-approvals.component';
 import { DeliveryReportsComponent } from './delivery-reports/delivery-reports.component';
 import { PalletReportComponent } from './pallet-report/pallet-report.component';
+import { GrvReportComponent } from './grv-report/grv-report.component';
 
 @NgModule({
   declarations: [
@@ -112,7 +113,9 @@ import { PalletReportComponent } from './pallet-report/pallet-report.component';
     DailyOperationReportComponent,
     GeoApprovalsComponent,
     DeliveryReportsComponent,
-    PalletReportComponent],
+    PalletReportComponent,
+    GrvReportComponent,
+  ],
   imports: [
     CommonModule,
     SharedModule,
