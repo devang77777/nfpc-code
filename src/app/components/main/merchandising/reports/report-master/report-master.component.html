@@ -61,7 +61,7 @@
                             </div>
                             
                             <div class="mb-4"
-                                *ngIf=" activeRoute!='daily-operation' && activeRoute!='delivery-report' && activeRoute!='grv-report' && activeRoute!='driver-loaded-qty' && activeRoute!='sales-vs-grv'">
+                                *ngIf=" activeRoute!='daily-operation' && activeRoute!='delivery-report' && activeRoute!='driver-loaded-qty' && activeRoute!='sales-vs-grv'">
                                 <label for="">Division</label>
                                 <app-multiautocomplete isSingle="true" [options]="divisionList"
                                     (selectionchanged)="filterWarehouse()"
@@ -75,7 +75,7 @@
                                 </span>
                             </div>
                             <div class="mb-4"
-                                *ngIf="activeRoute!='order-details' && activeRoute!='daily-operation' && activeRoute!='grv-report' &&  activeRoute!='delivery-report' && activeRoute!='driver-loaded-qty' && activeRoute!='sales-vs-grv'">
+                                *ngIf="activeRoute!='order-details' && activeRoute!='daily-operation' &&  activeRoute!='delivery-report' && activeRoute!='driver-loaded-qty' && activeRoute!='sales-vs-grv'">
                                 <label for="">Warehouse</label>
                                 <app-multiautocomplete isSingle="false" [options]="warehouseList"
                                     (selectionchanged)="filterVehicles()"
@@ -232,7 +232,7 @@
                                     </app-multiautocomplete>
                                 </div>
 
-                                <div class="mb-4" *ngIf="activeRoute=='daily-operation'">
+                                <div class="mb-4" *ngIf="activeRoute=='daily-operation' || activeRoute=='grv-report'">
                                     <label for="">Warehouse</label>
                                     <app-multiautocomplete isSingle="false" [options]="warehouseList"
                                         [control]="sideFiltersForm.controls['warehouse_id']" text="name" id="id"

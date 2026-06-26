@@ -94,6 +94,8 @@ import { MasterDownloadComponent } from './components/pages/settings/master-down
 import { MsalModule, MSAL_INSTANCE, MsalService } from '@azure/msal-angular';
 import { IPublicClientApplication, PublicClientApplication } from '@azure/msal-browser';
 
+import { LightboxModule } from 'ngx-lightbox';
+
 export function MSALInstanceFactory(): IPublicClientApplication {
   return new PublicClientApplication({
     auth: {
@@ -195,6 +197,7 @@ export function MSALInstanceFactory(): IPublicClientApplication {
     MsalModule,
     AdvanceSearchModule,
     NgxSpinnerModule,
+    LightboxModule,
     NgxDaterangepickerMd.forRoot(),
     ToastrModule.forRoot(),
     NgxSpinnerModule,

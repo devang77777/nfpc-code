@@ -123,10 +123,10 @@
         <div class="arrow-up"></div>
         <div class="card-header">
                 <span class="h6 font-weight-bold text-secondary">Notifications</span>
-                <button mat-flat-button class="btn" type="button"  (click)="deleteAll()">
+                <button mat-flat-button class="btn" type="button" (click)="deleteAll()">
                         Delete All
                 </button>
-                <button mat-flat-button class="btn" type="button"  (click)="markAsRead()">
+                <button mat-flat-button class="btn" type="button" (click)="markAsRead()">
                         Mark As Read
                 </button>
                 <a (click)="close()" class="closeicon settingclose"><i class="os-icon os-icon-x"></i></a>
@@ -144,13 +144,13 @@
                                                 <span class="demo-2"
                                                         style="display: block;">{{notification.message}}</span>
                                         </p>
-                                        <div mat-line class="col-12"> {{notification?.postTiming}} <b
+                                        <div mat-line class="col-12"> {{notification?.created_at | date: 'd MMM y h:mm a'}} <b
                                                         style="margin-right: 2px;" *ngIf="notification.approval_status"
                                                         [ngStyle]="{'color': getColor(notification)}">{{getNotificationStatus(notification)}}</b>
                                         </div>
                                         <div mat-line class="col-12" *ngIf="notification.reason"><b>Reason:</b>
                                                 {{notification.reason}}</div>
-                                        <mat-accordion *ngIf="notification.type=='Geo Approval'"> 
+                                        <mat-accordion *ngIf="notification.type=='Geo Approval'">
                                                 <mat-expansion-panel (opened)="panelOpenState = true"
                                                         (closed)="panelOpenState = false">
                                                         <mat-expansion-panel-header>
@@ -168,44 +168,63 @@
                                         <!-- Credit Note / Return expanded details — rendered inline below the timestamp -->
                                         <ng-container *ngIf="notification.type == 'Return' && notification.expanded">
                                                 <div class="credit-note-expanded" (click)="$event.stopPropagation()">
-                                                        <ng-container *ngIf="getCreditNoteInfo(notification) as creditNoteInfo">
+                                                        <ng-container
+                                                                *ngIf="getCreditNoteInfo(notification) as creditNoteInfo">
                                                                 <table class="expanded-details-table">
                                                                         <tbody>
                                                                                 <tr>
                                                                                         <th>Merchandiser</th>
-                                                                                        <td>{{creditNoteInfo.merchandiserName || '-'}}</td>
+                                                                                        <td>{{creditNoteInfo?.merchandiserName
+                                                                                                || '-'}}</td>
                                                                                 </tr>
                                                                                 <tr>
                                                                                         <th>Customer GRV</th>
-                                                                                        <td>{{creditNoteInfo.grvNo || '-'}}</td>
+                                                                                        <td>{{creditNoteInfo?.grvNo ||
+                                                                                                '-'}}</td>
                                                                                 </tr>
                                                                                 <tr>
                                                                                         <th>Customer</th>
-                                                                                        <td>{{creditNoteInfo.customer || ''}} - {{creditNoteInfo.customerCode || ''}}</td>
+                                                                                        <td>{{creditNoteInfo?.customer
+                                                                                                || ''}} -
+                                                                                                {{creditNoteInfo?.customerCode
+                                                                                                || ''}}</td>
                                                                                 </tr>
                                                                                 <tr>
                                                                                         <th>GRV Amount</th>
-                                                                                        <td>{{creditNoteInfo.amount || '-'}}</td>
+                                                                                        <td>{{creditNoteInfo?.amount ||
+                                                                                                '-'}}</td>
                                                                                 </tr>
                                                                                 <tr>
                                                                                         <th>Image</th>
                                                                                         <td>
-                                                                                                <ng-container *ngIf="creditNoteInfo.image; else noImage">
-                                                                                                        <img class="notification-image-preview" [src]="creditNoteInfo.image" alt="Credit Note Image" (click)="openMerchImageViewer(creditNoteInfo, $event)" />
+                                                                                                <ng-container
+                                                                                                        *ngIf="creditNoteInfo.image; else noImage">
+                                                                                                        <img class="notification-image-preview"
+                                                                                                                [src]="creditNoteInfo?.image"
+                                                                                                                alt="Credit Note Image"
+                                                                                                                (click)="openMerchImageViewer(creditNoteInfo, $event)" />
                                                                                                 </ng-container>
                                                                                                 <ng-template #noImage>
-                                                                                                        <span class="field-value">-</span>
+                                                                                                        <span
+                                                                                                                class="field-value">-</span>
                                                                                                 </ng-template>
                                                                                         </td>
                                                                                 </tr>
                                                                         </tbody>
                                                                 </table>
-                                                                <div class="btn-block" *ngIf="creditNoteInfo.workflowUuid">
-                                                                        <button mat-flat-button class="btn-approve" (click)="onApprove(notification); $event.stopPropagation()">
-                                                                                <mat-icon class="icon-done">done</mat-icon> Approve
+                                                                <div class="btn-block"
+                                                                        *ngIf="creditNoteInfo.workflowUuid">
+                                                                        <button mat-flat-button class="btn-approve"
+                                                                                (click)="onApprove(notification); $event.stopPropagation()">
+                                                                                <mat-icon
+                                                                                        class="icon-done">done</mat-icon>
+                                                                                Approve
                                                                         </button>
-                                                                        <button mat-flat-button class="btn-reject" (click)="onReject(notification); $event.stopPropagation()">
-                                                                                <mat-icon class="icon-done">close</mat-icon> Reject
+                                                                        <button mat-flat-button class="btn-reject"
+                                                                                (click)="onReject(notification); $event.stopPropagation()">
+                                                                                <mat-icon
+                                                                                        class="icon-done">close</mat-icon>
+                                                                                Reject
                                                                         </button>
                                                                 </div>
                                                         </ng-container>
@@ -217,10 +236,12 @@
 
                                 <div class="btn-block"
                                         *ngIf="(notification.type == 'Geo Approval' || notification.type == 'Route Deviation') && (notification.approval_status== 'Pending' || !notification.approval_status)">
-                                        <button mat-flat-button class="btn-approve" (click)="onApprove(notification); $event.stopPropagation()">
+                                        <button mat-flat-button class="btn-approve"
+                                                (click)="onApprove(notification); $event.stopPropagation()">
                                                 <mat-icon class="icon-done">done</mat-icon> Approve
                                         </button>
-                                        <button mat-flat-button class="btn-reject" (click)="onReject(notification); $event.stopPropagation()">
+                                        <button mat-flat-button class="btn-reject"
+                                                (click)="onReject(notification); $event.stopPropagation()">
                                                 <mat-icon class="icon-done">close</mat-icon> Reject
                                         </button>
                                 </div>

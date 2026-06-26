@@ -220,7 +220,7 @@ export class CreditNoteFormComponent implements OnInit, OnDestroy {
     // this.dueDateFormControl = new FormControl('', [ Validators.required ]);
     this.creditNoteDateFormControl = new FormControl(this.currentDate, [Validators.required]);
     this.creditNoteTypeFormControl = new FormControl('1');
-    this.reasonFormControl = new FormControl('0');
+    this.reasonFormControl = new FormControl('');
     this.isCreditTypeIsInvoice = false;
     this.salesmanFormControl = new FormControl('', [Validators.required])
 
@@ -1413,28 +1413,62 @@ export class CreditNoteFormComponent implements OnInit, OnDestroy {
   //   );
   // }
 
+  // public checkFormValidation(): boolean {
+  //   if (!this.isDepotOrder && this.customerFormControl.invalid) {
+  //     Utils.setFocusOn('customerFormField');
+  //     return false;
+  //   }
+  //   if (!this.isDepotOrder && this.customerLobFormControl.invalid) {
+  //     return false;
+  //   }
+  //   if (this.isDepotOrder && this.depotFormControl.invalid) {
+  //     Utils.setFocusOn('depotFormField');
+  //     return false;
+  //   }
+  //   if (this.reasonFormControl.invalid) {
+  //     Utils.setFocusOn('reasonFormField');
+  //     return false;
+  //   }
+  //   if (this.numberFormControl.invalid) {
+  //     Utils.setFocusOn('numberField');
+  //     return false;
+  //   }
+  //   return true;
+  // }
+
   public checkFormValidation(): boolean {
-    if (!this.isDepotOrder && this.customerFormControl.invalid) {
-      Utils.setFocusOn('customerFormField');
-      return false;
-    }
-    if (!this.isDepotOrder && this.customerLobFormControl.invalid) {
-      return false;
-    }
-    if (this.isDepotOrder && this.depotFormControl.invalid) {
-      Utils.setFocusOn('depotFormField');
-      return false;
-    }
-    if (this.reasonFormControl.invalid) {
-      Utils.setFocusOn('reasonFormField');
-      return false;
-    }
-    if (this.numberFormControl.invalid) {
-      Utils.setFocusOn('numberField');
-      return false;
-    }
-    return true;
+  if (!this.isDepotOrder && this.customerFormControl.invalid) {
+    Utils.setFocusOn('customerFormField');
+    return false;
   }
+  if (!this.isDepotOrder && this.customerLobFormControl.invalid) {
+    return false;
+  }
+  if (this.isDepotOrder && this.depotFormControl.invalid) {
+    Utils.setFocusOn('depotFormField');
+    return false;
+  }
+  if (this.reasonFormControl.invalid) {
+    Utils.setFocusOn('reasonFormField');
+    return false;
+  }
+  if (this.numberFormControl.invalid) {
+    Utils.setFocusOn('numberField');
+    return false;
+  }
+
+  const itemControls = this.creditNoteForm.get('items') as FormArray;
+  for (const item of itemControls.controls) {
+    const reasonControl = item.get('reason');
+    if (!reasonControl.value) {
+      reasonControl.markAsTouched();
+      this.toaster.showInfo('Alert', 'Please select a Reason for all items.');
+      return false;
+    }
+  }
+
+  return true;
+}
 
   private generatecreditNoteStats(
     isDeleted?: boolean,

@@ -38,6 +38,7 @@ import { environment } from '../../environments/environment';
 export class ApiService {
   public domain = window.location.host;
   public baseUrl: string = this.domain == 'presales.nfpc.net' ? environment.nfpcApiUrl : environment.baseApiUrl;
+  public sapURL: string = this.domain == 'presales.nfpc.net' ? environment.sapUrl : environment.sapUrl;
   // baseUrl = 'https://mobiato-msfa.com/application-backend/public/api';
   constructor(private http: HttpClient, private currencyPipe: CurrencyPipe) { }
 
@@ -1926,12 +1927,12 @@ export class ApiService {
   // }
   postCreditNoteOdooData(id): Observable<any> {
     return this.http.post(
-      `https://presales.nfpc.net/production/odbc_order_return_posting_prd.php?orderid=${id}`, null
+      `${this.sapURL}/odbc_order_return_posting_prd.php?orderid=${id}`, null
     );
   }
   postDebitNoteOdooData(id): Observable<any> {
     return this.http.post(
-      `https://presales.nfpc.net/production/odbc_order_return_posting_drebit_prd.php?orderid=${id}`, null
+      `${this.sapURL}/odbc_order_return_posting_drebit_prd.php?orderid=${id}`, null
     );
   }
   updateImport(data): Observable<any> {
@@ -1951,7 +1952,7 @@ export class ApiService {
   // }
   postInvoiceOdooData(id): Observable<any> {
     return this.http.post(
-      `https://presales.nfpc.net/production/odbc_order_posting_prd.php?orderid=${id}`, null
+      `${this.sapURL}/odbc_order_posting_prd.php?orderid=${id}`, null
     );
   }
   public isStockCheck(body): Observable<any> {
@@ -2103,7 +2104,7 @@ export class ApiService {
   }
   infiniteOrder(model): Observable<any> {
     return this.http.post(
-      `https://presales.nfpc.net/production/public/api/orderpostingprd/add`, model
+      `${this.baseUrl}/orderpostingprd/add`, model
     );
   }
   groupPDfDownload(model): Observable<any> {

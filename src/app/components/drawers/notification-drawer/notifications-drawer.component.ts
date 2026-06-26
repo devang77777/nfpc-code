@@ -182,7 +182,7 @@
 
 // //   getCreditNoteInfo(notification: NotificationModel) {
 // //     const parsedMessage = this.parseNotificationMessage(notification);
-    
+
 // //     // Extract from root level first, then parsed message
 // //     const image = notification.url || 
 // //                   notification.merchandiser_image_1 || 
@@ -192,26 +192,26 @@
 // //                   parsedMessage?.merchandiser_image_1 || 
 // //                   parsedMessage?.image || 
 // //                   parsedMessage?.image_url;
-    
+
 // //     const amount = notification.customer_amount || 
 // //                    parsedMessage?.customer_amount || 
 // //                    parsedMessage?.amount || 
 // //                    notification.other?.grv_amount || 
 // //                    notification.other?.amount || '';
-    
+
 // //     const customer = notification.customer_name || 
 // //                      parsedMessage?.customer_name || 
 // //                      parsedMessage?.customer || '';
-    
+
 // //     const customerCode = notification.customer_code || parsedMessage?.customer_code || '';
-    
+
 // //     const merchandiserName = notification.merchandiser_name || parsedMessage?.merchandiser_name || '';
-    
+
 // //     const grvNo = notification.customer_grv || 
 // //                   parsedMessage?.customer_grv || 
 // //                   parsedMessage?.grvNo || 
 // //                   notification.other?.grv_amount || '';
-    
+
 // //     const workflowUuid = notification.work_flow_obj_uuid || parsedMessage?.work_flow_obj_uuid || '';
 
 // //     return {
@@ -654,7 +654,7 @@
 
 //   getCreditNoteInfo(notification: NotificationModel) {
 //     const parsedMessage = this.parseNotificationMessage(notification);
-    
+
 //     // Extract from root level first, then parsed message
 //     const image = notification.url || 
 //                   notification.merchandiser_image_1 || 
@@ -664,26 +664,26 @@
 //                   parsedMessage?.merchandiser_image_1 || 
 //                   parsedMessage?.image || 
 //                   parsedMessage?.image_url;
-    
+
 //     const amount = notification.customer_amount || 
 //                    parsedMessage?.customer_amount || 
 //                    parsedMessage?.amount || 
 //                    notification.other?.grv_amount || 
 //                    notification.other?.amount || '';
-    
+
 //     const customer = notification.customer_name || 
 //                      parsedMessage?.customer_name || 
 //                      parsedMessage?.customer || '';
-    
+
 //     const customerCode = notification.customer_code || parsedMessage?.customer_code || '';
-    
+
 //     const merchandiserName = notification.merchandiser_name || parsedMessage?.merchandiser_name || '';
-    
+
 //     const grvNo = notification.customer_grv || 
 //                   parsedMessage?.customer_grv || 
 //                   parsedMessage?.grvNo || 
 //                   notification.other?.grv_amount || '';
-    
+
 //     const workflowUuid = notification.work_flow_obj_uuid || parsedMessage?.work_flow_obj_uuid || '';
 
 //     return {
@@ -929,7 +929,8 @@ export interface DialogData {
 @Component({
   selector: 'app-notifications-drawer',
   templateUrl: './notifications-drawer.component.html',
-  styleUrls: ['./notifications-drawer.component.scss']
+  styleUrls: ['./notifications-drawer.component.scss'],
+  providers: [Lightbox]
 })
 export class NotificationsDrawerComponent implements OnInit, OnDestroy {
   notifications: Array<NotificationModel> = [];
@@ -944,7 +945,7 @@ export class NotificationsDrawerComponent implements OnInit, OnDestroy {
 
   private refreshInterval: any;
   private messageSubscription: Subscription;
-  private readonly REFRESH_INTERVAL_MS = 30000;
+  private readonly REFRESH_INTERVAL_MS = 60000;
 
   constructor(
     private fds: FormDrawerService,
@@ -954,8 +955,8 @@ export class NotificationsDrawerComponent implements OnInit, OnDestroy {
     public dialog: MatDialog,
     private toaster: CommonToasterService,
     // ── ADDED ──
-    private lightbox: Lightbox,
-    private spinnerService: NgxSpinnerService
+    public lightbox: Lightbox,
+    public spinnerService: NgxSpinnerService
   ) {
     this.pagingRequestModel = {
       page: 1,
@@ -1118,55 +1119,100 @@ export class NotificationsDrawerComponent implements OnInit, OnDestroy {
     }
   }
 
+  // getCreditNoteInfo(notification: NotificationModel) {
+  //   const parsedMessage = this.parseNotificationMessage(notification);
+
+  //   const image = notification?.url ||
+  //     notification?.merchandiser_image_1 ||
+  //     notification?.other?.image ||
+  //     notification?.other?.image_url ||
+  //     notification?.other?.url ||
+  //     parsedMessage?.merchandiser_image_1 ||
+  //     parsedMessage?.image ||
+  //     parsedMessage?.image_url;
+
+  //   const amount = notification?.customer_amount ||
+  //     parsedMessage?.customer_amount ||
+  //     parsedMessage?.amount ||
+  //     notification?.other?.grv_amount ||
+  //     notification?.other?.amount || '';
+
+  //   const customer = notification?.customer_name ||
+  //     parsedMessage?.customer_name ||
+  //     parsedMessage?.customer || '';
+
+  //   const customerCode = notification?.customer_code || parsedMessage?.customer_code || '';
+
+  //   const merchandiserName = notification?.merchandiser_name || parsedMessage?.merchandiser_name || '';
+
+  //   const grvNo = notification?.customer_grv ||
+  //     parsedMessage?.customer_grv ||
+  //     parsedMessage?.grvNo ||
+  //     notification?.other?.grv_amount || '';
+
+  //   const workflowUuid = notification?.work_flow_obj_uuid || parsedMessage?.work_flow_obj_uuid || '';
+
+  //   return {
+  //     grvNo,
+  //     customer,
+  //     amount,
+  //     image,
+  //     merchandiserName,
+  //     customerCode,
+  //     workflowUuid
+  //   };
+  // }
+
+  // 3. Fix getCreditNoteInfo — also expose merchandiser_image_1 
+  //    so the raw field is preserved alongside the resolved 'image'
   getCreditNoteInfo(notification: NotificationModel) {
     const parsedMessage = this.parseNotificationMessage(notification);
 
-    const image = notification.url ||
-      notification.merchandiser_image_1 ||
-      notification.other?.image ||
-      notification.other?.image_url ||
-      notification.other?.url ||
+    const image = notification?.merchandiser_image_1 ||   // ← check direct field FIRST
+      notification?.url ||
+      notification?.other?.image ||
+      notification?.other?.image_url ||
+      notification?.other?.url ||
       parsedMessage?.merchandiser_image_1 ||
       parsedMessage?.image ||
       parsedMessage?.image_url;
 
-    const amount = notification.customer_amount ||
+    const amount = notification?.customer_amount ||
       parsedMessage?.customer_amount ||
       parsedMessage?.amount ||
-      notification.other?.grv_amount ||
-      notification.other?.amount || '';
+      notification?.other?.grv_amount ||
+      notification?.other?.amount || '';
 
-    const customer = notification.customer_name ||
+    const customer = notification?.customer_name ||
       parsedMessage?.customer_name ||
       parsedMessage?.customer || '';
 
-    const customerCode = notification.customer_code || parsedMessage?.customer_code || '';
+    const customerCode = notification?.customer_code || parsedMessage?.customer_code || '';
 
-    const merchandiserName = notification.merchandiser_name || parsedMessage?.merchandiser_name || '';
+    const merchandiserName = notification?.merchandiser_name || parsedMessage?.merchandiser_name || '';
 
-    const grvNo = notification.customer_grv ||
+    const grvNo = notification?.customer_grv ||
       parsedMessage?.customer_grv ||
       parsedMessage?.grvNo ||
-      notification.other?.grv_amount || '';
+      notification?.other?.grv_amount || '';
 
-    const workflowUuid = notification.work_flow_obj_uuid || parsedMessage?.work_flow_obj_uuid || '';
+    const workflowUuid = notification?.work_flow_obj_uuid || parsedMessage?.work_flow_obj_uuid || '';
 
     return {
       grvNo,
       customer,
       amount,
-      image,
+      image,           // resolved image URL
       merchandiserName,
       customerCode,
       workflowUuid
     };
   }
-
   updateRecord(notification) {
     this.notifications.map(x => {
-      if (x.uuid == notification.uuid) {
-        x.approval_status = notification.status;
-        x.reason = notification.reason;
+      if (x.uuid == notification?.uuid) {
+        x.approval_status = notification?.status;
+        x.reason = notification?.reason;
       }
     })
   }
@@ -1186,13 +1232,13 @@ export class NotificationsDrawerComponent implements OnInit, OnDestroy {
   }
 
   onRejecting(notification: NotificationModel, reason: string) {
-    const type = (notification.type || '').toLowerCase();
+    const type = (notification?.type || '').toLowerCase();
     if (type === 'route deviation') {
       let data = {
         route_approval: 'Reject',
         reason: reason
       };
-      this.apiService.approveRouteNotification(notification.uuid, data).subscribe((res) => {
+      this.apiService.approveRouteNotification(notification?.uuid, data).subscribe((res) => {
         if (res.status) {
           this.statusText = 'Rejected successfully';
           this.toaster.showWarning(this.statusText);
@@ -1210,7 +1256,7 @@ export class NotificationsDrawerComponent implements OnInit, OnDestroy {
       });
     } else {
       let data = {
-        uuid: notification.uuid,
+        uuid: notification?.uuid,
         status: 'Reject',
         reason: reason
       };
@@ -1373,16 +1419,36 @@ export class NotificationsDrawerComponent implements OnInit, OnDestroy {
     }
   }
 
+  // public openMerchImageViewer(data: any, event: MouseEvent): void {
+  //   event.stopPropagation();
+  //   if (!data?.merchandiser_image_1 || !data?.image) {
+  //     return;
+  //   }
+  //   const album = [
+  //     {
+  //       src: data?.merchandiser_image_1 || data?.image,
+  //       caption: 'Merchandiser Image',
+  //       thumb: data?.merchandiser_image_1 || data?.image,
+  //     },
+  //   ];
+  //   this.lightbox.open(album, 0);
+  // }
+
+  // 2. Fix openMerchImageViewer — accept the creditNoteInfo shape
   public openMerchImageViewer(data: any, event: MouseEvent): void {
     event.stopPropagation();
-    if (!data?.merchandiser_image_1 || !data?.image) {
+
+    // creditNoteInfo has { image } not { merchandiser_image_1 }
+    const imageUrl = data?.image || data?.merchandiser_image_1;
+    if (!imageUrl) {
       return;
     }
+
     const album = [
       {
-        src: data.merchandiser_image_1 || data?.image,
+        src: imageUrl,
         caption: 'Merchandiser Image',
-        thumb: data.merchandiser_image_1 || data?.image,
+        thumb: imageUrl,
       },
     ];
     this.lightbox.open(album, 0);

@@ -215,15 +215,19 @@ export class ReportMasterComponent extends BaseComponent implements OnInit, OnCh
       "warehouse_id": sideFilter?.warehouse_id ? sideFilter?.warehouse_id?.length > 0 ? sideFilter.warehouse_id.map(i => i.id) : [] : [],
       // "warehouse_id": [9],
       "order_number": sideFilter.order_number ? sideFilter.order_number : '',
-      "customer_lpo": sideFilter.customer_lp ? sideFilter.customer_lp : '',
-      "channel_id": sideFilter.channel_code.length > 0 ? sideFilter.channel_code.map(i => i.id) : [],
+      "customer_lpo": sideFilter.customer_lpo ? sideFilter.customer_lpo : '',
+      "channel_id": sideFilter.channel_code && sideFilter.channel_code.length > 0 ? sideFilter.channel_code.map(i => i.id) : [],
       "del_start_date": del_start_date,
       "del_end_date": del_end_date,
       "export": 1,
       "export_type": "CSV",
       "module": "orderSCReport",
-      
     };
+    this.ReportService.dailyOperationReportsData(body).subscribe((res) => {
+      if (res?.status == true) {
+        this.apiService.downloadFile(res.data.file_url);
+      }
+    });
   }
   getGRVReport() {
     const sideFilter = this.sideFiltersForm.value;
@@ -232,18 +236,16 @@ export class ReportMasterComponent extends BaseComponent implements OnInit, OnCh
     const body = {
       "warehouse_id": sideFilter?.warehouse_id ? sideFilter?.warehouse_id?.length > 0 ? sideFilter.warehouse_id.map(i => i.id) : [] : [],
       // "warehouse_id": [9],
-      "start_date": sideFilter.value?.start_date,
-        "end_date": sideFilter.value?.end_date,
+      "start_date": sideFilter.start_date,
+      "end_date": sideFilter.end_date,
       "channel_id": sideFilter.channel_code.length > 0 ? sideFilter.channel_code.map(i => i.id) : [],
-      "export": 1,
-      "export_type": "CSV",
-      "module": "grv-report",
-      
+      "export": "1",
+
     };
     this.apiService.customerGrvReport(body).subscribe((res) => {
       if (res?.status == true) {
-        const filetype = '.file' + body.export_type.toUpperCase();
-        this.apiService.downloadFile(res.data.file_url, filetype);
+        // const filetype = '.file' + body.export_type.toUpperCase();
+        this.apiService.downloadFile(res.data.file_url);
       }
     });
   }
@@ -1410,12 +1412,12 @@ export class ReportMasterComponent extends BaseComponent implements OnInit, OnCh
       let del_start_date1 = sideFilter.del_start_date ? sideFilter.del_start_date : null;
       let del_end_date2 = sideFilter.del_end_date ? sideFilter.del_end_date : null;
       body = {
-        warehouse_id: sideFilter?.warehouse_id ? sideFilter?.warehouse_id?.length > 0 ? sideFilter.warehouse_id.map(i => i.id) : [] : [],
-        start_date: sideFilter.start_date,
-        end_date: sideFilter.end_date,
-        export: 1,
-        export_type: "CSV",
-        module: this.getModuleType(),
+        "warehouse_id": sideFilter?.warehouse_id ? sideFilter?.warehouse_id?.length > 0 ? sideFilter.warehouse_id.map(i => i.id) : [] : [],
+      // "warehouse_id": [9],
+      "start_date": sideFilter.start_date,
+      "end_date": sideFilter.end_date,
+      "channel_id": sideFilter.channel_code.length > 0 ? sideFilter.channel_code.map(i => i.id) : [],
+      "export": "1",
       }
     }else if (this.activeRoute == 'delivery-report') {
     let del_start_date1 = sideFilter.del_start_date ? sideFilter.del_start_date : null;

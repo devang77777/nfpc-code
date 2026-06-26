@@ -230,11 +230,20 @@
                         formControlName="item_qty"></td>
                     <td data-th="Expiry Date" class="stats-cell item-code"><input type="date" class="form-control"
                         placeholder="Expiry Date" formControlName="item_expiry_date"></td>
-                    <td data-th="Reason" class="item-code">
+                    <!-- <td data-th="Reason" class="item-code">
                       <select class="custom-select" required formControlName="reason">
                         <option [value]="reason.name" *ngFor="let reason of returnReasons">{{ reason.name }}</option>
                       </select>
-                    </td>
+                    </td> -->
+                    <td data-th="Reason" class="item-code">
+  <select class="custom-select" required formControlName="reason"
+    [ngClass]="{'is-invalid': item.get('reason').invalid && (item.get('reason').touched || item.get('reason').dirty)}">
+    <option [value]="reason.name" *ngFor="let reason of returnReasons">{{ reason.name }}</option>
+  </select>
+  <div class="invalid-feedback" *ngIf="item.get('reason').invalid && (item.get('reason').touched || item.get('reason').dirty)">
+    Reason is required
+  </div>
+</td>
                     <td data-th="Price" class="stats-cell item-code"><input type="text"
                         class="form-control non-editable"
                         [value]="payloadItems[i]?.item_price ? numberFormat(payloadItems[i]?.item_price) : numberFormat(0)"
