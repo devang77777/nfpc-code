@@ -1,0 +1,197 @@
+<div style="    height: 100%;
+    ">
+    <header>
+        <div class="container mt-3">
+            <div class="row">
+                <div class="col-md-12">
+                    <form [formGroup]="filterForm" (ngSubmit)="applyFilterOnClick()">
+                        <div class="form-group row">
+                            <div class="col-sm-12">
+                                <div class="row">
+                                    <div class="col line">
+                                        <label for="">Start Date </label>
+                                        <input type="date" formControlName="startdate"
+                                            class="form-control form-control-sm" placeholder="Start Date">
+                                    </div>
+                                    <div class="col-auto dash">
+                                        <span>_</span>
+                                    </div>
+                                    <div class="col line">
+                                        <label for="">End Date </label>
+                                        <input type="date" formControlName="enddate"
+                                            class="form-control form-control-sm" placeholder="End Date">
+                                    </div>
+                                    <div class="col line">
+                                        <label for="">Service Channel</label>
+                                        <app-multiautocomplete isSingle="false" [options]="allChannelList"
+                                            [control]="filterForm.controls['channel_code']" text="name" id="id"
+                                            param1="id" param2="name" objectName="code-root"
+                                            placeholder="Select Service Channel">
+                                        </app-multiautocomplete>
+                                    </div>
+                                    <div class="col line">
+                                        <label for="">Warehouse</label>
+                                        <app-multiautocomplete isSingle="false" [options]="warehouseList"
+                                            [control]="filterForm.controls['warehouse_id']" text="name" id="id"
+                                            param1="code" param2="name" objectName="code-root"
+                                            placeholder="Select Warehouse">
+                                        </app-multiautocomplete>
+                                    </div>
+
+                                    <div class="col custom-submit-btn-wrapper">
+                                        <button type="submit" class="btn btn-sm btn-info next-arrow-dash mr-1">
+                                            <i class="fa fa-arrow-right" style="height: 27px;font-size: 26px;"></i>
+                                        </button>
+
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <!-- <div class="col-md-5 d-flex justify-content-end">
+                    <div>
+                        <button class="btn btn-sm btn-secondary mr-1">Filters</button>
+                        <button class="btn  btn-sm btn-secondary  mr-1"> Clear</button>
+                        <button class="btn  btn-sm btn-secondary  mr-1">Current Selections</button>
+                    </div> &nbsp;
+                    <div> <input type="text" style="height: 30px;" placeholder="Search" class="form-control"></div>
+                </div> -->
+            </div>
+            <!-- <div class="row mt-3">
+                   
+                    <div class="col-md-6 text-right">
+                        <strong>Last Reload Date: {{viewDate|date:'dd/MM/yyyy' }}</strong>
+                    </div>
+                </div> -->
+        </div>
+    </header>
+    <hr>
+
+
+    <div class="container mb-5">
+        <div class="row">
+            <div class="col-md-12 d-flex flex-wrap">
+                <!-- Stats Cards Row -->
+                
+
+                <!-- Warehouse Charts Row -->
+                <div class="col-sm-12 row mb-4" *ngIf="showChart" style="margin-left: 0px; margin-right: 0px;">
+                    <div class="col-md-6 pr-2">
+                        <div class="box d-flex flex-column">
+                            <div class="d-flex header-bottom justify-content-center">
+                                <strong>Warehouse Order Analysis</strong>
+                            </div>
+                            <div class="card">
+                                <div class="card-body" style="padding: 10px;">
+                                    <div id="chartdiv_wh_orders" style="width: 100%; height: 480px"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6 pl-2">
+                        <div class="box d-flex flex-column">
+                            <div class="d-flex header-bottom justify-content-center">
+                                <strong>Warehouse OTIF Analysis</strong>
+                            </div>
+                            <div class="card">
+                                <div class="card-body" style="padding: 10px;">
+                                    <div id="chartdiv_wh_otif" style="width: 100%; height: 480px"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Warehouse Ltr & Load Utilization Charts Row -->
+                <div class="col-sm-12 row mb-4" *ngIf="showChart" style="margin-left: 0px; margin-right: 0px;">
+                    <div class="col-md-6 pr-2">
+                        <div class="box d-flex flex-column">
+                            <div class="d-flex header-bottom justify-content-center">
+                                <strong>Warehouse Order Analysis (Ltr)</strong>
+                            </div>
+                            <div class="card">
+                                <div class="card-body" style="padding: 10px;">
+                                    <div id="chartdiv_wh_orders_ltr" style="width: 100%; height: 480px"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6 pl-2">
+                        <div class="box d-flex flex-column">
+                            <div class="d-flex header-bottom justify-content-center">
+                                <strong>Warehouse Load Utilization Analysis</strong>
+                            </div>
+                            <div class="card">
+                                <div class="card-body" style="padding: 10px;">
+                                    <div id="chartdiv_wh_load_utilization" style="width: 100%; height: 480px"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Channel Charts Row -->
+                <div class="col-sm-12 row" *ngIf="showChart" style="margin-left: 0px; margin-right: 0px;">
+                    <div class="col-md-6 pr-2">
+                        <div class="box d-flex flex-column">
+                            <div class="d-flex header-bottom justify-content-center">
+                                <strong>Channel Order Analysis</strong>
+                            </div>
+                            <div class="card">
+                                <div class="card-body" style="padding: 10px;">
+                                    <div id="chartdiv_channel_orders" style="width: 100%; height: 480px"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6 pl-2">
+                        <div class="box d-flex flex-column">
+                            <div class="d-flex header-bottom justify-content-center">
+                                <strong>Channel OTIF Analysis</strong>
+                            </div>
+                            <div class="card">
+                                <div class="card-body" style="padding: 10px;">
+                                    <div id="chartdiv_channel_otif" style="width: 100%; height: 480px"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+<div [hidden]="openDetailType == 'chart' ? false : true">
+    <app-dashboard-chart-detail (close)="closeChartDetail()" [openDetailType]="openDetailType" [selected]="selected"
+        [selectedData]="selectedData" [selectedChart]="selectedChart" [labelBy]="filterForm.controls['type'].value">
+    </app-dashboard-chart-detail>
+</div>
+
+
+<!-- <div class="row" style="height: 100%;">
+            <div class="col-sm-6" style="margin-top: 40px;">
+                <div style="height: 150px;">
+                    <p class="chart-heading"  >Vehicle Load Utilization</p>
+                    <div class="card">
+                        <div class="card-body" style="padding: 0px;">
+                            <div id="chartdiv1" style="width: 100%; height: 393px"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-6" style="margin-top: 40px;">
+                <div style="height: 150px;">
+                    <p class="chart-heading">Vehicle Trip per day</p>
+                    <div class="card">
+                        <div class="card-body" style="padding: 0px;">
+                            <div id="chartdiv2" style="width: 100%; height: 393px"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+      
+            
+        
+        </div> -->

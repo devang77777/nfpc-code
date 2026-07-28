@@ -2166,6 +2166,11 @@ export class ApiService {
       const url = `${this.baseUrl}/copy-item-base-price`;
       return this.http.post(url, body);
   }
+
+  public distributionDashboard(body): Observable<any> {
+      const url = `${this.baseUrl}/dashboard-distribution`;
+      return this.http.post(url, body);
+  }
 //   public uploadCopyPricingByItem1(file: File): Observable<any> {
 //   return this.http.post(
 //     `${this.baseUrl}/copy-item-base-price`,

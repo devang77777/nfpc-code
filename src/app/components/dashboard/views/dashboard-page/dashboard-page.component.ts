@@ -121,6 +121,11 @@ export class DashboardPageComponent implements OnInit {
           label: 'Dashboard 5',
           link: './board5',
           index: 4
+        },
+        {
+          label: 'Distribution Dashboard',
+          link: './distribution-dashboard',
+          index: 5
         });
     } else {
       this.navLinks.push(
@@ -143,13 +148,18 @@ export class DashboardPageComponent implements OnInit {
           label: 'Logistic',
           link: './logistic',
           index: 2
+        },
+        {
+          label: 'Distribution Dashboard',
+          link: './distribution-dashboard',
+          index: 5
         }
 
-        );
+      );
     }
     this.router.events.subscribe((res) => {
       this.activeLinkIndex = this.navLinks.indexOf(this.navLinks.find(tab => tab.link === '.' + this.router.url));
-      console.log(this.activeLinkIndex,"presales.nfpc.net")
+      console.log(this.activeLinkIndex, "presales.nfpc.net")
     });
     if (this.router.url.includes('/dashboard/board1') && this.domain == 'presales.nfpc.net') {
       this.router.navigate(['/dashboard/monthly-kpi']);

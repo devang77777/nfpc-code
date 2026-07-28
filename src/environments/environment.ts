@@ -4,15 +4,15 @@
 
 export const environment = {
 
- baseApiUrl: 'https://presales.nfpc.net/production/public/api',
+  baseApiUrl: 'https://presales.nfpc.net/production/public/api',
   nfpcApiUrl: 'https://presales.nfpc.net/production/public/api',
-sapUrl: 'https://presales.nfpc.net/production',
+  sapUrl: 'https://presales.nfpc.net/production',
   host: 'https://presales.nfpc.net',
-//  baseApiUrl: 'https://presales-dev.nfpc.net/production/public/api',
-//  sapUrl: 'https://presales-dev.nfpc.net/production',
-//   nfpcApiUrl: 'https://presales-dev.nfpc.net/production/public/api',
-//   host: 'https://presales-dev.nfpc.net',
-//   production: false
+  // baseApiUrl: 'https://presales-dev.nfpc.net/production/public/api',
+  // sapUrl: 'https://presales-dev.nfpc.net/production',
+  // nfpcApiUrl: 'https://presales-dev.nfpc.net/production/public/api',
+  // host: 'https://presales-dev.nfpc.net',
+  //   production: false
 
   production: false
 };
