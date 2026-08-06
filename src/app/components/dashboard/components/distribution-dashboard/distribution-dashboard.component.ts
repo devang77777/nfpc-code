@@ -254,7 +254,7 @@ export class DistributionDashboardComponent implements OnInit {
     const selectedChannels = form?.channel_code || [];
     const channelIds = (selectedChannels && selectedChannels.length > 0)
       ? selectedChannels.map((c: any) => c.id || c)
-      : [];
+      : (this.allChannelList || []).map((c: any) => c.id || c);
 
     let filterObj: any = {
       start_date: form.startdate,
@@ -1088,7 +1088,7 @@ export class DistributionDashboardComponent implements OnInit {
     const valueAxis = chart.yAxes.push(new am4charts.ValueAxis());
     valueAxis.title.text = 'Load Utilization (%)';
     valueAxis.min = 0;
-    valueAxis.max = 110;
+    valueAxis.extraMax = 0.15;
 
     const series = chart.series.push(new am4charts.ColumnSeries());
     series.dataFields.valueY = 'load_utilization';
@@ -1255,7 +1255,7 @@ export class DistributionDashboardComponent implements OnInit {
     const selectedChannels = form?.channel_code || [];
     const channelIds = (selectedChannels && selectedChannels.length > 0)
       ? selectedChannels.map((c: any) => c.id || c)
-      : [];
+      : (this.allChannelList || []).map((c: any) => c.id || c);
 
     let body: any = {
       start_date: form.startdate,
